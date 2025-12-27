@@ -57,42 +57,57 @@ CREATE INDEX IF NOT EXISTS idx_chasen_conversations_client_id
 -- ============================================================================
 
 -- 3.1 unified_meetings
+-- NOTE: unified_meetings.client_id is INTEGER (legacy), add new UUID column
+ALTER TABLE unified_meetings ADD COLUMN IF NOT EXISTS client_uuid UUID;
+CREATE INDEX IF NOT EXISTS idx_unified_meetings_client_uuid ON unified_meetings(client_uuid);
+
 UPDATE unified_meetings um
-SET client_id = resolve_client_id(um.client_name)
-WHERE um.client_id IS NULL
+SET client_uuid = resolve_client_id(um.client_name)
+WHERE um.client_uuid IS NULL
   AND um.client_name IS NOT NULL
   AND um.client_name != '';
 
 -- 3.2 actions (column is 'client', not 'client_name')
+-- NOTE: actions.client_id is INTEGER (legacy), add new UUID column
+ALTER TABLE actions ADD COLUMN IF NOT EXISTS client_uuid UUID;
+CREATE INDEX IF NOT EXISTS idx_actions_client_uuid ON actions(client_uuid);
+
 UPDATE actions a
-SET client_id = resolve_client_id(a.client)
-WHERE a.client_id IS NULL
+SET client_uuid = resolve_client_id(a.client)
+WHERE a.client_uuid IS NULL
   AND a.client IS NOT NULL
   AND a.client != '';
 
 -- 3.3 nps_responses
+-- NOTE: nps_responses.client_id is INTEGER (legacy), not UUID
+-- We need to add a new UUID column for proper foreign key
+ALTER TABLE nps_responses ADD COLUMN IF NOT EXISTS client_uuid UUID;
+
 UPDATE nps_responses nr
-SET client_id = (
-    SELECT id::integer FROM clients c
-    WHERE c.id = resolve_client_id(nr.client_name)
-    LIMIT 1
-)
-WHERE nr.client_id IS NULL
+SET client_uuid = resolve_client_id(nr.client_name)
+WHERE nr.client_uuid IS NULL
   AND nr.client_name IS NOT NULL;
 
--- Note: nps_responses.client_id is INTEGER, not UUID, so we need special handling
--- This may require schema change or a mapping table
+CREATE INDEX IF NOT EXISTS idx_nps_responses_client_uuid ON nps_responses(client_uuid);
 
 -- 3.4 client_segmentation
+-- NOTE: client_segmentation.client_id is VARCHAR (legacy), add new UUID column
+ALTER TABLE client_segmentation ADD COLUMN IF NOT EXISTS client_uuid UUID;
+CREATE INDEX IF NOT EXISTS idx_client_segmentation_client_uuid ON client_segmentation(client_uuid);
+
 UPDATE client_segmentation cs
-SET client_id = resolve_client_id(cs.client_name)
-WHERE cs.client_id IS NULL
+SET client_uuid = resolve_client_id(cs.client_name)
+WHERE cs.client_uuid IS NULL
   AND cs.client_name IS NOT NULL;
 
 -- 3.5 aging_accounts
+-- NOTE: aging_accounts.client_id is INTEGER (legacy), add new UUID column
+ALTER TABLE aging_accounts ADD COLUMN IF NOT EXISTS client_uuid UUID;
+CREATE INDEX IF NOT EXISTS idx_aging_accounts_client_uuid ON aging_accounts(client_uuid);
+
 UPDATE aging_accounts aa
-SET client_id = resolve_client_id(COALESCE(aa.client_name_normalized, aa.client_name))
-WHERE aa.client_id IS NULL
+SET client_uuid = resolve_client_id(COALESCE(aa.client_name_normalized, aa.client_name))
+WHERE aa.client_uuid IS NULL
   AND (aa.client_name IS NOT NULL OR aa.client_name_normalized IS NOT NULL);
 
 -- 3.6 portfolio_initiatives
@@ -152,7 +167,7 @@ CREATE INDEX IF NOT EXISTS idx_client_unresolved_names_name
 INSERT INTO client_unresolved_names (source_table, original_name, record_count)
 SELECT 'unified_meetings', client_name, COUNT(*)
 FROM unified_meetings
-WHERE client_id IS NULL
+WHERE client_uuid IS NULL
   AND client_name IS NOT NULL
   AND client_name != ''
 GROUP BY client_name
@@ -162,7 +177,7 @@ ON CONFLICT DO NOTHING;
 INSERT INTO client_unresolved_names (source_table, original_name, record_count)
 SELECT 'actions', client, COUNT(*)
 FROM actions
-WHERE client_id IS NULL
+WHERE client_uuid IS NULL
   AND client IS NOT NULL
   AND client != ''
 GROUP BY client
@@ -172,7 +187,7 @@ ON CONFLICT DO NOTHING;
 INSERT INTO client_unresolved_names (source_table, original_name, record_count)
 SELECT 'client_segmentation', client_name, COUNT(*)
 FROM client_segmentation
-WHERE client_id IS NULL
+WHERE client_uuid IS NULL
   AND client_name IS NOT NULL
 GROUP BY client_name
 ON CONFLICT DO NOTHING;
@@ -181,7 +196,7 @@ ON CONFLICT DO NOTHING;
 INSERT INTO client_unresolved_names (source_table, original_name, record_count)
 SELECT 'aging_accounts', COALESCE(client_name_normalized, client_name), COUNT(*)
 FROM aging_accounts
-WHERE client_id IS NULL
+WHERE client_uuid IS NULL
   AND (client_name IS NOT NULL OR client_name_normalized IS NOT NULL)
 GROUP BY COALESCE(client_name_normalized, client_name)
 ON CONFLICT DO NOTHING;
@@ -212,33 +227,33 @@ CREATE OR REPLACE VIEW client_id_backfill_status AS
 SELECT
     'unified_meetings' AS table_name,
     COUNT(*) AS total_rows,
-    COUNT(client_id) AS with_client_id,
-    COUNT(*) - COUNT(client_id) AS missing_client_id,
-    ROUND(100.0 * COUNT(client_id) / NULLIF(COUNT(*), 0), 1) AS percentage
+    COUNT(client_uuid) AS with_client_id,
+    COUNT(*) - COUNT(client_uuid) AS missing_client_id,
+    ROUND(100.0 * COUNT(client_uuid) / NULLIF(COUNT(*), 0), 1) AS percentage
 FROM unified_meetings
 UNION ALL
 SELECT
     'actions',
     COUNT(*),
-    COUNT(client_id),
-    COUNT(*) - COUNT(client_id),
-    ROUND(100.0 * COUNT(client_id) / NULLIF(COUNT(*), 0), 1)
+    COUNT(client_uuid),
+    COUNT(*) - COUNT(client_uuid),
+    ROUND(100.0 * COUNT(client_uuid) / NULLIF(COUNT(*), 0), 1)
 FROM actions
 UNION ALL
 SELECT
     'client_segmentation',
     COUNT(*),
-    COUNT(client_id),
-    COUNT(*) - COUNT(client_id),
-    ROUND(100.0 * COUNT(client_id) / NULLIF(COUNT(*), 0), 1)
+    COUNT(client_uuid),
+    COUNT(*) - COUNT(client_uuid),
+    ROUND(100.0 * COUNT(client_uuid) / NULLIF(COUNT(*), 0), 1)
 FROM client_segmentation
 UNION ALL
 SELECT
     'aging_accounts',
     COUNT(*),
-    COUNT(client_id),
-    COUNT(*) - COUNT(client_id),
-    ROUND(100.0 * COUNT(client_id) / NULLIF(COUNT(*), 0), 1)
+    COUNT(client_uuid),
+    COUNT(*) - COUNT(client_uuid),
+    ROUND(100.0 * COUNT(client_uuid) / NULLIF(COUNT(*), 0), 1)
 FROM aging_accounts
 UNION ALL
 SELECT
@@ -297,11 +312,11 @@ BEGIN
     RAISE NOTICE '📊 Backfill Status:';
 
     FOR rec IN SELECT * FROM client_id_backfill_status ORDER BY table_name LOOP
-        RAISE NOTICE '   % : %/% (%%)',
+        RAISE NOTICE '   % : %/% (%)',
             rec.table_name,
             rec.with_client_id,
             rec.total_rows,
-            rec.percentage;
+            rec.percentage || '%';
     END LOOP;
 
     RAISE NOTICE '';
