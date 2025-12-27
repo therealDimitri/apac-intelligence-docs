@@ -118,12 +118,13 @@ All connections tested and verified working:
    - Updated `.husky/pre-commit` to block commits containing secrets
    - Commit: `153f089` - feat: add pre-commit secret scanning with secretlint
 
+5. **GitHub Secret Scanning:** Enabled via repository settings (Code security and analysis)
+
 ### Recommended (Outstanding)
 
 1. **Git History Cleanup:** Consider using BFG Repo-Cleaner to remove secrets from git history
 2. **Repository Visibility:** Review if scripts repository should be private
 3. **.gitignore Review:** Ensure all `.env*` files are properly gitignored
-4. **GitHub Secret Scanning:** Enable GitHub secret scanning if not already active
 
 ## Timeline
 
@@ -136,6 +137,7 @@ All connections tested and verified working:
 | 27 Dec 2025 | Legacy API keys disabled |
 | 27 Dec 2025 | Connections verified working |
 | 28 Dec 2025 | Pre-commit secret scanning implemented |
+| 28 Dec 2025 | GitHub secret scanning enabled |
 
 ## Lessons Learned
 
