@@ -44,23 +44,33 @@ Created `scripts/backfill-missing-snapshots.mjs` to fill in missing days:
 node scripts/backfill-missing-snapshots.mjs
 ```
 
-### 3. Results
+### 3. Mock Data Removal
 
-Before fix:
-- Latest snapshot: 2025-12-20
-- Unique dates: 2
+Initially backfilled with synthetic data, but user requested real data only. Tested Invoice Tracker API for historical data support - **it does not support historical queries** (all date parameters return current data).
 
-After fix:
-- Latest snapshot: 2025-12-27
-- Unique dates: 37
-- Date range: 2025-11-21 to 2025-12-27
+Removed all mock/synthetic data, keeping only real captures:
+
+```bash
+node scripts/remove-mock-data.mjs
+```
+
+### 4. Final Results
+
+| Date | Clients | Avg Compliance | Source |
+|------|---------|----------------|--------|
+| 2025-12-19 | 15 | 72.5% | Cron capture |
+| 2025-12-20 | 15 | 72.5% | Cron capture |
+| 2025-12-27 | 11 | 64.2% | Manual capture |
+
+**Note:** Historical data cannot be backfilled as Invoice Tracker only provides current-day aging data. The chart will populate with real data as the daily cron runs.
 
 ## Files Created
 
 | File | Purpose |
 |------|---------|
 | `scripts/capture-aged-accounts-snapshot.mjs` | Manually trigger Invoice Tracker data capture |
-| `scripts/backfill-missing-snapshots.mjs` | Fill in missing snapshot dates |
+| `scripts/backfill-missing-snapshots.mjs` | Fill in missing snapshot dates (synthetic) |
+| `scripts/remove-mock-data.mjs` | Remove synthetic data, keep only real captures |
 
 ## Recommendations
 
