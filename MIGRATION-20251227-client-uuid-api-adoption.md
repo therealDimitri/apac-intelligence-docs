@@ -2,8 +2,8 @@
 
 **Date:** 2025-12-27
 **Type:** Migration
-**Status:** Complete (Phases 2 & 3)
-**Commits:** ab634ec, 66b516e
+**Status:** Complete (Phases 2, 3, 4, & 5)
+**Commits:** ab634ec, 66b516e, 5524627
 
 ---
 
@@ -145,14 +145,27 @@ const { data } = await supabase
 - `src/hooks/useNPSAnalysis.ts` - Updated to use unified `client_aliases` table
 - `src/app/api/clients/health-history/route.ts` - Added canonical name resolution
 
-### Phase 4: Update Components (Lower Priority)
-- `src/app/(dashboard)/nps/page.tsx`
-- `src/components/LogEventModal.tsx`
-- Multiple components passing clientName props
+### Phase 4: Update Components ✅ COMPLETE
+- `src/app/(dashboard)/nps/page.tsx` - Updated to use `client_aliases` table
+- `src/components/LogEventModal.tsx` - No changes needed (triggers auto-populate client_uuid)
+- `src/app/(dashboard)/meetings/[id]/page.tsx` - Added clientUuid to Meeting transformation
+- `src/hooks/useMeetings.ts` - Added clientUuid to Meeting interface and query
+- 5 client detail components updated to use `matchesClientSmart()`
+  - `LeftColumn.tsx`
+  - `CenterColumn.tsx`
+  - `ClientActionBar.tsx`
+  - `QuickStatsRow.tsx`
+  - `MeetingHistorySection.tsx`
 
-### Phase 5: Deprecate Legacy Utilities
-- `src/lib/client-name-mapper.ts` → Use `clients.display_name`
-- `src/utils/clientMatching.ts` → Use UUID comparison
+### Phase 5: Deprecate Legacy Utilities ✅ PARTIAL
+- `src/utils/clientMatching.ts` - Added `matchesClientSmart()` with UUID-first matching
+  - `matchesClient()` marked as deprecated
+  - `matchesClientByUuid()` added for direct UUID comparison
+  - `matchesClientSmart()` added for smart fallback to string matching
+- `src/lib/client-name-mapper.ts` - Still in use for display names
+  - Hard-coded display names should be replaced with `clients.display_name` from database
+  - All 32 clients have `display_name` populated
+  - Lower priority refactor (UI display only, not data integrity)
 
 ### Add client_uuid to Remaining Tables
 - nps_clients
