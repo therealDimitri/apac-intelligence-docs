@@ -120,11 +120,14 @@ All connections tested and verified working:
 
 5. **GitHub Secret Scanning:** Enabled via repository settings (Code security and analysis)
 
-### Recommended (Outstanding)
+6. **.gitignore Coverage:** Verified `.env*` pattern in main repo; added `.gitignore` to scripts repo
 
-1. **Git History Cleanup:** Consider using BFG Repo-Cleaner to remove secrets from git history
-2. **Repository Visibility:** Review if scripts repository should be private
-3. **.gitignore Review:** Ensure all `.env*` files are properly gitignored
+7. **Repository Visibility:** Changed `apac-intelligence-scripts` from public to private
+
+8. **Git History Cleanup:** Used BFG Repo-Cleaner to remove exposed secrets from git history
+   - Removed database password and JWT token from all historical commits
+   - Force-pushed cleaned history to remote
+   - Old commit hashes invalidated (secrets no longer accessible)
 
 ## Timeline
 
@@ -138,6 +141,8 @@ All connections tested and verified working:
 | 27 Dec 2025 | Connections verified working |
 | 28 Dec 2025 | Pre-commit secret scanning implemented |
 | 28 Dec 2025 | GitHub secret scanning enabled |
+| 28 Dec 2025 | Scripts repository made private |
+| 28 Dec 2025 | Git history cleaned with BFG Repo-Cleaner |
 
 ## Lessons Learned
 
