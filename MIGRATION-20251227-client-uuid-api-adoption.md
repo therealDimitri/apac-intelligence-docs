@@ -157,15 +157,37 @@ const { data } = await supabase
   - `QuickStatsRow.tsx`
   - `MeetingHistorySection.tsx`
 
-### Phase 5: Deprecate Legacy Utilities ✅ PARTIAL
+### Phase 5: Deprecate Legacy Utilities ✅ COMPLETE
 - `src/utils/clientMatching.ts` - Added `matchesClientSmart()` with UUID-first matching
   - `matchesClient()` marked as deprecated
   - `matchesClientByUuid()` added for direct UUID comparison
   - `matchesClientSmart()` added for smart fallback to string matching
-- `src/lib/client-name-mapper.ts` - Still in use for display names
-  - Hard-coded display names should be replaced with `clients.display_name` from database
-  - All 32 clients have `display_name` populated
-  - Lower priority refactor (UI display only, not data integrity)
+- `src/lib/client-name-mapper.ts` - Deprecated and replaced with database-backed solution
+  - All 13 components migrated to use `useClientDisplayNames` hook
+  - File marked as deprecated with migration notice
+  - Hard-coded `DISPLAY_NAMES` replaced with `clients.display_name` from database
+
+### Phase 6: Component Display Name Migration ✅ COMPLETE
+Migrated all components from hard-coded `getDisplayName` to database-backed hook:
+
+| Component | File |
+|-----------|------|
+| KanbanBoard | `src/components/KanbanBoard.tsx` |
+| Actions Page | `src/app/(dashboard)/actions/page.tsx` |
+| Action Detail | `src/app/(dashboard)/actions/[id]/page.tsx` |
+| Meeting Detail | `src/app/(dashboard)/meetings/[id]/page.tsx` |
+| NPS Page | `src/app/(dashboard)/nps/page.tsx` |
+| Segmentation Page | `src/app/(dashboard)/segmentation/page.tsx` |
+| MeetingDetailTabs | `src/components/MeetingDetailTabs.tsx` |
+| RecurringMeetingPatterns | `src/components/RecurringMeetingPatterns.tsx` |
+| MeetingRecommendations | `src/components/MeetingRecommendations.tsx` |
+| CompactMeetingCard | `src/components/CompactMeetingCard.tsx` |
+| MeetingAnalyticsDashboard | `src/components/MeetingAnalyticsDashboard.tsx` |
+| MeetingPrepChecklist | `src/components/MeetingPrepChecklist.tsx` |
+
+Also cleaned up:
+- `src/hooks/useEventCompliance.ts` - Removed unused `normalizeClientName` import
+- `src/app/(dashboard)/segmentation/page.tsx` - Removed deprecated `getSegmentationName` and `getAllClientNames` usage
 
 ### Add client_uuid to Remaining Tables ✅ COMPLETE
 All tables now have `client_uuid` column with backfilled data:
