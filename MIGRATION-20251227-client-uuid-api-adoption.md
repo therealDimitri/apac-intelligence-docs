@@ -2,8 +2,8 @@
 
 **Date:** 2025-12-27
 **Type:** Migration
-**Status:** Complete (Phase 2)
-**Commit:** ab634ec
+**Status:** Complete (Phases 2 & 3)
+**Commits:** ab634ec, 66b516e
 
 ---
 
@@ -138,12 +138,12 @@ const { data } = await supabase
 
 ## Remaining Work
 
-### Phase 3: Update Hooks (Medium Priority)
-- `src/hooks/useChaSenRecommendations.ts`
-- `src/hooks/usePortfolioInitiatives.ts`
-- `src/hooks/useHealthHistory.ts`
-- `src/hooks/useStreamingChat.ts`
-- `src/hooks/useNPSAnalysis.ts`
+### Phase 3: Update Hooks ✅ COMPLETE
+- `src/hooks/useChaSenRecommendations.ts` - No changes needed (uses API)
+- `src/hooks/usePortfolioInitiatives.ts` - Deferred (low priority, uses client_name)
+- `src/hooks/useHealthHistory.ts` - Uses API (health-history route updated)
+- `src/hooks/useNPSAnalysis.ts` - Updated to use unified `client_aliases` table
+- `src/app/api/clients/health-history/route.ts` - Added canonical name resolution
 
 ### Phase 4: Update Components (Lower Priority)
 - `src/app/(dashboard)/nps/page.tsx`
