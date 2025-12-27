@@ -111,14 +111,19 @@ All connections tested and verified working:
 1. **Environment Variable Pattern:** All scripts now load credentials from `.env.local`
 2. **Explicit Validation:** Scripts fail fast with clear error messages if env vars missing
 3. **Security Comments:** Added inline comments warning against hardcoding secrets
+4. **Pre-commit Secret Scanning:** Added `secretlint` to scan staged files before every commit
+   - Installed `secretlint` with `@secretlint/secretlint-rule-preset-recommend`
+   - Created `.secretlintrc.json` configuration
+   - Added `secrets:scan` and `secrets:scan:staged` npm scripts
+   - Updated `.husky/pre-commit` to block commits containing secrets
+   - Commit: `153f089` - feat: add pre-commit secret scanning with secretlint
 
-### Recommended
+### Recommended (Outstanding)
 
-1. **Pre-commit Hooks:** Consider adding secret scanning to pre-commit hooks
-2. **Git History Cleanup:** Consider using BFG Repo-Cleaner to remove secrets from git history
-3. **Repository Visibility:** Review if scripts repository should be private
-4. **.gitignore Review:** Ensure all `.env*` files are properly gitignored
-5. **Secret Scanning:** Enable GitHub secret scanning if not already active
+1. **Git History Cleanup:** Consider using BFG Repo-Cleaner to remove secrets from git history
+2. **Repository Visibility:** Review if scripts repository should be private
+3. **.gitignore Review:** Ensure all `.env*` files are properly gitignored
+4. **GitHub Secret Scanning:** Enable GitHub secret scanning if not already active
 
 ## Timeline
 
@@ -130,6 +135,7 @@ All connections tested and verified working:
 | 27 Dec 2025 | Credentials rotated in Supabase |
 | 27 Dec 2025 | Legacy API keys disabled |
 | 27 Dec 2025 | Connections verified working |
+| 28 Dec 2025 | Pre-commit secret scanning implemented |
 
 ## Lessons Learned
 
