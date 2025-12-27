@@ -45,19 +45,19 @@
       },
       {
         "column_name": "Content_Topic",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "Meeting_Date",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "Topic_Number",
-        "data_type": "unknown",
+        "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -75,7 +75,7 @@
       },
       {
         "column_name": "Notes",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -93,7 +93,7 @@
       },
       {
         "column_name": "Completed_At",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -141,7 +141,7 @@
       },
       {
         "column_name": "department_code",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -174,9 +174,51 @@
         "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
+      },
+      {
+        "column_name": "ai_context",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "ai_context_key_points",
+        "data_type": "array",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "ai_context_urgency_indicators",
+        "data_type": "array",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "ai_context_related_topics",
+        "data_type": "array",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "ai_context_confidence",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "ai_context_generated_at",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "ai_context_meeting_title",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
       }
     ],
-    "row_count": 91
+    "row_count": 90
   },
   "unified_meetings": {
     "columns": [
@@ -1104,7 +1146,7 @@
         "inferred": true
       }
     ],
-    "row_count": 100
+    "row_count": 198
   },
   "nps_period_config": {
     "columns": [
@@ -1270,7 +1312,7 @@
         "inferred": true
       }
     ],
-    "row_count": 16
+    "row_count": 20
   },
   "chasen_feedback": {
     "columns": [
@@ -1401,7 +1443,7 @@
         "inferred": true
       }
     ],
-    "row_count": 18
+    "row_count": 22
   },
   "chasen_knowledge_suggestions": {
     "columns": [
@@ -1508,7 +1550,7 @@
         "inferred": true
       }
     ],
-    "row_count": 10
+    "row_count": 12
   },
   "chasen_learning_patterns": {
     "columns": [],
@@ -1578,7 +1620,7 @@
         "inferred": true
       }
     ],
-    "row_count": 37
+    "row_count": 100
   },
   "chasen_folders": {
     "columns": [
