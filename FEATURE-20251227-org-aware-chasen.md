@@ -11,23 +11,51 @@ ChaSen now understands the APAC team's organisational structure, enabling person
 
 ### Database Schema
 
-Added two columns to `cse_profiles`:
+Added three columns to `cse_profiles`:
 
 | Column | Type | Description |
 |--------|------|-------------|
 | `reports_to` | TEXT | Email of the user's manager |
 | `is_global_role` | BOOLEAN | True for global roles (not APAC-specific) |
+| `job_description` | TEXT | Detailed role responsibilities for context |
 
-**Migration:** `docs/migrations/20251227_add_reports_to_column.sql`
+**Migrations:**
+- `docs/migrations/20251227_add_reports_to_column.sql`
+- `docs/migrations/20251227_add_job_descriptions.sql`
 
 ### ChaSen System Prompt
 
 Added `**ORGANISATIONAL CONTEXT:**` section that dynamically shows:
 
+- User's job description (responsibilities)
 - Whether user is in a GLOBAL role (e.g., Cristina Ortenzi, Todd Duncan)
-- Who they report to (manager name and role)
-- Their direct reports (names and roles)
+- Who they report to (manager name, role, and job description)
+- Their direct reports (names, roles, and job descriptions)
 - Instructions to reference direct reports when asked about "my team"
+
+### Job Descriptions
+
+All 18 team members now have detailed job descriptions:
+
+| Role | Description |
+|------|-------------|
+| EVP APAC | Overall APAC business strategy, P&L ownership, regional leadership |
+| AVP Client Success | Leads CS team, drives retention, manages CSE performance |
+| VP Business Support | Business operations, project delivery, support functions |
+| VP Solutions | Pre-sales, solutions consulting, clinical/technical resources |
+| Client Success Executive | Primary client relationship owner, health & retention |
+| Client Account Manager | Commercial aspects, renewals, upsells, account growth |
+| Director Solutions | Senior consulting for complex implementations |
+| Chief Medical Officer | Clinical leadership, healthcare industry expertise |
+| Project Manager | Implementation projects, timelines, go-lives |
+| AVP Support | Leads support organisation, service levels |
+| Business Operations | Operational processes, reporting, admin functions |
+| Sr Field Marketing | Regional campaigns, events, demand generation |
+| Sr HR Business Partner | Talent management, employee engagement |
+| Country Manager | Local operations and client relationships |
+| SVP Client Success & Ops | Global CS & Ops strategy |
+| VP Client Success | Global CS methodology and tools |
+| Marketing Manager | Marketing programs and campaigns |
 
 ### New Role Types
 
