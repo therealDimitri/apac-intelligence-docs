@@ -251,6 +251,29 @@ const formatClientNps = (clientName: string): string => {
 
 ---
 
+## Issue 7: Table Links Showing Raw URLs (Fixed)
+
+### Symptoms
+
+The "Open Actions" and "Recent Meetings" rows in the Client Health Card table displayed raw URL syntax like `(/actions?client=...)` instead of proper clickable links.
+
+### Root Cause
+
+The LLM prompt template showed placeholders `[X]` for these cells without demonstrating proper markdown link format in table context.
+
+### Fix
+
+Updated the table template in the system prompt to show proper link syntax:
+
+```markdown
+| Open Actions | [View X Actions](/actions?client=URL_ENCODED_CLIENT_NAME) |
+| Recent Meetings | [View Meetings](/meetings?client=URL_ENCODED_CLIENT_NAME) |
+```
+
+**Location:** `src/app/api/chasen/stream/route.ts:1590-1591`
+
+---
+
 ## Related
 
 - [Profile Photos Bug](./BUG-REPORT-20251227-chasen-profile-photos-not-rendering.md)
