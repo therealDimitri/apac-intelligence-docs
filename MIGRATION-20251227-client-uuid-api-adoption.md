@@ -2,8 +2,8 @@
 
 **Date:** 2025-12-27
 **Type:** Migration
-**Status:** Complete (Phases 2, 3, 4, & 5)
-**Commits:** ab634ec, 66b516e, 5524627
+**Status:** Complete (All Phases)
+**Commits:** ab634ec, 66b516e, 5524627, 75c9648
 
 ---
 
@@ -167,12 +167,27 @@ const { data } = await supabase
   - All 32 clients have `display_name` populated
   - Lower priority refactor (UI display only, not data integrity)
 
-### Add client_uuid to Remaining Tables
-- nps_clients
-- client_arr
-- segmentation_compliance_scores
-- client_health_summary
-- chasen_documents
+### Add client_uuid to Remaining Tables ✅ COMPLETE
+All tables now have `client_uuid` column with backfilled data:
+
+| Table | Coverage | Notes |
+|-------|----------|-------|
+| nps_clients | 100% | All 18 rows have UUID |
+| client_arr | 100% | All 16 rows have UUID |
+| segmentation_compliance_scores | 100% | All 19 rows have UUID |
+| chasen_documents | 0% | All 11 rows have NULL client_name (expected - documents uploaded without client association) |
+
+Migration scripts created:
+- `docs/migrations/20251227_add_client_uuid_to_remaining_tables.sql`
+- `scripts/apply-client-uuid-migration.mjs` (Node.js backfill script)
+- `scripts/execute-client-uuid-sql.mjs` (SQL executor script)
+
+New utilities created:
+- `src/lib/client-display-names.ts` - Database-backed display name resolver
+- `src/hooks/useClientDisplayNames.ts` - React hook for client-side display names
+
+### client_health_summary View
+This is a materialized view. A future migration should update the view definition to include `client_uuid` from the clients table join.
 
 ---
 
