@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2025-12-27T01:11:35.228Z
+**Generated**: 2025-12-27T01:14:51.872Z
 **Purpose**: Source of truth for all database table schemas
 
 ---

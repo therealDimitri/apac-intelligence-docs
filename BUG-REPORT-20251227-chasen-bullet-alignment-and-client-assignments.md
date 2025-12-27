@@ -1,15 +1,18 @@
-# Bug Report: ChaSen Bullet Alignment and Missing Client Assignments
+# Bug Report: ChaSen Markdown Rendering and Client Assignments
 
 **Date:** 27 December 2025
-**Severity:** Low
+**Severity:** Medium
 **Status:** Fixed
-**Commits:** `d062e1e`, `4f59894`
+**Commits:** `d062e1e`, `4f59894`, `464f3a8`, `ac274a2`, `e48b4bf`
 
 ## Summary
 
-Two issues with ChaSen responses:
+Multiple issues with ChaSen response formatting:
 1. Bullet points were misaligned (appearing too low relative to text)
-2. Team member client assignments were not included in org context, causing incomplete responses
+2. Team member client assignments were not included in org context
+3. Section headers had same bullet style as list items (unprofessional)
+4. Labeled items (e.g., "Key Responsibilities: content") not styled distinctly
+5. Plain text labels without bold markers not detected
 
 ## Issue 1: Bullet Alignment
 
@@ -94,8 +97,8 @@ parts.push(
 
 | File | Changes |
 |------|---------|
-| `src/lib/markdown-renderer.tsx` | Changed bullet alignment from `items-start` + `mt-1.5` to `items-baseline` |
-| `src/app/api/chasen/stream/route.ts` | Added client_segmentation query, included assigned clients in team member context |
+| `src/lib/markdown-renderer.tsx` | Changed bullet alignment from `items-start` + `mt-1.5` to `items-baseline`; added section header and labeled item detection |
+| `src/app/api/chasen/stream/route.ts` | Added client_segmentation query, included assigned clients in team member context; added bidirectional alias lookup for NPS data |
 
 ## Verification
 
@@ -111,6 +114,142 @@ After the fix, responses correctly show:
    - Bullet points align with text (not below)
    - Both SLMC and GRMC are listed as assigned clients
    - Profile photo displays correctly
+
+---
+
+## Issue 3: Section Headers Same as List Items
+
+### Symptoms
+
+Section headers like "**Assigned Clients:**" rendered with the same bullet style as list items beneath them, making it hard to distinguish hierarchy.
+
+### Fix (Commit `464f3a8`)
+
+Added detection for section headers (bold text ending with colon) to render without bullets:
+
+```typescript
+const isSectionHeader = /^\*\*[^*]+:\*\*$/.test(content) || /^\*\*[^*]+\*\*:$/.test(content)
+
+if (isSectionHeader) {
+  const headerText = content.replace(/\*\*/g, '').replace(/:$/, '')
+  elements.push(
+    <div key={i} className="mt-4 mb-2 text-[15px] font-semibold text-gray-800">
+      {headerText}
+    </div>
+  )
+}
+```
+
+---
+
+## Issue 4: Labeled Items Not Styled Distinctly
+
+### Symptoms
+
+Bullet items starting with bold labels like `• **Key responsibilities**: content` rendered with same bullet style as regular items.
+
+### Fix (Commit `ac274a2`)
+
+Added detection for labeled items (bold label + colon + content) to render without bullets:
+
+```typescript
+const labeledItemMatch = content.match(/^\*\*([^*]+)\*\*:\s*(.*)$|^\*\*([^*]+):\*\*\s*(.*)$/)
+
+if (labeledItemMatch) {
+  const label = labeledItemMatch[1] || labeledItemMatch[3]
+  const itemContent = labeledItemMatch[2] || labeledItemMatch[4] || ''
+  elements.push(
+    <div key={i} className="mt-3 mb-1.5 text-[15px] leading-relaxed">
+      <span className="font-semibold text-gray-800">{label}</span>
+      <span className="text-gray-500">: </span>
+      <span className="text-gray-700">{processedContent}</span>
+    </div>
+  )
+}
+```
+
+---
+
+## Issue 5: Plain Text Labels Not Detected
+
+### Symptoms
+
+LLM sometimes generates labeled items without bold markers (e.g., "Key responsibilities: content") which rendered as plain paragraphs.
+
+### Fix (Commit `e48b4bf`)
+
+Added detection for plain text labels (capitalized phrase followed by colon):
+
+```typescript
+const plainLabelMatch = trimmedLine.match(/^([A-Z][a-zA-Z\s]+):\s*(.+)$/)
+if (plainLabelMatch && plainLabelMatch[1].length <= 30) {
+  const label = plainLabelMatch[1]
+  const content = plainLabelMatch[2]
+  elements.push(
+    <div key={i} className="mt-3 mb-2 text-[15px] leading-relaxed">
+      <span className="font-semibold text-gray-800">{label}</span>
+      <span className="text-gray-500">: </span>
+      <span className="text-gray-700">{processedContent}</span>
+    </div>
+  )
+}
+```
+
+---
+
+## Issue 6: NPS Data Shows N/A (Fixed)
+
+### Symptoms
+
+NPS scores showed "N/A" for clients like GRMC even though NPS data existed in the database.
+
+### Root Cause
+
+Client names in `nps_responses` table don't match names in `client_segmentation`:
+- Segmentation: "Guam Regional Medical City (GRMC)"
+- NPS: "Guam Regional Medical Centre"
+
+The `formatClientNps` function did a direct lookup without considering aliases.
+
+### Fix
+
+Added bidirectional alias lookup to the stream route:
+
+```typescript
+/**
+ * Build a bidirectional alias map for client name lookups
+ */
+async function buildClientAliasMap(supabase): Promise<Map<string, Set<string>>> {
+  const aliasGroups = new Map<string, Set<string>>()
+  const { data: aliases } = await supabase
+    .from('client_name_aliases')
+    .select('canonical_name, display_name')
+    .eq('is_active', true)
+
+  // Build groups of related names and create bidirectional lookup
+  // ...
+  return aliasGroups
+}
+
+// In formatClientNps:
+const formatClientNps = (clientName: string): string => {
+  let npsData = clientNpsMap.get(clientName)
+
+  // If not found, try alias lookup
+  if (!npsData) {
+    const aliases = aliasMap.get(clientName)
+    if (aliases) {
+      for (const alias of aliases) {
+        npsData = clientNpsMap.get(alias)
+        if (npsData) break
+      }
+    }
+  }
+  // ...
+}
+```
+
+---
 
 ## Related
 
