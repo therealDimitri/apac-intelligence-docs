@@ -45,19 +45,19 @@
       },
       {
         "column_name": "Content_Topic",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "Meeting_Date",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "Topic_Number",
-        "data_type": "integer",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -75,7 +75,7 @@
       },
       {
         "column_name": "Notes",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -93,7 +93,7 @@
       },
       {
         "column_name": "Completed_At",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -141,13 +141,13 @@
       },
       {
         "column_name": "department_code",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "activity_type_code",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -171,7 +171,7 @@
       },
       {
         "column_name": "client_id",
-        "data_type": "unknown",
+        "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -214,6 +214,12 @@
       {
         "column_name": "ai_context_meeting_title",
         "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "client_uuid",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       }
@@ -539,9 +545,15 @@
         "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
+      },
+      {
+        "column_name": "client_uuid",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
       }
     ],
-    "row_count": 138
+    "row_count": 137
   },
   "nps_responses": {
     "columns": [
@@ -634,6 +646,12 @@
         "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
+      },
+      {
+        "column_name": "client_uuid",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
       }
     ],
     "row_count": 199
@@ -709,6 +727,12 @@
       {
         "column_name": "created_by",
         "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "client_uuid",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       }
@@ -802,7 +826,7 @@
       },
       {
         "column_name": "current_amount",
-        "data_type": "integer",
+        "data_type": "numeric",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -844,13 +868,13 @@
       },
       {
         "column_name": "days_271_to_365",
-        "data_type": "numeric",
+        "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "days_over_365",
-        "data_type": "numeric",
+        "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -862,7 +886,7 @@
       },
       {
         "column_name": "total_overdue",
-        "data_type": "numeric",
+        "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -904,7 +928,13 @@
       },
       {
         "column_name": "client_id",
-        "data_type": "unknown",
+        "data_type": "integer",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "client_uuid",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       }
@@ -1076,6 +1106,12 @@
       },
       {
         "column_name": "updated_at",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "client_id",
         "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
@@ -1618,9 +1654,15 @@
         "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
+      },
+      {
+        "column_name": "client_id",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
       }
     ],
-    "row_count": 100
+    "row_count": 115
   },
   "chasen_folders": {
     "columns": [
@@ -1644,7 +1686,7 @@
       },
       {
         "column_name": "client_name",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -1669,6 +1711,12 @@
       {
         "column_name": "updated_at",
         "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "client_id",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       }
@@ -1760,9 +1808,15 @@
         "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
+      },
+      {
+        "column_name": "client_id",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
       }
     ],
-    "row_count": 540
+    "row_count": 558
   },
   "health_status_alerts": {
     "columns": [
@@ -1840,6 +1894,12 @@
       },
       {
         "column_name": "created_at",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "client_id",
         "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true

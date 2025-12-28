@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2025-12-27T01:14:51.872Z
+**Generated**: 2025-12-28T08:32:03.839Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -24,15 +24,15 @@ This document provides the authoritative schema definition for all tables in the
 | `Due_Date` | text | ✗ | - | *(inferred)* |
 | `Status` | text | ✗ | - | *(inferred)* |
 | `Priority` | text | ✗ | - | *(inferred)* |
-| `Content_Topic` | text | ✗ | - | *(inferred)* |
-| `Meeting_Date` | text | ✗ | - | *(inferred)* |
-| `Topic_Number` | integer | ✗ | - | *(inferred)* |
+| `Content_Topic` | unknown | ✗ | - | *(inferred)* |
+| `Meeting_Date` | unknown | ✗ | - | *(inferred)* |
+| `Topic_Number` | unknown | ✗ | - | *(inferred)* |
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `updated_at` | text | ✗ | - | *(inferred)* |
-| `Notes` | text | ✗ | - | *(inferred)* |
+| `Notes` | unknown | ✗ | - | *(inferred)* |
 | `Shared_Action_Id` | unknown | ✗ | - | *(inferred)* |
 | `Is_Shared` | boolean | ✗ | - | *(inferred)* |
-| `Completed_At` | text | ✗ | - | *(inferred)* |
+| `Completed_At` | unknown | ✗ | - | *(inferred)* |
 | `meeting_id` | unknown | ✗ | - | *(inferred)* |
 | `outlook_task_id` | unknown | ✗ | - | *(inferred)* |
 | `teams_message_id` | unknown | ✗ | - | *(inferred)* |
@@ -40,12 +40,12 @@ This document provides the authoritative schema definition for all tables in the
 | `edit_history` | array | ✗ | - | *(inferred)* |
 | `client` | text | ✗ | - | *(inferred)* |
 | `Category` | text | ✗ | - | *(inferred)* |
-| `department_code` | unknown | ✗ | - | *(inferred)* |
-| `activity_type_code` | unknown | ✗ | - | *(inferred)* |
+| `department_code` | text | ✗ | - | *(inferred)* |
+| `activity_type_code` | text | ✗ | - | *(inferred)* |
 | `is_internal` | boolean | ✗ | - | *(inferred)* |
 | `cross_functional` | boolean | ✗ | - | *(inferred)* |
 | `linked_initiative_id` | unknown | ✗ | - | *(inferred)* |
-| `client_id` | unknown | ✗ | - | *(inferred)* |
+| `client_id` | integer | ✗ | - | *(inferred)* |
 | `ai_context` | unknown | ✗ | - | *(inferred)* |
 | `ai_context_key_points` | array | ✗ | - | *(inferred)* |
 | `ai_context_urgency_indicators` | array | ✗ | - | *(inferred)* |
@@ -53,12 +53,13 @@ This document provides the authoritative schema definition for all tables in the
 | `ai_context_confidence` | unknown | ✗ | - | *(inferred)* |
 | `ai_context_generated_at` | unknown | ✗ | - | *(inferred)* |
 | `ai_context_meeting_title` | unknown | ✗ | - | *(inferred)* |
+| `client_uuid` | text | ✗ | - | *(inferred)* |
 
 ---
 
 ## Table: `unified_meetings`
 
-**Row Count**: 138
+**Row Count**: 137
 
 ### Columns
 
@@ -117,6 +118,7 @@ This document provides the authoritative schema definition for all tables in the
 | `cross_functional` | boolean | ✗ | - | *(inferred)* |
 | `linked_initiative_id` | unknown | ✗ | - | *(inferred)* |
 | `client_id` | unknown | ✗ | - | *(inferred)* |
+| `client_uuid` | text | ✗ | - | *(inferred)* |
 
 ---
 
@@ -143,6 +145,7 @@ This document provides the authoritative schema definition for all tables in the
 | `contact_email` | unknown | ✗ | - | *(inferred)* |
 | `region` | unknown | ✗ | - | *(inferred)* |
 | `client_id` | integer | ✗ | - | *(inferred)* |
+| `client_uuid` | text | ✗ | - | *(inferred)* |
 
 ---
 
@@ -166,6 +169,7 @@ This document provides the authoritative schema definition for all tables in the
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `updated_at` | text | ✗ | - | *(inferred)* |
 | `created_by` | unknown | ✗ | - | *(inferred)* |
+| `client_uuid` | text | ✗ | - | *(inferred)* |
 
 ---
 
@@ -201,24 +205,25 @@ This document provides the authoritative schema definition for all tables in the
 | `client_name` | text | ✗ | - | *(inferred)* |
 | `client_name_normalized` | text | ✗ | - | *(inferred)* |
 | `most_recent_comment` | text | ✗ | - | *(inferred)* |
-| `current_amount` | integer | ✗ | - | *(inferred)* |
+| `current_amount` | numeric | ✗ | - | *(inferred)* |
 | `days_1_to_30` | integer | ✗ | - | *(inferred)* |
 | `days_31_to_60` | integer | ✗ | - | *(inferred)* |
 | `days_61_to_90` | integer | ✗ | - | *(inferred)* |
 | `days_91_to_120` | integer | ✗ | - | *(inferred)* |
 | `days_121_to_180` | integer | ✗ | - | *(inferred)* |
 | `days_181_to_270` | integer | ✗ | - | *(inferred)* |
-| `days_271_to_365` | numeric | ✗ | - | *(inferred)* |
-| `days_over_365` | numeric | ✗ | - | *(inferred)* |
+| `days_271_to_365` | integer | ✗ | - | *(inferred)* |
+| `days_over_365` | integer | ✗ | - | *(inferred)* |
 | `total_outstanding` | numeric | ✗ | - | *(inferred)* |
-| `total_overdue` | numeric | ✗ | - | *(inferred)* |
+| `total_overdue` | integer | ✗ | - | *(inferred)* |
 | `is_inactive` | boolean | ✗ | - | *(inferred)* |
 | `data_source` | text | ✗ | - | *(inferred)* |
 | `import_date` | text | ✗ | - | *(inferred)* |
 | `week_ending_date` | text | ✗ | - | *(inferred)* |
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `updated_at` | text | ✗ | - | *(inferred)* |
-| `client_id` | unknown | ✗ | - | *(inferred)* |
+| `client_id` | integer | ✗ | - | *(inferred)* |
+| `client_uuid` | text | ✗ | - | *(inferred)* |
 
 ---
 
@@ -268,6 +273,7 @@ This document provides the authoritative schema definition for all tables in the
 | `description` | text | ✗ | - | *(inferred)* |
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `updated_at` | text | ✗ | - | *(inferred)* |
+| `client_id` | text | ✗ | - | *(inferred)* |
 
 ---
 
@@ -410,7 +416,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `chasen_conversations`
 
-**Row Count**: 100
+**Row Count**: 115
 
 ### Columns
 
@@ -426,6 +432,7 @@ This document provides the authoritative schema definition for all tables in the
 | `context` | text | ✗ | - | *(inferred)* |
 | `client_name` | unknown | ✗ | - | *(inferred)* |
 | `model_id` | unknown | ✗ | - | *(inferred)* |
+| `client_id` | unknown | ✗ | - | *(inferred)* |
 
 ---
 
@@ -440,17 +447,18 @@ This document provides the authoritative schema definition for all tables in the
 | `id` | text | ✗ | - | *(inferred)* |
 | `name` | text | ✗ | - | *(inferred)* |
 | `parent_id` | unknown | ✗ | - | *(inferred)* |
-| `client_name` | text | ✗ | - | *(inferred)* |
+| `client_name` | unknown | ✗ | - | *(inferred)* |
 | `description` | text | ✗ | - | *(inferred)* |
 | `color` | text | ✗ | - | *(inferred)* |
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `updated_at` | text | ✗ | - | *(inferred)* |
+| `client_id` | unknown | ✗ | - | *(inferred)* |
 
 ---
 
 ## Table: `client_health_history`
 
-**Row Count**: 540
+**Row Count**: 558
 
 ### Columns
 
@@ -470,6 +478,7 @@ This document provides the authoritative schema definition for all tables in the
 | `previous_status` | unknown | ✗ | - | *(inferred)* |
 | `status_changed` | boolean | ✗ | - | *(inferred)* |
 | `created_at` | text | ✗ | - | *(inferred)* |
+| `client_id` | text | ✗ | - | *(inferred)* |
 
 ---
 
@@ -494,6 +503,7 @@ This document provides the authoritative schema definition for all tables in the
 | `acknowledged_at` | text | ✗ | - | *(inferred)* |
 | `cse_name` | text | ✗ | - | *(inferred)* |
 | `created_at` | text | ✗ | - | *(inferred)* |
+| `client_id` | text | ✗ | - | *(inferred)* |
 
 ---
 
