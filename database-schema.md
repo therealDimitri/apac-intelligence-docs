@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2025-12-28T08:32:03.839Z
+**Generated**: 2025-12-28T16:18:19.625Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -11,7 +11,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `actions`
 
-**Row Count**: 90
+**Row Count**: 140
 
 ### Columns
 
