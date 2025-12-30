@@ -1,8 +1,35 @@
 # Unified Actions System
 
-**Version:** 1.0
+**Version:** 1.1
 **Last Updated:** 30 December 2025
-**Status:** Production Ready
+**Status:** Production Ready - Migration Complete
+
+---
+
+## Migration Status
+
+✅ **Database Migration**: Source tracking columns (`source`, `source_metadata`, `created_by`) added
+✅ **Hook Migration**: `useActions` now wraps `useUnifiedActions` for backwards compatibility
+✅ **Component Deprecation**: Legacy components marked with `@deprecated` JSDoc tags
+
+### Backwards Compatibility
+
+The legacy `useActions` hook continues to work seamlessly. It now internally uses `useUnifiedActions` and converts the data to the legacy `Action` format via `toLegacyActions()`. This means:
+
+- **No breaking changes** - All existing code continues to work
+- **New features available** - Source tracking, AI context, and rich metadata are captured
+- **Gradual migration** - Components can be migrated to the new system incrementally
+
+### Deprecated Components
+
+The following components are deprecated and should be replaced in new code:
+
+| Deprecated | Replacement | Notes |
+|-----------|-------------|-------|
+| `ActionDetailModal` | `ActionDetailPanel` | Supports inline editing |
+| `CreateActionModal` | `ActionQuickCreate` | Context-aware creation |
+| `EditActionModal` | `ActionDetailPanel` | Inline editing mode |
+| `ActionContextMenu` | `UnifiedContextMenu` | Consistent right-click menu |
 
 ---
 
