@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2025-12-28T16:18:19.625Z
+**Generated**: 2025-12-30T06:06:55.825Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -11,7 +11,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `actions`
 
-**Row Count**: 140
+**Row Count**: 139
 
 ### Columns
 
@@ -59,7 +59,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `unified_meetings`
 
-**Row Count**: 137
+**Row Count**: 127
 
 ### Columns
 
