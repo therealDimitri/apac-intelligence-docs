@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2025-12-30T06:06:55.825Z
+**Generated**: 2025-12-31T05:28:23.175Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -11,7 +11,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `actions`
 
-**Row Count**: 139
+**Row Count**: 151
 
 ### Columns
 
@@ -54,6 +54,9 @@ This document provides the authoritative schema definition for all tables in the
 | `ai_context_generated_at` | unknown | ✗ | - | *(inferred)* |
 | `ai_context_meeting_title` | unknown | ✗ | - | *(inferred)* |
 | `client_uuid` | text | ✗ | - | *(inferred)* |
+| `source` | text | ✗ | - | *(inferred)* |
+| `source_metadata` | jsonb | ✗ | - | *(inferred)* |
+| `created_by` | unknown | ✗ | - | *(inferred)* |
 
 ---
 
