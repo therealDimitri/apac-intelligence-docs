@@ -163,14 +163,76 @@ Removed the `section` parameter from both:
 
 Now all "Open Client Profile" actions navigate directly to `/clients/{id}/v2` without any section parameter.
 
-### Key Learning
+## Follow-up Fix #3: Strategic Asia Pacific Partners Logo
 
-**Single Source of Truth**: The `client_health_summary` materialised view is the source of truth for canonical client names. All other systems (aliases, logos, deep links) must reference these exact names.
+"Strategic Asia Pacific Partners" (GRMC's billing entity) was not resolving to the correct logo.
+
+### Root Cause
+
+No alias existed in the database for "Strategic Asia Pacific Partners" variants.
+
+### Fix Applied
+
+Added aliases to database and `FALLBACK_ALIASES`:
+- `Strategic Asia Pacific Partners` → Guam Regional Medical City (GRMC)
+- `Strategic Asia Pacific Partners,` → Guam Regional Medical City (GRMC)
+- `Strategic Asia Pacific Partners, Incorporated` → Guam Regional Medical City (GRMC)
+- `Strategic Asia Pacific Partners, Incorporated,` → Guam Regional Medical City (GRMC)
+- `Strategic Asia Pacific Partners, Incorporated (SAPPI)` → Guam Regional Medical City (GRMC)
+- `SAPPI` → Guam Regional Medical City (GRMC)
+
+## Follow-up Fix #4: Pre-push Hook Missing Scripts Submodule
+
+Netlify deploy failed because the `scripts` submodule commit wasn't pushed.
+
+### Root Cause
+
+The `.husky/pre-push` hook only pushed the `docs` submodule, not `scripts`.
+
+### Fix Applied
+
+Updated `.husky/pre-push` to handle both submodules:
+
+```bash
+# Store the root directory
+ROOT_DIR=$(pwd)
+
+# Check if docs submodule has unpushed commits
+cd "$ROOT_DIR/docs" 2>/dev/null
+# ... push logic ...
+
+# Check if scripts submodule has unpushed commits
+cd "$ROOT_DIR/scripts" 2>/dev/null
+# ... push logic ...
+```
+
+---
+
+## Key Learnings
+
+1. **Single Source of Truth**: The `client_health_summary` materialised view is the source of truth for canonical client names. All other systems (aliases, logos, deep links) must reference these exact names.
+
+2. **Alias Consistency**: When updating aliases, ensure ALL dependent systems are updated:
+   - `client_name_aliases` table (database)
+   - `CLIENT_LOGO_MAP` keys (logo lookup)
+   - `FALLBACK_ALIASES` values (immediate resolution)
+
+3. **Submodule Management**: All submodules must be included in pre-push hooks to prevent deploy failures.
+
+## Commits
+
+| Commit | Description |
+|--------|-------------|
+| `78737bb` | fix: Resolve client alias deep link and logo display issues |
+| `fea9e3f` | fix: Add scripts submodule to pre-push hook |
 
 ## Related Files
 
 - `src/hooks/useClientAliases.ts` - Client alias resolution hook
 - `src/lib/client-logos-local.ts` - Logo lookup with fallback aliases
 - `src/components/priority-matrix/QuickActionsMenu.tsx` - Context menu with deep link navigation
+- `src/components/priority-matrix/PriorityMatrix.tsx` - Priority Matrix with alias resolution
+- `src/components/priority-matrix/PriorityMatrixMultiView.tsx` - Multi-view with alias resolution
+- `.husky/pre-push` - Git pre-push hook for submodule management
 - `scripts/check-all-alias-mismatches.mjs` - Validation script
 - `scripts/fix-all-alias-mismatches-v2.mjs` - Fix script
