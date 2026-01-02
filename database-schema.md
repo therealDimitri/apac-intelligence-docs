@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2025-12-31T05:28:23.175Z
+**Generated**: 2026-01-01T08:26:47.839Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -11,7 +11,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `actions`
 
-**Row Count**: 151
+**Row Count**: 156
 
 ### Columns
 
@@ -33,7 +33,7 @@ This document provides the authoritative schema definition for all tables in the
 | `Shared_Action_Id` | unknown | ✗ | - | *(inferred)* |
 | `Is_Shared` | boolean | ✗ | - | *(inferred)* |
 | `Completed_At` | unknown | ✗ | - | *(inferred)* |
-| `meeting_id` | unknown | ✗ | - | *(inferred)* |
+| `meeting_id` | text | ✗ | - | *(inferred)* |
 | `outlook_task_id` | unknown | ✗ | - | *(inferred)* |
 | `teams_message_id` | unknown | ✗ | - | *(inferred)* |
 | `last_synced_at` | unknown | ✗ | - | *(inferred)* |
@@ -45,7 +45,7 @@ This document provides the authoritative schema definition for all tables in the
 | `is_internal` | boolean | ✗ | - | *(inferred)* |
 | `cross_functional` | boolean | ✗ | - | *(inferred)* |
 | `linked_initiative_id` | unknown | ✗ | - | *(inferred)* |
-| `client_id` | integer | ✗ | - | *(inferred)* |
+| `client_id` | unknown | ✗ | - | *(inferred)* |
 | `ai_context` | unknown | ✗ | - | *(inferred)* |
 | `ai_context_key_points` | array | ✗ | - | *(inferred)* |
 | `ai_context_urgency_indicators` | array | ✗ | - | *(inferred)* |
@@ -57,6 +57,9 @@ This document provides the authoritative schema definition for all tables in the
 | `source` | text | ✗ | - | *(inferred)* |
 | `source_metadata` | jsonb | ✗ | - | *(inferred)* |
 | `created_by` | unknown | ✗ | - | *(inferred)* |
+| `source_alert_text_id` | text | ✗ | - | *(inferred)* |
+| `source_alert_id` | text | ✗ | - | *(inferred)* |
+| `tags` | array | ✗ | - | *(inferred)* |
 
 ---
 
@@ -232,7 +235,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `notifications`
 
-**Row Count**: 15
+**Row Count**: 13
 
 ### Columns
 

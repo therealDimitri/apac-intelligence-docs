@@ -99,7 +99,7 @@
       },
       {
         "column_name": "meeting_id",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -171,7 +171,7 @@
       },
       {
         "column_name": "client_id",
-        "data_type": "integer",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -240,9 +240,27 @@
         "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
+      },
+      {
+        "column_name": "source_alert_text_id",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "source_alert_id",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "tags",
+        "data_type": "array",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
       }
     ],
-    "row_count": 151
+    "row_count": 156
   },
   "unified_meetings": {
     "columns": [
@@ -1052,7 +1070,7 @@
         "inferred": true
       }
     ],
-    "row_count": 15
+    "row_count": 13
   },
   "portfolio_initiatives": {
     "columns": [
