@@ -87,3 +87,30 @@ async function fetchWithParallelPagination<T>(
 ## Related Commits
 
 - `8074d46`: fix: optimize Historical Analytics API with parallel pagination
+- `ccaf632`: fix: correct Historical Analytics pagination to match Supabase limit
+
+---
+
+## Follow-up Issue: Low Revenue Values (Resolved)
+
+**Date:** 3 January 2026
+
+**Problem:** Revenue trend values were showing incorrectly low totals.
+
+**Root Cause:** The parallel pagination implementation used `pageSize = 10000` but Supabase has a hard limit of **1000 rows per request**. This caused:
+- Only ~9,000 of 84,932 records to be fetched
+- Revenue totals were 10-15x lower than actual values
+
+**Fix:** Changed `pageSize` from 10000 to 1000 in `fetchWithParallelPagination()`.
+
+**Correct Values:**
+| Year | Revenue (USD) |
+|------|---------------|
+| 2019 | $25.53M |
+| 2020 | $27.49M |
+| 2021 | $29.63M |
+| 2022 | $26.64M |
+| 2023 | $30.83M |
+| 2024 | $33.09M |
+| 2025 | $32.47M |
+| **Total** | **$205.68M** |
