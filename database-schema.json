@@ -75,7 +75,7 @@
       },
       {
         "column_name": "Notes",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -99,7 +99,7 @@
       },
       {
         "column_name": "meeting_id",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -141,13 +141,13 @@
       },
       {
         "column_name": "department_code",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "activity_type_code",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -219,7 +219,7 @@
       },
       {
         "column_name": "client_uuid",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -243,13 +243,13 @@
       },
       {
         "column_name": "source_alert_text_id",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "source_alert_id",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -260,7 +260,7 @@
         "inferred": true
       }
     ],
-    "row_count": 156
+    "row_count": 157
   },
   "unified_meetings": {
     "columns": [
@@ -1698,7 +1698,7 @@
         "inferred": true
       }
     ],
-    "row_count": 115
+    "row_count": 124
   },
   "chasen_folders": {
     "columns": [
@@ -1852,7 +1852,7 @@
         "inferred": true
       }
     ],
-    "row_count": 558
+    "row_count": 576
   },
   "health_status_alerts": {
     "columns": [

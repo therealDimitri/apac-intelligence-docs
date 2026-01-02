@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2026-01-01T08:26:47.839Z
+**Generated**: 2026-01-02T11:27:03.307Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -11,7 +11,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `actions`
 
-**Row Count**: 156
+**Row Count**: 157
 
 ### Columns
 
@@ -29,19 +29,19 @@ This document provides the authoritative schema definition for all tables in the
 | `Topic_Number` | unknown | ✗ | - | *(inferred)* |
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `updated_at` | text | ✗ | - | *(inferred)* |
-| `Notes` | unknown | ✗ | - | *(inferred)* |
+| `Notes` | text | ✗ | - | *(inferred)* |
 | `Shared_Action_Id` | unknown | ✗ | - | *(inferred)* |
 | `Is_Shared` | boolean | ✗ | - | *(inferred)* |
 | `Completed_At` | unknown | ✗ | - | *(inferred)* |
-| `meeting_id` | text | ✗ | - | *(inferred)* |
+| `meeting_id` | unknown | ✗ | - | *(inferred)* |
 | `outlook_task_id` | unknown | ✗ | - | *(inferred)* |
 | `teams_message_id` | unknown | ✗ | - | *(inferred)* |
 | `last_synced_at` | unknown | ✗ | - | *(inferred)* |
 | `edit_history` | array | ✗ | - | *(inferred)* |
 | `client` | text | ✗ | - | *(inferred)* |
 | `Category` | text | ✗ | - | *(inferred)* |
-| `department_code` | text | ✗ | - | *(inferred)* |
-| `activity_type_code` | text | ✗ | - | *(inferred)* |
+| `department_code` | unknown | ✗ | - | *(inferred)* |
+| `activity_type_code` | unknown | ✗ | - | *(inferred)* |
 | `is_internal` | boolean | ✗ | - | *(inferred)* |
 | `cross_functional` | boolean | ✗ | - | *(inferred)* |
 | `linked_initiative_id` | unknown | ✗ | - | *(inferred)* |
@@ -53,12 +53,12 @@ This document provides the authoritative schema definition for all tables in the
 | `ai_context_confidence` | unknown | ✗ | - | *(inferred)* |
 | `ai_context_generated_at` | unknown | ✗ | - | *(inferred)* |
 | `ai_context_meeting_title` | unknown | ✗ | - | *(inferred)* |
-| `client_uuid` | text | ✗ | - | *(inferred)* |
+| `client_uuid` | unknown | ✗ | - | *(inferred)* |
 | `source` | text | ✗ | - | *(inferred)* |
 | `source_metadata` | jsonb | ✗ | - | *(inferred)* |
 | `created_by` | unknown | ✗ | - | *(inferred)* |
-| `source_alert_text_id` | text | ✗ | - | *(inferred)* |
-| `source_alert_id` | text | ✗ | - | *(inferred)* |
+| `source_alert_text_id` | unknown | ✗ | - | *(inferred)* |
+| `source_alert_id` | unknown | ✗ | - | *(inferred)* |
 | `tags` | array | ✗ | - | *(inferred)* |
 
 ---
@@ -422,7 +422,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `chasen_conversations`
 
-**Row Count**: 115
+**Row Count**: 124
 
 ### Columns
 
@@ -464,7 +464,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `client_health_history`
 
-**Row Count**: 558
+**Row Count**: 576
 
 ### Columns
 
