@@ -16,12 +16,65 @@ Key finding: **Significant discrepancies exist between source Excel files and da
 
 ## Source Files Analysed
 
+### Primary Source Files
 | Source File | Sheets | Status |
 |-------------|--------|--------|
 | `2025/2025 APAC Performance.xlsx` | 50 sheets | ✅ Parsed |
 | `2026/2026 APAC Performance.xlsx` | 35 sheets | ✅ Parsed |
 | `APAC Revenue 2019 - 2024.xlsx` | 3 sheets | ✅ Parsed |
 | `2025/Critical Supplier List APAC.xlsx` | 1 sheet | ✅ Parsed |
+
+### Critical Financial Files (Newly Analysed)
+| Source File | Sheets | Status |
+|-------------|--------|--------|
+| `2024/Dec/2024 Dec EOY Summary.xlsx` | 8 sheets | ✅ Parsed |
+| `2024/Dec/2024 12 Rev and COGS Actuals.xlsx` | 6 sheets | ✅ Parsed |
+| `2025/ARR Target 2025.xlsx` | 2 sheets | ✅ Parsed |
+| `2025/2025 Financial Plan.xlsx` | 2 sheets | ✅ Parsed |
+| `2025/AUD Revenue Split 2025.xlsx` | 1 sheet | ✅ Parsed |
+| `2026/Budget Planning/APAC 3 yrs EBITA GAP Analysis.xlsx` | 2 sheets | ✅ Parsed |
+| `2026/Budget Planning/APAC 2026 Budget GAP_ver3.xlsx` | 3 sheets | ✅ Parsed |
+| `2026/Budget Planning/APAC 2021-2023 Profit PL...xlsx` | 4 sheets | ✅ Parsed |
+| `2024/Dec/2024 12 BURC File.xlsb` | 26 sheets | ✅ Parsed (pyxlsb) |
+| `2025/Nov/2025 11 BURC File FINAL.xlsb` | 26 sheets | ✅ Parsed (pyxlsb) |
+
+**Note:** The .xlsb (binary Excel) files were successfully read using Python's pyxlsb library.
+
+### BURC File Key Data (2025 11 BURC File FINAL.xlsb)
+
+**November 2025 Monthly Results:**
+| Metric | Actual | Forecast | Variance |
+|--------|--------|----------|----------|
+| Gross Revenue | $2.24M | $2.37M | -$127K (-5.4%) |
+| Net Revenue | $2.00M | $2.05M | -$53K (-2.6%) |
+| License Revenue | $5.6K | $50K | -$44K |
+| PS Revenue | $716.8K | $691.9K | +$25K |
+| Maintenance Revenue | $1.42M | $1.54M | -$120K |
+
+**2025 Quarterly Net Revenue (1pager sheet):**
+| Quarter | Actual | Status |
+|---------|--------|--------|
+| Q1 2025 | $5.23M | Actual |
+| Q2 2025 | $7.10M | Actual |
+| Q3 2025 | $5.62M | Actual |
+| Q4 2025 | $6.10M | Forecast |
+| **FY 2025** | **$23.23M** | **Current Forecast** |
+
+**Quarterly Gross Revenue:**
+| Quarter | License | PS | Maintenance | HW/Other | Total |
+|---------|---------|--------|-------------|----------|-------|
+| Q1 2025 | $29.8K | $1.70M | $4.00M | $3.1K | $5.73M |
+| Q2 2025 | $1.29M | $2.23M | $4.72M | $135.5K | $8.38M |
+| Q3 2025 | $238.2K | $2.01M | $4.05M | -$37.4K | $6.27M |
+| Q4 Fcst | $154.8K | $2.07M | $3.79M | -$6.6K | $6.01M |
+
+**Net Bookings Trends:**
+| Quarter | SW | Services | SaaS | Total |
+|---------|--------|----------|------|-------|
+| Q1 2025 | $36.5K | $837.6K | $5.4K | $879.6K |
+| Q2 2025 | $473.1K | $910.8K | $268.1K | $1.65M |
+| Q3 2025 | $33.6K | $2.33M | $1.5K | $2.36M |
+| Q4 Fcst | $128.6K | $386.1K | $14.8K | $529.4K |
 
 ---
 
@@ -104,7 +157,44 @@ The `year_2025` column is $0 for all 4 records. Only SA Health data is present.
 
 ---
 
-### Issue 3: Waterfall Data Discrepancies Between Source and Database
+### Issue 3: Total ARR Discrepancy - Critical Finding
+
+**Severity:** Critical
+**Location:** `burc_executive_summary.total_arr` vs `ARR Target 2025.xlsx`
+
+**Source File Data (ARR Target 2025.xlsx):**
+| Client | CSE | ARR [USD] | Target (10%) | Booking Achieved |
+|--------|-----|-----------|--------------|------------------|
+| Sing Health | Boon | $4.74M | $473.6K | $26.4K |
+| SA Health | Laura | $5.40M | $540.0K | $6.62M |
+| GHA | Tracey | $1.14M | $114.0K | $958.6K |
+| SLMC | Gil | $812.0K | $81.2K | $2.34M |
+| WA Health | John | $636.0K | $63.6K | $1.45M |
+| NCS | Nikki | $546.0K | $54.6K | $0 |
+| Parkway | Nikki | $546.0K | $54.6K | $29.7K |
+| BWH | John | $227.6K | $22.8K | $140.2K |
+| MAH | Nikki | $294.0K | $29.4K | $0 |
+| **Total** | | **$15.73M** | **$1.57M** | **$11.78M** |
+
+**Database Value:**
+- `burc_executive_summary.total_arr` = **$34.27M**
+
+**Variance:** +$18.54M (Database shows 2.18× higher than source)
+
+**Analysis:**
+The database "Total ARR" appears to be calculated differently:
+- Source file shows client-level contracted ARR totalling $15.73M
+- Database value ($34.27M) closely matches `weighted_pipeline` ($34.12M)
+- This suggests the dashboard is showing pipeline-weighted revenue, not contracted ARR
+
+**Recommendation:**
+Either:
+1. Rename "Total ARR" to "Weighted Pipeline" in the UI, OR
+2. Update the calculation to use actual contracted ARR from source
+
+---
+
+### Issue 4: Waterfall Data Discrepancies Between Source and Database
 
 **Severity:** Critical
 **Location:** `burc_waterfall` table vs `2025 APAC Performance.xlsx` → "Waterfall Data" sheet
@@ -181,6 +271,46 @@ Database may contain data from a different source or time period than the ShareP
 | 2023 | $7.33M | ⚠️ DB: $7.53M |
 | 2024 | N/A in source | DB: $10.66M |
 | 2025 | N/A in source | ❌ DB: $0 |
+
+### Historical P&L Summary (Source: "APAC 2021-2023 Profit PL and 2024 3YPlan_Draft4.xlsx")
+
+**Full P&L Data by Year (in USD):**
+| Metric | 2021 | 2022 | 2023 | 2024 (Plan) | 2025 (Plan) |
+|--------|------|------|------|-------------|-------------|
+| License Revenue | $1.87M | $2.25M | $1.95M | $2.94M | $2.45M |
+| PS Revenue | $10.60M | $9.80M | $9.04M | $9.47M | $9.00M |
+| Maintenance Revenue | $14.60M | $17.48M | $16.57M | $16.20M | $17.50M |
+| **Gross Revenue** | **$27.06M** | **$29.54M** | **$27.20M** | **$28.72M** | **$28.95M** |
+| License COGS | $889.9K | $816.6K | $664K | $543K | — |
+| PS COGS | $664K | $1.77M | $1.04M | $602K | — |
+| Maintenance COGS | $1.39M | $1.51M | $1.26M | $1.97M | — |
+| **Total NR** | **$24.12M** | **$25.44M** | **$24.85M** | — | — |
+
+### 2025 Financial Plan (Source: "2025 Financial Plan.xlsx")
+
+**Planned Revenue Structure:**
+| Revenue Type | 2025 Planned |
+|--------------|--------------|
+| License Revenue | $2.20-2.45M |
+| • Opal | $150K |
+| • Sunrise | $1.05M |
+| • 3rd Party | $1.00M |
+| • Altera HIS | $250K |
+| Professional Services | $9.00M |
+| Maintenance Revenue | $17.45-17.50M |
+| • Opal | $1.75M |
+| • Sunrise | $12.50M |
+
+### AUD Revenue Split 2025 (Source: "AUD Revenue Split 2025.xlsx")
+
+| Category | AUD | Total Rev | % AUD |
+|----------|-----|-----------|-------|
+| Dial 2 | $6.74M | $8.50M | 79.3% |
+| SW | $2.80M | $3.23M | 86.7% |
+| Maint and Subs | $9.52M | $18.76M | 50.7% |
+| PS New | $3.13M | $4.58M | 68.4% |
+| PS Backlog | $1.72M | $3.17M | 54.2% |
+| **Total exc Dial2** | **$17.16M** | **$29.73M** | **57.7%** |
 
 ### Opal Maintenance Contracts (Source: "Opal Maint Contracts and Value" sheet)
 
@@ -355,7 +485,9 @@ For recent months (2026-10 to 2026-12):
 | `scripts/check-burc-schema.mjs` | Schema and column verification |
 | `scripts/check-revenue-detail.mjs` | Historical revenue detail analysis |
 | `scripts/trace-arr-source.mjs` | Total ARR source investigation |
-| `scripts/reconcile-burc-source.mjs` | **NEW** - Excel source file parsing and comparison |
+| `scripts/reconcile-burc-source.mjs` | Excel source file parsing and comparison (.xlsx) |
+| `scripts/read-critical-burc-files.mjs` | **NEW** - Critical financial files analysis |
+| Python `pyxlsb` | Used for reading .xlsb binary Excel files |
 
 ---
 
@@ -367,26 +499,44 @@ The BURC Performance page displays **accurate data** for end users through a com
 
 ### Key Findings from Source File Reconciliation:
 
-1. **Waterfall Data Discrepancy:** Database values differ significantly from SharePoint source files
+1. **Total ARR Discrepancy (Critical):**
+   - Source ARR Target 2025: **$15.73M** (client-level contracted ARR)
+   - Database `total_arr`: **$34.27M** (appears to be weighted pipeline)
+   - **Variance: +$18.54M (118% higher)**
+
+2. **FY 2025 Revenue Forecast (from BURC xlsb):**
+   - Current forecast: **$23.23M** Net Revenue
+   - Q1-Q3 Actuals: $17.95M
+   - Q4 Forecast: $6.10M
+
+3. **Waterfall Data Discrepancy:**
    - Backlog: $20.95M (DB) vs $24.17M (Source) = **$3.22M difference**
    - Best Case PS: $3.92M (DB) vs $0 (Source) = **$3.92M unexplained**
 
-2. **Historical Revenue:** 2019-2022 data matches source; 2023 slightly differs; 2024-2025 not in historical source file
+4. **Historical Revenue:** 2019-2022 data matches source; 2023 slightly differs; 2024-2025 not in historical source file
 
-3. **Missing Tables:** `burc_suppliers` and `burc_maintenance` tables are empty despite source data availability
+5. **Missing Tables:** `burc_suppliers` and `burc_maintenance` tables are empty despite source data availability
 
-4. **Attrition Data:** Closely matches - $2.72M (DB) vs $2.54M (Source)
+6. **Attrition Data:** Closely matches - $2.72M (DB) vs $2.54M (Source)
+
+### Summary of Source Files Analysed:
+- **248 Excel files** across 2023, 2024, 2025, and 2026 folders
+- **Critical files read:** 2025 11 BURC File FINAL.xlsb, ARR Target 2025.xlsx, 2024 Dec EOY Summary.xlsx, APAC 2021-2023 Profit PL.xlsx
+- **Python pyxlsb library** successfully used to read binary .xlsb files
 
 ### Next Steps:
 
-The discrepancy between database and source files suggests either:
-- Database was populated from a different/older version of BURC files
-- Manual adjustments were made to database values
-- Different fiscal period boundaries
+The discrepancy between database and source files suggests:
+1. **Total ARR definition mismatch** - Dashboard shows weighted pipeline, not contracted ARR
+2. Database may be populated from a different/older version of BURC files
+3. Manual adjustments may have been made to database values
 
-Recommend establishing a single authoritative source and implementing automated sync.
+**Recommended Actions:**
+1. Rename "Total ARR" to "Weighted Pipeline" in UI, OR sync from ARR Target 2025.xlsx
+2. Establish automated sync process from SharePoint BURC folder
+3. Create data dictionary clarifying metric definitions
 
 ---
 
 **Report Generated:** 3 January 2026 11:55 AM AEDT
-**Updated:** 3 January 2026 12:15 PM AEDT (Source file reconciliation added)
+**Updated:** 3 January 2026 12:30 PM AEDT (Full source file analysis including .xlsb binary files)
