@@ -119,14 +119,40 @@ result.sort((a, b) => {
 ## Testing Checklist
 
 - [x] TypeScript compilation passes
-- [ ] Status filter works for all action statuses
-- [ ] Status filter correctly maps meeting statuses (scheduled → open)
-- [ ] Sort by date ascending/descending works
-- [ ] Sort by priority orders correctly (critical first)
-- [ ] Sort by status orders correctly (open first)
-- [ ] Filters and sorts combine correctly
-- [ ] Mobile layout works correctly
-- [ ] Dropdowns close when clicking outside
+- [x] Status filter works for all action statuses
+- [x] Status filter correctly maps meeting statuses (scheduled → open)
+- [x] Sort by date ascending/descending works
+- [x] Sort by priority orders correctly (critical first)
+- [x] Sort by status orders correctly (open first)
+- [x] Filters and sorts combine correctly
+- [x] Mobile layout works correctly
+- [x] Dropdowns close when clicking outside
+- [x] No horizontal scrolling required
+
+## Layout Design
+
+### Two-Row Responsive Layout
+
+The filter bar uses a stacked two-row design to ensure all controls are always visible:
+
+**Row 1: Type Filters**
+- SHOW label + 4 filter buttons (All, Actions, Meetings, Notes)
+- `flex-1` on mobile for equal-width buttons
+- Abbreviated labels on mobile (All, Acti, Meet, Note)
+- Full labels on desktop (All Activity, Actions, etc.)
+
+**Row 2: Controls**
+- LEFT: Status filter dropdown + Sort dropdown
+- RIGHT: Quick action buttons (icons only on desktop, FAB on mobile)
+- `justify-between` for proper spacing
+
+### Responsive Breakpoints
+
+| Breakpoint | Type Filters | Labels | Quick Actions |
+|------------|--------------|--------|---------------|
+| Mobile (<sm) | Equal-width buttons | 3-4 chars | Single FAB |
+| Tablet (sm-md) | Auto-width | 3-4 chars | Icon buttons |
+| Desktop (md+) | Auto-width | Full labels | Icon buttons |
 
 ## Screenshots
 
@@ -136,3 +162,5 @@ N/A - Feature enhancement documentation
 
 - Previous: BUG-REPORT-20260104-activity-stream-alias-and-refetch.md (fixed alias resolution)
 - Previous: Health Score Trend card colour fix
+- Follow-up: ccaa418 - Fixed horizontal scrolling issues
+- Follow-up: 74a3b0f - Redesigned with two-row layout to eliminate scrolling
