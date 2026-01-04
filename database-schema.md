@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2026-01-02T11:27:03.307Z
+**Generated**: 2026-01-04T06:06:43.130Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -422,7 +422,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `chasen_conversations`
 
-**Row Count**: 124
+**Row Count**: 127
 
 ### Columns
 
@@ -439,6 +439,7 @@ This document provides the authoritative schema definition for all tables in the
 | `client_name` | unknown | ✗ | - | *(inferred)* |
 | `model_id` | unknown | ✗ | - | *(inferred)* |
 | `client_id` | unknown | ✗ | - | *(inferred)* |
+| `is_pinned` | boolean | ✗ | - | *(inferred)* |
 
 ---
 

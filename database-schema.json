@@ -1696,9 +1696,15 @@
         "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
+      },
+      {
+        "column_name": "is_pinned",
+        "data_type": "boolean",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
       }
     ],
-    "row_count": 124
+    "row_count": 127
   },
   "chasen_folders": {
     "columns": [

@@ -51,8 +51,8 @@ The fixed materialized view:
 ### Option 2: Use psql Command Line
 
 ```bash
-psql "postgresql://postgres.[PROJECT]:[PASSWORD]@aws-0-us-west-1.pooler.supabase.com:6543/postgres" \
-  -f docs/migrations/20251202_fix_event_compliance_view_segment_changes.sql
+# Use your DATABASE_URL from .env.local
+psql "$DATABASE_URL" -f docs/migrations/20251202_fix_event_compliance_view_segment_changes.sql
 ```
 
 ## Expected Results After Fix
