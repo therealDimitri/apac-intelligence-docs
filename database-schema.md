@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2026-01-04T06:06:43.130Z
+**Generated**: 2026-01-04T12:29:49.928Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -465,7 +465,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `client_health_history`
 
-**Row Count**: 576
+**Row Count**: 594
 
 ### Columns
 
