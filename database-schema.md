@@ -1,6 +1,7 @@
 # Database Schema Documentation
 
 **Generated**: 2026-01-04T12:29:49.928Z
+**Updated**: 2026-01-05 (Added regional_benchmarks table)
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -8,6 +9,68 @@
 ## Overview
 
 This document provides the authoritative schema definition for all tables in the APAC Intelligence database. **Always reference this document when writing queries or TypeScript interfaces.**
+
+## Table: `regional_benchmarks`
+
+**Row Count**: 0 (Newly created - pending data population)
+
+**Purpose**: Stores cross-region benchmark data for comparing APAC performance against other global regions (EMEA, Americas, Global aggregate)
+
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | UUID | ✗ | gen_random_uuid() | Primary key |
+| `region` | VARCHAR(20) | ✗ | - | One of: APAC, EMEA, Americas, Global |
+| `period` | VARCHAR(20) | ✗ | - | Format: YYYY-Q#, YYYY-YTD, YYYY-FY |
+| `metric_name` | VARCHAR(50) | ✗ | - | NRR, GRR, Rule of 40, DSO, Churn Rate, ARR Growth, etc. |
+| `metric_value` | NUMERIC(15,2) | ✗ | - | Current value of the metric |
+| `target_value` | NUMERIC(15,2) | ✓ | NULL | Target or goal value |
+| `previous_value` | NUMERIC(15,2) | ✓ | NULL | Previous period value for trend comparison |
+| `unit` | VARCHAR(10) | ✓ | '%' | Unit of measurement: %, $, days, ratio |
+| `created_at` | TIMESTAMPTZ | ✓ | NOW() | Record creation timestamp |
+| `updated_at` | TIMESTAMPTZ | ✓ | NOW() | Record last updated timestamp |
+
+### Constraints
+
+- **Primary Key**: `id`
+- **Unique**: `(region, period, metric_name)` - Ensures unique combination
+- **Check**: `region IN ('APAC', 'EMEA', 'Americas', 'Global')`
+- **Check**: `metric_name IN ('NRR', 'GRR', 'Rule of 40', 'DSO', 'Churn Rate', 'ARR Growth', 'Customer Acquisition Cost', 'Lifetime Value', 'Revenue per Client', 'Gross Margin', 'Operating Margin', 'EBITDA Margin')`
+
+### Indexes
+
+- `idx_regional_benchmarks_region` on `region`
+- `idx_regional_benchmarks_period` on `period`
+- `idx_regional_benchmarks_metric` on `metric_name`
+- `idx_regional_benchmarks_region_period` on `(region, period)`
+
+### RLS Policies
+
+- Allow authenticated users to read all benchmark data
+- Allow service role to manage (insert/update/delete) benchmark data
+
+### Usage Example
+
+```sql
+-- Get Q4 2025 benchmarks for all regions
+SELECT region, metric_name, metric_value, target_value, unit
+FROM regional_benchmarks
+WHERE period = '2025-Q4'
+ORDER BY metric_name, region;
+
+-- Compare APAC vs Global for specific metrics
+SELECT
+  metric_name,
+  MAX(CASE WHEN region = 'APAC' THEN metric_value END) as apac_value,
+  MAX(CASE WHEN region = 'Global' THEN metric_value END) as global_value,
+  MAX(CASE WHEN region = 'APAC' THEN target_value END) as apac_target
+FROM regional_benchmarks
+WHERE period = '2025-Q4'
+GROUP BY metric_name;
+```
+
+---
 
 ## Table: `actions`
 
