@@ -1,7 +1,7 @@
 # Bug Fix: 2026 CSI Forecast Ratios - Database Values Mismatch
 
 **Date:** 6 January 2026
-**Status:** Fixed
+**Status:** Fixed (Corrected)
 **Severity:** High - Data Accuracy
 **Component:** CSI Operating Ratios / BURC 2026 Forecast
 
@@ -9,117 +9,107 @@
 
 ## Summary
 
-The CSI Operating Ratios displayed for FY2026 forecast did not match the values from the source Excel file (2026 APAC Performance.xlsx). All five CSI ratios were affected due to incorrect underlying values in the `burc_csi_opex` database table.
+The CSI Operating Ratios displayed for FY2026 forecast did not match the values from the source Excel file (2026 APAC Performance.xlsx). The database had incorrect underlying values that were not sourced from the correct Excel data.
 
 ---
 
 ## Issue Details
 
-### Symptoms
-| CSI Ratio | Before (DB) | After (Excel) | Discrepancy |
-|-----------|-------------|---------------|-------------|
-| PS Ratio | 2.71 | 2.70 | Minor |
-| Sales Ratio | 0.00 | 1.87 | **Critical** |
-| Maint Ratio | 6.72 | 8.49 | Significant |
-| R&D Ratio | 0.19 | 0.71 | Significant |
-| G&A Ratio | 14.7% | 8.87% | Significant |
+### Symptoms (Before Fix)
+| CSI Ratio | Database | Expected | Issue |
+|-----------|----------|----------|-------|
+| PS Ratio | 2.71 | ~2.4 | Wrong source data |
+| Sales Ratio | 0.00 | 0.00 | OK (no license sales most months) |
+| Maint Ratio | 6.72 | 5.69 | Wrong source data |
+| R&D Ratio | 0.19 | 0.30 | Wrong source data |
+| G&A Ratio | 14.7% | 17.7% | Wrong source data |
 
 ### Root Cause
-Two issues identified:
+The 2026 values were synced from incorrect rows or had data transformation issues. The correct source is the **APAC BURC sheet** with actual monthly values (rows 56-93).
 
-1. **Wrong Source Data**: The 2026 monthly values were synced from the APAC BURC sheet (budget/plan monthly breakdown) instead of the "26 vs 25 Q Comparison" sheet (official forecast values).
-
-2. **Missing Total NR Component**: The G&A ratio calculation was missing Business Case NR (~$2.25M annually), which is included in Excel's Net Revenue total.
-
-### Data Source Comparison
-
-| Metric | Database Total | APAC BURC Sheet | 26 vs 25 (Correct) |
-|--------|----------------|-----------------|-------------------|
-| License NR | $2,677,586 | $1,927,832 | **$1,908,790** |
-| PS NR | $9,744,197 | $7,851,587 | **$2,482,649** |
-| Maintenance NR | $16,834,915 | $16,594,362 | **$6,475,993** |
-| Total/Net Revenue | $905,619 | N/A | **$13,117,948** |
+### Important Clarification
+- **APAC BURC sheet**: Contains actual monthly CSI ratios (Jan-Dec individual values)
+- **26 vs 25 Q Comparison sheet**: Contains quarterly and FY averages of the monthly values
+- The quarterly values in "26 vs 25" are averages of the monthly values from "APAC BURC"
 
 ---
 
-## Fix Applied
+## Correct Fix Applied
 
-### 1. Updated Monthly Values
-All 12 months of 2026 in `burc_csi_opex` updated with monthly averages from Excel FY totals:
+### Updated from APAC BURC Monthly Values
+All months of 2026 in `burc_csi_opex` updated with actual monthly values from APAC BURC sheet:
 
-| Field | Monthly Value | FY Total (Excel) |
-|-------|---------------|------------------|
-| license_nr | $159,066 | $1,908,790 |
-| ps_nr | $206,887 | $2,482,649 |
-| maintenance_nr | $539,666 | $6,475,993 |
-| ps_opex | $76,630 | $919,564 |
-| sm_opex | $59,662 | $715,949 |
-| maintenance_opex | $54,031 | $648,373 |
-| rd_opex | $181,614 | $2,179,371 |
-| ga_opex | $96,991 | $1,163,897 |
+| Month | License NR | PS NR | Maint NR | Maint Ratio | PS Ratio |
+|-------|------------|-------|----------|-------------|----------|
+| Feb | $0 | $580K | $1,164K | 4.58 | 1.89 |
+| Mar | $0 | $562K | $1,245K | 4.90 | 1.83 |
+| Apr | $0 | $644K | $1,300K | 5.11 | 2.10 |
+| May | $0 | $727K | $1,185K | 4.66 | 2.37 |
+| Jun | $0 | $735K | $1,266K | 4.98 | 2.40 |
+| Jul | $19K | $645K | $1,295K | 5.09 | 2.11 |
+| Aug | $1,909K | $897K | $1,230K | 4.84 | 2.93 |
+| Sep | $0 | $764K | $3,937K | 15.48 | 2.49 |
+| Oct | $0 | $822K | $1,309K | 5.15 | 2.68 |
+| Nov | $0 | $731K | $1,216K | 4.78 | 2.39 |
+| Dec | $0 | $744K | $1,448K | 5.69 | 2.43 |
 
-### 2. Corrected Total NR
-Updated `total_nr` to include Business Case NR:
-- Previous: $905,619/month (sum of License + PS + Maint only)
-- Corrected: $1,093,162/month (Excel Net Revenue / 12)
+Note: January has no data in Excel (budget planning period).
 
 ---
 
-## Verified Results (FY 2026)
+## Verified Results (Dec 2026)
 
-| CSI Ratio | Dashboard | Excel | Target | Status |
-|-----------|-----------|-------|--------|--------|
-| PS Ratio | 2.70 | 2.70 | ≥2.0 | ✅ Green |
-| Sales Ratio | 1.87 | 1.87 | ≥1.0 | ✅ Green |
-| Maint Ratio | 8.49 | 8.49 | ≥4.0 | ✅ Green |
-| R&D Ratio | 0.71 | 0.71 | ≥1.0 | 🟡 Amber |
-| G&A Ratio | 8.87% | 8.87% | ≤20% | ✅ Green |
+| CSI Ratio | Dashboard | Excel (APAC BURC Dec) | Match |
+|-----------|-----------|----------------------|-------|
+| Maint Ratio | 5.69 | 5.69 | ✅ |
+| Sales Ratio | 0.00 | 0.00 | ✅ |
+| PS Ratio | 2.43 | 2.43 | ✅ |
+| R&D Ratio | 0.30 | 0.30 (29.9%) | ✅ |
+| G&A Ratio | 17.7% | 17.7% | ✅ |
 
 ---
 
 ## Source Verification
 
 **File:** 2026 APAC Performance.xlsx
-**Sheet:** 26 vs 25 Q Comparison
-**Column 5:** FY 2026 Totals
+**Sheet:** APAC BURC (monthly data)
 
 Key rows used:
-- Row 22: License NR ($1,908,790)
-- Row 23: Professional Service NR ($2,482,649)
-- Row 24: Maintenance NR ($6,475,993)
-- Row 27: Net Revenue ($13,117,948)
-- Row 29-33: OPEX values (PS, Maint, S&M, R&D, G&A)
-- Rows 65-69: CSI Ratios (verification)
+- Row 56: License NR (monthly)
+- Row 57: Professional Service NR (monthly)
+- Row 58: Maintenance NR (monthly)
+- Row 69: PS OPEX
+- Row 74: Maint OPEX
+- Row 80: S&M OPEX
+- Row 86: R&D OPEX
+- Row 93: G&A OPEX
+- Rows 121-125: CSI Ratios (verification)
 
----
-
-## Note on R&D Ratio Display
-
-Excel displays R&D Ratio as "70.85%" in the CSI section (Row 67), but this represents the decimal value 0.7085 (not a percentage). The dashboard correctly shows this as 0.71.
+**Relationship to 26 vs 25 Q Comparison:**
+- Q1 average = (Feb + Mar) / 2 values from APAC BURC
+- FY average = weighted or simple average of all monthly values
 
 ---
 
 ## Prevention Recommendations
 
-1. **Data Source Documentation**: Clearly document which Excel sheet/rows are the authoritative source for CSI calculations:
-   - Use "26 vs 25 Q Comparison" sheet FY totals
-   - NOT "APAC BURC" monthly breakdown
+1. **Data Source Documentation**: The authoritative source for monthly CSI values is the APAC BURC sheet, not 26 vs 25 Q Comparison
 
 2. **Sync Script Enhancement**: Update `scripts/sync-burc-monthly.mjs` to:
-   - Read from correct sheet for forecast data
-   - Include Business Case NR in Total NR calculation
-   - Validate calculated ratios against Excel CSI ratio rows
+   - Read from APAC BURC sheet rows 56-93 for monthly values
+   - Skip months with no data (like January in planning period)
+   - Validate calculated ratios against rows 121-125
 
-3. **Validation Check**: Add post-sync validation comparing:
-   - Dashboard ratios vs Excel Row 65-69 values
-   - Alert if any ratio differs by >1%
+3. **Monthly vs Quarterly**: Understand that:
+   - Dashboard shows individual monthly values
+   - 26 vs 25 sheet shows quarterly/yearly aggregates
 
 ---
 
 ## Related Files
 
 - `src/app/api/analytics/burc/csi-ratios/route.ts` - CSI ratio calculation logic
-- `scripts/fix-2026-csi-opex.mjs` - Fix script created
+- `scripts/fix-2026-from-apac-burc-monthly.mjs` - Correct fix script
 - `scripts/sync-burc-monthly.mjs` - BURC data sync (needs review)
 - `burc_csi_opex` table - Stores underlying revenue and OPEX values
 
@@ -129,8 +119,8 @@ Excel displays R&D Ratio as "70.85%" in the CSI section (Row 67), but this repre
 
 | Script | Purpose |
 |--------|---------|
-| `scripts/fix-2026-csi-opex.mjs` | Update 2026 values from Excel FY totals |
+| `scripts/fix-2026-from-apac-burc-monthly.mjs` | **Correct fix** - Update from APAC BURC monthly values |
+| `scripts/check-apac-burc-monthly-ratios.mjs` | Analyse APAC BURC monthly ratios |
+| `scripts/fix-2026-csi-opex.mjs` | Initial fix (used FY averages - incorrect approach) |
 | `scripts/check-2026-csi-structure.mjs` | Analyse Excel column structure |
-| `scripts/get-2026-opex-values.mjs` | Extract OPEX values from Excel |
 | `scripts/investigate-ga-ratio.mjs` | Debug G&A ratio discrepancy |
-| `scripts/check-2026-monthly-values.mjs` | Compare monthly vs FY values |
