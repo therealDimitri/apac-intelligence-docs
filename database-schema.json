@@ -1856,6 +1856,60 @@
         "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
+      },
+      {
+        "column_name": "health_score_version",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "actions_points",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "revenue_trend_points",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "contract_status_points",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "support_health_points",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "expansion_points",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "primary_concern_category",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "revenue_growth_percentage",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "renewal_risk_level",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
       }
     ],
     "row_count": 594
