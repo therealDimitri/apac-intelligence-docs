@@ -89,6 +89,31 @@ const CLIENT_NAME_MAP = {
 
 **250 records inserted** with correct client name mappings.
 
+### Cleanup of Duplicate Records
+
+After initial sync, the table had both old null-source records AND new Excel records, causing inflated totals. Ran cleanup to remove duplicates:
+
+```bash
+node scripts/cleanup-duplicate-revenue.mjs
+```
+
+**Result:** Removed 1,000 duplicate null-source records for 2019-2024.
+
+### Update to burc_annual_financials
+
+The Revenue Trend chart uses `burc_annual_financials` as its primary data source. Updated this table with correct values:
+
+| Year | Before | After |
+|------|--------|-------|
+| 2019 | $13.55M | $23.92M |
+| 2020 | $17.06M | $24.12M |
+| 2021 | $9.64M | $28.98M |
+| 2022 | $12.29M | $28.08M |
+| 2023 | $15.88M | $28.88M |
+| 2024 | $29.35M | $33.04M |
+
+**Total Revenue (2019-2026):** $155.3M → $224.5M
+
 ---
 
 ## Files Created/Modified
@@ -96,6 +121,7 @@ const CLIENT_NAME_MAP = {
 | File | Purpose |
 |------|---------|
 | `scripts/sync-historical-revenue-from-excel.mjs` | Main sync script |
+| `scripts/cleanup-duplicate-revenue.mjs` | Remove duplicate null-source records |
 | `scripts/compare-revenue.mjs` | Comparison tool for auditing |
 | `scripts/verify-revenue-totals.mjs` | Verification script |
 | `scripts/check-sa-health-revenue.mjs` | Client-specific debug script |
