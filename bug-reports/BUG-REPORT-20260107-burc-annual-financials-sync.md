@@ -17,7 +17,7 @@ The BURC sync script was not extracting annual financial totals from the source 
 
 ## Root Cause
 
-**Two related issues:**
+**Three related issues:**
 
 ### Issue 1: API Using Wrong Data Source
 The `getRevenueTrend` function in the historical API was using `burc_historical_revenue_detail` as the primary data source, which had almost no data. Only FY2026 was being fetched from `burc_annual_financials`.
@@ -25,12 +25,18 @@ The `getRevenueTrend` function in the historical API was using `burc_historical_
 **Result:** YoY calculation compared $33.74M to near-zero values = 786.2%
 
 ### Issue 2: Sync Script Not Updating Annual Financials
-The BURC sync script (`sync-burc-data-supabase.mjs`) was syncing monthly financial data but **not** extracting the annual totals from the "APAC BURC" worksheet.
+The BURC sync script (`sync-burc-data-supabase.mjs`) was syncing monthly financial data but **not** extracting the annual totals correctly.
 
-**Source File:** `2026/2026 APAC Performance.xlsx`
-- Row 35: "Gross Revenue (Actual and Forecast) Includes Business Case"
-- Column 20: FY2026 Total
-- Column 22: FY2025 Total
+### Issue 3: Incorrect FY2025 Source
+Initial fix incorrectly extracted FY2025 from "APAC BURC" sheet Column 22 ($30.906M), which is actually the **FY2026 Budget/Target**, not FY2025 actuals.
+
+**Correct Source Locations:**
+
+| Value | Sheet | Row | Column | Amount |
+|-------|-------|-----|--------|--------|
+| FY2026 Forecast | APAC BURC | 35 | 20 | $31.170M |
+| FY2026 Target/Budget | APAC BURC | 35 | 22 | $30.906M |
+| FY2025 Actual | 26 vs 25 Q Comparison | 12 | 15 | $26.345M |
 
 ---
 
@@ -40,52 +46,48 @@ The BURC sync script (`sync-burc-data-supabase.mjs`) was syncing monthly financi
 Changed `src/app/api/analytics/burc/historical/route.ts` to use `burc_annual_financials` as the primary source.
 
 ### Fix 2: Sync Script Enhancement
-Added `syncAnnualFinancials()` function to `scripts/sync-burc-data-supabase.mjs`:
+Updated `syncAnnualFinancials()` function in `scripts/sync-burc-data-supabase.mjs` to extract from correct sources:
 
 ```javascript
 async function syncAnnualFinancials(workbook) {
-  console.log('💵 Extracting Annual Financials from APAC BURC sheet...');
+  // FY2026 Forecast: APAC BURC sheet, Row 35, Column 20
+  const apacSheet = workbook.Sheets['APAC BURC'];
+  const apacData = XLSX.utils.sheet_to_json(apacSheet, { header: 1 });
 
-  const sheet = workbook.Sheets['APAC BURC'];
-  const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
-  // Find Row 35: "Gross Revenue (Actual and Forecast) Includes Business Case"
-  let grossRevenueRow = null;
-  for (let i = 0; i < data.length; i++) {
-    const firstCol = (data[i]?.[0] || '').toString();
-    if (firstCol.includes('Gross Revenue') && firstCol.includes('Actual and Forecast')) {
-      grossRevenueRow = data[i];
+  for (let i = 0; i < apacData.length; i++) {
+    if (apacData[i]?.[0]?.includes('Gross Revenue') &&
+        apacData[i]?.[0]?.includes('Actual and Forecast')) {
+      fy2026Total = apacData[i][20]; // $31.170M
       break;
     }
   }
 
-  // Extract FY2026 (col 20) and FY2025 (col 22) totals
-  const fy2026Total = grossRevenueRow[20]; // $31,170,000
-  const fy2025Total = grossRevenueRow[22]; // $30,906,000
+  // FY2025 Actual: 26 vs 25 Q Comparison sheet, Row 12, Column 15
+  const compSheet = workbook.Sheets['26 vs 25 Q Comparison'];
+  const compData = XLSX.utils.sheet_to_json(compSheet, { header: 1 });
 
-  // Upsert to burc_annual_financials table
-  // ...
+  for (let i = 0; i < compData.length; i++) {
+    if (compData[i]?.[0] === 'Gross Revenue') {
+      fy2025Total = compData[i][15]; // $26.345M (25 Total column)
+      break;
+    }
+  }
 }
-```
-
-Also added worksheet listing for visibility:
-```javascript
-console.log('📋 Worksheets in file:', workbook.SheetNames.join(', '));
 ```
 
 ---
 
 ## Values Before and After
 
-| Fiscal Year | Before | After | Source |
-|-------------|--------|-------|--------|
+| Fiscal Year | Before (Incorrect) | After (Correct) | Source |
+|-------------|-------------------|-----------------|--------|
 | FY2024 | $29.352M | $29.352M | Unchanged |
-| FY2025 | $26.345M | $30.906M | APAC BURC Row 35, Col 22 |
-| FY2026 | $33.74M | $31.170M | APAC BURC Row 35, Col 20 |
+| FY2025 | $30.906M (budget baseline) | **$26.345M** | 26 vs 25 Q Comparison sheet, Row 12, Col 15 |
+| FY2026 | $33.74M | **$31.170M** | APAC BURC sheet, Row 35, Col 20 |
 
 | Metric | Before | After |
 |--------|--------|-------|
-| FY2026 YoY Growth | 786.2% (broken) → 28.1% (partial fix) | 0.9% (correct) |
+| FY2026 YoY Growth | 786.2% (broken) | **18.3%** (correct) |
 
 ---
 
@@ -125,9 +127,9 @@ The sync script now logs all available worksheets:
 ## Database State After Fix
 
 ```
-FY2024: $29.352M (updated: 2026-01-06)
-FY2025: $30.906M (updated: 2026-01-07)
-FY2026: $31.170M (updated: 2026-01-07)
+FY2024: $29.352M (source: 2024 APAC Performance.xlsx)
+FY2025: $26.345M (source: 26 vs 25 Q Comparison, Gross Revenue row, Col 15)
+FY2026: $31.170M (source: APAC BURC sheet, Row 35, Col 20)
 ```
 
 ---
