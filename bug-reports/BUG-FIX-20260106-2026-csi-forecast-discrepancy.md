@@ -62,10 +62,36 @@ Note: January has no data in Excel (budget planning period).
 | CSI Ratio | Dashboard | Excel (APAC BURC Dec) | Match |
 |-----------|-----------|----------------------|-------|
 | Maint Ratio | 5.69 | 5.69 | ✅ |
-| Sales Ratio | 0.00 | 0.00 | ✅ |
+| Sales Ratio (Standard) | 0.00 | 0.00 | ✅ |
+| Sales Ratio (APAC) | 0.51 | 50.8% | ✅ |
 | PS Ratio | 2.43 | 2.43 | ✅ |
 | R&D Ratio | 0.30 | 0.30 (29.9%) | ✅ |
 | G&A Ratio | 17.7% | 17.7% | ✅ |
+
+---
+
+## Sales Ratio Enhancement
+
+### Two Sales Ratio Calculations
+
+The API now returns **both** Sales Ratio calculations:
+
+1. **Standard CSI Sales Ratio** (`sales`)
+   - Formula: `(70% × Licence Revenue) / S&M OPEX`
+   - Only has values when there are licence sales (e.g., Jul 0.06, Aug 4.83)
+   - Returns 0 for months with no licence sales
+
+2. **APAC Sales Ratio** (`salesApac`)
+   - Formula: `(70% × (Licence NR + 11% × Maintenance NR)) / S&M OPEX`
+   - Includes 11% of Maintenance as "licence equivalent" revenue
+   - Provides consistent monthly values even without direct licence sales
+   - Row 129 in APAC BURC sheet
+
+### Why Both?
+
+- **Standard CSI** follows traditional CSI benchmarking methodology
+- **APAC version** accounts for the regional business model where maintenance revenue includes embedded licence value
+- Dashboard displays both for complete financial visibility
 
 ---
 
