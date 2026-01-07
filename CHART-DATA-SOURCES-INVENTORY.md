@@ -15,7 +15,7 @@
 | Health Score | 4 | 4 | 0 |
 | Compliance | 3 | 3 | 0 |
 | Meetings | 5 | 5 | 0 |
-| Aging/Invoice | 3 | 1 | 2 (need sync) |
+| Aging/Invoice | 3 | 2 | 1 (empty tables) |
 
 ---
 
@@ -298,12 +298,14 @@
 | Field | Value |
 |-------|-------|
 | **Component** | `src/app/(dashboard)/aging-accounts/*` |
-| **API Endpoint** | `/api/aging-accounts` |
+| **API Endpoint** | `/api/aging-accounts` (database), `/api/invoice-tracker/aging-by-cse` (live) |
 | **Database Table** | `aging_accounts` |
-| **Original Source** | Manual import from Invoice Tracker |
-| **Records** | 20 clients, $1.8M outstanding, $1.23M overdue |
-| **Week Ending** | 2025-11-10 (needs refresh) |
-| **Reconciliation** | ✅ **DATA EXISTS** - Needs regular sync |
+| **Original Source** | Invoice Tracker API (https://invoice.alteraapacai.dev) |
+| **Sync Script** | `scripts/sync-invoice-tracker-to-database.mjs` |
+| **Records** | 11 clients, $2.96M outstanding |
+| **Data Source** | `invoice_tracker_api` |
+| **Reconciliation** | ✅ **SYNCED** - Live data from Invoice Tracker |
+| **Last Synced** | 2026-01-07 |
 
 ### 7.2 Aged Invoices Detail
 | Field | Value |
@@ -330,7 +332,7 @@
 | BURC Monthly Files (2025, 2026) | BURC/2025/, BURC/2026/ | `burc_csi_opex`, `burc_monthly_data` | ✅ Synced |
 | NPS Survey Responses | Alchemer/SurveyMonkey | `nps_responses` | ⚠️ Manual |
 | Outlook Calendar | Microsoft Graph API | `unified_meetings` | ⚠️ Partial |
-| Invoice Tracker | External API | `aged_invoices` | ❌ Not synced |
+| Invoice Tracker | External API | `aging_accounts` | ✅ Synced via script |
 | Segmentation Requirements | Tier Requirements Excel | `tier_event_requirements` | ✅ Synced |
 
 ---
@@ -344,6 +346,7 @@
 | `sync-burc-comprehensive.mjs` | Monthly BURC data | Recent |
 | `sync-burc-data-supabase.mjs` | BURC to Supabase | Recent |
 | `verify-revenue-totals.mjs` | Verification script | 2026-01-07 |
+| `sync-invoice-tracker-to-database.mjs` | Sync Invoice Tracker to aging_accounts | 2026-01-07 |
 
 ---
 
@@ -369,5 +372,5 @@
 - [ ] Aged Invoices detail (`aged_invoices` empty)
 - [ ] Working Capital Summary (`working_capital_summary` empty)
 
-### Partially Synced ⚠️
-- [x] Aging Accounts (20 clients, $1.8M outstanding, week ending 2025-11-10 - needs refresh)
+### Synced ✅
+- [x] Aging Accounts (11 clients, $2.96M outstanding - synced from Invoice Tracker 2026-01-07)
