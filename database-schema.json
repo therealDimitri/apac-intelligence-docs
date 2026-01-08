@@ -260,7 +260,7 @@
         "inferred": true
       }
     ],
-    "row_count": 158
+    "row_count": 159
   },
   "unified_meetings": {
     "columns": [
@@ -589,7 +589,7 @@
         "inferred": true
       }
     ],
-    "row_count": 132
+    "row_count": 204
   },
   "nps_responses": {
     "columns": [
@@ -862,7 +862,7 @@
       },
       {
         "column_name": "current_amount",
-        "data_type": "numeric",
+        "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -916,7 +916,7 @@
       },
       {
         "column_name": "total_outstanding",
-        "data_type": "numeric",
+        "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -964,7 +964,7 @@
       },
       {
         "column_name": "client_id",
-        "data_type": "integer",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -975,7 +975,7 @@
         "inferred": true
       }
     ],
-    "row_count": 20
+    "row_count": 11
   },
   "notifications": {
     "columns": [
@@ -1070,7 +1070,7 @@
         "inferred": true
       }
     ],
-    "row_count": 13
+    "row_count": 15
   },
   "portfolio_initiatives": {
     "columns": [
@@ -1218,7 +1218,7 @@
         "inferred": true
       }
     ],
-    "row_count": 198
+    "row_count": 199
   },
   "nps_period_config": {
     "columns": [

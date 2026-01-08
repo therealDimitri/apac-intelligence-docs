@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2026-01-06T13:41:50.905Z
+**Generated**: 2026-01-08T13:12:44.804Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -11,7 +11,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `actions`
 
-**Row Count**: 158
+**Row Count**: 159
 
 ### Columns
 
@@ -65,7 +65,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `unified_meetings`
 
-**Row Count**: 132
+**Row Count**: 204
 
 ### Columns
 
@@ -200,7 +200,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `aging_accounts`
 
-**Row Count**: 20
+**Row Count**: 11
 
 ### Columns
 
@@ -211,7 +211,7 @@ This document provides the authoritative schema definition for all tables in the
 | `client_name` | text | ✗ | - | *(inferred)* |
 | `client_name_normalized` | text | ✗ | - | *(inferred)* |
 | `most_recent_comment` | text | ✗ | - | *(inferred)* |
-| `current_amount` | numeric | ✗ | - | *(inferred)* |
+| `current_amount` | integer | ✗ | - | *(inferred)* |
 | `days_1_to_30` | integer | ✗ | - | *(inferred)* |
 | `days_31_to_60` | integer | ✗ | - | *(inferred)* |
 | `days_61_to_90` | integer | ✗ | - | *(inferred)* |
@@ -220,7 +220,7 @@ This document provides the authoritative schema definition for all tables in the
 | `days_181_to_270` | integer | ✗ | - | *(inferred)* |
 | `days_271_to_365` | integer | ✗ | - | *(inferred)* |
 | `days_over_365` | integer | ✗ | - | *(inferred)* |
-| `total_outstanding` | numeric | ✗ | - | *(inferred)* |
+| `total_outstanding` | integer | ✗ | - | *(inferred)* |
 | `total_overdue` | integer | ✗ | - | *(inferred)* |
 | `is_inactive` | boolean | ✗ | - | *(inferred)* |
 | `data_source` | text | ✗ | - | *(inferred)* |
@@ -228,14 +228,14 @@ This document provides the authoritative schema definition for all tables in the
 | `week_ending_date` | text | ✗ | - | *(inferred)* |
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `updated_at` | text | ✗ | - | *(inferred)* |
-| `client_id` | integer | ✗ | - | *(inferred)* |
+| `client_id` | unknown | ✗ | - | *(inferred)* |
 | `client_uuid` | text | ✗ | - | *(inferred)* |
 
 ---
 
 ## Table: `notifications`
 
-**Row Count**: 13
+**Row Count**: 15
 
 ### Columns
 
@@ -285,7 +285,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `nps_topic_classifications`
 
-**Row Count**: 198
+**Row Count**: 199
 
 ### Columns
 

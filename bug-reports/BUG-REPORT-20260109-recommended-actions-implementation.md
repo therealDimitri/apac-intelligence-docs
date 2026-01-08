@@ -184,16 +184,32 @@ Client identification relied solely on subject line pattern matching. Meetings w
 
 ---
 
-## Database Migration Required
+## Database Migration Status
 
-**IMPORTANT:** Run the following migration before using domain-based client resolution:
+**✅ COMPLETED:** Migration applied automatically on 9 January 2026
 
-```bash
-# Apply via Supabase SQL editor or migration tool
-cat docs/migrations/20260109_client_email_domains.sql | psql $DATABASE_URL
+The following domains are now configured:
+
+| Client | Primary Domain | Additional Domains |
+|--------|---------------|-------------------|
+| SA Health | sahealth.sa.gov.au | sa.gov.au |
+| SingHealth | singhealth.com.sg | sgh.com.sg |
+| GHA | gha.net.au | lrh.com.au |
+| Grampians Health | grampians.net.au | bhs.org.au |
+| Epworth | epworth.org.au | - |
+| St Luke's | stlukes.com.ph | - |
+| GRMC | grmc.gu | - |
+| Austin Health | austin.org.au | - |
+| Albury Wodonga Health | awh.org.au | - |
+| NCS | ncs.com.sg | defence.gov.sg |
+
+To add more domains, run:
+```sql
+INSERT INTO client_email_domains (client_id, domain, is_primary, notes)
+SELECT id, 'newdomain.com', true, 'Description'
+FROM clients WHERE canonical_name ILIKE '%Client Name%'
+ON CONFLICT (domain) DO NOTHING;
 ```
-
-Or paste the contents of `docs/migrations/20260109_client_email_domains.sql` into the Supabase SQL Editor.
 
 ---
 
@@ -204,6 +220,7 @@ Or paste the contents of `docs/migrations/20260109_client_email_domains.sql` int
 | `src/components/CSEOwnerSelector.tsx` | Created | New CSE owner selector component |
 | `src/components/TokenWarningBanner.tsx` | Created | New token warning banner component |
 | `docs/migrations/20260109_client_email_domains.sql` | Created | Domain mapping migration |
+| `scripts/run-migration-direct.mjs` | Created | Migration automation script |
 | `src/components/schedule-meeting-modal.tsx` | Modified | Added CSE owner field |
 | `src/components/outlook-import-modal.tsx` | Modified | Added Skip All / Unskip All buttons |
 | `src/app/(dashboard)/layout.tsx` | Modified | Added TokenWarningBanner |
