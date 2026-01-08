@@ -17,7 +17,11 @@ Multiple issues were identified with the Territory Strategy creation page:
 
 ### Issue 1: ARR/NPS/CSI Not Loading
 
-The client portfolio was correctly fetching data from `client_arr` and `client_health_scores_materialized` tables, but the lookups were **case-sensitive**. When client names in the assigned clients list didn't match the exact casing in the ARR/health tables, the lookup failed silently.
+Two problems were identified:
+
+1. **Wrong table name**: Code was querying `client_health_scores_materialized` but the actual table is `client_health_summary`
+2. **Wrong field name**: Code was querying `latest_nps` but the actual field is `nps_score`
+3. **Case-sensitive lookups**: When client names didn't match exact casing, the lookup failed silently
 
 **Original Code:**
 ```typescript
@@ -49,9 +53,11 @@ The original MEDDPICC scoring used basic number inputs with single-letter labels
 
 ## Solution Implemented
 
-### Fix 1: Case-Insensitive Lookups with Map
+### Fix 1: Correct Table/Field Names and Case-Insensitive Lookups
 
-Created efficient Map-based lookups using lowercase keys for O(1) case-insensitive matching:
+1. Changed table from `client_health_scores_materialized` to `client_health_summary`
+2. Changed field from `latest_nps` to `nps_score`
+3. Created efficient Map-based lookups using lowercase keys for O(1) case-insensitive matching:
 
 ```typescript
 // Create ARR lookup map (case-insensitive)
