@@ -132,6 +132,30 @@ Completely redesigned MEDDPICC scoring interface:
    - Pain Identified: Identify Pain score 4+
    - Qualified Lead: Total score 30+
 
+## Additional Fix: ARR Data Source and Client Aliases (9 Jan 2026 - Update 2)
+
+### Issue: ARR Showing $0
+The `client_arr` table was empty. ARR data is actually stored in the `burc_contracts` table with `annual_value_usd` column.
+
+### Issue: GHA NPS/CSI Missing
+The client "GHA" in the assigned clients list didn't match "Gippsland Health Alliance (GHA)" in the health summary table.
+
+### Solution
+1. Changed ARR source from `client_arr` to `burc_contracts.annual_value_usd`
+2. Implemented client name alias resolution using `client_name_aliases` table
+3. Created bidirectional alias mapping (display_name ↔ canonical_name)
+4. Added missing alias: "GHA Regional" → "Gippsland Health Alliance (GHA)"
+5. Added tooltips to all relevant column headers with definitions
+
+### Column Tooltips Added
+- **ARR**: "Annual Recurring Revenue - The yearly contract value from this client in USD"
+- **NPS**: "Net Promoter Score (-100 to 100) - Measures customer loyalty"
+- **CSI**: "Client Success Index (0-100%) - Composite health score"
+- **Segment**: "Client Segment - Strategic categorisation based on ARR, growth potential"
+- **Renewal Target**: "Expected revenue from contract renewals"
+- **Growth Target**: "New revenue from upsells, cross-sells, and expansion"
+- **Confidence**: "Your assessment of achieving this target (High/Medium/Low)"
+
 ## Files Modified
 
 - `src/app/(dashboard)/planning/territory/new/page.tsx` - Multiple sections updated
