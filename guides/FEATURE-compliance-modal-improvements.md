@@ -46,18 +46,32 @@ If a client's segment changed mid-year, their compliance deadline is extended to
 
 ## Clients with Segment Changes (Sep 2025)
 
-Based on database analysis, these clients have segment records starting September 2025:
+Based on the APAC Client Segmentation Activity Register 2025.xlsx, these clients changed segments in September 2025:
 
-| Client | Previous Segment | Current Segment | Actual Change? |
-|--------|-----------------|-----------------|----------------|
-| SingHealth | Nurture | Sleeping Giant | ✅ Yes |
-| Epworth Healthcare | Leverage | Maintain | ✅ Yes |
-| SA Health (iPro) | Nurture | Collaboration | ✅ Yes |
-| RVEEH | Maintain | Maintain | No (re-assigned) |
-| Western Health | Maintain | Maintain | No (re-assigned) |
-| Te Whatu Ora Waikato | Collaboration | Collaboration | No (re-assigned) |
-| Mount Alvernia Hospital | Leverage | Leverage | No (re-assigned) |
-| Albury Wodonga Health | Leverage | Leverage | No (re-assigned) |
+| Client | Jan 2025 | Sep 2025 |
+|--------|----------|----------|
+| Gippsland Health Alliance (GHA) | Collaboration | Leverage |
+| Grampians Health | Collaboration | Leverage |
+| Guam Regional Medical City (GRMC) | Leverage | Maintain |
+| NCS/MinDef Singapore | Maintain | Leverage |
+| SA Health (Sunrise) | Sleeping Giant | Giant |
+| Saint Luke's Medical Centre (SLMC) | Leverage | Maintain |
+| Department of Health - Victoria | Collaboration | Nurture |
+| WA Health | Nurture | Sleeping Giant |
+| Epworth Healthcare | Leverage | Maintain |
+| SA Health (iPro) | Nurture | Collaboration |
+| SingHealth | Nurture | Sleeping Giant |
+
+### Clients Re-assessed with No Change
+| Client | Segment (unchanged) |
+|--------|---------------------|
+| Barwon Health Australia | Maintain |
+| Royal Victorian Eye and Ear Hospital | Maintain |
+| Western Health | Maintain |
+| Te Whatu Ora Waikato | Collaboration |
+| Mount Alvernia Hospital | Leverage |
+| Albury Wodonga Health | Leverage |
+| SA Health (iQemo) | Nurture |
 
 ## Progress Calculation Logic
 
