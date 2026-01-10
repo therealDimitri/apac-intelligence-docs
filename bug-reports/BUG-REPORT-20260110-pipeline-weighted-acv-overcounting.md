@@ -120,27 +120,80 @@ const totalWeightedPipeline = salesBudgetInTarget.reduce(
 
 ---
 
-## Remaining Difference ($8.8M vs $8.3M)
+## Remaining Difference ($8.8M vs $8.3M) - RESOLVED
 
-The ~$500K difference may be due to:
-1. Minor data variations between import and Excel
-2. Different date/time of data snapshot
-3. Additional filtering criteria in Excel not yet implemented
+### Root Cause Identified
+
+The $451K variance was caused by **one specific opportunity**:
+
+| Opportunity | CSE | Weighted ACV | Issue |
+|------------|-----|--------------|-------|
+| WA Health Opal Enterprise License 2026 | John Salisbury | $450,576 | `in_or_out = "In"` but `forecast_category = "Omitted"` |
+
+**Business Rule Discovery:** Excel excludes opportunities with `forecast_category = "Omitted"` from the target totals, even when they're marked "In". This is because "Omitted" indicates the deal has been omitted from the sales forecast/compensation calculation.
+
+### Variance Breakdown by CSE
+
+| CSE | Dashboard | Excel | Variance |
+|-----|-----------|-------|----------|
+| John Salisbury | $1,720.3K | $1,269.6K | +$450.6K |
+| Laura Messing | $2,680.3K | $2,680.3K | $0 |
+| Open Role | $2,484.2K | $2,484.2K | $0 |
+| Tracey Bland | $1,909.3K | $1,909.3K | $0 |
+
+### Fix Applied (Second Phase)
+
+Updated `PipelineTargetStatus` type to include `'omitted'` status:
+
+```typescript
+export type PipelineTargetStatus = 'in_target' | 'omitted' | 'burc_only' | 'excluded'
+```
+
+Updated filtering logic:
+```typescript
+const isOmitted = row.forecast_category === 'Omitted'
+
+if (isInTarget && !isOmitted) {
+  targetStatus = 'in_target' // Counts towards compensation
+} else if (isInTarget && isOmitted) {
+  targetStatus = 'omitted' // "In" but omitted from forecast - show but doesn't count
+} else if (isBurcMatched) {
+  targetStatus = 'burc_only'
+} else {
+  return // Exclude
+}
+```
+
+### Final Results
+
+| Metric | Before Fix 1 | After Fix 1 | After Fix 2 | Excel Target |
+|--------|-------------|-------------|-------------|--------------|
+| Weighted ACV | $22.2M | $8.79M | **$8.34M** | $8.34M |
+| Variance | +$13.9M | +$451K | **$0** | - |
+
+**Dashboard now matches Excel exactly.**
 
 ---
 
 ## Follow-up Tasks
 
 1. Add "BURC Only" badge to opportunities with `target_status === 'burc_only'`
-2. Investigate remaining $500K variance
-3. Add data validation to ensure In/Out column is correctly mapped
+2. ~~Investigate remaining $500K variance~~ **RESOLVED**
+3. Add "Omitted" badge to opportunities with `target_status === 'omitted'`
+4. Add data validation to ensure In/Out and Forecast Category columns are correctly mapped
 
 ---
 
-## Commit
+## Commits
 
+### Fix 1: In/Out Filtering
 ```
 fix(pipeline): Apply correct In/Out filtering for Sales Budget pipeline
-
 Commit: 0d63f220
+```
+
+### Fix 2: Omitted Forecast Exclusion
+```
+fix(pipeline): Exclude 'Omitted' forecast opportunities from in_target count
+Commit: d6d8a12a
 ```
