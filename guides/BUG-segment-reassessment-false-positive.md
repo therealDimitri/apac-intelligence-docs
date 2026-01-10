@@ -36,7 +36,10 @@ if (effectiveFrom >= yearStart && effectiveFrom <= yearEnd) {
 
 ## Fix Applied
 
-Updated both `detectSegmentChange` and `useSegmentChange` to compare the actual segment tier names before marking a change:
+Updated both `detectSegmentChange` and `useSegmentChange` to compare the actual segment tier names before marking a change.
+
+### Initial Fix (v6)
+Added tier name comparison logic:
 
 ```typescript
 if (effectiveFrom >= yearStart && effectiveFrom <= yearEnd) {
@@ -54,17 +57,37 @@ if (effectiveFrom >= yearStart && effectiveFrom <= yearEnd) {
 }
 ```
 
+### Follow-up Fix (v7) - Supabase Type Mismatch
+
+The initial fix had a bug: `segmentation_tiers` is returned by Supabase as a **single object** at runtime (many-to-one relationship), not an array. The TypeScript types incorrectly suggested it was an array.
+
+**Problem**: `?.[0]?.tier_name` returned `undefined`, causing `null → null` comparisons which failed to detect real changes (e.g., SingHealth: Nurture → Sleeping Giant was missed).
+
+**Solution**: Changed access pattern from `?.[0]?.tier_name` to `?.tier_name`:
+
+```typescript
+// Correct access pattern for single object (not array)
+const prevTierName = prevRecord.segmentation_tiers?.tier_name || null
+const currTierName = change.segmentation_tiers?.tier_name || null
+```
+
+Also added `as unknown as SegmentHistoryRecord` cast to bypass TypeScript's incorrect array type inference.
+
 ## Files Changed
 
 1. `src/lib/segment-deadline-utils.ts`
    - Updated `detectSegmentChange` function to compare tier names
+   - Fixed interface: `segmentation_tiers: { tier_name: string } | null` (single object, not array)
+   - Added `as unknown as` cast for TypeScript compatibility
    - Added logging for re-assessments vs actual changes
 
 2. `src/hooks/useSegmentChange.ts`
    - Updated segment change detection loop to compare tier names
+   - Fixed interface: `segmentation_tiers: { tier_name: string } | null` (single object, not array)
+   - Added `as unknown as` cast for TypeScript compatibility
 
 3. `src/hooks/useEventCompliance.ts`
-   - Bumped cache version to `v6_segment_change_fix`
+   - Bumped cache version to `v7_tier_access_fix`
 
 ## Affected Clients
 
