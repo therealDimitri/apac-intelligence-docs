@@ -73,14 +73,24 @@ Based on the APAC Client Segmentation Activity Register 2025.xlsx, these clients
 | Albury Wodonga Health | Leverage |
 | SA Health (iQemo) | Nurture |
 
-## Progress Calculation Logic
+## Assessment Period Logic
 
-The `useEventCompliance` hook already accounts for segment changes:
+The `useEventCompliance` hook calculates compliance based on assessment periods:
 
-1. **No segment change:** Calculates from Jan 1 to Dec 31 of prior year
-2. **Segment changed:** Calculates from change month in prior year to June 30 of current year
+### Clients WITHOUT Segment Change
+- **Assessment period:** Jan 1 to Dec 31 of the assessment year
+- **Example:** Jan 2025 - Dec 2025
+- **Deadline:** Dec 31, 2025
 
-This logic is implemented in `src/hooks/useEventCompliance.ts` (lines 147-413).
+### Clients WITH Segment Change (Sep 2025)
+- **Assessment period:** Change month to June 30 of the following year
+- **Example:** Sep 2025 - June 30, 2026
+- **Deadline:** June 30, 2026
+- This allows a full 12 months for compliance activities to be scheduled and addressed
+
+This logic is implemented in:
+- `src/hooks/useEventCompliance.ts` - Compliance calculation with assessment period logic
+- `src/lib/segment-deadline-utils.ts` - Segment change detection and deadline calculation
 
 ## Visual Design
 
@@ -92,10 +102,13 @@ The segment change badge uses:
 
 ## Testing
 
-1. Verify modal heading shows "Compliance Details" (no year)
+1. Verify modal heading shows "Segmentation Event Progress" (no year reference)
 2. Open compliance modal for SingHealth - should show segment change badge
-3. Badge should display "Nurture → Sleeping Giant" with extended deadline
+3. Badge should display "Nurture → Sleeping Giant" with extended deadline (June 30, 2026)
 4. Verify badge does NOT appear for clients without segment changes
+5. Check console logs for assessment period calculations:
+   - Unchanged: "assessment period: Jan 2025 - Dec 2025"
+   - Changed: "assessment period: 2025-09-01 to June 30, 2026"
 
 ## Related
 
