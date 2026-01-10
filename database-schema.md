@@ -810,3 +810,164 @@ This document provides the authoritative schema definition for all tables in the
 
 ---
 
+## Table: `strategic_plans`
+
+**Purpose**: Unified strategic planning table supporting territory, account, and hybrid planning workflows.
+
+**Row Count**: 0 (new table)
+
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
+| `plan_type` | text | ✗ | - | Type: 'territory', 'account', 'hybrid' |
+| `fiscal_year` | integer | ✗ | 2026 | Fiscal year for the plan |
+| `primary_owner` | text | ✗ | - | CSE or CAM name |
+| `primary_owner_role` | text | ✓ | - | Role: 'CSE' or 'CAM' |
+| `collaborators` | text[] | ✓ | '{}' | Array of team members |
+| `territory` | text | ✓ | - | Region/territory name |
+| `client_id` | uuid | ✓ | - | For account plans |
+| `client_name` | text | ✓ | - | For account plans |
+| `portfolio_data` | jsonb | ✓ | '[]' | Clients in scope |
+| `snapshot_data` | jsonb | ✓ | '{}' | Health metrics |
+| `stakeholders_data` | jsonb | ✓ | '[]' | Relationship mapping |
+| `opportunities_data` | jsonb | ✓ | '[]' | Pipeline with MEDDPICC |
+| `targets_data` | jsonb | ✓ | '{}' | FY targets & coverage |
+| `risks_data` | jsonb | ✓ | '[]' | Risk assessment |
+| `actions_data` | jsonb | ✓ | '[]' | Action plans |
+| `value_data` | jsonb | ✓ | '{}' | Outcomes & value realisation |
+| `comments` | jsonb | ✓ | '[]' | In-context comments (deprecated) |
+| `activity_log` | jsonb | ✓ | '[]' | Edit history (deprecated) |
+| `active_editors` | jsonb | ✓ | '[]' | Real-time presence (deprecated) |
+| `status` | text | ✓ | 'draft' | Status: 'draft', 'in_review', 'approved', 'archived' |
+| `completion_percentage` | integer | ✓ | 0 | Progress percentage 0-100 |
+| `steps_completed` | jsonb | ✓ | '{}' | Track which steps are done |
+| `submitted_at` | timestamptz | ✓ | - | When submitted for review |
+| `submitted_by` | text | ✓ | - | Who submitted |
+| `approved_by` | text | ✓ | - | Who approved |
+| `approved_at` | timestamptz | ✓ | - | When approved |
+| `created_at` | timestamptz | ✓ | NOW() | Creation timestamp |
+| `updated_at` | timestamptz | ✓ | NOW() | Last update timestamp |
+
+### Indexes
+
+- `idx_strategic_plans_owner` - (primary_owner)
+- `idx_strategic_plans_type` - (plan_type)
+- `idx_strategic_plans_fiscal_year` - (fiscal_year)
+- `idx_strategic_plans_status` - (status)
+- `idx_strategic_plans_client` - (client_id) WHERE client_id IS NOT NULL
+- `idx_strategic_plans_territory` - (territory) WHERE territory IS NOT NULL
+- `idx_strategic_plans_client_name` - (client_name) WHERE client_name IS NOT NULL
+- `idx_strategic_plans_created` - (created_at DESC)
+- `idx_strategic_plans_updated` - (updated_at DESC)
+- `idx_strategic_plans_collaborators` - USING GIN(collaborators)
+
+---
+
+## Table: `plan_comments`
+
+**Purpose**: Threaded comments for strategic plan collaboration.
+
+**Row Count**: 0 (new table)
+
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
+| `plan_id` | uuid | ✗ | - | FK to strategic_plans (ON DELETE CASCADE) |
+| `parent_id` | uuid | ✓ | - | FK to plan_comments for threading (ON DELETE CASCADE) |
+| `author` | text | ✗ | - | Author name |
+| `author_email` | text | ✓ | - | Author email |
+| `author_avatar` | text | ✓ | - | Author avatar URL |
+| `content` | text | ✗ | - | Comment content |
+| `entity_type` | text | ✓ | - | Type: 'risk', 'opportunity', 'action', 'stakeholder', 'portfolio', 'target', 'general' |
+| `entity_id` | text | ✓ | - | Reference to specific item |
+| `resolved` | boolean | ✓ | false | Whether comment is resolved |
+| `resolved_by` | text | ✓ | - | Who resolved it |
+| `resolved_at` | timestamptz | ✓ | - | When resolved |
+| `edited` | boolean | ✓ | false | Whether comment was edited |
+| `edited_at` | timestamptz | ✓ | - | When edited |
+| `mentions` | text[] | ✓ | '{}' | @mentioned users |
+| `created_at` | timestamptz | ✓ | NOW() | Creation timestamp |
+| `updated_at` | timestamptz | ✓ | NOW() | Last update timestamp |
+
+### Indexes
+
+- `idx_plan_comments_plan` - (plan_id)
+- `idx_plan_comments_parent` - (parent_id) WHERE parent_id IS NOT NULL
+- `idx_plan_comments_author` - (author)
+- `idx_plan_comments_entity` - (entity_type, entity_id)
+- `idx_plan_comments_unresolved` - (plan_id) WHERE NOT resolved
+- `idx_plan_comments_created` - (created_at DESC)
+- `idx_plan_comments_mentions` - USING GIN(mentions)
+
+---
+
+## Table: `plan_presence`
+
+**Purpose**: Real-time presence tracking for collaborative editing.
+
+**Row Count**: 0 (new table)
+
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
+| `plan_id` | uuid | ✗ | - | FK to strategic_plans (ON DELETE CASCADE) |
+| `user_name` | text | ✗ | - | User name |
+| `user_email` | text | ✓ | - | User email |
+| `user_role` | text | ✓ | - | Role: 'CSE', 'CAM', 'Admin', 'Viewer' |
+| `user_avatar` | text | ✓ | - | User avatar URL |
+| `current_step` | text | ✓ | - | Step: 'context', 'portfolio', 'relationships', 'risks', 'review' |
+| `editing_entity` | text | ✓ | - | What they're editing (e.g., 'stakeholder:uuid') |
+| `cursor_position` | jsonb | ✓ | - | For cursor presence feature |
+| `last_active` | timestamptz | ✓ | NOW() | Last activity timestamp |
+
+### Indexes
+
+- `idx_plan_presence_plan` - (plan_id)
+- `idx_plan_presence_user` - (user_name)
+- `idx_plan_presence_active` - (last_active DESC)
+- `idx_plan_presence_step` - (plan_id, current_step)
+
+### Constraints
+
+- UNIQUE(plan_id, user_name)
+
+---
+
+## Table: `plan_activity_log`
+
+**Purpose**: Audit trail for all strategic plan changes.
+
+**Row Count**: 0 (new table)
+
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
+| `plan_id` | uuid | ✗ | - | FK to strategic_plans (ON DELETE CASCADE) |
+| `user_name` | text | ✗ | - | User who performed action |
+| `user_email` | text | ✓ | - | User email |
+| `action` | text | ✗ | - | Action: 'created', 'updated', 'commented', 'submitted', 'approved', 'rejected', 'archived', 'restored', 'step_completed', 'collaborator_added', 'collaborator_removed', 'status_changed' |
+| `details` | jsonb | ✓ | - | Additional context about the action |
+| `entity_type` | text | ✓ | - | What was affected (e.g., 'risk', 'action') |
+| `entity_id` | text | ✓ | - | ID of affected entity |
+| `previous_value` | jsonb | ✓ | - | For tracking changes |
+| `new_value` | jsonb | ✓ | - | For tracking changes |
+| `created_at` | timestamptz | ✓ | NOW() | Creation timestamp |
+
+### Indexes
+
+- `idx_plan_activity_plan` - (plan_id)
+- `idx_plan_activity_user` - (user_name)
+- `idx_plan_activity_action` - (action)
+- `idx_plan_activity_created` - (created_at DESC)
+- `idx_plan_activity_entity` - (entity_type, entity_id)
+
+---
+
