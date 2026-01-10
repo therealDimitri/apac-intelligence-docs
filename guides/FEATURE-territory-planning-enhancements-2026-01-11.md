@@ -175,20 +175,23 @@ const isOnTrack = roundedPercent >= 100
 
 ## Testing Checklist
 
-- [ ] Epworth logo displays correctly
-- [ ] Selection instructions appear in blue panel
-- [ ] vs FY26 Target shows percentage and target amount
-- [ ] Can select up to 20 opportunities
-- [ ] Column headers have subtitles visible
-- [ ] MEDDPICC column is not visible in selection table
-- [ ] Next button visible above ChaSen widget on all displays
-- [ ] Revenue Targets table columns are centered
-- [ ] 100% target shows green colour
-- [ ] Risk Assessment client dropdown shows portfolio clients
-- [ ] Revenue at Risk auto-fills when client selected
-- [ ] Review step shows opportunities sorted by value (highest first)
-- [ ] Switching CSEs resets targets to 0 while loading
-- [ ] Each CSE shows their unique coverage ratio (not stale data)
+- [x] Epworth logo displays correctly
+- [x] Selection instructions appear in blue panel
+- [x] vs FY26 Target shows percentage and target amount
+- [x] Can select unlimited opportunities (no max limit)
+- [x] Select All / Clear All buttons work
+- [x] Column headers have subtitles visible
+- [x] MEDDPICC column is not visible in selection table
+- [x] Next button visible above ChaSen widget on all displays
+- [x] Revenue Targets table columns are centered
+- [x] 100% target shows green colour
+- [x] Risk Assessment client dropdown shows portfolio clients
+- [x] Revenue at Risk auto-fills when client selected
+- [x] Review step shows opportunities sorted by value (highest first)
+- [x] Switching CSEs resets targets to 0 while loading
+- [x] Each CSE shows their unique coverage ratio (verified correct)
+- [x] Portfolio sorted by FY26 ACV Target descending
+- [x] Portfolio columns centered (except Client name)
 
 ---
 
@@ -215,3 +218,5 @@ const isOnTrack = roundedPercent >= 100
 | `d58bca19` | Client name auto-populate dropdown |
 | `77fff619` | Sort opportunities by value descending |
 | `39cdde57` | Fix stale coverage data when switching CSEs |
+| `a6e5c229` | Remove 20-opp limit, add Select All, sort portfolio by ACV Target |
+| `2a8a70f5` | Center portfolio columns, sort by FY26 ACV Target |
