@@ -145,6 +145,34 @@ const isOnTrack = roundedPercent >= 100
 
 ---
 
+### 11. Sort Opportunities by Value
+**Commit:** `77fff619`
+
+**Enhancement:** Review step now displays opportunities sorted by ACV descending.
+
+**Change:**
+```typescript
+{[...formData.opportunities]
+  .sort((a, b) => (b.acv || 0) - (a.acv || 0))
+  .map((opp, idx) => (...))}
+```
+
+---
+
+### 12. Fix Stale Coverage Data When Switching CSEs
+**Commit:** `39cdde57`
+
+**Issue:** Coverage ratio displayed the same values for all CSEs. Previous CSE's targets persisted when switching.
+
+**Root Cause:** `handleCSESelect` reset portfolio but not targets when CSE changed.
+
+**Fix:** Reset targets and pipeline opportunities to zero/empty when CSE selection changes:
+- Quarterly targets reset to 0
+- Pipeline totals reset to 0
+- Pipeline opportunities cleared
+
+---
+
 ## Testing Checklist
 
 - [ ] Epworth logo displays correctly
@@ -158,6 +186,9 @@ const isOnTrack = roundedPercent >= 100
 - [ ] 100% target shows green colour
 - [ ] Risk Assessment client dropdown shows portfolio clients
 - [ ] Revenue at Risk auto-fills when client selected
+- [ ] Review step shows opportunities sorted by value (highest first)
+- [ ] Switching CSEs resets targets to 0 while loading
+- [ ] Each CSE shows their unique coverage ratio (not stale data)
 
 ---
 
@@ -182,3 +213,5 @@ const isOnTrack = roundedPercent >= 100
 | `4322ddda` | Increased max selections to 20 |
 | `b30de4e3` | Fixed 100% target colour to green |
 | `d58bca19` | Client name auto-populate dropdown |
+| `77fff619` | Sort opportunities by value descending |
+| `39cdde57` | Fix stale coverage data when switching CSEs |
