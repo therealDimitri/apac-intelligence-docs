@@ -14,6 +14,10 @@ Fixed multiple formatting issues in the Strategic Planning Portfolio step:
 4. Incorrect column naming (Client Health, Support Health)
 5. Segment styling not matching Client Portfolios
 6. Summary cards in wrong order
+7. Table width not showing all columns
+8. Segment badges wrapping to multiple lines ("Sleeping Giant")
+9. Table not sorted by Weighted ACV
+10. Client column should be left-aligned
 
 ## Issues Addressed
 
@@ -121,34 +125,96 @@ Updated Segment cell to use `rounded-full` with icons:
 **Resolution:**
 Reordered summary cards JSX to match expected order.
 
+### 7. Table Width Not Showing All Columns
+
+**Reported Behaviour:**
+- Table columns were being compressed, hiding the Segment column
+- Required horizontal scroll but columns were still cut off
+
+**Resolution:**
+Added `min-w-max` to table to prevent column compression:
+```typescript
+<table className="w-full min-w-max text-sm">
+```
+
+### 8. Segment Badges Wrapping
+
+**Reported Behaviour:**
+- "Sleeping Giant" segment text was wrapping to two lines within the badge
+
+**Resolution:**
+Added `whitespace-nowrap` to segment badge spans and `flex-shrink-0` to icons:
+```typescript
+<span className={`... whitespace-nowrap ...`}>
+  <SegIcon className="h-3 w-3 flex-shrink-0" />
+  {client.segment}
+</span>
+```
+
+### 9. Table Sorting
+
+**Reported Behaviour:**
+- Table was sorted alphabetically by client name
+- Expected: Sort by Weighted ACV descending (highest value first)
+
+**Resolution:**
+Added sort before mapping portfolio clients:
+```typescript
+{[...formData.portfolio]
+  .sort((a, b) => b.acvTarget - a.acvTarget)
+  .map(client => { ... })}
+```
+
+### 10. Client Column Alignment
+
+**Reported Behaviour:**
+- Client column was centred like other columns
+- Expected: Left-aligned for better readability
+
+**Resolution:**
+Changed Client column header and data to use `text-left`:
+```typescript
+<th className="text-left py-3 px-4 font-medium text-gray-700">
+```
+Removed `justify-center` from client cell flex container.
+
 ## Files Modified
 
 ### src/app/(dashboard)/planning/strategic/new/page.tsx
 - Added imports: `Crown`, `Zap`, `Sprout`, `Moon`, `type LucideIcon`
 - Added `SEGMENT_CONFIG` constant with icon mappings
 - Updated `getStepCompletion` case 'relationships' to require `portfolioConfirmed`
-- Added `text-center` to all table header `<th>` elements
-- Added `text-center` to all table data `<td>` elements
+- Added `text-center` to all table header `<th>` elements (except Client)
+- Added `text-center` to all table data `<td>` elements (except Client)
 - Changed `ClientLogoDisplay` size from `sm` to `xs`
-- Added `justify-center` to client cell container
+- Changed Client column to `text-left` alignment
 - Renamed "Client Health" → "Health Score"
 - Renamed "Support Health" → "Support Score"
 - Updated tooltip content to be concise
 - Updated Segment cell to use `SEGMENT_CONFIG` with icons and `rounded-full`
 - Reordered summary cards: Target, ARR, Coverage
+- Added `min-w-max` to table for proper column widths
+- Added `whitespace-nowrap` to Segment badges
+- Added portfolio sort by Weighted ACV descending
 
 ## Testing Performed
 
 - [x] Build passes with zero TypeScript errors
 - [x] Step 3 no longer shows as complete until portfolio is confirmed
-- [x] Table columns are centred (headers and data)
+- [x] Table columns are centred (headers and data) except Client
+- [x] Client column is left-aligned
 - [x] Client logos display at correct size with proper alignment
 - [x] Health Score and Support Score columns display correctly
 - [x] Segment badges show icons matching Client Portfolios
+- [x] Segment badges stay on one line (including "Sleeping Giant")
 - [x] Summary cards appear in correct order
+- [x] Table sorted by Weighted ACV descending
+- [x] All columns visible with horizontal scroll
 
 ## Prevention
 
 1. **Wizard Step Logic**: Always require prerequisite steps before marking later steps complete
 2. **UI Consistency**: Use shared config constants (like SEGMENT_CONFIG) across pages
-3. **Table Styling**: Follow established patterns for centred data tables
+3. **Table Styling**: Follow established patterns for data tables
+4. **Table Width**: Use `min-w-max` when tables have many columns
+5. **Text Wrapping**: Use `whitespace-nowrap` for badges and short labels
