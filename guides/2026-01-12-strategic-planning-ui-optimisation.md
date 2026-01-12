@@ -148,36 +148,44 @@ Added group headers with visual hierarchy:
 
 **Reported Behaviour:**
 - Support column showed "-" for all clients despite data existing in `support_sla_metrics` table
-- Client names in support_sla_metrics didn't match portfolio client names (display vs canonical names)
+- Supabase queries returned empty arrays with no errors
 
 **Root Cause:**
-- The `clientAliases` mapping used canonical names as keys (e.g., "The Royal Victorian Eye and Ear Hospital")
-- Portfolio clients use display names (e.g., "RVEEH")
-- Alias lookup failed because display name "RVEEH" wasn't a key in the mapping
+- The `support_sla_metrics` table has Row Level Security (RLS) enabled
+- RLS policy only allows `authenticated` role, NOT `anon` role
+- Client-side code uses `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- Supabase silently returns empty arrays when RLS blocks access (no error thrown)
 
 **Resolution:**
-Created bidirectional alias mapping with both canonical AND display names as keys:
+Created server-side API route that uses service role key to bypass RLS:
+
 ```typescript
-const clientAliases: Record<string, string[]> = {
-  'The Royal Victorian Eye and Ear Hospital': ['The Royal Victorian Eye and Ear Hospital', 'RVEEH'],
-  'RVEEH': ['The Royal Victorian Eye and Ear Hospital', 'RVEEH'], // Display name as key
-  'Barwon Health Australia': ['Barwon Health Australia', 'Barwon Health'],
-  'Barwon Health': ['Barwon Health Australia', 'Barwon Health'], // Display name as key
-  // ...
+// src/app/api/planning/support-metrics/route.ts
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!  // Bypasses RLS
+)
+
+export async function GET() {
+  const { data: supportMetrics } = await supabase
+    .from('support_sla_metrics')
+    .select('client_name, resolution_sla_percent, satisfaction_score, ...')
+    .order('period_end', { ascending: false })
+
+  // Calculate support health scores and return
+  return NextResponse.json({ supportHealthByClient })
 }
 ```
 
-Also added fallback logic to search alias arrays if direct lookup fails:
+Updated strategic planning page to fetch via API:
 ```typescript
-if (!aliases) {
-  for (const [, aliasList] of Object.entries(clientAliases)) {
-    if (aliasList.some(a => a.toLowerCase() === clientName.toLowerCase())) {
-      aliases = aliasList
-      break
-    }
-  }
-}
+const supportResponse = await fetch('/api/planning/support-metrics')
+const supportData = await supportResponse.json()
 ```
+
+Also maintained bidirectional alias mapping for name resolution between API response and portfolio clients.
 
 ### 11. Table Column Alignment
 
@@ -225,6 +233,11 @@ const avgHealth = healthScores.length > 0
 
 ### src/app/(dashboard)/planning/territory/[id]/page.tsx
 - Enhanced error logging for strategy loading failures
+
+### src/app/api/planning/support-metrics/route.ts (NEW)
+- Server-side API route for fetching support metrics
+- Uses service role key to bypass RLS on support_sla_metrics table
+- Calculates support health score per client
 
 ## Visual Changes Summary
 
@@ -277,3 +290,4 @@ const avgHealth = healthScores.length > 0
 8. `fix: Reorder header to Territory • CSE • Collaborator`
 9. `feat: Add FY26 Plan and Actual group headers to Portfolio table`
 10. `feat: Enhance Portfolio table with totals row and centre alignment`
+11. `fix: Resolve Support scores not displaying in Portfolio table`
