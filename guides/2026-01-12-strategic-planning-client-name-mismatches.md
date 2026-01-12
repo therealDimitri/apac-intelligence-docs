@@ -12,6 +12,7 @@ Fixed multiple client name mismatch issues affecting the Strategic Planning Port
 2. WA Health missing from John Salisbury's portfolio
 3. RVEEH health data, NPS, and segment not loading
 4. WA Health pipeline data (Weighted ACV, Total ACV) not loading
+5. TCV column showing "-" for all clients (not being aggregated from pipeline)
 
 ## Issues Addressed
 
@@ -65,6 +66,14 @@ WHERE id = 19;
 ### src/lib/client-logos-local.ts
 - Added `'The Royal Victorian Eye and Ear Hospital': '/logos/rveeh.webp'` to CLIENT_LOGO_MAP
 
+### src/app/(dashboard)/planning/strategic/new/page.tsx
+- Added `tcv: number` to `PipelineOpportunity` interface
+- Added `tcv: row.tcv || 0` in pipeline row mapping
+- Extended `pipelineByClient` Map type to include TCV: `{ weighted: number; total: number; tcv: number }`
+- Added TCV aggregation in pipeline grouping loop
+- Set `tcv: clientPipelineData.tcv` in portfolio client mapping
+- Added `tcv: 0` to custom opportunity creation
+
 ### Database Updates (via Supabase service role)
 - `cse_client_assignments`: Updated record id=19
   - `client_name`: "Western Australia Department Of Health" → "WA Health"
@@ -76,6 +85,8 @@ WHERE id = 19;
 - [x] RVEEH logo displays correctly in Portfolio Clients table
 - [x] WA Health now appears in John Salisbury's portfolio
 - [x] All 5 clients display for John: Barwon Health, Epworth Healthcare, RVEEH, Western Health, WA Health
+- [x] TCV column displays correct values from sales_pipeline_opportunities
+- [x] TCV aggregation verified against source Excel (APAC 2026 Sales Budget 6Jan2026.xlsx)
 
 ## Prevention
 
@@ -128,6 +139,32 @@ const pipelineAliases: Record<string, string> = {
   // ... other aliases
 }
 ```
+
+### 5. TCV Column Not Displaying
+
+**Reported Behaviour:**
+- TCV column showed "-" for all clients in Portfolio Clients table
+- TCV data existed in `sales_pipeline_opportunities.tcv` but wasn't being aggregated
+
+**Root Cause:**
+- `PipelineOpportunity` interface didn't include `tcv` field
+- Pipeline row mapping didn't extract TCV from database rows
+- `pipelineByClient` aggregation only tracked `weighted` and `total` ACV, not TCV
+- Portfolio client mapping didn't set TCV from aggregated data
+
+**Resolution:**
+1. Added `tcv: number` to `PipelineOpportunity` interface
+2. Included `tcv: row.tcv || 0` in pipeline row mapping
+3. Extended `pipelineByClient` to track `{ weighted, total, tcv }`
+4. Set `tcv: clientPipelineData.tcv` in portfolio client mapping
+
+**Result:**
+TCV now displays correctly for John Salisbury's portfolio:
+- WA Health: $7,083,321
+- Western Health: $1,087,343
+- Barwon Health: $275,962
+- Epworth Healthcare: $229,297
+- RVEEH: "-" (opportunities excluded due to Out/Omitted status)
 
 ## Related Issues
 
