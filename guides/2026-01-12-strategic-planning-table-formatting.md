@@ -18,6 +18,8 @@ Fixed multiple formatting issues in the Strategic Planning Portfolio step:
 8. Segment badges wrapping to multiple lines ("Sleeping Giant")
 9. Table not sorted by Weighted ACV
 10. Client column should be left-aligned
+11. NPS scores showing stale data instead of calculated aggregates
+12. Support Health scores showing stale data instead of latest metrics
 
 ## Issues Addressed
 
@@ -178,6 +180,59 @@ Changed Client column header and data to use `text-left`:
 ```
 Removed `justify-center` from client cell flex container.
 
+### 11. NPS Scores Using Stale Data
+
+**Reported Behaviour:**
+- NPS scores were showing stale values from `client_health_summary.nps_score`
+- Example: Epworth Healthcare showed +5 when NPS Analytics page showed -100
+- Data was not being calculated from actual survey responses
+
+**Root Cause:**
+The portfolio loading used `client_health_summary.nps_score` which is a point-in-time snapshot, not the actual calculated aggregate from `nps_responses`.
+
+**Resolution:**
+Query `nps_responses` table and calculate NPS aggregates per client:
+```typescript
+const { data: npsResponses } = await supabase
+  .from('nps_responses')
+  .select('client_name, score')
+  .in('client_name', portfolioClientNames)
+
+// Calculate NPS for each client
+// Formula: NPS = ((promoters - detractors) / total) * 100
+// Promoters: scores >= 9, Detractors: scores <= 6
+```
+
+Override the stale `nps` value with the calculated aggregate in portfolio mapping.
+
+### 12. Support Health Scores Using Stale Data
+
+**Reported Behaviour:**
+- Support Health scores showed stale values from `client_health_summary.support_health_score`
+- Support Health page showed different (correct) values
+- Example: RVEEH showed 96, WA Health showed 94, Barwon Health showed 92
+
+**Root Cause:**
+The portfolio loading used cached `support_health_score` from `client_health_summary`, not the latest calculated score from `support_sla_metrics`.
+
+**Resolution:**
+Query `support_sla_metrics` table and calculate Support Health scores using the same formula as the Support Health page:
+```typescript
+const { data: supportMetrics } = await supabase
+  .from('support_sla_metrics')
+  .select('client_name, resolution_sla_percent, satisfaction_score, aging_31_60d, aging_61_90d, aging_90d_plus, critical_open, period_end')
+  .order('period_end', { ascending: false })
+
+// Calculate support health score
+// Formula matches api/support-metrics/route.ts:
+// - SLA Compliance (40% weight)
+// - Satisfaction (30% weight) - convert 1-5 scale to 0-100
+// - Aging penalty (20% weight) - 100 - (aging30dPlus * 10)
+// - Critical cases penalty (10% weight) - 100 - (critical_open * 25)
+```
+
+Override the stale `supportHealthScore` with the calculated value in portfolio mapping.
+
 ## Files Modified
 
 ### src/app/(dashboard)/planning/strategic/new/page.tsx
@@ -196,6 +251,9 @@ Removed `justify-center` from client cell flex container.
 - Added `min-w-max` to table for proper column widths
 - Added `whitespace-nowrap` to Segment badges
 - Added portfolio sort by Weighted ACV descending
+- Added NPS aggregate calculation from `nps_responses` table
+- Added Support Health score calculation from `support_sla_metrics` table
+- Override stale client_health_summary values with calculated aggregates
 
 ## Testing Performed
 
@@ -210,6 +268,9 @@ Removed `justify-center` from client cell flex container.
 - [x] Summary cards appear in correct order
 - [x] Table sorted by Weighted ACV descending
 - [x] All columns visible with horizontal scroll
+- [x] NPS scores now show calculated aggregates from nps_responses
+- [x] Support Health scores now show latest values from support_sla_metrics
+- [x] Console logging confirms correct NPS and Support Health calculations
 
 ## Prevention
 
@@ -218,3 +279,4 @@ Removed `justify-center` from client cell flex container.
 3. **Table Styling**: Follow established patterns for data tables
 4. **Table Width**: Use `min-w-max` when tables have many columns
 5. **Text Wrapping**: Use `whitespace-nowrap` for badges and short labels
+6. **Dynamic Data**: Always fetch latest data from source tables (nps_responses, support_sla_metrics) instead of using cached/summary values
