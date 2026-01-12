@@ -144,6 +144,71 @@ Added group headers with visual hierarchy:
 </tr>
 ```
 
+### 10. Support Scores Not Displaying
+
+**Reported Behaviour:**
+- Support column showed "-" for all clients despite data existing in `support_sla_metrics` table
+- Client names in support_sla_metrics didn't match portfolio client names (display vs canonical names)
+
+**Root Cause:**
+- The `clientAliases` mapping used canonical names as keys (e.g., "The Royal Victorian Eye and Ear Hospital")
+- Portfolio clients use display names (e.g., "RVEEH")
+- Alias lookup failed because display name "RVEEH" wasn't a key in the mapping
+
+**Resolution:**
+Created bidirectional alias mapping with both canonical AND display names as keys:
+```typescript
+const clientAliases: Record<string, string[]> = {
+  'The Royal Victorian Eye and Ear Hospital': ['The Royal Victorian Eye and Ear Hospital', 'RVEEH'],
+  'RVEEH': ['The Royal Victorian Eye and Ear Hospital', 'RVEEH'], // Display name as key
+  'Barwon Health Australia': ['Barwon Health Australia', 'Barwon Health'],
+  'Barwon Health': ['Barwon Health Australia', 'Barwon Health'], // Display name as key
+  // ...
+}
+```
+
+Also added fallback logic to search alias arrays if direct lookup fails:
+```typescript
+if (!aliases) {
+  for (const [, aliasList] of Object.entries(clientAliases)) {
+    if (aliasList.some(a => a.toLowerCase() === clientName.toLowerCase())) {
+      aliases = aliasList
+      break
+    }
+  }
+}
+```
+
+### 11. Table Column Alignment
+
+**Reported Behaviour:**
+- Table columns were right-aligned, inconsistent with visual design
+
+**Resolution:**
+- Centre aligned all columns except Client (remains left-aligned)
+- Applied consistent `text-center` to headers and data cells
+
+### 12. Portfolio Totals Row
+
+**Reported Behaviour:**
+- No summary row to show portfolio totals and averages
+- Had to manually calculate totals from individual client data
+
+**Resolution:**
+Added `<tfoot>` row with calculated values:
+- **Financial columns**: Sum of portfolio values (Wtd ACV, Total ACV, TCV, ARR)
+- **Score columns**: Portfolio average (Health, NPS, Support) - excludes null values
+- **Segment column**: Shows total client count
+
+Values calculated from displayed table data (not imported totals) as a reconciliation check:
+```typescript
+const totalArr = portfolio.reduce((sum, c) => sum + c.arr, 0)
+const healthScores = portfolio.map(c => c.healthScore).filter((s): s is number => s !== null)
+const avgHealth = healthScores.length > 0
+  ? Math.round(healthScores.reduce((a, b) => a + b, 0) / healthScores.length)
+  : null
+```
+
 ## Files Modified
 
 ### src/app/(dashboard)/planning/page.tsx
@@ -175,6 +240,9 @@ Added group headers with visual hierarchy:
 | Header subtitle | Name • Territory | Territory • Name [CSE] • Collab [CAM] |
 | Table column groups | No grouping | FY26 Plan (indigo) / Actual (emerald) |
 | Table column order | Wtd ACV, ARR, Health, NPS, Support, Segment, Total ACV, TCV | Wtd ACV, Total ACV, TCV, ARR, Health, NPS, Support, Segment |
+| Table column alignment | Right-aligned | Centre-aligned (except Client) |
+| Table totals | None | Portfolio totals/averages row |
+| Support alias mapping | One-directional | Bidirectional (canonical + display names) |
 
 ## Testing Performed
 
@@ -187,6 +255,9 @@ Added group headers with visual hierarchy:
 - [x] CSE and CAM badges display correctly
 - [x] Layout utilises available screen width on larger displays
 - [x] Table column groups display with correct colours and grouping
+- [x] Support scores display correctly for clients with support_sla_metrics data
+- [x] Table columns are centre-aligned (except Client)
+- [x] Portfolio totals row shows calculated sums and averages
 
 ## Browser/Device Testing
 
@@ -205,3 +276,4 @@ Added group headers with visual hierarchy:
 7. `feat: Add CSE and CAM badges to Strategic Plan header`
 8. `fix: Reorder header to Territory • CSE • Collaborator`
 9. `feat: Add FY26 Plan and Actual group headers to Portfolio table`
+10. `feat: Enhance Portfolio table with totals row and centre alignment`
