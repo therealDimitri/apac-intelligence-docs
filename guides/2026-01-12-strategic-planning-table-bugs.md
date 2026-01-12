@@ -48,33 +48,29 @@ Fixed multiple issues in the Strategic Planning Portfolio step:
 - Other clients showing correct data
 
 **Root Cause Analysis:**
-The issue is a **data issue**, not a code issue. RVEEH likely:
-1. Has no entry in `client_arr` table (source of ARR data)
-2. Has no pipeline opportunities in `sales_pipeline_opportunities` for this CSE
-3. May have name mismatch between tables
+**Name mismatch** between tables:
+- `clients` table had: "Royal Victorian Eye and Ear Hospital" (missing "The")
+- `client_arr` table had: "**The** Royal Victorian Eye and Ear Hospital"
+- Case-insensitive matching failed because the names were different
 
 **Resolution:**
-- Added console logging to help debug:
-  - Logs ARR data count and samples on client load
-  - Warns when clients have no financial data
-  - Lists possible causes for missing data
-- User should check browser console for debugging info:
-  - `[loadClients] ARR data loaded: X entries`
-  - `[loadPortfolioForOwner] Clients with no financial data: [...]`
+Updated database tables to align client names:
 
-**Data Verification Required:**
-Run these queries to verify RVEEH data exists:
+1. **Updated `clients` table:**
+   ```sql
+   UPDATE clients SET canonical_name = 'The Royal Victorian Eye and Ear Hospital'
+   WHERE display_name = 'RVEEH';
+   ```
 
-```sql
--- Check if RVEEH has ARR data
-SELECT * FROM client_arr WHERE client_name ILIKE '%RVEEH%';
+2. **Updated `client_name_aliases` table:**
+   ```sql
+   UPDATE client_name_aliases SET canonical_name = 'The Royal Victorian Eye and Ear Hospital'
+   WHERE canonical_name = 'Royal Victorian Eye and Ear Hospital';
+   ```
 
--- Check if RVEEH has pipeline opportunities
-SELECT * FROM sales_pipeline_opportunities WHERE account_name ILIKE '%RVEEH%';
-
--- Check RVEEH's canonical name in clients table
-SELECT * FROM clients WHERE canonical_name ILIKE '%RVEEH%' OR display_name ILIKE '%RVEEH%';
-```
+**Result:**
+- ARR now displays: **$100,417**
+- All name references are aligned across tables
 
 ## Files Modified
 
