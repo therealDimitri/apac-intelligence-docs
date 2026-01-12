@@ -7,9 +7,11 @@
 
 ## Summary
 
-Fixed two client name mismatch issues affecting the Strategic Planning Portfolio view:
+Fixed multiple client name mismatch issues affecting the Strategic Planning Portfolio view:
 1. RVEEH logo not displaying (showing fallback initials "RV")
 2. WA Health missing from John Salisbury's portfolio
+3. RVEEH health data, NPS, and segment not loading
+4. WA Health pipeline data (Weighted ACV, Total ACV) not loading
 
 ## Issues Addressed
 
@@ -80,6 +82,52 @@ WHERE id = 19;
 1. **Client Name Consistency**: Ensure `cse_client_assignments.client_name` matches `clients.canonical_name`
 2. **Logo Map Coverage**: Add both common variants when canonical names have variations (with/without "The", abbreviations, etc.)
 3. **Validation Script**: Consider adding a validation check that compares names across related tables
+
+### 3. RVEEH Health Data Not Loading
+
+**Reported Behaviour:**
+- RVEEH showed "-" for Client Health, NPS, and Segment columns
+- Data existed in client_health_summary but wasn't being matched
+
+**Root Cause:**
+- `client_health_summary.client_name`: "Royal Victorian Eye and Ear Hospital" (without "The")
+- `clients.canonical_name`: "The Royal Victorian Eye and Ear Hospital" (with "The")
+- Exact string matching failed due to "The " prefix
+
+**Resolution:**
+Added name normalization function in `strategic/new/page.tsx`:
+```typescript
+const normalizeNameForArr = (name: string): string => {
+  return (name || '')
+    .toLowerCase()
+    .replace(/^the\s+/i, '') // Remove leading "The "
+    .trim()
+}
+```
+Updated health data matching to use flexible matching:
+- Normalizes both canonical name and health summary name
+- Uses includes() for partial matching fallback
+
+### 4. WA Health Pipeline Data Not Loading
+
+**Reported Behaviour:**
+- WA Health showed "-" for Weighted ACV Target and Total ACV
+- Other clients (Western Health, Barwon Health, Epworth) showed correct pipeline data
+
+**Root Cause:**
+- `sales_pipeline_opportunities.account_name`: "Western Australia Department Of Health"
+- `clients.canonical_name`: "WA Health"
+- These are not substrings of each other, so partial matching failed
+
+**Resolution:**
+Added pipeline alias mapping:
+```typescript
+const pipelineAliases: Record<string, string> = {
+  'western australia department of health': 'wa health',
+  'western australia department of health,': 'wa health',
+  // ... other aliases
+}
+```
 
 ## Related Issues
 
