@@ -1,0 +1,101 @@
+# Bug Report: Strategic Planning - Client Name Mismatches
+
+**Date:** 12 January 2026
+**Status:** Resolved
+**Type:** Bug Fix
+**Severity:** Medium
+
+## Summary
+
+Fixed two client name mismatch issues affecting the Strategic Planning Portfolio view:
+1. RVEEH logo not displaying (showing fallback initials "RV")
+2. WA Health missing from John Salisbury's portfolio
+
+## Issues Addressed
+
+### 1. RVEEH Logo Not Displaying
+
+**Reported Behaviour:**
+- RVEEH client row showed fallback initials "RV" instead of the hospital logo
+- ARR data was displaying correctly after previous database fix
+
+**Root Cause:**
+Name mismatch in logo resolution chain:
+- `clients` table `canonical_name`: "The Royal Victorian Eye and Ear Hospital" (with "The")
+- `client_name_aliases` returns: "The Royal Victorian Eye and Ear Hospital"
+- `CLIENT_LOGO_MAP` key: "Royal Victorian Eye and Ear Hospital" (without "The")
+
+The logo lookup failed because the canonical name from Supabase didn't match the key in CLIENT_LOGO_MAP.
+
+**Resolution:**
+Added both name variants to `CLIENT_LOGO_MAP` in `src/lib/client-logos-local.ts`:
+```typescript
+'Royal Victorian Eye and Ear Hospital': '/logos/rveeh.webp',
+'The Royal Victorian Eye and Ear Hospital': '/logos/rveeh.webp',
+```
+
+### 2. WA Health Missing from Portfolio
+
+**Reported Behaviour:**
+- John Salisbury's territory shows "VIC, WA"
+- Portfolio Clients table only showed 4 clients (Barwon Health, Epworth Healthcare, RVEEH, Western Health)
+- WA Health was missing despite being assigned to John
+
+**Root Cause:**
+Name mismatch between tables:
+- `cse_client_assignments.client_name`: "Western Australia Department Of Health"
+- `clients.canonical_name`: "WA Health"
+
+The portfolio loading logic in `strategic/new/page.tsx` queries `cse_client_assignments` to get client names for a CSE, then matches against `clients` table by canonical_name. The substring matching failed because:
+- "wa health".includes("western australia department of health") = false
+- "western australia department of health".includes("wa health") = false
+
+**Resolution:**
+Updated database record in `cse_client_assignments`:
+```sql
+UPDATE cse_client_assignments
+SET client_name = 'WA Health', client_name_normalized = 'WA Health'
+WHERE id = 19;
+```
+
+## Files Modified
+
+### src/lib/client-logos-local.ts
+- Added `'The Royal Victorian Eye and Ear Hospital': '/logos/rveeh.webp'` to CLIENT_LOGO_MAP
+
+### Database Updates (via Supabase service role)
+- `cse_client_assignments`: Updated record id=19
+  - `client_name`: "Western Australia Department Of Health" → "WA Health"
+  - `client_name_normalized`: "Western Australia Department Of Health" → "WA Health"
+
+## Testing Performed
+
+- [x] Build passes with zero TypeScript errors
+- [x] RVEEH logo displays correctly in Portfolio Clients table
+- [x] WA Health now appears in John Salisbury's portfolio
+- [x] All 5 clients display for John: Barwon Health, Epworth Healthcare, RVEEH, Western Health, WA Health
+
+## Prevention
+
+1. **Client Name Consistency**: Ensure `cse_client_assignments.client_name` matches `clients.canonical_name`
+2. **Logo Map Coverage**: Add both common variants when canonical names have variations (with/without "The", abbreviations, etc.)
+3. **Validation Script**: Consider adding a validation check that compares names across related tables
+
+## Related Issues
+
+- Previous fix: RVEEH ARR showing $0 (resolved 2026-01-12)
+- Previous fix: clients.canonical_name alignment for RVEEH (resolved 2026-01-12)
+
+## Data Flow Reference
+
+Portfolio loading in `strategic/new/page.tsx`:
+```
+1. Query cse_client_assignments WHERE cse_name = owner
+2. Get client_name list from assignments
+3. Filter availableClients (from clients table) by name matching
+4. Display portfolio with logos from getClientLogo()
+```
+
+For names to match correctly:
+- `cse_client_assignments.client_name` must align with `clients.canonical_name`
+- `CLIENT_LOGO_MAP` keys must cover all `canonical_name` variants
