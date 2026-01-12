@@ -118,6 +118,32 @@ Added role badges to header subtitle:
 - CAM badge (purple): `bg-purple-100 text-purple-700`
 - Order: Territory • Owner [CSE] • Collaborator [CAM]
 
+### 9. Portfolio Table Column Grouping
+
+**Reported Behaviour:**
+- Table columns lacked logical grouping
+- Difficult to distinguish between planned vs actual metrics
+
+**Resolution:**
+Added group headers with visual hierarchy:
+- **FY26 Plan** group (indigo): Wtd ACV, Total ACV, TCV
+- **Actual** group (emerald): ARR, Health, NPS, Support, Segment
+- Group header row with `colSpan` for visual grouping
+- Background colours to distinguish column groups (`bg-indigo-50`, `bg-emerald-50`)
+
+```typescript
+{/* Group Header Row */}
+<tr className="border-b border-gray-100">
+  <th className="py-1 px-2"></th>
+  <th colSpan={3} className="py-1 px-2 text-center text-xs font-semibold text-indigo-600 bg-indigo-50 rounded-t-lg">
+    FY26 Plan
+  </th>
+  <th colSpan={5} className="py-1 px-2 text-center text-xs font-semibold text-emerald-600 bg-emerald-50 rounded-t-lg">
+    Actual
+  </th>
+</tr>
+```
+
 ## Files Modified
 
 ### src/app/(dashboard)/planning/page.tsx
@@ -130,6 +156,7 @@ Added role badges to header subtitle:
 - Footer: Added `left-64` offset, `pr-28` right padding, step indicator
 - Main content: Changed to `max-w-screen-2xl`, added `pb-24`
 - Portfolio table: Compact design with abbreviated headers, formatted currency, icon-only segments
+- Portfolio table: Added FY26 Plan and Actual group headers with colour-coded columns
 
 ### src/app/(dashboard)/planning/territory/[id]/page.tsx
 - Enhanced error logging for strategy loading failures
@@ -146,6 +173,8 @@ Added role badges to header subtitle:
 | Segment display | Full text badge | Icon with tooltip |
 | Step labels | Truncated | Full text |
 | Header subtitle | Name • Territory | Territory • Name [CSE] • Collab [CAM] |
+| Table column groups | No grouping | FY26 Plan (indigo) / Actual (emerald) |
+| Table column order | Wtd ACV, ARR, Health, NPS, Support, Segment, Total ACV, TCV | Wtd ACV, Total ACV, TCV, ARR, Health, NPS, Support, Segment |
 
 ## Testing Performed
 
@@ -157,6 +186,7 @@ Added role badges to header subtitle:
 - [x] Client names display in full
 - [x] CSE and CAM badges display correctly
 - [x] Layout utilises available screen width on larger displays
+- [x] Table column groups display with correct colours and grouping
 
 ## Browser/Device Testing
 
@@ -174,3 +204,4 @@ Added role badges to header subtitle:
 6. `fix: Display full text for stepper labels and client names`
 7. `feat: Add CSE and CAM badges to Strategic Plan header`
 8. `fix: Reorder header to Territory • CSE • Collaborator`
+9. `feat: Add FY26 Plan and Actual group headers to Portfolio table`
