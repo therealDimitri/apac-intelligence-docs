@@ -20,6 +20,7 @@ Fixed multiple formatting issues in the Strategic Planning Portfolio step:
 10. Client column should be left-aligned
 11. NPS scores showing stale data instead of calculated aggregates
 12. Support Health scores showing stale data instead of latest metrics
+13. Health scores showing stale data instead of latest snapshots
 
 ## Issues Addressed
 
@@ -233,6 +234,28 @@ const { data: supportMetrics } = await supabase
 
 Override the stale `supportHealthScore` with the calculated value in portfolio mapping.
 
+### 13. Health Scores Using Stale Data
+
+**Reported Behaviour:**
+- Health scores showed stale values from `client_health_summary.health_score`
+- Historical client health data available but not being used
+
+**Root Cause:**
+The portfolio loading used cached `health_score` from `client_health_summary`, not the latest snapshot from `client_health_history`.
+
+**Resolution:**
+Query `client_health_history` table and get the latest health score for each client:
+```typescript
+const { data: healthHistory } = await supabase
+  .from('client_health_history')
+  .select('client_name, health_score, snapshot_date')
+  .order('snapshot_date', { ascending: false })
+
+// Get latest health score for each client (first occurrence after sorting by date desc)
+```
+
+Override the stale `healthScore` with the latest value in portfolio mapping.
+
 ## Files Modified
 
 ### src/app/(dashboard)/planning/strategic/new/page.tsx
@@ -253,7 +276,8 @@ Override the stale `supportHealthScore` with the calculated value in portfolio m
 - Added portfolio sort by Weighted ACV descending
 - Added NPS aggregate calculation from `nps_responses` table
 - Added Support Health score calculation from `support_sla_metrics` table
-- Override stale client_health_summary values with calculated aggregates
+- Added Health Score fetching from `client_health_history` table
+- Override stale client_health_summary values with latest data from source tables
 
 ## Testing Performed
 
@@ -270,7 +294,8 @@ Override the stale `supportHealthScore` with the calculated value in portfolio m
 - [x] All columns visible with horizontal scroll
 - [x] NPS scores now show calculated aggregates from nps_responses
 - [x] Support Health scores now show latest values from support_sla_metrics
-- [x] Console logging confirms correct NPS and Support Health calculations
+- [x] Health scores now show latest values from client_health_history
+- [x] Console logging confirms correct NPS, Support Health, and Health Score calculations
 
 ## Prevention
 
@@ -279,4 +304,4 @@ Override the stale `supportHealthScore` with the calculated value in portfolio m
 3. **Table Styling**: Follow established patterns for data tables
 4. **Table Width**: Use `min-w-max` when tables have many columns
 5. **Text Wrapping**: Use `whitespace-nowrap` for badges and short labels
-6. **Dynamic Data**: Always fetch latest data from source tables (nps_responses, support_sla_metrics) instead of using cached/summary values
+6. **Dynamic Data**: Always fetch latest data from source tables (nps_responses, support_sla_metrics, client_health_history) instead of using cached/summary values
