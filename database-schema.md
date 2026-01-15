@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2026-01-08T13:12:44.804Z
+**Generated**: 2026-01-14T17:32:47.702Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -11,7 +11,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `actions`
 
-**Row Count**: 159
+**Row Count**: 160
 
 ### Columns
 
@@ -65,7 +65,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `unified_meetings`
 
-**Row Count**: 204
+**Row Count**: 210
 
 ### Columns
 
@@ -157,7 +157,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `client_segmentation`
 
-**Row Count**: 26
+**Row Count**: 36
 
 ### Columns
 
@@ -170,8 +170,8 @@ This document provides the authoritative schema definition for all tables in the
 | `cse_name` | text | ✗ | - | *(inferred)* |
 | `cse_id` | unknown | ✗ | - | *(inferred)* |
 | `effective_from` | text | ✗ | - | *(inferred)* |
-| `effective_to` | unknown | ✗ | - | *(inferred)* |
-| `notes` | text | ✗ | - | *(inferred)* |
+| `effective_to` | text | ✗ | - | *(inferred)* |
+| `notes` | unknown | ✗ | - | *(inferred)* |
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `updated_at` | text | ✗ | - | *(inferred)* |
 | `created_by` | unknown | ✗ | - | *(inferred)* |
@@ -285,7 +285,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `nps_topic_classifications`
 
-**Row Count**: 199
+**Row Count**: 201
 
 ### Columns
 
@@ -354,7 +354,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `chasen_feedback`
 
-**Row Count**: 22
+**Row Count**: 23
 
 ### Columns
 
@@ -386,7 +386,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `chasen_knowledge_suggestions`
 
-**Row Count**: 12
+**Row Count**: 13
 
 ### Columns
 
@@ -422,7 +422,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `chasen_conversations`
 
-**Row Count**: 127
+**Row Count**: 130
 
 ### Columns
 
@@ -520,454 +520,6 @@ This document provides the authoritative schema definition for all tables in the
 | `cse_name` | text | ✗ | - | *(inferred)* |
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `client_id` | text | ✗ | - | *(inferred)* |
-
----
-
-## Table: `account_plan_ai_insights`
-
-**Purpose**: Stores AI-generated insights for account plans including risks, opportunities, and recommendations.
-
-**Row Count**: 0 (new table)
-
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
-| `client_id` | uuid | ✓ | - | Optional FK to clients table |
-| `client_name` | text | ✗ | - | Client name for display |
-| `insight_type` | text | ✗ | - | Type: 'risk', 'opportunity', 'action', 'stakeholder', 'meddpicc' |
-| `insight_category` | text | ✓ | - | Category: 'engagement', 'financial', 'sentiment', 'relationship' |
-| `title` | text | ✗ | - | Short insight title |
-| `description` | text | ✗ | - | Full insight description |
-| `confidence_score` | decimal(3,2) | ✓ | - | AI confidence 0.00 to 1.00 |
-| `priority` | text | ✓ | - | Priority: 'critical', 'high', 'medium', 'low' |
-| `impact_score` | integer | ✓ | - | Impact rating 1-10 |
-| `data_sources` | jsonb | ✓ | - | Array of source references used |
-| `recommended_actions` | jsonb | ✓ | - | Array of suggested actions |
-| `is_dismissed` | boolean | ✓ | false | Whether insight was dismissed |
-| `dismissed_by` | text | ✓ | - | Who dismissed it |
-| `dismissed_at` | timestamptz | ✓ | - | When dismissed |
-| `created_at` | timestamptz | ✓ | NOW() | Creation timestamp |
-| `expires_at` | timestamptz | ✓ | - | When insight expires |
-
-### Indexes
-
-- `idx_insights_client` - (client_id, insight_type)
-- `idx_insights_client_name` - (client_name)
-- `idx_insights_active` - (client_id) WHERE NOT is_dismissed AND expires_at > NOW()
-- `idx_insights_type` - (insight_type)
-- `idx_insights_priority` - (priority)
-- `idx_insights_created` - (created_at DESC)
-
----
-
-## Table: `next_best_actions`
-
-**Purpose**: AI-recommended actions for CSEs/CAMs prioritised by impact and urgency.
-
-**Row Count**: 0 (new table)
-
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
-| `client_id` | uuid | ✓ | - | Optional FK to clients table |
-| `client_name` | text | ✗ | - | Client name for display |
-| `cse_name` | text | ✓ | - | Assigned CSE |
-| `cam_name` | text | ✓ | - | Assigned CAM |
-| `action_type` | text | ✗ | - | Type: 'engagement', 'nps_followup', 'risk_mitigation', 'relationship', 'financial', 'expansion', 'action_completion' |
-| `title` | text | ✗ | - | Action title |
-| `description` | text | ✗ | - | Full action description |
-| `priority_score` | decimal(5,2) | ✓ | - | Calculated priority (Impact x Urgency x Confidence) |
-| `impact_category` | text | ✓ | - | Category: 'health', 'revenue', 'relationship', 'meddpicc' |
-| `estimated_impact` | integer | ✓ | - | Estimated points improvement |
-| `urgency_level` | text | ✓ | - | Urgency: 'immediate', 'this_week', 'this_month' |
-| `trigger_reason` | text | ✓ | - | Why this action was recommended |
-| `trigger_data` | jsonb | ✓ | - | Supporting trigger data |
-| `status` | text | ✓ | 'pending' | Status: 'pending', 'accepted', 'completed', 'dismissed' |
-| `accepted_at` | timestamptz | ✓ | - | When action was accepted |
-| `completed_at` | timestamptz | ✓ | - | When action was completed |
-| `dismissed_at` | timestamptz | ✓ | - | When action was dismissed |
-| `dismissed_reason` | text | ✓ | - | Reason for dismissal |
-| `created_at` | timestamptz | ✓ | NOW() | Creation timestamp |
-| `expires_at` | timestamptz | ✓ | - | When action expires |
-
-### Indexes
-
-- `idx_nba_cse` - (cse_name, status)
-- `idx_nba_cam` - (cam_name, status)
-- `idx_nba_client` - (client_id, status)
-- `idx_nba_client_name` - (client_name)
-- `idx_nba_priority` - (priority_score DESC) WHERE status = 'pending'
-- `idx_nba_action_type` - (action_type)
-- `idx_nba_urgency` - (urgency_level, status)
-- `idx_nba_created` - (created_at DESC)
-
----
-
-## Table: `stakeholder_relationships`
-
-**Purpose**: Stores relationship mapping data for visual org charts and influence mapping.
-
-**Row Count**: 0 (new table)
-
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
-| `plan_id` | uuid | ✓ | - | References account_plans |
-| `client_id` | uuid | ✓ | - | Optional FK to clients table |
-| `client_name` | text | ✗ | - | Client name for display |
-| `stakeholder_name` | text | ✗ | - | Full name of stakeholder |
-| `stakeholder_email` | text | ✓ | - | Email address |
-| `stakeholder_title` | text | ✓ | - | Job title |
-| `stakeholder_role` | text | ✓ | - | Role: 'economic_buyer', 'champion', 'influencer', 'user', 'blocker', 'coach' |
-| `meddpicc_role` | text | ✓ | - | MEDDPICC mapping: 'EB', 'Champion', 'Coach', 'User' |
-| `department` | text | ✓ | - | Department name |
-| `reports_to` | uuid | ✓ | - | Self-reference for org hierarchy |
-| `influence_level` | integer | ✓ | - | Influence rating 1-10 |
-| `engagement_score` | integer | ✓ | - | Calculated from meetings |
-| `sentiment` | text | ✓ | - | Sentiment: 'positive', 'neutral', 'negative' |
-| `last_interaction_date` | date | ✓ | - | Date of last interaction |
-| `interaction_count` | integer | ✓ | 0 | Total interaction count |
-| `relationship_strength` | text | ✓ | - | Strength: 'strong', 'moderate', 'weak', 'unknown' |
-| `notes` | text | ✓ | - | Additional notes |
-| `is_primary_contact` | boolean | ✓ | false | Is primary contact flag |
-| `is_decision_maker` | boolean | ✓ | false | Is decision maker flag |
-| `auto_detected` | boolean | ✓ | false | True if auto-detected from meetings |
-| `created_at` | timestamptz | ✓ | NOW() | Creation timestamp |
-| `updated_at` | timestamptz | ✓ | NOW() | Last update timestamp |
-
-### Indexes
-
-- `idx_stakeholders_client` - (client_id)
-- `idx_stakeholders_client_name` - (client_name)
-- `idx_stakeholders_plan` - (plan_id)
-- `idx_stakeholders_role` - (stakeholder_role)
-- `idx_stakeholders_meddpicc_role` - (meddpicc_role)
-- `idx_stakeholders_reports_to` - (reports_to)
-- `idx_stakeholders_sentiment` - (sentiment)
-- `idx_stakeholders_email` - (stakeholder_email)
-
----
-
-## Table: `stakeholder_influences`
-
-**Purpose**: Stores influence relationships between stakeholders for org chart visualisation.
-
-**Row Count**: 0 (new table)
-
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
-| `from_stakeholder_id` | uuid | ✓ | - | FK to stakeholder_relationships (ON DELETE CASCADE) |
-| `to_stakeholder_id` | uuid | ✓ | - | FK to stakeholder_relationships (ON DELETE CASCADE) |
-| `influence_type` | text | ✓ | - | Type: 'reports_to', 'influences', 'blocks', 'champions' |
-| `influence_strength` | integer | ✓ | - | Strength rating 1-10 |
-| `notes` | text | ✓ | - | Additional notes |
-| `created_at` | timestamptz | ✓ | NOW() | Creation timestamp |
-
-### Indexes
-
-- `idx_influences_from` - (from_stakeholder_id)
-- `idx_influences_to` - (to_stakeholder_id)
-- `idx_influences_type` - (influence_type)
-
----
-
-## Table: `predictive_health_scores`
-
-**Purpose**: ML-predicted health and risk scores for proactive account management.
-
-**Row Count**: 0 (new table)
-
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
-| `client_id` | uuid | ✓ | - | Optional FK to clients table |
-| `client_name` | text | ✗ | - | Client name for display |
-| `calculation_date` | date | ✗ | - | Date of calculation |
-| `current_health_score` | integer | ✓ | - | Current health score |
-| `predicted_health_30d` | integer | ✓ | - | Predicted score in 30 days |
-| `predicted_health_90d` | integer | ✓ | - | Predicted score in 90 days |
-| `churn_risk_score` | decimal(5,2) | ✓ | - | Churn probability 0-100 (>70 Critical, 50-70 Warning) |
-| `expansion_probability` | decimal(5,2) | ✓ | - | Expansion likelihood 0-100 |
-| `engagement_velocity` | decimal(5,2) | ✓ | - | Meetings per quarter trend |
-| `risk_factors` | jsonb | ✓ | - | Array of contributing risk factors |
-| `opportunity_signals` | jsonb | ✓ | - | Array of positive signals |
-| `model_version` | text | ✓ | - | ML model version used |
-| `confidence_score` | decimal(3,2) | ✓ | - | Model confidence 0.00 to 1.00 |
-| `created_at` | timestamptz | ✓ | NOW() | Creation timestamp |
-
-### Indexes
-
-- `idx_predictive_client` - (client_id, calculation_date DESC)
-- `idx_predictive_client_name` - (client_name)
-- `idx_predictive_date` - (calculation_date DESC)
-- `idx_predictive_churn_risk` - (churn_risk_score DESC)
-- `idx_predictive_expansion` - (expansion_probability DESC)
-- `idx_predictive_model` - (model_version)
-
----
-
-## Table: `meddpicc_scores`
-
-**Purpose**: Detailed MEDDPICC scoring with AI-assisted gap analysis and recommendations.
-
-**Row Count**: 0 (new table)
-
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
-| `plan_id` | uuid | ✓ | - | References account_plans or territory_strategies |
-| `plan_type` | text | ✓ | - | Type: 'account' or 'territory' |
-| `client_id` | uuid | ✓ | - | Optional FK to clients table |
-| `client_name` | text | ✓ | - | Client name for display |
-| `opportunity_name` | text | ✓ | - | Opportunity being scored |
-| `metrics_score` | integer | ✓ | - | Metrics score 0-100 |
-| `metrics_evidence` | text | ✓ | - | Evidence for metrics score |
-| `metrics_ai_detected` | jsonb | ✓ | - | AI-detected metrics info |
-| `economic_buyer_score` | integer | ✓ | - | Economic Buyer score 0-100 |
-| `economic_buyer_evidence` | text | ✓ | - | Evidence for EB score |
-| `economic_buyer_ai_detected` | jsonb | ✓ | - | AI-detected EB info |
-| `decision_criteria_score` | integer | ✓ | - | Decision Criteria score 0-100 |
-| `decision_criteria_evidence` | text | ✓ | - | Evidence for DC score |
-| `decision_criteria_ai_detected` | jsonb | ✓ | - | AI-detected DC info |
-| `decision_process_score` | integer | ✓ | - | Decision Process score 0-100 |
-| `decision_process_evidence` | text | ✓ | - | Evidence for DP score |
-| `decision_process_ai_detected` | jsonb | ✓ | - | AI-detected DP info |
-| `paper_process_score` | integer | ✓ | - | Paper Process score 0-100 |
-| `paper_process_evidence` | text | ✓ | - | Evidence for PP score |
-| `paper_process_ai_detected` | jsonb | ✓ | - | AI-detected PP info |
-| `identify_pain_score` | integer | ✓ | - | Identify Pain score 0-100 |
-| `identify_pain_evidence` | text | ✓ | - | Evidence for IP score |
-| `identify_pain_ai_detected` | jsonb | ✓ | - | AI-detected IP info |
-| `champion_score` | integer | ✓ | - | Champion score 0-100 |
-| `champion_evidence` | text | ✓ | - | Evidence for Champion score |
-| `champion_ai_detected` | jsonb | ✓ | - | AI-detected Champion info |
-| `competition_score` | integer | ✓ | - | Competition score 0-100 |
-| `competition_evidence` | text | ✓ | - | Evidence for Competition score |
-| `competition_ai_detected` | jsonb | ✓ | - | AI-detected Competition info |
-| `overall_score` | integer | ✓ | - | Weighted average score 0-100 |
-| `gap_analysis` | jsonb | ✓ | - | AI-identified gaps per component |
-| `recommended_actions` | jsonb | ✓ | - | AI-recommended actions to close gaps |
-| `last_ai_analysis` | timestamptz | ✓ | - | Last AI analysis timestamp |
-| `created_at` | timestamptz | ✓ | NOW() | Creation timestamp |
-| `updated_at` | timestamptz | ✓ | NOW() | Last update timestamp |
-
-### Indexes
-
-- `idx_meddpicc_plan` - (plan_id, plan_type)
-- `idx_meddpicc_client` - (client_id)
-- `idx_meddpicc_client_name` - (client_name)
-- `idx_meddpicc_overall` - (overall_score DESC)
-- `idx_meddpicc_updated` - (updated_at DESC)
-
----
-
-## Table: `engagement_timeline`
-
-**Purpose**: Denormalised timeline view of all client touchpoints for engagement tracking.
-
-**Row Count**: 0 (new table)
-
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
-| `client_id` | uuid | ✓ | - | Optional FK to clients table |
-| `client_name` | text | ✗ | - | Client name for display |
-| `event_type` | text | ✗ | - | Type: 'meeting', 'nps', 'action', 'health_change', 'note', 'email', 'call' |
-| `event_date` | timestamptz | ✗ | - | Date/time of event |
-| `event_title` | text | ✓ | - | Event title |
-| `event_summary` | text | ✓ | - | Event summary |
-| `sentiment` | text | ✓ | - | Sentiment: 'positive', 'neutral', 'negative' |
-| `participants` | jsonb | ✓ | - | Array of participant names/emails |
-| `key_topics` | jsonb | ✓ | - | Array of key topics discussed |
-| `outcomes` | jsonb | ✓ | - | Array of outcomes/decisions |
-| `source_id` | uuid | ✓ | - | Reference to source record |
-| `source_table` | text | ✓ | - | Source table name (unified_meetings, nps_responses, etc.) |
-| `created_at` | timestamptz | ✓ | NOW() | Creation timestamp |
-
-### Indexes
-
-- `idx_timeline_client` - (client_id, event_date DESC)
-- `idx_timeline_client_name` - (client_name)
-- `idx_timeline_type` - (client_id, event_type, event_date DESC)
-- `idx_timeline_date` - (event_date DESC)
-- `idx_timeline_source` - (source_table, source_id)
-- `idx_timeline_sentiment` - (sentiment, event_date DESC)
-
----
-
-## Table: `strategic_plans`
-
-**Purpose**: Unified strategic planning table supporting territory, account, and hybrid planning workflows.
-
-**Row Count**: 0 (new table)
-
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
-| `plan_type` | text | ✗ | - | Type: 'territory', 'account', 'hybrid' |
-| `fiscal_year` | integer | ✗ | 2026 | Fiscal year for the plan |
-| `primary_owner` | text | ✗ | - | CSE or CAM name |
-| `primary_owner_role` | text | ✓ | - | Role: 'CSE' or 'CAM' |
-| `collaborators` | text[] | ✓ | '{}' | Array of team members |
-| `territory` | text | ✓ | - | Region/territory name |
-| `client_id` | uuid | ✓ | - | For account plans |
-| `client_name` | text | ✓ | - | For account plans |
-| `portfolio_data` | jsonb | ✓ | '[]' | Clients in scope |
-| `snapshot_data` | jsonb | ✓ | '{}' | Health metrics |
-| `stakeholders_data` | jsonb | ✓ | '[]' | Relationship mapping |
-| `opportunities_data` | jsonb | ✓ | '[]' | Pipeline with MEDDPICC |
-| `targets_data` | jsonb | ✓ | '{}' | FY targets & coverage |
-| `risks_data` | jsonb | ✓ | '[]' | Risk assessment |
-| `actions_data` | jsonb | ✓ | '[]' | Action plans |
-| `value_data` | jsonb | ✓ | '{}' | Outcomes & value realisation |
-| `comments` | jsonb | ✓ | '[]' | In-context comments (deprecated) |
-| `activity_log` | jsonb | ✓ | '[]' | Edit history (deprecated) |
-| `active_editors` | jsonb | ✓ | '[]' | Real-time presence (deprecated) |
-| `status` | text | ✓ | 'draft' | Status: 'draft', 'in_review', 'approved', 'archived' |
-| `completion_percentage` | integer | ✓ | 0 | Progress percentage 0-100 |
-| `steps_completed` | jsonb | ✓ | '{}' | Track which steps are done |
-| `submitted_at` | timestamptz | ✓ | - | When submitted for review |
-| `submitted_by` | text | ✓ | - | Who submitted |
-| `approved_by` | text | ✓ | - | Who approved |
-| `approved_at` | timestamptz | ✓ | - | When approved |
-| `created_at` | timestamptz | ✓ | NOW() | Creation timestamp |
-| `updated_at` | timestamptz | ✓ | NOW() | Last update timestamp |
-
-### Indexes
-
-- `idx_strategic_plans_owner` - (primary_owner)
-- `idx_strategic_plans_type` - (plan_type)
-- `idx_strategic_plans_fiscal_year` - (fiscal_year)
-- `idx_strategic_plans_status` - (status)
-- `idx_strategic_plans_client` - (client_id) WHERE client_id IS NOT NULL
-- `idx_strategic_plans_territory` - (territory) WHERE territory IS NOT NULL
-- `idx_strategic_plans_client_name` - (client_name) WHERE client_name IS NOT NULL
-- `idx_strategic_plans_created` - (created_at DESC)
-- `idx_strategic_plans_updated` - (updated_at DESC)
-- `idx_strategic_plans_collaborators` - USING GIN(collaborators)
-
----
-
-## Table: `plan_comments`
-
-**Purpose**: Threaded comments for strategic plan collaboration.
-
-**Row Count**: 0 (new table)
-
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
-| `plan_id` | uuid | ✗ | - | FK to strategic_plans (ON DELETE CASCADE) |
-| `parent_id` | uuid | ✓ | - | FK to plan_comments for threading (ON DELETE CASCADE) |
-| `author` | text | ✗ | - | Author name |
-| `author_email` | text | ✓ | - | Author email |
-| `author_avatar` | text | ✓ | - | Author avatar URL |
-| `content` | text | ✗ | - | Comment content |
-| `entity_type` | text | ✓ | - | Type: 'risk', 'opportunity', 'action', 'stakeholder', 'portfolio', 'target', 'general' |
-| `entity_id` | text | ✓ | - | Reference to specific item |
-| `resolved` | boolean | ✓ | false | Whether comment is resolved |
-| `resolved_by` | text | ✓ | - | Who resolved it |
-| `resolved_at` | timestamptz | ✓ | - | When resolved |
-| `edited` | boolean | ✓ | false | Whether comment was edited |
-| `edited_at` | timestamptz | ✓ | - | When edited |
-| `mentions` | text[] | ✓ | '{}' | @mentioned users |
-| `created_at` | timestamptz | ✓ | NOW() | Creation timestamp |
-| `updated_at` | timestamptz | ✓ | NOW() | Last update timestamp |
-
-### Indexes
-
-- `idx_plan_comments_plan` - (plan_id)
-- `idx_plan_comments_parent` - (parent_id) WHERE parent_id IS NOT NULL
-- `idx_plan_comments_author` - (author)
-- `idx_plan_comments_entity` - (entity_type, entity_id)
-- `idx_plan_comments_unresolved` - (plan_id) WHERE NOT resolved
-- `idx_plan_comments_created` - (created_at DESC)
-- `idx_plan_comments_mentions` - USING GIN(mentions)
-
----
-
-## Table: `plan_presence`
-
-**Purpose**: Real-time presence tracking for collaborative editing.
-
-**Row Count**: 0 (new table)
-
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
-| `plan_id` | uuid | ✗ | - | FK to strategic_plans (ON DELETE CASCADE) |
-| `user_name` | text | ✗ | - | User name |
-| `user_email` | text | ✓ | - | User email |
-| `user_role` | text | ✓ | - | Role: 'CSE', 'CAM', 'Admin', 'Viewer' |
-| `user_avatar` | text | ✓ | - | User avatar URL |
-| `current_step` | text | ✓ | - | Step: 'context', 'portfolio', 'relationships', 'risks', 'review' |
-| `editing_entity` | text | ✓ | - | What they're editing (e.g., 'stakeholder:uuid') |
-| `cursor_position` | jsonb | ✓ | - | For cursor presence feature |
-| `last_active` | timestamptz | ✓ | NOW() | Last activity timestamp |
-
-### Indexes
-
-- `idx_plan_presence_plan` - (plan_id)
-- `idx_plan_presence_user` - (user_name)
-- `idx_plan_presence_active` - (last_active DESC)
-- `idx_plan_presence_step` - (plan_id, current_step)
-
-### Constraints
-
-- UNIQUE(plan_id, user_name)
-
----
-
-## Table: `plan_activity_log`
-
-**Purpose**: Audit trail for all strategic plan changes.
-
-**Row Count**: 0 (new table)
-
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | uuid | ✗ | gen_random_uuid() | Primary key |
-| `plan_id` | uuid | ✗ | - | FK to strategic_plans (ON DELETE CASCADE) |
-| `user_name` | text | ✗ | - | User who performed action |
-| `user_email` | text | ✓ | - | User email |
-| `action` | text | ✗ | - | Action: 'created', 'updated', 'commented', 'submitted', 'approved', 'rejected', 'archived', 'restored', 'step_completed', 'collaborator_added', 'collaborator_removed', 'status_changed' |
-| `details` | jsonb | ✓ | - | Additional context about the action |
-| `entity_type` | text | ✓ | - | What was affected (e.g., 'risk', 'action') |
-| `entity_id` | text | ✓ | - | ID of affected entity |
-| `previous_value` | jsonb | ✓ | - | For tracking changes |
-| `new_value` | jsonb | ✓ | - | For tracking changes |
-| `created_at` | timestamptz | ✓ | NOW() | Creation timestamp |
-
-### Indexes
-
-- `idx_plan_activity_plan` - (plan_id)
-- `idx_plan_activity_user` - (user_name)
-- `idx_plan_activity_action` - (action)
-- `idx_plan_activity_created` - (created_at DESC)
-- `idx_plan_activity_entity` - (entity_type, entity_id)
 
 ---
 

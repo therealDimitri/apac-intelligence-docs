@@ -260,7 +260,7 @@
         "inferred": true
       }
     ],
-    "row_count": 159
+    "row_count": 160
   },
   "unified_meetings": {
     "columns": [
@@ -589,7 +589,7 @@
         "inferred": true
       }
     ],
-    "row_count": 204
+    "row_count": 210
   },
   "nps_responses": {
     "columns": [
@@ -738,13 +738,13 @@
       },
       {
         "column_name": "effective_to",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "notes",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -773,7 +773,7 @@
         "inferred": true
       }
     ],
-    "row_count": 26
+    "row_count": 36
   },
   "topics": {
     "columns": [
@@ -1218,7 +1218,7 @@
         "inferred": true
       }
     ],
-    "row_count": 199
+    "row_count": 201
   },
   "nps_period_config": {
     "columns": [
@@ -1515,7 +1515,7 @@
         "inferred": true
       }
     ],
-    "row_count": 22
+    "row_count": 23
   },
   "chasen_knowledge_suggestions": {
     "columns": [
@@ -1622,7 +1622,7 @@
         "inferred": true
       }
     ],
-    "row_count": 12
+    "row_count": 13
   },
   "chasen_learning_patterns": {
     "columns": [],
@@ -1704,7 +1704,7 @@
         "inferred": true
       }
     ],
-    "row_count": 127
+    "row_count": 130
   },
   "chasen_folders": {
     "columns": [
