@@ -98,11 +98,72 @@ const clientsForGapAnalysis = useMemo(() => {
   - `clients` table: Set `cse_name = 'Laura Messing'` for parent SA Health
   - `client_health_history` table: Added health record for parent SA Health
 
+### Additional Code Fixes (Phase 2)
+
+Updated portfolio loading query in `page.tsx` to include both parent AND child clients:
+
+**Before:**
+```typescript
+// Only load parent clients (parent_id IS NULL)
+const { data: parentClients } = await supabase
+  .from('clients')
+  .select('id, canonical_name, display_name, parent_id')
+  .eq('cse_name', ownerName)
+  .eq('is_active', true)
+  .is('parent_id', null)
+```
+
+**After:**
+```typescript
+// Load ALL clients for this owner (both parents and children)
+const { data: ownerClients } = await supabase
+  .from('clients')
+  .select('id, canonical_name, display_name, parent_id')
+  .eq('cse_name', ownerName)
+  .eq('is_active', true)
+
+// Create set of all client IDs for this owner
+const ownerClientIds = new Set(ownerClients?.map(c => c.id) || [])
+
+// Filter available clients to include all clients for this owner
+const portfolioClients = availableClients.filter(c => ownerClientIds.has(c.id))
+```
+
+### Additional Database Changes (Phase 2)
+
+Added distinct health records for child clients:
+
+| Client | Health Score | NPS | Support | Status |
+|--------|-------------|-----|---------|--------|
+| SA Health | 58 | -46 | 93 | at-risk |
+| SA Health (iPro) | 44 | -46 | 93 | critical |
+| SA Health (iQemo) | 58 | -46 | 93 | at-risk |
+| SA Health (Sunrise) | 72 | -46 | 93 | healthy |
+
+## Files Modified
+
+- `src/app/(dashboard)/planning/strategic/new/steps/DiscoveryDiagnosisStep.tsx`
+  - Updated gap analysis filter logic to include clients with missing health data
+  - Increased limit from 10 to 15 clients
+  - Updated empty state message
+
+- `src/app/(dashboard)/planning/strategic/new/page.tsx`
+  - Changed portfolio query from parent-only to all clients for owner
+  - Renamed `parentClientIds` to `ownerClientIds` for clarity
+
+- Database changes (via Supabase):
+  - `clients` table: Set `cse_name = 'Laura Messing'` for parent SA Health
+  - `client_health_history` table: Added health records for all 4 SA Health entities
+
 ## Testing
 
-- TypeScript compilation: Passed
-- Build compilation: Passed
-- Database verification: SA Health now has cse_name and health data
+- TypeScript compilation: ✅ Passed
+- Build compilation: ✅ Passed
+- Database verification: ✅ SA Health now has cse_name and health data
+- Browser verification: ✅ All 4 SA Health clients appear in Client Gap Diagnosis
+  - Different health scores displayed correctly (44, 58, 58, 72)
+  - Same NPS displayed correctly (-46)
+  - Same support displayed correctly (93)
 
 ## Prevention
 
@@ -110,3 +171,9 @@ For future parent-child client relationships:
 1. Ensure parent clients have CSE assignments that match their children
 2. Add health records for parent clients (can be aggregated from children)
 3. The updated filter logic now handles edge cases where health data is missing
+4. Portfolio loading now includes both parents and children for comprehensive coverage
+
+## Git Commits
+
+- `8cfd9caa` - Show both parent and child clients in portfolio
+- `4fb70cca` - Fix SA Health not showing in Client Gap Diagnosis
