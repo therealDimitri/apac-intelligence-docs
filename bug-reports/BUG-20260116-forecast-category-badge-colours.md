@@ -7,7 +7,7 @@
 
 ## Issue Description
 
-The Plan Coverage table displayed all forecast category badges in the same grey colour, making it difficult to quickly identify opportunity categories at a glance.
+The Plan Coverage and MEDDPICC tables displayed all forecast category badges in the same grey colour, making it difficult to quickly identify opportunity categories at a glance.
 
 ## Solution Applied
 
@@ -104,6 +104,7 @@ The `forecast_category` value is loaded from the `sales_pipeline_opportunities` 
 ## Related Commits
 
 - `d3a15159`: feat: Color-code forecast category badges in Plan Coverage
+- `b74a9f6c`: feat: Apply forecast category colour coding to MEDDPICC section
 
 ## Related Files
 
