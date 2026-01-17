@@ -35,7 +35,9 @@ segment: health?.segment || c.tier || 'Unknown',  // c.tier was NULL
 2. `c.tier` - Was NULL in the database (column exists but not populated)
 3. Falls through to `'Unknown'`
 
-The `clients.segment` column **does** have data (Leverage, Steady State, etc.) but wasn't being selected in the query.
+The `clients.segment` column **does** have data but wasn't being selected in the query.
+
+**Additional Issue:** The `clients` table had **outdated segment values** ("Steady State") that are not valid in the current segmentation model. Valid segments are: Giant, Collaboration, Leverage, Nurture, Maintain, Sleeping Giant.
 
 ## Fix Applied
 
@@ -48,6 +50,12 @@ The `clients.segment` column **does** have data (Leverage, Steady State, etc.) b
 ```typescript
 segment: health?.segment || c.segment || c.tier || 'Unknown',
 ```
+
+### Change 3: Database data fix
+Updated 16 clients in `clients` table from "Steady State" → "Maintain":
+- WA Health, RVEEH, SA Health (all variants), Epworth Healthcare, Barwon Health, Western Health
+- Albury Wodonga Health, Grampians Health, Dept of Health Victoria
+- Te Whatu Ora Waikato, Mount Alvernia Hospital, GRMC, SLMC
 
 ## Verification
 
