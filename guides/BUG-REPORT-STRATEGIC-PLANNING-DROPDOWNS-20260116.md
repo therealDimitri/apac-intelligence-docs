@@ -1,7 +1,7 @@
 # Bug Report: Strategic Planning Wizard - Client Dropdowns & Related Issues
 
 **Date**: 16 January 2026
-**Status**: Partially Resolved
+**Status**: Resolved
 **Severity**: High
 **Reporter**: User
 **Investigator**: Claude
@@ -10,10 +10,11 @@
 
 ## Executive Summary
 
-Multiple bugs were reported in the Strategic Planning wizard relating to empty dropdowns and missing functionality. Root cause analysis revealed these issues stem from two distinct causes:
+Multiple bugs were reported in the Strategic Planning wizard relating to empty dropdowns, incorrect data display, and missing functionality. Root cause analysis revealed these issues stem from three distinct causes:
 
 1. **Data Configuration**: Client-to-CSE assignments in the database
 2. **Code Regression**: MS Graph owner search was missing from Actions step
+3. **Matching Logic**: Child clients incorrectly inheriting parent's segment data
 
 ---
 
@@ -29,6 +30,8 @@ Multiple bugs were reported in the Strategic Planning wizard relating to empty d
 | 6 | Add Your First Risk button not working | Works, but client dropdown is empty | Explained |
 | 7 | Actions owner MS Graph search missing | Code regression | **FIXED** |
 | 8 | Actions client dropdown broken | Data - Empty portfolio | Explained |
+| 9 | SA Health child clients showing wrong segment | Substring matching priority | **FIXED** |
+| 10 | Client Gap Diagnosis sorting + iPro inclusion | Sort order + rolled-up metrics | **FIXED** |
 
 ---
 
@@ -123,7 +126,58 @@ Canonical: "KK Women's and Children's Hospital" → Display: "KK Women's Hospita
 - Replaced plain text input with `PeopleSearchInput`
 - Uses semicolon delimiter for multiple owners (compatible with Azure AD "Last, First" format)
 
-**Commit**: (pending)
+**Commit**: `507548f4` - Fix MS Graph owner search in Actions step
+
+### 2. Segment Matching for Child Clients (Bug 9)
+
+**Root Cause**: The health data enrichment logic used substring matching which caused child clients (e.g., "SA Health (iPro)") to match their parent's data ("SA Health") instead of their own segment.
+
+**File**: `src/app/(dashboard)/planning/strategic/new/page.tsx`
+
+**Before (buggy)**:
+```tsx
+const health = healthData?.find(h => {
+  const healthNameNorm = normalizeNameForArr(h.client_name || '')
+  return (
+    healthNameNorm === canonicalNorm ||
+    healthNameNorm === displayNorm ||
+    canonicalNorm.includes(healthNameNorm) ||
+    healthNameNorm.includes(canonicalNorm)
+  )
+})
+```
+
+**After (fixed)** - Two-pass approach prioritising exact matches:
+```tsx
+const health =
+  healthData?.find(h => {
+    const healthNameNorm = normalizeNameForArr(h.client_name || '')
+    return healthNameNorm === canonicalNorm || healthNameNorm === displayNorm
+  }) ||
+  healthData?.find(h => {
+    const healthNameNorm = normalizeNameForArr(h.client_name || '')
+    return (
+      canonicalNorm.includes(healthNameNorm) || healthNameNorm.includes(canonicalNorm)
+    )
+  })
+```
+
+**Commit**: `3600aa6f` - Fix segment matching for child clients in Strategic Planning
+
+### 3. Client Gap Diagnosis Sorting & iPro Exclusion (Bug 10)
+
+**Issues**:
+1. Clients were sorted by health ascending (lowest first) instead of descending (highest first)
+2. SA Health (iPro) was included even though its NPS/support scores are rolled into the parent
+
+**File**: `src/app/(dashboard)/planning/strategic/new/steps/DiscoveryDiagnosisStep.tsx`
+
+**Changes**:
+- Changed sort order from ascending to descending (highest health first)
+- Added exclusion list for child clients with rolled-up metrics
+- SA Health (iPro) now excluded from gap analysis
+
+**Commit**: `a7b3c090` - Sort Client Gap Diagnosis by health descending, exclude iPro
 
 ---
 
