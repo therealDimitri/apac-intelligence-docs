@@ -2,7 +2,7 @@
 
 **Date**: 17 January 2026
 **Severity**: High
-**Status**: Fixed (Data Corrected)
+**Status**: Fixed (Data Corrected + Code Fix Applied)
 **Affected Areas**: Strategic Plan - Opportunity Strategy Step
 
 ---
@@ -64,23 +64,57 @@ After fix:
 
 ---
 
-## Prevention
+## Prevention - Code Fix Applied
 
-To prevent similar issues:
+The root cause was in the code logic that decided whether to preserve saved opportunities when loading a plan. The code only checked if opportunities existed, not whether they matched the current owner.
 
-1. **Reload opportunities when owner changes**: When a plan's owner is changed, automatically refresh the opportunities data from the database
-2. **Validate owner-opportunity match on save**: Before saving, verify that the opportunities belong to the selected owner
-3. **Add ownership audit trail**: Log when plan ownership changes and flag if opportunities mismatch
-4. **UI warning**: Show a warning if loaded opportunities don't match the selected CSE
+### Code Changes Made
 
-### Suggested Code Change
-In `strategic/new/page.tsx`, when owner changes, force reload of opportunities:
+**File**: `/src/app/(dashboard)/planning/strategic/new/page.tsx`
 
+1. **Added `cse_name` to `PipelineOpportunity` interface** (line 302):
 ```typescript
-// When owner changes, always reload fresh opportunities
-// Don't preserve stale opportunities from a different owner
-const shouldKeepExistingOpportunities = false // Always refresh on owner change
+interface PipelineOpportunity {
+  // ... existing fields ...
+  cse_name?: string // Owner CSE name - used to validate ownership on load
+  // ...
+}
 ```
+
+2. **Include `cse_name` when transforming pipeline data** (line 1514):
+```typescript
+const pipeline: PipelineOpportunity[] = (pipelineData || []).map(row => ({
+  // ... existing fields ...
+  cse_name: row.cse_name || ownerName, // Track owner for validation on load
+  // ...
+}))
+```
+
+3. **Validate ownership before preserving opportunities** (lines 1964-1971):
+```typescript
+// Before (buggy):
+const shouldKeepExistingOpportunities = prev.opportunities.length > 0
+
+// After (fixed):
+const hasExistingOpportunities = prev.opportunities.length > 0
+
+// Validate ownership: check if the first saved opportunity's CSE matches current owner
+// If cse_name is missing (legacy data) or doesn't match, refresh from pipeline
+const savedCseName = prev.opportunities[0]?.cse_name
+const opportunitiesMatchOwner = savedCseName?.toLowerCase() === ownerName.toLowerCase()
+
+const shouldKeepExistingOpportunities = hasExistingOpportunities && opportunitiesMatchOwner
+```
+
+**File**: `/src/app/(dashboard)/planning/strategic/new/steps/types.ts`
+- Also updated `PipelineOpportunity` interface to include `cse_name` for consistency
+
+### How This Prevents Recurrence
+
+- When a plan is loaded, the code now validates that saved opportunities belong to the current owner
+- Legacy plans without `cse_name` will automatically refresh from the pipeline (correct behaviour)
+- Future plans will save `cse_name` with each opportunity, enabling proper validation
+- If the owner is changed, stale opportunities from the wrong CSE are automatically replaced
 
 ---
 
@@ -88,9 +122,11 @@ const shouldKeepExistingOpportunities = false // Always refresh on owner change
 
 - The `sales_pipeline_opportunities` table has correct CSE assignments
 - The issue was isolated to this specific saved plan's data
+- Legacy plans will auto-correct on next load (fresh pipeline data replaces stale data)
 
 ---
 
 ## Files Affected
 
-No code changes required - this was a data fix only.
+1. `/src/app/(dashboard)/planning/strategic/new/page.tsx` - Ownership validation logic
+2. `/src/app/(dashboard)/planning/strategic/new/steps/types.ts` - Interface update
