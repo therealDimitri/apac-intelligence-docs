@@ -18,15 +18,19 @@ When a CSE with multiple clients in their portfolio loaded AI Suggestions on any
 
 ## Root Cause
 
-The `onLoadAISuggestions` handler in the strategic planning wizard page (`src/app/(dashboard)/planning/strategic/new/page.tsx`) was only extracting the first client from the portfolio:
+Two issues were identified:
+
+1. **useEffect auto-load**: The `useEffect` that auto-loads AI suggestions when the wizard step changes was only using a single client context, ignoring other portfolio clients.
+
+2. **onLoadAISuggestions handlers**: The manual refresh callbacks in each wizard step also only extracted the first client from the portfolio.
 
 ```typescript
 // Before (BROKEN):
-onLoadAISuggestions={() => {
+useEffect(() => {
   const primaryClient = formData.portfolio[0]  // Only first client!
   const clientNameToUse = primaryClient?.name || firstOpportunityClient
-  // ... only generates for single client
-}}
+  questionnaireAI.loadSuggestions(stepId, clientContext)  // Single client only
+})
 ```
 
 ## Solution
@@ -51,7 +55,37 @@ This method:
 - Tags each suggestion with its `clientName` for grouping
 - Makes fieldIds unique per-client to avoid conflicts
 
-### 2. Updated Wizard Page
+### 2. Fixed useEffect Auto-Load
+
+Updated the `useEffect` that auto-loads suggestions when the step changes to use multi-client loading:
+
+**File**: `src/app/(dashboard)/planning/strategic/new/page.tsx`
+
+```typescript
+// After (FIXED):
+useEffect(() => {
+  // Get unique client names from portfolio AND opportunities
+  const portfolioClientNames = formData.portfolio.map(c => c.name).filter(Boolean)
+  const opportunityClientNames = [...new Set(
+    [...formData.opportunities, ...pipelineOpportunities].map(o => o.client_name).filter(Boolean)
+  )]
+  const allClientNames = [...new Set([...portfolioClientNames, ...opportunityClientNames])]
+
+  // Use multi-client method for portfolios with multiple clients
+  if (allClientNames.length > 1) {
+    const clientContexts = allClientNames.map(name => ({
+      clientName: name,
+      territory: formData.territory,
+      // ... other context fields
+    }))
+    questionnaireAI.loadSuggestionsForClients(stepId, clientContexts)
+    return
+  }
+  // Single client fallback...
+})
+```
+
+### 3. Updated Wizard Step Callbacks
 
 Modified all four wizard steps (Discovery, Stakeholder, Opportunity, Risk) to collect ALL clients from portfolio and opportunities:
 
@@ -83,7 +117,7 @@ onLoadAISuggestions={() => {
 }}
 ```
 
-### 3. Enhanced UI Component
+### 4. Enhanced UI Component
 
 Updated `AIPrePopulation` component to group suggestions by client with per-client "Apply All" buttons:
 
@@ -94,7 +128,7 @@ Updated `AIPrePopulation` component to group suggestions by client with per-clie
 - Each client group is collapsible with its own styling
 - Added "Refresh All" button for multi-client mode
 
-### 4. Updated Account Plan View
+### 5. Updated Account Plan View
 
 Also updated the account plan view page to use CSE-based suggestions for portfolio-wide context:
 
@@ -116,6 +150,8 @@ Changed from `clientName={plan.client_name}` to `cseName={plan.cse_partner}` to 
 - [x] Build passes (`npm run build`)
 - [x] TypeScript compilation successful
 - [x] ESLint passes
+- [x] Manual testing verified: John Salisbury's portfolio (8 unique clients) loaded 30 suggestions across all clients
+- [x] UI correctly groups suggestions by client with per-client "Apply All" buttons
 - [x] Changes committed and pushed to `main`
 
 ## Result
