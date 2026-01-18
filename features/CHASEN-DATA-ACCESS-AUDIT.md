@@ -1,877 +1,402 @@
-# ChaSen AI Data Access Audit
+# ChaSen AI Data Access Audit & Enhancement Roadmap
 
-**Date:** 2025-12-03
-**Updated:** 2025-12-05 (Aging Accounts Compliance Enhancement)
-**Purpose:** Verify ChaSen has access to ALL data needed for AI-powered Recommended Actions
-**Status:** ✅ **COMPLETE** - 2 of 3 gaps closed (95% coverage) + Aging Accounts Enhanced
-
----
-
-## ✅ Implementation Complete (2025-12-03)
-
-**Commit:** a046517 - "Add Compliance Predictions and Segmentation Events data sources to ChaSen AI"
-
-**What Was Added:**
-
-1. ✅ **Compliance Predictions** - AI/ML risk scores from `segmentation_compliance_scores` table
-2. ✅ **Segmentation Events** - Scheduled/completed events from `segmentation_events` table
-3. ⚠️ **Portfolio Initiatives** - SKIPPED (no table exists yet, using mock data)
-
-**ChaSen Data Coverage: 20 of 21 data types (95%)**
-
----
-
-## ✅ Aging Accounts Enhancement (2025-12-05)
-
-**Commit:** f6380d6 - "Add Aging Accounts Compliance Dashboard and Alerts"
-
-**What Was Enhanced:**
-
-1. ✅ **Database Migration** - Moved from Excel file parsing to Supabase database (`aging_accounts` table)
-2. ✅ **Compliance Dashboard** - Visual dashboard with charts, trends, and CSV export (`/aging-accounts/compliance`)
-3. ✅ **Historical Tracking** - Week-over-week compliance trends via materialized view (`aging_compliance_summary`)
-4. ✅ **Alert System** - Automated compliance checking script with HTML/JSON reports
-5. ✅ **Automated Imports** - GitHub Actions workflow + manual script for weekly data imports
-
-**Impact on ChaSen:**
-
-- More reliable aging data (database vs. file parsing)
-- Historical trend analysis available
-- Compliance predictions can leverage historical data
-- Alert system provides proactive monitoring
+**Date**: 19 January 2026
+**Previous Audit**: 3 December 2025
+**Purpose**: Comprehensive audit of ChaSen's current data access, identification of gaps, and recommendations for achieving maximum AI intelligence through complete dashboard and Supabase data integration.
 
 ---
 
 ## Executive Summary
 
-ChaSen now has access to **20 different data types**:
+ChaSen has evolved significantly since the December 2025 audit. The system now features:
+- **Multi-agent orchestration** (Researcher, Analyst, Writer, Executor, Predictor)
+- **Hybrid RAG** (vector search + knowledge graph traversal)
+- **Multi-tiered memory** (episodic, procedural, semantic)
+- **MCP tool framework** (scaffolded, awaiting activation)
+- **Dynamic context loading** via `chasen_data_sources` configuration table
 
-- **11 primary database tables** (unchanged)
-- **7 calculated/derived datasets** (unchanged)
-- **2 NEW data sources** (compliance predictions, segmentation events)
-
-**Remaining Gap:**
-
-- ❌ **Portfolio Initiatives** - Cannot add until `portfolio_initiatives` table is created (currently using mock data in `usePortfolioInitiatives.ts`)
-
----
-
-## ✅ Data Sources ChaSen CURRENTLY Has Access To
-
-### Primary Database Tables (9)
-
-#### 1. **Clients** (`nps_clients` table)
-
-**Access**: ✅ Full access
-**Location**: `route.ts` lines 386-395
-**Fields**: `client_name`, `segment`, `cse`
-**Filters**: Excludes churned clients (Parkway)
-**User Filtering**: ✅ CSEs see only their assigned clients
-
-**Use Cases**:
-
-- Portfolio overview
-- Segment analysis
-- CSE workload distribution
+**Current State**: ChaSen accesses **25+ data sources** actively, but **43+ tables remain unconnected**, representing significant untapped intelligence potential.
 
 ---
 
-#### 2. **Meetings** (`unified_meetings` table)
+## Part 1: What ChaSen CURRENTLY Has Access To
 
-**Access**: ✅ Full access (recent + historical)
-**Location**: `route.ts` lines 396-407, 464-473
-**Fields**: `client_name`, `meeting_date`, `meeting_type`, `meeting_notes`
-**Time Ranges**:
+### ✅ Connected Data Sources (25+ Tables)
 
-- Recent: Last 30 days
-- Historical: Last 12 months
-  **User Filtering**: ✅ CSEs see only meetings for their clients
+| Category | Table | Access Method | Priority |
+|----------|-------|---------------|----------|
+| **Client Health** | `client_health_history` | Dynamic context | High |
+| | `client_segmentation` | Dynamic context | High |
+| | `health_status_alerts` | Dynamic context | High |
+| | `client_name_aliases` | Direct query | Medium |
+| **NPS & Feedback** | `nps_responses` | Dynamic context | High |
+| | `nps_period_config` | Direct query | Medium |
+| | `nps_topic_classifications` | Dynamic context | High |
+| **Operations** | `unified_meetings` | Dynamic context | High |
+| | `actions` | Dynamic context | High |
+| | `comments` | Dynamic context | Medium |
+| | `portfolio_initiatives` | Dynamic context | Medium |
+| | `topics` | Dynamic context | Medium |
+| **Financial** | `aging_accounts` | Dynamic context | High |
+| | `aged_accounts_history` | Direct query | Medium |
+| **BURC Financial** | `burc_executive_summary` | BURC context builder | High |
+| | `burc_active_alerts` | BURC context builder | Medium |
+| | `burc_historical_revenue_detail` | BURC context builder | Medium |
+| **Reference** | `products` | Dynamic context | Low |
+| | `client_products_detailed` | Dynamic context | Medium |
+| **Notifications** | `notifications` | Dynamic context | Low |
+| | `saved_views` | Direct query | Low |
+| **ChaSen Learning** | `chasen_knowledge` | Direct query | High |
+| | `chasen_feedback` | Direct query | High |
+| | `chasen_conversations` | Direct query | High |
+| | `chasen_knowledge_suggestions` | Direct query | Medium |
+| | `chasen_folders` | Direct query | Low |
+| | `chasen_data_sources` | Config table | System |
 
-**Use Cases**:
+### ✅ Current Capabilities Matrix
 
-- Meeting recency analysis (days since last meeting)
-- Engagement scoring
-- Meeting frequency trends
-- Servicing analysis (under/over-serviced detection)
+| Capability | Status | Implementation Details |
+|------------|--------|------------------------|
+| **Multi-Agent Orchestration** | ✅ Active | 5 specialist agents: Researcher, Analyst, Writer, Executor, Predictor |
+| **Hybrid RAG Retrieval** | ✅ Active | 60% vector similarity + 40% knowledge graph traversal |
+| **Episodic Memory** | ✅ Active | Past interactions with vector embeddings, feedback tracking |
+| **Procedural Memory** | ✅ Active | Reusable workflows with trigger patterns |
+| **Semantic Memory** | ✅ Active | Concept relationships and definitions |
+| **Knowledge Graph** | ✅ Active | Entity nodes (clients, meetings, actions) with relationship edges |
+| **MCP Tool Integration** | ⚠️ Scaffolded | Filesystem, GitHub, Slack, Calendar - placeholder implementations |
+| **Dynamic Context Loading** | ✅ Active | Auto-discovery via `chasen_data_sources` table |
+| **SharePoint Integration** | ✅ Active | Document search with keyword matching |
+| **User Personalisation** | ✅ Active | Name, role, team structure, portfolio filtering |
+| **Streaming Responses** | ✅ Active | Real-time streaming with heartbeat for Netlify timeout prevention |
 
----
+### ✅ Data Retrieval Methods
 
-#### 3. **Actions** (`actions` table)
-
-**Access**: ✅ Full access (team-wide, not client-specific)
-**Location**: `route.ts` lines 409-418
-**Fields**: `Action_ID`, `Action_Description`, `Owners`, `Due_Date`, `Status`, `Priority`
-**Filters**: Excludes completed/closed
-**User Filtering**: ❌ NOT currently filtered by user (team-wide view)
-
-**Use Cases**:
-
-- Open action counts
-- Overdue action identification
-- CSE workload analysis (actions per CSE)
-- Health score penalty calculation
-
-**⚠️ Note**: Actions table doesn't have client-specific links (uses `Action_Description` string matching)
-
----
-
-#### 4. **NPS Responses** (`nps_responses` table)
-
-**Access**: ✅ Full access (recent + historical)
-**Location**: `route.ts` lines 420-430, 453-462
-**Fields**: `client_name`, `score`, `feedback`, `response_date`
-**Time Ranges**:
-
-- Recent: Last 30 days
-- Historical: Last 12 months
-  **User Filtering**: ✅ CSEs see only responses for their clients
-
-**Use Cases**:
-
-- Average NPS calculation
-- NPS trends (6-month comparison)
-- Detractor identification
-- Sentiment analysis
-- Health score NPS component
-
-**Critical Context**: NPS surveys conducted Q2 and Q4 only (not monthly)
-
----
-
-#### 5. **Event Compliance** (`segmentation_event_compliance` table)
-
-**Access**: ✅ Full access (current year only)
-**Location**: `route.ts` lines 432-451
-**Fields**: `client_name`, `event_type_id`, `compliance_percentage`, `status`, `year`
-**Joins**: `segmentation_event_types` (event_name, event_code, frequency_type)
-**Filters**: Current year only
-**User Filtering**: ✅ CSEs see only compliance for their clients
-
-**Use Cases**:
-
-- Compliance percentage by client
-- At-risk compliance identification (<70%)
-- Portfolio compliance average
-- Health score compliance component
-- Event type analysis
+1. **Direct Supabase Queries** - Real-time fetching via service role key
+2. **Dynamic Context Builder** - Configurable data source loading from `chasen_data_sources`
+3. **Semantic Vector Search** - Embedding-based similarity matching with threshold filtering
+4. **Knowledge Graph Traversal** - Multi-hop relationship discovery up to depth 2
+5. **Hybrid Retrieval** - Combined vector + graph scoring with configurable weights
+6. **SharePoint Document Search** - Keyword-based document context retrieval
+7. **BURC Context Builder** - Specialised financial metrics aggregation
 
 ---
 
-#### 6. **ARR/Revenue** (`client_arr` table)
+## Part 2: What ChaSen Does NOT Have Access To
 
-**Access**: ✅ Full access
-**Location**: `route.ts` lines 475-483
-**Fields**: `client_name`, `arr_usd`, `contract_start_date`, `contract_end_date`, `contract_renewal_date`, `growth_percentage`, `currency`, `notes`
-**Sort**: Descending by ARR
-**User Filtering**: ✅ CSEs see only ARR for their clients
+### ❌ Unconnected Tables (43+)
 
-**Use Cases**:
+#### 🔴 High Priority - Connect Immediately
 
-- Total portfolio ARR
-- Average ARR per client
-- ARR by segment
-- At-risk revenue (contracts ending <90 days)
-- Growth rate analysis
-- Top 5 clients by ARR
-- Servicing level expectations (ARR-based)
+| Table | Purpose | Business Value If Connected |
+|-------|---------|----------------------------|
+| `support_sla_metrics` | SLA performance tracking | Proactively flag SLA breaches, correlate with health scores |
+| `support_service_credits` | Credits issued for breaches | Quantify financial impact of support issues |
+| `support_case_details` | Individual support cases | Understand support burden, identify patterns |
+| `support_known_problems` | Known issues/bugs | Reference during client conversations |
+| `account_plan_ai_insights` | AI-generated insights | Meta-awareness of ChaSen's own recommendations |
+| `next_best_actions` | AI-recommended actions | Track recommendation effectiveness, learn from acceptance |
+| `predictive_health_scores` | ML-predicted health/churn | 30-day forecasting, expansion probability scoring |
+| `meddpicc_scores` | Sales methodology scoring | Detailed opportunity assessment for renewals |
+| `stakeholder_relationships` | Relationship mapping | Org charts, influence analysis, champion identification |
+| `stakeholder_influences` | Influence relationships | Power mapping between stakeholders |
+| `engagement_timeline` | All client touchpoints | Holistic engagement view across all channels |
+| `client_arr` | Annual Recurring Revenue | Revenue context for prioritisation and servicing levels |
+| `client_financials` | Revenue, costs, margins | Complete financial health per client |
 
----
+#### 🟡 Medium Priority - Connect Soon
 
-#### 7. **Aging Accounts** (Database via `aging_accounts` table)
+| Table | Purpose | Business Value If Connected |
+|-------|---------|----------------------------|
+| `segmentation_event_types` | 12 official event definitions | Reference event requirements in conversations |
+| `tier_event_requirements` | Segment requirements | Understand what each tier needs |
+| `segmentation_events` | Individual events | Track event completion and scheduling |
+| `segmentation_event_compliance` | Event-type compliance | Granular compliance analysis |
+| `segmentation_compliance_scores` | Overall compliance | Year-on-year compliance trends |
+| `cse_profiles` | CSE team structure | Understand reporting relationships |
+| `cse_client_assignments` | CSE-client mapping | Workload distribution awareness |
+| `client_email_domains` | Email domain mapping | Auto-identify clients from email addresses |
+| `user_preferences` | Dashboard preferences | More personalised responses |
+| `territory_strategies` | Territory planning | Strategic context for recommendations |
+| `planning_hub_data` | Account planning | Initiative awareness |
+| `burc_critical_suppliers` | Vendor risk tracking | Supply chain context |
 
-**Access**: ✅ Full access (all CSEs)
-**Location**: `route.ts` lines 485-495
-**Source**: `aging_accounts` table (Supabase database)
-**Import**: Automated via GitHub Actions + manual import script
-**User Filtering**: ✅ CSEs see only their own aging data
+#### 🟢 Lower Priority - Nice to Have
 
-**Use Cases**:
-
-- Portfolio receivables total
-- Aging compliance (<90 days, <60 days)
-- CSEs meeting aging goals
-- Clients with overdue receivables (>90 days)
-- Aging bucket analysis
-- Working capital risk assessment
-- Historical trend analysis (week-over-week)
-- Compliance alerts and monitoring
-
-**Buckets Available**:
-
-- Current (NOT overdue - excluded from aging calculations)
-- 1-30 days overdue
-- 31-60 days overdue
-- 61-90 days overdue
-- 91-120 days overdue
-- 121-180 days overdue
-- 181-270 days overdue
-- 271-365 days overdue
-- 365+ days overdue
-
-**Goals**:
-
-- 100% of overdue amounts < 90 days old
-- 90% of overdue amounts < 60 days old
-
-**New Features** (Added 2025-12-05):
-
-- ✅ **Compliance Dashboard** (`/aging-accounts/compliance`) - Visual charts, donut charts, trend lines
-- ✅ **Historical Trends** - Week-over-week compliance tracking via `aging_compliance_summary` materialized view
-- ✅ **CSV Export** - Download compliance data for offline analysis
-- ✅ **Alert System** - Automated compliance checking with HTML/JSON reports (`scripts/check-aging-compliance-alerts.mjs`)
-- ✅ **Database Storage** - All aging data stored in `aging_accounts` table with weekly snapshots in `aging_accounts_history`
-- ✅ **Automated Import** - GitHub Actions workflow for weekly imports + manual script support
-
----
-
-#### 8. **Documents** (`chasen_documents` table)
-
-**Access**: ✅ Full access (user-specific)
-**Location**: `route.ts` lines 81-107
-**Fields**: `id`, `file_name`, `extracted_text`, `file_type`, `summary`
-**Supported Types**: PDF, DOCX, CSV, TXT, XLSX
-**User Filtering**: ✅ Documents belong to specific conversations/users
-
-**Use Cases**:
-
-- Document upload and analysis
-- Meeting notes analysis
-- Contract review
-- Report generation from uploaded data
+| Table | Purpose |
+|-------|---------|
+| `action_comments` | Legacy action comments |
+| `action_owner_completions` | Owner completion tracking |
+| `skipped_outlook_events` | Calendar sync context |
+| `user_logins` | Usage audit log |
+| `webhook_subscriptions` | Integration configuration |
+| `webhook_logs` | Integration health |
+| `query_performance_logs` | Performance data |
+| `slow_query_alerts` | Performance alerts |
+| `email_logs` | Email tracking |
+| `chasen_learning_patterns` | Learning patterns (empty) |
+| `chasen_recommendations` | Generated recommendations |
+| `chasen_recommendation_interactions` | Interaction tracking |
+| `chasen_success_patterns` | Success patterns |
+| `chasen_generation_log` | Audit log |
+| `conversation_embeddings` | Semantic search |
+| `cse_assignment_suggestions` | Assignment AI |
+| `nps_insights_cache` | Cached analytics |
+| `client_metric_snapshots` | Metric snapshots |
+| `llm_models` | Model configurations |
+| `departments` | Reference data |
+| `activity_types` | Reference data |
 
 ---
 
-#### 9. **CSE Profiles** (via `useCSEProfiles()`)
+## Part 3: MCP Tool Integration Status
 
-**Access**: ✅ Assumed available
-**Location**: Not explicitly in `gatherPortfolioContext()`, but used elsewhere
-**Fields**: CSE names, photos, assigned clients
-**User Filtering**: N/A (team directory)
+### Current State: Scaffolded but Placeholder
 
-**Use Cases**:
-
-- Team workload visualization
-- CSE contact information
-- Photo display
-
----
-
-### Calculated/Derived Datasets (7)
-
-ChaSen performs extensive calculations on the raw data to generate additional insights:
-
-#### 10. **Client Health Scores** (5-component weighted system)
-
-**Calculation**: `route.ts` lines 652-750
-**Components**:
-
-1. **NPS (30 points max)**: Latest NPS score normalized to 0-30 scale
-2. **Engagement (25 points max)**: Based on meeting recency
-3. **Compliance (20 points max)**: Event compliance percentage
-4. **Actions (15 points max)**: Penalty for open actions (0-15, deducted by 1.5 per action)
-5. **Recency (10 points max)**: Days since last meeting scored
-
-**Output**:
-
-- `healthScore` (0-100)
-- Component breakdown
-- At-risk classification (<60)
-- Portfolio average
-
-**Use Cases**:
-
-- Critical health identification
-- Health trend analysis
-- Prioritization for interventions
-
----
-
-#### 11. **Compliance Metrics** (client-level aggregations)
-
-**Calculation**: `route.ts` lines 576-607
-**Metrics**:
-
-- Average compliance by client
-- At-risk clients (<70% compliance)
-- Portfolio compliance average
-- Event-specific compliance details
-
-**Use Cases**:
-
-- Compliance ranking
-- Risk identification
-- Segmentation requirement tracking
-
----
-
-#### 12. **CSE Workload Analysis**
-
-**Calculation**: `route.ts` lines 547-574
-**Metrics**:
-
-- Client count per CSE
-- Open actions per CSE
-- Client list per CSE
-
-**Use Cases**:
-
-- Capacity planning
-- Workload balancing
-- Team efficiency analysis
-
----
-
-#### 13. **Historical Trends** (12-month analysis)
-
-**Calculation**: `route.ts` lines 751-831
-**Metrics**:
-
-- NPS trend (improving/declining/stable)
-- NPS change (last 6 months vs. previous 6 months)
-- Meeting frequency trend (increasing/decreasing/stable)
-- Overall client trend (combining NPS + meetings)
-- At-risk trend (both declining)
-
-**Categorizations**:
-
-- Improving clients
-- Declining clients
-- At-risk trend clients (BOTH NPS and meetings declining)
-- Stable clients
-
-**Use Cases**:
-
-- Early risk detection
-- Success story identification
-- Trend-based prioritization
-
----
-
-#### 14. **ARR Analytics** (revenue analysis)
-
-**Calculation**: `route.ts` lines 609-651
-**Metrics**:
-
-- Total portfolio ARR
-- Average ARR per client
-- ARR by segment
-- At-risk revenue (renewals <90 days)
-- Top 5 clients by ARR
-- Average growth rate
-
-**Use Cases**:
-
-- Revenue planning
-- Renewal forecasting
-- Segment value analysis
-- Churn risk quantification ($)
-
----
-
-#### 15. **Servicing Analysis** (under/over-servicing detection)
-
-**Calculation**: `route.ts` lines 833-942
-**Methodology**:
-Expected service levels based on ARR + Segment:
-
-- ARR >$600K OR Giant/Collaboration: 12 meetings/6mo
-- ARR $400K-600K OR Leverage: 9 meetings/6mo
-- ARR $200K-400K OR Maintain: 6 meetings/6mo
-- ARR <$200K: 4 meetings/6mo
-
-**Servicing Status**:
-
-- **Under-serviced** (<50% expected): Increase engagement
-- **Needs-attention** (Under-serviced + health <60): URGENT
-- **Optimally-serviced** (50-150%): Current cadence appropriate
-- **Over-serviced** (150-200%): Consider reducing if healthy
-- **Significantly over-serviced** (>200%): Review inefficiency
-
-**Output**:
-
-- Servicing status per client
-- Severity (critical/high/medium/low)
-- Recommendation text
-- Metrics (actual vs. expected meetings)
-- Capacity opportunity (excess meetings identified)
-
-**Use Cases**:
-
-- CSE efficiency optimization
-- Resource reallocation
-- Under-serviced client alerts
-- Capacity planning
-
----
-
-#### 16. **Aging Portfolio Metrics**
-
-**Calculation**: `route.ts` lines 949-995
-**Metrics**:
-
-- Portfolio-wide aging compliance (< 90 days, < 60 days)
-- Total outstanding receivables
-- CSEs meeting aging goals (%)
-- Clients with overdue receivables (>90 days)
-- At-risk CSEs (not meeting goals)
-
-**Use Cases**:
-
-- Financial health monitoring
-- Collection prioritization
-- CSE performance evaluation
-
----
-
-#### 17. **User Context & Hyper-Personalization**
-
-**Calculation**: `route.ts` lines 377-530
-**Filtering Logic**:
-
-- CSEs: See only their assigned clients (all datasets filtered)
-- Managers: See entire portfolio (no filtering)
-
-**Filtered Datasets**:
-
-- Clients
-- Meetings
-- NPS responses
-- Historical NPS
-- Historical meetings
-- ARR data
-- Aging data (filtered by CSE name)
-
-**Use Cases**:
-
-- Role-based access control
-- Personalized insights
-- CSE-specific recommendations
-
----
-
-## Data Sources Implementation Status
-
-### ✅ IMPLEMENTED: Compliance Predictions (AI/ML Risk Scores)
-
-**What It Is**: Machine learning predictions for year-end compliance outcomes
-**Source Table**: No dedicated table - generated on-demand via `useCompliancePredictions()` hook
-**Hook File**: `src/hooks/useCompliancePredictions.ts`
-
-**Data Structure**:
+The MCP integration (`src/lib/chasen-mcp.ts`) has the complete architecture but **all tool executions are placeholder implementations**:
 
 ```typescript
-interface CompliancePrediction {
-  client_name: string
-  year: number
-  current_month: number
-
-  // Predictions
-  predicted_year_end_score: number
-  predicted_status: 'critical' | 'at-risk' | 'compliant'
-  confidence_score: number // 0-1 scale
-
-  // Risk
-  risk_score: number // 0-1 scale (0=low, 1=high risk of missing compliance)
-  risk_factors: string[]
-
-  // AI Recommendations
-  recommended_actions: string[]
-  priority_event_types: EventTypeCompliance[]
-  suggested_events: SuggestedEvent[]
-
-  // Metadata
-  prediction_date: string
-  months_remaining: number
-  current_compliance_score: number
+// Current placeholder state
+async function executeFileSystemTool(...): Promise<Record<string, unknown>> {
+  console.log(`Executing filesystem tool: ${toolName}`, input, config)
+  return { result: 'Filesystem operation completed', tool: toolName }  // NOT REAL
 }
 ```
 
-**Used In Recommended Actions**:
+### MCP Server Types Defined
 
-- **Action #5**: High risk prediction (risk_score > 0.7) → Critical alert
-- **Action #12**: Moderate risk prediction (risk_score <= 0.7) → Info alert
+| Server Type | Placeholder Status | Production Implementation Needed |
+|-------------|-------------------|----------------------------------|
+| `filesystem` | ✅ Scaffolded | File read/write operations |
+| `github` | ✅ Scaffolded | Repository, issues, PRs |
+| `slack` | ✅ Scaffolded | Message sending, channel listing |
+| `calendar` | ✅ Scaffolded | Event CRUD operations |
+| `custom` | ✅ Scaffolded | Custom HTTP endpoint integration |
 
-**Why It's Important**:
+### Recommended MCP Implementations
 
-- Proactive risk identification (predict issues 3-6 months in advance)
-- Data-driven prioritization (focus on high-risk clients first)
-- Evidence-based recommendations (AI suggests specific event types to log)
+| MCP Server | Purpose | Business Value |
+|------------|---------|----------------|
+| **Microsoft Graph** | Calendar, Email, SharePoint | Full Outlook integration, email drafting/sending |
+| **Supabase Direct** | Database write operations | Safe writes with audit trail (action creation, meeting logging) |
+| **Slack** | Team notifications | Alert CSEs to critical changes in real-time |
+| **Jira/ServiceNow** | Ticket management | Support case correlation and updates |
+| **Salesforce** | CRM data | Pipeline and opportunity context |
 
-**How to Add**:
+---
 
-```typescript
-// In gatherPortfolioContext(), add new Promise.all entry:
-const [/* ... existing ...*/, predictionsData] = await Promise.all([
-  // ... existing queries ...
+## Part 4: AI Innovation Opportunities (2026 Research)
 
-  // NEW: Compliance Predictions
-  supabase
-    .from('compliance_predictions')  // ⚠️ NEEDS TABLE CREATION
-    .select('*')
-    .eq('year', currentYear)
-    .then(r => {
-      console.log('[ChaSen] Predictions query result:', { count: r.data?.length, error: r.error })
-      return r.data || []
-    })
-])
+Based on research of leading AI companies and current trends:
 
-// Then add to return object:
-predictions: {
-  all: predictionsData,
-  highRisk: predictionsData.filter((p: any) => p.risk_score > 0.7),
-  moderateRisk: predictionsData.filter((p: any) => p.risk_score > 0.3 && p.risk_score <= 0.7),
-  byClient: clientName && predictionsData.find((p: any) => p.client_name === clientName) || null
-}
+### 1. Multi-Agent Enhancement - "Agent OS" Pattern
+
+**Current**: Single orchestrator with 5 specialist agents
+**Recommended**: Full Agent OS with dynamic agent spawning
+
+| Enhancement | Description | Source |
+|-------------|-------------|--------|
+| Agent Teams | Specialised squads for complex workflows | [The New Stack](https://thenewstack.io/5-key-trends-shaping-agentic-development-in-2026/) |
+| Dynamic Spawning | Create ad-hoc agents for novel tasks | [Deloitte](https://www.deloitte.com/us/en/insights/topics/technology-management/tech-trends/2026/agentic-ai-strategy.html) |
+| Cross-Agent Memory | Shared memory layer between agents | [MarkTechPost](https://www.marktechpost.com/2025/11/15/how-to-build-memory-powered-agentic-ai-that-learns-continuously-through-episodic-experiences-and-semantic-patterns-for-long-term-autonomy/) |
+
+### 2. GraphRAG Implementation
+
+**Current**: Hybrid vector + basic graph
+**Recommended**: Full semantic knowledge backbone
+
+| Enhancement | Description | Source |
+|-------------|-------------|--------|
+| Knowledge Graph as Hub | Trusted, continuously updated web of facts | [Intelligent CIO](https://www.intelligentcio.com/north-america/2025/12/24/enterprise-ai-and-agentic-software-trends-shaping-2026/) |
+| Entity Resolution | Link clients, contacts, meetings as graph nodes | [Google Cloud](https://cloud.google.com/resources/content/ai-agent-trends-2026) |
+| Relationship Inference | Discover hidden connections between entities | [Kellton](https://www.kellton.com/kellton-tech-blog/agentic-ai-trends-2026) |
+
+### 3. Workflow Autonomy
+
+**Current**: Single-step responses
+**Recommended**: End-to-end workflow ownership
+
+| Enhancement | Description | Source |
+|-------------|-------------|--------|
+| Goal-Oriented Execution | Set objectives, ChaSen executes multi-step plans | [IBM](https://www.ibm.com/think/news/ai-tech-trends-predictions-2026) |
+| Checkpoint Validation | Human approval at critical decision points | [Analytics Vidhya](https://www.analyticsvidhya.com/blog/2026/01/ai-agents-trends/) |
+| Autonomous Monitoring | Proactive alerts on threshold breaches | [Salesmate](https://www.salesmate.io/blog/future-of-ai-agents/) |
+
+### 4. Anthropic Advanced Tool Use
+
+**Current**: Placeholder MCP tools
+**Recommended**: Production MCP with Tool Search
+
+| Enhancement | Description | Source |
+|-------------|-------------|--------|
+| Tool Search Tool | 85% token reduction, dynamic tool discovery | [Anthropic](https://www.anthropic.com/engineering/advanced-tool-use) |
+| Programmatic Tool Calling | Sandboxed Python execution | [Claude Docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling) |
+| Computer Use | GUI interaction for legacy systems | [Claude Docs](https://docs.anthropic.com/en/docs/agents-and-tools/computer-use) |
+
+### 5. Enhanced Memory Systems
+
+**Current**: Episodic, procedural, semantic memory
+**Recommended**: Enterprise-grade memory layer
+
+| Enhancement | Description | Source |
+|-------------|-------------|--------|
+| MemSync Pattern | Dual-layer semantic + episodic (243% accuracy improvement) | [Plurality Network](https://plurality.network/blogs/best-universal-ai-memory-extensions-2026/) |
+| Profile Memory | User preferences, communication style | [IBM](https://www.ibm.com/think/topics/ai-agent-memory) |
+| Memory Lifecycle | GDPR-compliant retention, filtering policies | [Mem0](https://mem0.ai/blog/ai-memory-layer-guide) |
+| Cross-Session Continuity | Maintain context across days/weeks | [DataCamp](https://www.datacamp.com/blog/how-does-llm-memory-work) |
+
+### 6. Proactive Intelligence Features
+
+| Feature | Description | Business Value |
+|---------|-------------|----------------|
+| Anomaly Detection | Auto-flag unusual patterns in health scores | Early warning system |
+| Predictive Alerts | "Client X likely to churn in 30 days" | Preventive action |
+| Meeting Preparation | Auto-generate briefs before calendar events | CSE efficiency |
+| Action Forecasting | Predict bottlenecks in task completion | Workload management |
+| NPS Trend Prediction | Forecast NPS movements before surveys | Proactive engagement |
+| Competitor Intelligence | Track competitor mentions in meetings | Strategic awareness |
+
+### 7. Experimental Capabilities (2026 Frontier)
+
+| Capability | Description | Readiness |
+|------------|-------------|-----------|
+| Domain-Tuned Models | Smaller, APAC CS-specific model fine-tuning | Research phase |
+| Voice Integration | Speech-to-text for meeting transcription | Available now |
+| Real-Time Collaboration | Multiple CSEs + ChaSen in same session | Experimental |
+| Automated Compliance | Auto-schedule required events per tier | Near-term |
+| Self-Improving RAG | Learn retrieval patterns from user feedback | Active research |
+| Agentic Runtimes | Complex workflows with control mechanisms | Emerging |
+
+---
+
+## Part 5: Implementation Roadmap
+
+### Phase 1: Data Completeness (Weeks 1-2)
+
+**Objective**: Connect all high-priority tables to ChaSen
+
+```sql
+-- Add high-priority tables to chasen_data_sources
+INSERT INTO chasen_data_sources (table_name, display_name, category, priority, section_emoji, is_enabled)
+VALUES
+  ('support_sla_metrics', 'SLA Performance', 'operations', 90, '📊', true),
+  ('support_case_details', 'Support Cases', 'operations', 85, '🎫', true),
+  ('predictive_health_scores', 'Health Predictions', 'analytics', 95, '🔮', true),
+  ('client_arr', 'Client Revenue', 'client', 88, '💰', true),
+  ('engagement_timeline', 'Engagement History', 'client', 82, '📅', true),
+  ('next_best_actions', 'AI Recommendations', 'analytics', 80, '🎯', true),
+  ('stakeholder_relationships', 'Stakeholders', 'client', 78, '👥', true),
+  ('meddpicc_scores', 'MEDDPICC Analysis', 'analytics', 75, '📈', true);
 ```
 
-**✅ IMPLEMENTATION COMPLETE (2025-12-03):**
+**Tasks**:
+- [ ] Add 12 high-priority tables to `chasen_data_sources`
+- [ ] Configure appropriate filters, limits, and time windows
+- [ ] Test context loading performance (<15s target)
+- [ ] Update system prompt to reference new data sources
+- [ ] Run `npm run validate-schema` to verify column names
 
-- Added query to `segmentation_compliance_scores` table (lines 496-504)
-- Added data to portfolio context return object with categorization (lines 1162-1167)
-- Added CSE filtering support (lines 552-554)
-- Updated system prompt with documentation and example questions (lines 1440-1552)
-- ChaSen now has access to all prediction data for intelligent recommendations
+### Phase 2: MCP Activation (Weeks 3-4)
 
----
+**Objective**: Enable real tool execution
 
-### ❌ NOT IMPLEMENTED: Portfolio Initiatives
+**Tasks**:
+- [ ] Implement Microsoft Graph MCP server (calendar, email read)
+- [ ] Implement Supabase direct MCP server (safe writes with audit)
+- [ ] Add Tool Search Tool pattern for dynamic discovery
+- [ ] Enable programmatic tool calling beta header
+- [ ] Create tool execution audit logging
 
-**What It Is**: Client-specific strategic initiatives (projects, implementations, expansions)
-**Source Table**: `portfolio_initiatives` (table exists but hook uses **MOCK DATA**)
-**Hook File**: `src/hooks/usePortfolioInitiatives.ts` (lines 41-50 show it's currently mock)
-**Status**: ⚠️ **SKIPPED** - Cannot implement until real data is populated in the table
+### Phase 3: Workflow Autonomy (Month 2)
 
-**Data Structure**:
+**Objective**: Enable goal-oriented multi-step execution
 
-```typescript
-interface PortfolioInitiative {
-  id: string
-  name: string
-  client: string
-  cse: string
-  year: number
-  status: 'planned' | 'in-progress' | 'completed' | 'cancelled'
-  category: string
-  startDate?: string
-  completionDate?: string
-  description?: string
-}
-```
+**Tasks**:
+- [ ] Implement goal-setting interface in ChaSen UI
+- [ ] Add checkpoint/approval system for critical actions
+- [ ] Create autonomous monitoring for health thresholds
+- [ ] Build proactive alert system
+- [ ] Implement workflow templates for common tasks
 
-**Stats Calculated**:
+### Phase 4: Advanced Memory (Month 3)
 
-```typescript
-stats: {
-  total: number
-  completed: number
-  inProgress: number
-  planned: number
-  byYear: {
-    [year: number]: {
-      total: number
-      completed: number
-      completionRate: number
-    }
-  }
-}
-```
+**Objective**: Enterprise-grade memory with compliance
 
-**Used In Recommended Actions**:
+**Tasks**:
+- [ ] Implement profile memory for user preferences
+- [ ] Add memory lifecycle management (retention policies)
+- [ ] Enhance cross-session continuity
+- [ ] Build memory observability dashboard
+- [ ] Implement memory export/audit for compliance
 
-- **Action #13**: Portfolio initiatives need attention (completion rate < 50% AND inProgress > 0)
+### Phase 5: Predictive Intelligence (Month 4+)
 
-**Why It's Important**:
+**Objective**: Proactive AI-driven insights
 
-- Strategic project tracking
-- Delivery velocity monitoring
-- Initiative completion rates
-- Client value realization
-
-**How to Add**:
-
-```typescript
-// In gatherPortfolioContext(), add new Promise.all entry:
-const [/* ... existing ...*/, initiativesData] = await Promise.all([
-  // ... existing queries ...
-
-  // NEW: Portfolio Initiatives
-  supabase
-    .from('portfolio_initiatives')
-    .select('*')
-    .eq('year', currentYear)
-    .then(r => {
-      console.log('[ChaSen] Initiatives query result:', { count: r.data?.length, error: r.error })
-      return r.data || []
-    })
-])
-
-// Calculate stats
-const initiativeStats = initiativesData.reduce((acc: any, init: any) => {
-  acc.total++
-  if (init.status === 'completed') acc.completed++
-  if (init.status === 'in-progress') acc.inProgress++
-  if (init.status === 'planned') acc.planned++
-  return acc
-}, { total: 0, completed: 0, inProgress: 0, planned: 0 })
-
-// Add to return object:
-initiatives: {
-  all: initiativesData,
-  stats: initiativeStats,
-  completionRate: initiativeStats.total > 0
-    ? (initiativeStats.completed / initiativeStats.total) * 100
-    : 0,
-  byClient: clientName && initiativesData.filter((i: any) => i.client === clientName) || [],
-  inProgress: initiativesData.filter((i: any) => i.status === 'in-progress')
-}
-```
-
-**Action Required**: ⚠️ **Populate `portfolio_initiatives` table with real data OR update hook to use Supabase**
+**Tasks**:
+- [ ] Implement anomaly detection on health scores
+- [ ] Build churn prediction model
+- [ ] Create automated meeting preparation briefs
+- [ ] Develop NPS trend forecasting
+- [ ] Add competitor mention tracking
 
 ---
 
-### ✅ IMPLEMENTED: Segmentation Events (Scheduled/Upcoming)
+## Part 6: Quick Reference Tables
 
-**What It Is**: Individual event records (dates, completion status) for segmentation event types
-**Source Table**: `segmentation_events`
-**Hook File**: `src/hooks/useSegmentationEvents.ts`
-**API Route**: `/api/segmentation-events` (exists, uses service role)
+### Table Connection Status Summary
 
-**Data Structure**:
+| Status | Count | Examples |
+|--------|-------|----------|
+| ✅ Connected | 25+ | client_health_history, nps_responses, unified_meetings, actions |
+| ❌ High Priority Gap | 13 | support_*, predictive_health_scores, stakeholder_*, client_arr |
+| ❌ Medium Priority Gap | 12 | segmentation_*, cse_profiles, territory_strategies |
+| ❌ Low Priority Gap | 18+ | audit logs, cache tables, reference data |
 
-```typescript
-interface SegmentationEvent {
-  client_name: string
-  event_date: string
-  event_year: number
-  event_type_id: string
-  completed: boolean
-}
-```
+### Capability Maturity Matrix
 
-**Used In Recommended Actions**:
-
-- **Action #14**: Upcoming events (next 2 weeks) → Prepare
-
-**Why It's Important**:
-
-- Event scheduling visibility
-- Proactive preparation alerts
-- Deadline management
-- Event logging reminders
-
-**How to Add**:
-
-```typescript
-// In gatherPortfolioContext(), add new Promise.all entry:
-const [/* ... existing ...*/, eventsData] = await Promise.all([
-  // ... existing queries ...
-
-  // NEW: Segmentation Events (all events, not just compliance summary)
-  supabase
-    .from('segmentation_events')
-    .select('*')
-    .eq('event_year', currentYear)
-    .order('event_date', { ascending: true })
-    .then(r => {
-      console.log('[ChaSen] Events query result:', { count: r.data?.length, error: r.error })
-      return r.data || []
-    })
-])
-
-// Calculate upcoming events
-const now = new Date()
-const twoWeeksFromNow = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000)
-const upcomingEvents = eventsData.filter((e: any) => {
-  if (!e.event_date) return false
-  const eventDate = new Date(e.event_date)
-  return eventDate >= now && eventDate <= twoWeeksFromNow && !e.completed
-})
-
-// Add to return object:
-events: {
-  all: eventsData,
-  upcoming: upcomingEvents,
-  uncompleted: eventsData.filter((e: any) => !e.completed),
-  byClient: clientName && eventsData.filter((e: any) => e.client_name === clientName) || []
-}
-```
-
-**✅ IMPLEMENTATION COMPLETE (2025-12-03):**
-
-- Added query to `segmentation_events` table (lines 506-515)
-- Added data to portfolio context return object with intelligent categorization:
-  - all: All events for current year
-  - completed: Completed events only
-  - upcoming: Future events not yet completed
-  - overdue: Past-due events not completed
-  - byClient: Client-specific event filtering
-- Added CSE filtering support (lines 556-558)
-- Updated system prompt with documentation and example questions (lines 1454-1557)
-- ChaSen now has access to all scheduled and completed events for proactive planning
+| Capability | Current Level | Target Level | Gap |
+|------------|---------------|--------------|-----|
+| Data Access | 37% (25/68 tables) | 80% (55/68 tables) | 30 tables |
+| Tool Execution | 10% (scaffolded) | 80% (production) | Full implementation |
+| Memory Systems | 60% (3 types active) | 90% (+ profile, lifecycle) | 2 enhancements |
+| Proactive Intelligence | 20% (basic alerts) | 80% (predictive) | ML models |
+| Workflow Autonomy | 10% (single-step) | 60% (multi-step) | Goal system |
 
 ---
 
-## 📋 Action Items
+## Appendix A: Research Sources
 
-### Priority 1: Add Missing Data Sources to ChaSen
-
-**File to Modify**: `src/app/api/chasen/chat/route.ts`
-**Function**: `gatherPortfolioContext()` (lines 365-1145)
-
-#### Task 1.1: Add Compliance Predictions
-
-- [ ] **Option A**: Create `compliance_predictions` database table
-  - Schema: Match `CompliancePrediction` interface
-  - Populate via scheduled job (daily/weekly)
-  - Query in `gatherPortfolioContext()`
-- [ ] **Option B**: Generate predictions on-demand
-  - Implement ML prediction logic in `gatherPortfolioContext()`
-  - Calculate risk scores based on current compliance trajectory
-  - Cache results (15-minute TTL)
-
-**Recommendation**: Option B (on-demand) for Phase 1 - simpler, no new table needed
+- [5 Key Trends Shaping Agentic Development in 2026 - The New Stack](https://thenewstack.io/5-key-trends-shaping-agentic-development-in-2026/)
+- [Enterprise AI and Agentic Software Trends Shaping 2026 - Intelligent CIO](https://www.intelligentcio.com/north-america/2025/12/24/enterprise-ai-and-agentic-software-trends-shaping-2026/)
+- [Agentic AI Strategy - Deloitte Insights](https://www.deloitte.com/us/en/insights/topics/technology-management/tech-trends/2026/agentic-ai-strategy.html)
+- [AI Agent Trends 2026 Report - Google Cloud](https://cloud.google.com/resources/content/ai-agent-trends-2026)
+- [15 AI Agents Trends to Watch in 2026 - Analytics Vidhya](https://www.analyticsvidhya.com/blog/2026/01/ai-agents-trends/)
+- [The Trends That Will Shape AI and Tech in 2026 - IBM](https://www.ibm.com/think/news/ai-tech-trends-predictions-2026)
+- [Introducing Advanced Tool Use - Anthropic](https://www.anthropic.com/engineering/advanced-tool-use)
+- [Programmatic Tool Calling - Claude Docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)
+- [Computer Use Tool - Claude Docs](https://docs.anthropic.com/en/docs/agents-and-tools/computer-use)
+- [What Is AI Agent Memory - IBM](https://www.ibm.com/think/topics/ai-agent-memory)
+- [AI Memory Layer Guide - Mem0](https://mem0.ai/blog/ai-memory-layer-guide)
+- [Memory-Powered Agentic AI - MarkTechPost](https://www.marktechpost.com/2025/11/15/how-to-build-memory-powered-agentic-ai-that-learns-continuously-through-episodic-experiences-and-semantic-patterns-for-long-term-autonomy/)
+- [Memory in the Age of AI Agents Survey - arXiv](https://arxiv.org/abs/2512.13564)
 
 ---
 
-#### Task 1.2: Add Portfolio Initiatives
+## Appendix B: Key Files Reference
 
-- [ ] Verify `portfolio_initiatives` table schema matches `PortfolioInitiative` interface
-- [ ] Populate table with real data (replace mock data in hook)
-- [ ] Add Supabase query to `gatherPortfolioContext()`
-- [ ] Calculate stats (total, completed, completion rate)
-- [ ] Filter by assigned clients (CSE personalization)
-
-**Estimated Effort**: 1-2 hours (if table exists and just needs query added)
-
----
-
-#### Task 1.3: Add Segmentation Events
-
-- [ ] Add `segmentation_events` query to `gatherPortfolioContext()`
-- [ ] Calculate upcoming events (next 2 weeks)
-- [ ] Identify uncompleted events
-- [ ] Filter by assigned clients (CSE personalization)
-
-**Estimated Effort**: 30 minutes (query already exists in API route, just needs to be added to context)
+| File | Purpose |
+|------|---------|
+| `src/lib/chasen-agents.ts` | Multi-agent orchestration and task management |
+| `src/lib/chasen-mcp.ts` | MCP server integration and tool execution |
+| `src/lib/chasen-graph-rag.ts` | Knowledge graph and hybrid RAG retrieval |
+| `src/lib/chasen-memory.ts` | Multi-tiered memory operations |
+| `src/lib/chasen-dynamic-context.ts` | Auto-discovery data source loading |
+| `src/lib/chasen-burc-context.ts` | Financial metrics and historical revenue |
+| `src/lib/chasen-prompts.ts` | Contextual prompt suggestions |
+| `src/app/api/chasen/stream/route.ts` | Main streaming endpoint (2000+ lines) |
+| `src/app/api/chasen/chat/route.ts` | Non-streaming chat endpoint |
 
 ---
 
-### Priority 2: Update System Prompt with New Data
-
-**File to Modify**: `src/app/api/chasen/chat/route.ts`
-**Function**: `getSystemPrompt()` (lines 1224-1496)
-
-- [ ] Add documentation for compliance predictions
-- [ ] Add documentation for portfolio initiatives
-- [ ] Add documentation for segmentation events
-- [ ] Add example queries using new data
-
-**Estimated Effort**: 30 minutes
-
----
-
-### Priority 3: Test Data Access
-
-**Test Cases**:
-
-- [ ] CSE user: Verify they only see their assigned clients' data
-- [ ] Manager user: Verify they see all portfolio data
-- [ ] Predictions: Verify risk scores calculate correctly
-- [ ] Initiatives: Verify stats match expected values
-- [ ] Events: Verify upcoming event detection works
-
-**Estimated Effort**: 1 hour
-
----
-
-## Summary Comparison: Recommended Actions vs. ChaSen
-
-| Data Source                | Used in Recommended Actions? | Available in ChaSen?      | Status                 |
-| -------------------------- | ---------------------------- | ------------------------- | ---------------------- |
-| Client Health Score        | ✅ Yes                       | ✅ Yes (calculated)       | ✅ Ready               |
-| NPS Scores                 | ✅ Yes                       | ✅ Yes (raw + trends)     | ✅ Ready               |
-| Meeting History            | ✅ Yes (recency)             | ✅ Yes (30d + 12mo)       | ✅ Ready               |
-| Actions (Overdue)          | ✅ Yes                       | ✅ Yes (all open actions) | ✅ Ready               |
-| Event Compliance           | ✅ Yes (tiers)               | ✅ Yes (by client)        | ✅ Ready               |
-| **Compliance Predictions** | ✅ Yes (risk scores)         | ❌ **NO**                 | ⚠️ **NEEDS ADDING**    |
-| Aging Accounts             | ✅ Yes (goals)               | ✅ Yes (Excel parsed)     | ✅ Ready               |
-| **Portfolio Initiatives**  | ✅ Yes (progress)            | ❌ **NO** (mock data)     | ⚠️ **NEEDS REAL DATA** |
-| **Segmentation Events**    | ✅ Yes (upcoming)            | ❌ **NO**                 | ⚠️ **NEEDS ADDING**    |
-| ARR/Revenue                | ⚠️ Not directly used         | ✅ Yes (full data)        | ✅ Ready (bonus!)      |
-| Servicing Analysis         | ⚠️ Not directly used         | ✅ Yes (calculated)       | ✅ Ready (bonus!)      |
-
----
-
-## Recommendations
-
-### For AI-Powered Recommended Actions Implementation
-
-**Phase 1 (Week 1)**: Add missing data sources
-
-1. Implement on-demand compliance predictions (2-3 hours)
-2. Add portfolio initiatives query (1-2 hours)
-3. Add segmentation events query (30 minutes)
-4. Update system prompt (30 minutes)
-5. Test data access (1 hour)
-
-**Total Effort**: ~6 hours
-
-**Phase 2 (Week 2)**: Build AI recommendation endpoint
-
-1. Create `/api/chasen/recommend-actions` endpoint
-2. Design prompt for recommendation generation
-3. Test with 5-10 sample clients
-4. Refine based on quality
-
----
-
-## Additional Observations
-
-### Strengths of Current ChaSen Data Access:
-
-- ✅ **Comprehensive**: 11 primary + 7 derived = 18 data types
-- ✅ **Real-time**: Most data fetched fresh on each query
-- ✅ **Historical**: 12-month trend analysis available
-- ✅ **User-aware**: CSE vs. Manager filtering implemented
-- ✅ **Calculated metrics**: Health scores, compliance, servicing analysis all pre-calculated
-- ✅ **Rich context**: ARR, aging, servicing data available for deep analysis
-
-### Weaknesses:
-
-- ❌ **Missing ML predictions**: No risk scores or forecasting
-- ❌ **Mock initiative data**: Initiatives not tracked in database
-- ❌ **No event scheduling data**: Can't see upcoming event calendar
-- ⚠️ **Actions not client-linked**: Uses string matching, not foreign key
-
----
-
-## Conclusion
-
-**ChaSen has access to 18 of 21 data types** needed for comprehensive AI-powered recommendations.
-
-**3 critical gaps remain**:
-
-1. Compliance predictions (AI/ML risk scores)
-2. Portfolio initiatives (real data, not mocks)
-3. Segmentation events (individual event records)
-
-**Estimated effort to close all gaps**: ~6 hours
-
-Once these are added, ChaSen will have **complete visibility** into all client data and can generate highly contextual, intelligent recommendations based on:
-
-- Current state (health, NPS, compliance)
-- Historical trends (12-month analysis)
-- Future predictions (ML risk scores)
-- Strategic progress (initiatives)
-- Upcoming deadlines (scheduled events)
-- Financial health (ARR, aging accounts)
-- Resource allocation (servicing analysis)
-
----
-
-**Next Step**: Approve adding the 3 missing data sources, then proceed with AI recommendation endpoint implementation.
-
-**Created By**: Claude Code
-**Date**: 2025-12-03
-**Status**: Awaiting Approval for Data Source Additions
+*Generated by Claude Code - 19 January 2026*
+*Previous audit: 3 December 2025*
