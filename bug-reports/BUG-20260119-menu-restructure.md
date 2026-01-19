@@ -19,7 +19,7 @@ Command Centre
   └── APAC Goals
 
 Success Plans
-  └── Account Plans
+  └── Account Planning Coach
 
 Clients
   └── Portfolio Health
@@ -48,7 +48,7 @@ Resources
 |---------|--------|-------|
 | Home | Command Centre (standalone link) | Command Centre (collapsible group) |
 | Home Children | - | BURC Performance, BU Performance, APAC Goals |
-| Planning Hub | Account Plans, Full Pipeline | Success Plans > Account Plans (moved after Command Centre) |
+| Planning Hub | Account Plans, Full Pipeline | Success Plans > Account Planning Coach (moved after Command Centre) |
 | Clients | Client Portfolios | Portfolio Health |
 | Clients | Segmentation Events | Segmentation Performance |
 | Engagement | Briefing Room, Actions & Tasks, etc. | Action Hub (renamed, restructured) |
@@ -58,12 +58,14 @@ Resources
 
 1. **Command Centre** → Now a collapsible group with performance dashboards
 2. **Planning Hub** → Renamed to **Success Plans** (industry standard), moved after Command Centre
-3. **Engagement** → Renamed to **Action Hub** (operational focus)
-4. **Briefing Room** → Renamed to **Meetings** (clearer purpose)
-5. **Client Portfolios** → Renamed to **Portfolio Health** (descriptive)
-6. **Team Performance** → Renamed to **CS Team Performance** (specific)
-7. **NPS Analytics** → Renamed to **NPS & Mid-Project Feedback** (comprehensive)
-8. **Full Pipeline** → Removed from menu
+3. **Account Plans** → Renamed to **Account Planning Coach** (descriptive)
+4. **Engagement** → Renamed to **Action Hub** (operational focus)
+5. **Briefing Room** → Renamed to **Meetings** (clearer purpose)
+6. **Client Portfolios** → Renamed to **Portfolio Health** (descriptive)
+7. **Team Performance** → Renamed to **CS Team Performance** (specific)
+8. **NPS Analytics** → Renamed to **NPS & Mid-Project Feedback** (comprehensive)
+9. **Full Pipeline** → Removed from menu
+10. **Segmentation Performance** → Route updated from /segmentation to /compliance
 
 ### Route Mappings
 
@@ -72,9 +74,9 @@ Resources
 | Command Centre > BURC Performance | `/burc` |
 | Command Centre > BU Performance | `/` |
 | Command Centre > APAC Goals | `/apac` |
-| Success Plans > Account Plans | `/planning` |
+| Success Plans > Account Planning Coach | `/planning` |
 | Clients > Portfolio Health | `/client-profiles` |
-| Clients > Segmentation Performance | `/segmentation` |
+| Clients > Segmentation Performance | `/compliance` |
 | Action Hub > Meetings | `/meetings` |
 | Action Hub > Actions & Tasks | `/actions` |
 | Action Hub > Segmentation Event Progress | `/compliance` |
@@ -111,4 +113,5 @@ Analysed terminology from leading CS platforms:
 
 ## Commits
 
-- `[pending]` - Restructure sidebar menu with industry best practice terminology
+- `d518eaac` - Restructure sidebar menu with industry best practice terminology
+- `daf0b4f3` - Update menu: rename Account Plans, fix Segmentation route
