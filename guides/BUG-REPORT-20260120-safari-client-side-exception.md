@@ -82,6 +82,19 @@ This forces all clients to update their service worker and clear old caches.
 | File | Change |
 |------|--------|
 | `public/sw.js` | Removed HTML caching, added navigate check, incremented version |
+| `src/lib/push-notifications.ts` | Added `forceServiceWorkerUpdate()` and `clearServiceWorkerCaches()` functions |
+| `src/components/ServiceWorkerUpdater.tsx` | New component that auto-updates SW on page load |
+| `src/app/layout.tsx` | Added ServiceWorkerUpdater to root layout |
+
+## Automated Fix
+
+The app now automatically handles stale service workers:
+
+1. **On page load**: Forces SW update check
+2. **On tab focus**: Checks for updates when returning to the tab
+3. **Auto-reload**: Automatically reloads when new SW version is installed
+
+Users no longer need to manually clear caches - the app handles it automatically.
 
 ## Immediate User Fix (While Deployment Propagates)
 
