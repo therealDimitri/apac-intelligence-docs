@@ -163,6 +163,38 @@ Expected response:
 - `/docs/guides/AGING_ACCOUNTS_IMPORT_GUIDE.md` - Data import process
 - `/docs/migrations/20251205_aging_accounts_database.sql` - Database schema
 
+## Verification Complete
+
+**Manual Snapshot Test (2026-01-20):**
+```
+=== Aged Accounts Snapshot Capture ===
+
+🔐 Authenticating with Invoice Tracker...
+✅ Authenticated successfully
+
+📊 Fetching aging report from Invoice Tracker...
+✅ Aging report fetched
+
+📋 Processing 16 clients...
+
+💾 Inserting 16 records for 2026-01-19...
+✅ Snapshot captured successfully for 2026-01-19
+
+📅 Latest snapshot date: 2026-01-19
+
+🎉 Done! Captured 16 client records.
+```
+
+**Database Verification:**
+```
+Recent snapshot dates (client count):
+  2026-01-19: 16 clients  ← Just captured
+  2026-01-14: 12 clients  ← Last auto capture before bug
+  2026-01-05: 2 clients
+```
+
+The 5-day gap (Jan 14 → Jan 19) confirms the scheduled functions were failing due to the wrong URL.
+
 ## Commit
 
 ```
