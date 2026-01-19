@@ -60,7 +60,7 @@ RETURNS TABLE (
   current_score INT,
   drop_amount INT,
   previous_date TIMESTAMPTZ,
-  current_date TIMESTAMPTZ
+  current_score_date TIMESTAMPTZ
 ) AS $$
 BEGIN
   RETURN QUERY
@@ -87,7 +87,7 @@ BEGIN
     c.total_score AS current_score,
     p.total_score - c.total_score AS drop_amount,
     p.recorded_at AS previous_date,
-    c.recorded_at AS current_date
+    c.recorded_at AS current_score_date
   FROM current_scores c
   INNER JOIN previous_scores p ON c.client_name = p.client_name
   WHERE p.total_score - c.total_score >= threshold
