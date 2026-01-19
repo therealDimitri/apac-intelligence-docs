@@ -73,12 +73,50 @@ CSI ratios had dropped off the executive dashboard but are important metrics for
 - **Database**: `burc_csi_opex_monthly` table
 - **Source Files**: BURC Performance Excel files
 
+## Bug Fix: API Response Parsing
+
+**Issue:** CSI Ratios card was not displaying initially because the fetch logic expected `csiData.current` but the API returns data at the top level.
+
+**Original Code (incorrect):**
+```typescript
+if (csiData.current) {
+  setCSISummary({
+    ratios: csiData.current.ratios,
+    statuses: csiData.current.statuses,
+    healthScore: csiData.current.healthScore || 0,
+    ...
+  })
+}
+```
+
+**Fixed Code:**
+```typescript
+if (csiData.ratios) {
+  setCSISummary({
+    ratios: {
+      ps: csiData.ratios.ps?.value || 0,
+      sales: csiData.ratios.sales?.value || 0,
+      // ... extract values from nested structure
+    },
+    statuses: {
+      ps: csiData.ratios.ps?.status || 'red',
+      // ... extract statuses from nested structure
+    },
+    healthScore: csiData.healthScore?.current || 0,
+    period: csiData.period?.monthName ? `${csiData.period.monthName} ${csiData.period.year}` : 'Current',
+  })
+}
+```
+
+**Root Cause:** The API returns ratios as objects with `value` and `status` properties (e.g., `{ ps: { value: 2.1, status: 'green', target: 2, ... } }`), but the dashboard expected simple numbers.
+
 ## Testing
 
 - Build passes without TypeScript errors
 - Pushed to main branch, triggers Netlify deployment
 - Card displays when CSI data is available
 - Expand/collapse functionality works correctly
+- Verified in browser: Health score, collapsed view with 3 ratios, expanded view with all 5 ratios
 
 ## Related Files
 
