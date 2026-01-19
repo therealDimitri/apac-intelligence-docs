@@ -1,6 +1,16 @@
--- ChaSen Phase 3: New Specialist Agents
--- Migration for additional specialist agents
+-- ChaSen Phase 3: New Specialist Agents + Model Upgrade
+-- Migration for additional specialist agents and Sonnet model upgrade
 -- Date: 2026-01-19
+
+-- ============================================================================
+-- MODEL UPGRADE: Update existing agents to use Sonnet
+-- ============================================================================
+
+-- Update all existing agents to use claude-sonnet-4 (optimisations make this possible)
+UPDATE chasen_agents
+SET model_preference = 'claude-sonnet-4',
+    updated_at = NOW()
+WHERE model_preference = 'claude-sonnet-4' OR model_preference IS NULL;
 
 -- ============================================================================
 -- NEW SPECIALIST AGENTS
