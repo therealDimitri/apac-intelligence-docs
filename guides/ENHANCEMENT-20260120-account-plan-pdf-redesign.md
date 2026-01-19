@@ -112,6 +112,10 @@ All text uses Montserrat font family:
 - Build: ✓ Passed
 - Pre-commit checks: ✓ Passed (ESLint, TypeScript, Prettier)
 - Deployment: Automatically deployed via Netlify
+- **PDF Generation Test**: ✓ Passed (2026-01-20)
+  - Generated 10-page PDF (86.8 KB) with Melbourne Health sample data
+  - All sections rendered correctly: Cover, Executive Summary, Account Profile, Stakeholders, Financial Plan, Gap Analysis, MEDDPICC, Risks, StoryBrand, Actions
+  - Minor table width warnings handled gracefully by jsPDF-AutoTable
 
 ## Future Enhancements
 
