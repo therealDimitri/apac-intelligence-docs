@@ -388,7 +388,73 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 
 ---
 
-## Appendix: Data Sources
+## Appendix A: Definitions & Glossary
+
+### Financial Metrics
+
+| Term | Definition |
+|------|------------|
+| **Weighted ACV** | Annual Contract Value multiplied by probability of close. A $1M deal at 30% probability = $300K weighted ACV. Used for realistic pipeline forecasting. |
+| **Total ACV** | Full Annual Contract Value if deal closes at 100%. Represents maximum potential, not expected outcome. |
+| **TCV** | Total Contract Value - full value over entire contract term (e.g., 3-year deal at $500K/year = $1.5M TCV). |
+| **ACV Net COGS** | Annual Contract Value minus Cost of Goods Sold. Represents gross margin contribution. |
+| **EBITA** | Earnings Before Interest, Tax, and Amortisation. Operating profit measure used for regional performance. |
+| **Gross Revenue** | Total revenue before any deductions. Top-line figure. |
+| **Net Revenue** | Revenue after deductions (discounts, returns, allowances). |
+| **Maintenance Revenue** | Recurring annual support and maintenance fees from existing clients. Most stable revenue stream. |
+
+### Attrition & Risk Metrics
+
+| Term | Definition |
+|------|------------|
+| **Attrition** | Confirmed or expected revenue loss from clients reducing scope or departing. Measured as annual revenue impact. |
+| **Revenue at Risk** | Annual revenue from clients showing churn indicators (low NPS, contract disputes, competitive evaluation). |
+| **Churn Risk** | Probability-weighted revenue exposure from at-risk clients. |
+| **Renewal Risk** | Revenue from contracts approaching renewal with uncertainty about continuation. |
+
+### Pipeline & Sales Metrics
+
+| Term | Definition |
+|------|------------|
+| **Pipeline** | Total value of sales opportunities at various stages. Includes all deals from early stage to near-close. |
+| **Committed/Backlog** | Deals with signed contracts or very high certainty (>90%). Essentially guaranteed revenue. |
+| **Best Case** | Deals with strong probability (60-90%) but not yet signed. Requires execution to close. |
+| **Forecast** | Expected revenue based on weighted pipeline. Typically committed + (best case × probability). |
+| **Conversion Rate** | Percentage of pipeline that converts to closed deals. Historical APAC rate ~35%. |
+| **Upsell Opportunity** | Potential to sell additional products/services to existing clients. |
+| **CPI Opportunity** | Consumer Price Index contractual increase. Annual price adjustment per contract terms. |
+
+### NPS & Client Health Metrics
+
+| Term | Definition |
+|------|------------|
+| **NPS (Net Promoter Score)** | Client satisfaction metric. Score 0-10. Calculated as: % Promoters (9-10) minus % Detractors (0-6). Range: -100 to +100. |
+| **Promoters** | Clients scoring 9-10. Loyal, likely to recommend and expand. |
+| **Passives** | Clients scoring 7-8. Satisfied but not enthusiastic. Vulnerable to competition. |
+| **Detractors** | Clients scoring 0-6. Unhappy, at risk of churn, may damage reputation. |
+| **NPS Trend** | Change in average NPS over time. Calculated by comparing first-half to second-half of response period. |
+| **Volatility** | Range of scores within a single client. High volatility (e.g., 1-9) indicates inconsistent experience across stakeholders. |
+
+### Organisational Terms
+
+| Term | Definition |
+|------|------------|
+| **CSE** | Client Success Engineer. Responsible for delivery, implementation, and client satisfaction. Owns technical relationship. |
+| **CAM** | Client Account Manager. Responsible for commercial relationship, renewals, and expansion. Owns revenue targets. |
+| **LHN** | Local Health Network. Regional health authority within a state (e.g., SA Health comprises CALHN, NALHN, SALHN, WCHN). |
+
+### Client-Specific Terms
+
+| Term | Definition |
+|------|------------|
+| **Sing Health** | Singapore Health Services. Public healthcare cluster including SGH, KKH, CGH, SKH, NCCS. Departing client. |
+| **Synapxe** | Technology arm of Singapore public healthcare (part of Sing Health ecosystem). Not a separate opportunity. |
+| **MINDEF/NCS** | Singapore Ministry of Defence / NCS (IT services). Separate government contract from Sing Health. |
+| **SA Health** | South Australia Health. Largest APAC client by maintenance revenue ($6.8M). Comprises multiple LHNs. |
+
+---
+
+## Appendix B: Data Sources
 
 | Source | Location | Last Updated |
 |--------|----------|--------------|
