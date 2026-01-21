@@ -49,7 +49,7 @@ This document provides a frank assessment of where we stand and a structured pla
 
 *Source: burc_revenue_detail table, fiscal_year=2026, revenue_type='Maint'*
 
-**Unspoken Truth #3:** Three clients represent **44% of maintenance revenue**. Losing any one of them would be catastrophic. SA Health alone is larger than our entire attrition exposure—and their NPS is 6.1.
+**Unspoken Truth #3:** Three clients represent **44% of maintenance revenue**. Losing any one of them would be catastrophic. SA Health alone is larger than our entire attrition exposure—and their NPS averages 6.1 across 46 responses with high volatility (scores range 1-9, some stakeholders satisfied, others severely dissatisfied).
 
 **Unspoken Truth #4:** Post-Sing Health departure, our top-3 concentration actually *increases* to **~52%** of remaining maintenance base. We're becoming more dependent on fewer clients, not less.
 
@@ -81,7 +81,7 @@ BUT at 35% conversion rate:
 Realistic New Revenue:        $2.93M
 Net Position:                 $0.21M surplus (razor thin)
 
-AND if SA Health churns (NPS 6.1):
+AND if SA Health churns (NPS 6.1 avg, 46 responses, volatile 1-9 range):
 Additional Risk:              $6.8M
 Adjusted Position:            -$6.59M catastrophic loss
 ```
@@ -215,7 +215,7 @@ Current State:
 │  ↓                                      │
 │  Top 2 Clients = 52% of remaining       │
 │  ↓                                      │
-│  SA Health unhappy (NPS 6.1)            │
+│  SA Health volatile (NPS 6.1 avg, 1-9)  │
 │  ↓                                      │
 │  If SA Health leaves = 30%+ revenue loss│
 └─────────────────────────────────────────┘
@@ -301,7 +301,7 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 
 | Initiative | Owner | Target | Investment |
 |------------|-------|--------|------------|
-| SA Health NPS Recovery | Laura Messing | NPS 6.1 → 7.5 | Executive time |
+| SA Health NPS Recovery | Laura Messing | Reduce volatility (1-9 range), shift avg 6.1 → 7.5, convert declining trend to improving | Executive time |
 | Singapore Market Rebuild | Nikki Wei | Find NEW opportunities outside Sing Health/Synapxe ecosystem. MINDEF/NCS is separate and at risk. | Sales focus |
 | Product Perception Fix | Product Team | Address "outdated" feedback | Roadmap comm |
 | Upsell Conversion | All CSEs | $3M of $14M pipeline | Sales effort |
@@ -362,7 +362,7 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 
 2. **Our product perception problem is real.** Clients are using words like "legacy," "outdated," and "subpar." This isn't a sales problem—it requires product investment and clear roadmap communication.
 
-3. **We're trying to grow accounts that are unhappy with us.** Laura's entire pipeline is with SA Health (NPS 6.1). Johnathan's year depends on WA Health (NPS 5.5). This is a structural issue.
+3. **We're trying to grow accounts with mixed sentiment.** Laura's entire pipeline is with SA Health (NPS 6.1 avg from 46 responses, but volatile 1-9 range—some love us, some don't). Johnathan's year depends on WA Health (NPS 5.5 avg from 19 responses, but **improving +1.2 trend**). The nuance matters for strategy.
 
 4. **Our operational execution is broken.** Zero action completions. 75% of meetings with no outcomes. We're not closing loops.
 
