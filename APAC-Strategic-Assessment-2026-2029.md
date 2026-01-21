@@ -65,7 +65,7 @@ This document provides a frank assessment of where we stand and a structured pla
 | Tracey Bland | CSE | $1.93M | GHA extension ($176K), AWH ($159K) |
 | **CSE Total** | | **$8.36M** | |
 | Anu Pradhan | CAM | $4.67M | Vic HIE portfolio, SA Health support |
-| Nikki Wei | CAM | $2.49M | Asia portfolio, Synapxe NEHR |
+| Nikki Wei | CAM | $2.49M | Asia portfolio incl. NCS/MINDEF, Synapxe |
 | **CAM Total** | | **$7.15M** | |
 
 *Source: APAC 2026 Sales Budget 14Jan2026 v0.1.xlsx, CSE Summary Wgt ACV sheet*
@@ -88,7 +88,7 @@ Adjusted Position:            -$6.59M catastrophic loss
 
 **Unspoken Truth #5:** Our pipeline looks healthy, but it's built on fragile assumptions. Johnathan Salisbury's entire year depends on one deal (WA Health, 82% of target). Laura Messing's $2.68M target is at risk because the client she's selling to (SA Health) is unhappy with our service.
 
-**Unspoken Truth #6:** The Synapxe NEHR RFP ($2M+ opportunity) is marked "Omitted" in the pipeline. This deal could single-handedly replace Sing Health revenue, but it's not being actively pursued. Why?
+**Unspoken Truth #6:** The Synapxe NEHR RFP ($2M+ opportunity) is marked "Omitted" in the pipeline. Synapxe is part of the NCS/MINDEF ecosystem (Singapore government healthcare IT), separate from Sing Health (the healthcare provider cluster). This deal could offset Sing Health losses, but **MINDEF NPS is declining (-1.3 trend)** and NCS has $272K attrition flagged for FY2028. The government IT relationship is deteriorating—we need to stabilise before we can expand.
 
 ### 1.4 EBITA Trajectory
 
@@ -108,36 +108,37 @@ Adjusted Position:            -$6.59M catastrophic loss
 
 ### 2.1 Client Sentiment (NPS Analysis)
 
-**Overall NPS Score: -35** (Detractor-heavy)
+**Overall NPS Score: -35** (199 responses, Q4 2025)
 
 | Category | Count | Percentage |
 |----------|-------|------------|
-| Promoters (9-10) | 4 | 15% |
-| Passives (7-8) | 10 | 38% |
-| Detractors (0-6) | 12 | 46% |
+| Promoters (9-10) | 23 | 12% |
+| Passives (7-8) | 84 | 42% |
+| Detractors (0-6) | 92 | 46% |
 
-*Source: nps_responses table, all responses*
+*Source: nps_responses table, 199 total responses*
 
-**Critical At-Risk Clients by NPS:**
+**Client NPS with Trend Analysis:**
 
-| Client | NPS Score | Annual Revenue | Risk Level |
-|--------|-----------|----------------|------------|
-| Epworth Healthcare | 4.8 | $890K | 🔴 Critical |
-| St Luke's Medical Centre | 5.0 | $420K | 🔴 Critical |
-| Grampians Health | 5.3 | $310K | 🔴 Critical |
-| WA Health | 5.5 | $4.2M | 🔴 Critical |
-| Western Health | 5.5 | $1.2M | 🔴 Critical |
-| Mount Alvernia Hospital | 5.7 | $380K | 🟠 High |
-| Barwon Health | 5.7 | $250K | 🟠 High |
-| **SA Health** | **6.1** | **$6.8M** | 🟠 High |
-| Dept of Health Victoria | 6.5 | $1.4M | 🟡 Elevated |
-| Guam Regional Medical | 6.6 | $180K | 🟡 Elevated |
+| Client | Responses | Avg NPS | Trend | Score Range | Risk Assessment |
+|--------|-----------|---------|-------|-------------|-----------------|
+| Epworth Healthcare | 11 | 4.8 | ↓ Declining (-0.7) | 2-7 | 🔴 Critical - scores deteriorating |
+| St Luke's Medical Centre | 11 | 5.0 | Stable | 3-7 | 🟠 High - consistently low |
+| Grampians Health | 3 | 5.3 | Stable | 4-7 | 🟠 High - small sample |
+| WA Health | 19 | 5.5 | ↑ Improving (+1.2) | 0-9 | 🟡 Watch - recovering from low base |
+| Western Health | 6 | 5.5 | ↑ Improving (+1.0) | 3-8 | 🟡 Watch - positive trajectory |
+| Barwon Health | 13 | 5.7 | ↑ Improving (+1.6) | 1-8 | 🟡 Watch - strong improvement |
+| Mount Alvernia Hospital | 15 | 5.7 | ↑ Improving (+2.2) | 2-8 | 🟡 Watch - best improvement |
+| **SA Health** | **46** | **6.1** | **Stable (-0.2)** | **1-9** | 🟠 High - volatile, largest client |
+| Dept of Health Victoria | 11 | 6.5 | ↑ Improving (+0.8) | 5-8 | 🟡 Elevated - improving |
+| MINDEF Singapore | 8 | 7.6 | ↓ Declining (-1.3) | 5-10 | 🔴 Critical - sharp decline |
+| Sing Health | 20 | 7.0 | ↑ Improving (+0.4) | 5-9 | ⬛ Departing - ironic improvement |
 
-*Source: nps_responses table, averaged by client, cross-referenced with burc_revenue_detail*
+*Source: nps_responses table, aggregated by client with trend calculated from first-half vs second-half averages*
 
-**Unspoken Truth #8:** SA Health's NPS of 6.1 is not just a customer satisfaction metric—it's a $6.8M revenue risk signal. Every point below 7 correlates with increased churn probability. At 6.1, we should assume active evaluation of alternatives is underway.
+**Unspoken Truth #8:** SA Health's 46 responses (largest sample) show high volatility—scores range from 1 to 9. The 6.1 average masks deep inconsistency in experience. Some stakeholders are satisfied (8-9), others are severely dissatisfied (1-3). This suggests systemic issues affecting certain user groups or departments, not a uniform problem.
 
-**Unspoken Truth #9:** WA Health has an NPS of 5.5, yet they represent $1.03M (82%) of Johnathan Salisbury's pipeline target. We are trying to expand a relationship with a dissatisfied client. The renewal is not guaranteed.
+**Unspoken Truth #9:** WA Health's NPS of 5.5 looks concerning, but the trend is **improving (+1.2)**. Recent scores (7, 7, 8) are better than historical (0, 2, 3). The renewal conversation should acknowledge past issues while highlighting recent improvements. This is a recovery story, not a crisis.
 
 ### 2.2 Feedback Theme Analysis
 
@@ -222,22 +223,33 @@ Current State:
 
 **The Cascade Risk:** Our client concentration is increasing, not decreasing. Each departure makes us more dependent on fewer clients, who are themselves showing warning signs.
 
-### 3.2 Pipeline-Satisfaction Paradox
+### 3.2 Pipeline-Satisfaction Reality (Nuanced)
 
+**The Challenge:**
 ```
-The Paradox:
-┌─────────────────────────────────────────┐
-│  Laura Messing's target: $2.68M         │
-│  All deals are with SA Health           │
-│  SA Health NPS: 6.1 (unhappy)           │
-│  ↓                                      │
-│  Selling expansion to unhappy client    │
-│  = Low probability of success           │
-│  = Pipeline is overstated               │
-└─────────────────────────────────────────┘
+Laura Messing's target: $2.68M (all SA Health deals)
+SA Health NPS: 6.1 avg, but STABLE and highly variable (1-9 range)
+→ Some stakeholders love us (9s), others hate us (1s)
+→ Expansion possible with right stakeholder targeting
 ```
 
-**Unspoken Truth #15:** Our pipeline is weighted toward clients who are dissatisfied. This creates a mathematical impossibility: we can't simultaneously retain unhappy clients AND sell them expansion deals at forecasted rates.
+**The Opportunity:**
+```
+Johnathan Salisbury's target: $1.27M (82% = WA Health)
+WA Health NPS: 5.5 avg, but IMPROVING (+1.2 trend)
+→ Recent scores: 7, 7, 8 (vs historical 0, 2, 3)
+→ Recovery story supports renewal conversation
+```
+
+**The Risk:**
+```
+Epworth Healthcare: NPS 4.8 and DECLINING (-0.7)
+MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
+→ These are genuinely deteriorating relationships
+→ MINDEF decline threatens Synapxe NEHR opportunity
+```
+
+**Unspoken Truth #15:** Our pipeline isn't uniformly at risk. WA Health, Western Health, Barwon, and Mount Alvernia are all **improving**. SA Health is **volatile** (target specific stakeholders). The genuine concerns are Epworth (declining from already low) and MINDEF (sharp decline threatens Singapore government business).
 
 ### 3.3 Geographic Risk Concentration
 
@@ -257,35 +269,40 @@ The Paradox:
 
 | Priority | Owner | Action | Why It Matters |
 |----------|-------|--------|----------------|
-| 1 | Laura Messing + Anu Pradhan | SA Health Executive Intervention | NPS 6.1 threatens $6.8M + $2.68M pipeline |
-| 2 | Johnathan Salisbury | WA Health Renewal Lock-in | $1.03M = 82% of his target |
-| 3 | Nikki Wei | Synapxe NEHR Reactivation | $2M+ opportunity to replace Sing Health |
-| 4 | New Asia CSE | MAH Azure Migration Close | $433K, largest Asia deal |
-| 5 | Tracey Bland | GHA Extension Signature | $176K, Victorian market anchor |
+| 1 | Laura Messing + Anu Pradhan | SA Health Stakeholder Mapping | NPS 6.1 avg masks volatility (1-9 range). Identify promoters vs detractors by department. Target expansion to satisfied stakeholders. |
+| 2 | Johnathan Salisbury | WA Health Renewal Conversation | NPS improving (+1.2 trend). Lead with recovery narrative—recent scores 7,7,8 vs historical lows. $1.03M = 82% of target. |
+| 3 | New Asia CSE | MINDEF Relationship Recovery | NPS declining (-1.3 trend). Address root cause before Synapxe NEHR pursuit. Government trust at stake. |
+| 4 | Nikki Wei | NCS/MINDEF Health Check | $272K FY2028 attrition + declining MINDEF NPS. Stabilise before $2M+ Synapxe expansion. |
+| 5 | Tracey Bland | Epworth Rescue Plan | Lowest NPS (4.8) AND declining (-0.7). Only genuinely deteriorating AU account. Urgent intervention. |
 
 ### 4.2 Short-Term Actions (This Month)
 
-**Client Recovery Programme:**
-1. **SA Health War Room** - Daily stand-ups until NPS > 7.0
-2. **WA Health Satisfaction Audit** - Address NPS 5.5 before renewal
-3. **Epworth Rescue Plan** - Lowest NPS (4.8), create recovery roadmap
+**Declining Account Intervention (Stop the Bleeding):**
+1. **Epworth Healthcare** - NPS 4.8 declining. Root cause analysis: scores went 7→6→4→4→5→4→7→7→4→3→2. Something broke. Identify and fix.
+2. **MINDEF Singapore** - NPS 7.6 declining (-1.3). Recent scores dropped from 10,8,8 to 5,7,8. Investigate government relationship.
+3. **SA Health Detractor Deep-Dive** - 46 responses with range 1-9. Map which LHNs/departments are scoring 1-3 vs 8-9. Target fixes.
+
+**Maintain Improving Accounts (Protect Momentum):**
+1. **WA Health** (+1.2 trend) - Acknowledge improvement in renewal talks. Don't assume crisis.
+2. **Mount Alvernia** (+2.2 trend) - Best improvement in portfolio. Study what's working.
+3. **GHA** (+1.4 trend, NPS 8.1) - Highest NPS improving account. Reference site candidate.
 
 **Pipeline Acceleration:**
-1. **Synapxe NEHR** - Move from "Omitted" to active pursuit
-2. **Upsell Activation** - Convert top 5 of the $14M opportunities
-3. **CPI Collection** - Execute all 8 CPI opportunities ($890K)
+1. **Upsell Activation** - Convert top 5 of the $14M opportunities (target satisfied accounts first)
+2. **CPI Collection** - Execute all 8 CPI opportunities ($890K)
+3. **Synapxe NEHR** - Pursue only after MINDEF trend stabilises
 
 **Operational Discipline:**
 1. **Action Item Amnesty** - Clear backlog, reset tracking system
 2. **Meeting Outcome Protocol** - No meeting without documented outcome
-3. **Weekly Pipeline Review** - Conversion rate tracking
+3. **Weekly NPS Trend Review** - Track improving vs declining accounts
 
 ### 4.3 Quarterly Initiatives (Q1-Q2 2026)
 
 | Initiative | Owner | Target | Investment |
 |------------|-------|--------|------------|
 | SA Health NPS Recovery | Laura Messing | NPS 6.1 → 7.5 | Executive time |
-| Singapore Market Rebuild | Nikki Wei | Replace 50% of Sing Health | Sales focus |
+| Singapore Market Rebuild | Nikki Wei | Stabilise NCS/MINDEF, win Synapxe NEHR, replace 50% of Sing Health | Sales focus |
 | Product Perception Fix | Product Team | Address "outdated" feedback | Roadmap comm |
 | Upsell Conversion | All CSEs | $3M of $14M pipeline | Sales effort |
 | Client Diversification | All CAMs | Reduce top-3 to <40% | New logos |
@@ -310,12 +327,19 @@ The Paradox:
 
 | Metric | Current | Q1 Target | Q2 Target | EOY Target |
 |--------|---------|-----------|-----------|------------|
-| NPS Score | -35 | -20 | 0 | +10 |
-| SA Health NPS | 6.1 | 7.0 | 7.5 | 8.0 |
+| Regional NPS Score | -35 (199 responses) | -20 | 0 | +10 |
+| SA Health NPS | 6.1 avg (stable) | Reduce volatility, ↑ trend | 7.0 avg | 7.5+ avg |
+| Declining Accounts | 3 (Epworth, MINDEF, RVEEH) | ≤2 | ≤1 | 0 |
+| Improving Accounts | 6 | Maintain | ≥8 | ≥10 |
 | Pipeline Conversion | ~35% | 38% | 42% | 50% |
 | Action Completion | 0% | 50% | 70% | 85% |
 | Upsell Realised | $0 | $2M | $5M | $10M |
-| New Attrition | $2.72M | $0 new | $0 new | $0 new |
+| New Attrition | $2.72M confirmed | $0 new | $0 new | $0 new |
+
+**Trend-Based NPS Targets:**
+- Convert **Epworth** from declining to stable (stop the bleeding)
+- Convert **MINDEF** from declining to stable (protect Synapxe opportunity)
+- Maintain improving trajectory for WA Health, Western Health, Barwon, Mount Alvernia, GHA, Vic DoH
 
 ### 5.2 Owner Accountability Matrix
 
@@ -326,7 +350,7 @@ The Paradox:
 | New Asia CSE | MAH/MINDEF delivery | No new Asia attrition |
 | Tracey Bland | GHA/AWH expansion | Vic HIE growth |
 | Anu Pradhan | Australian NPS improvement | AU pipeline support |
-| Nikki Wei | Synapxe conversion | Singapore market rebuild |
+| Nikki Wei | NCS/MINDEF retention + Synapxe NEHR | Singapore market rebuild |
 
 ---
 
@@ -346,15 +370,21 @@ The Paradox:
 
 ### What We Can Be Optimistic About
 
-1. **$14M in identified upsell opportunities.** The revenue replacement exists—we just need to execute.
+1. **Six accounts are actively improving.** WA Health (+1.2), Western Health (+1.0), Barwon (+1.6), Mount Alvernia (+2.2), GHA (+1.4), Vic DoH (+0.8). This is more improving accounts than declining (3). The trend is in our favour.
 
-2. **CSE pipeline ($8.36M) exceeds attrition ($2.72M).** The deals are there if we can convert them.
+2. **$14M in identified upsell opportunities.** Target these at improving accounts first (GHA, Mount Alvernia) for higher conversion probability.
 
-3. **Synapxe NEHR ($2M+) could replace Sing Health.** The opportunity exists; it just needs to be reactivated.
+3. **CSE pipeline ($8.36M) exceeds attrition ($2.72M).** The deals are there if we can convert them.
 
-4. **We still have SA Health and WA Health.** They're unhappy, but they haven't left. There's time to recover.
+4. **WA Health is a recovery story, not a crisis.** NPS improved from historical lows (0,2,3) to recent highs (7,7,8). Use this narrative in renewal conversations.
 
-5. **The team knows the challenges.** This document exists because leadership wants to face reality. That's the first step.
+5. **SA Health volatility means opportunity.** Some stakeholders score 8-9. Identify and expand with satisfied departments while fixing detractor issues.
+
+6. **GHA (NPS 8.1, improving) is a reference site candidate.** Highest-rated improving account. Use for case studies and peer referrals.
+
+7. **Synapxe NEHR ($2M+) could offset Sing Health losses.** Requires stabilising MINDEF relationship first (NPS declining), but the opportunity exists in a separate part of Singapore ecosystem.
+
+8. **The team knows the challenges.** This document exists because leadership wants to face reality. That's the first step.
 
 ---
 
