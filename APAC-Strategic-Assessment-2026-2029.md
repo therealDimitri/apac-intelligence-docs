@@ -264,11 +264,13 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 
 ### 3.3 Geographic Risk Concentration
 
-| Market | Revenue % | NPS | Trend |
-|--------|-----------|-----|-------|
-| Australia | 68% | -28 | Stable |
-| Singapore | 22% | N/A | Declining (Sing Health exit) |
-| Other Asia | 10% | -42 | At risk |
+| Market | Revenue % | NPS | Responses | Trend |
+|--------|-----------|-----|-----------|-------|
+| Australia | 68% | -28 | 156 | Stable |
+| Singapore | 22% | -33 | 43 | Declining (Sing Health exit) |
+| Other Asia | 10% | -42 | — | At risk |
+
+*Singapore NPS breakdown: MINDEF 7.6 avg (8 responses), Mount Alvernia 5.7 avg (15), SingHealth 7.0 avg (20)*
 
 **Unspoken Truth #16:** Singapore was 22% of our business. Post-Sing Health, it drops to ~8%. We're retreating to Australia precisely when Australian clients are showing dissatisfaction.
 
