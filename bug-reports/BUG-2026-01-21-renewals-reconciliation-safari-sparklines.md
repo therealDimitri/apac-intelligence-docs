@@ -1,4 +1,4 @@
-# Bug Report: Renewals Pending Data Reconciliation & Safari Sparkline Display
+# Bug Report: BURC Performance Data Reconciliation & Safari Sparkline Display
 
 **Date Reported:** 2026-01-21
 **Date Fixed:** 2026-01-21
@@ -7,9 +7,10 @@
 
 ## Summary
 
-Two issues were identified and fixed:
-1. Renewals Pending card on BURC Performance page showing incorrect data ($900K instead of $702K)
+Three issues were identified and fixed:
+1. Renewals Pending card on BURC Performance page showing incorrect data ($900K → $125K)
 2. Working Capital KPI cards sparklines not displaying correctly on Safari
+3. Revenue at Risk showing incorrect data ($675K → $578K)
 
 ## Issue 1: Renewals Pending Data Reconciliation
 
@@ -96,13 +97,62 @@ Updated `/src/app/(dashboard)/aging-accounts/compliance/components/KPICard.tsx`:
 >
 ```
 
+## Issue 3: Revenue at Risk Data Reconciliation
+
+### Symptoms
+
+- Revenue at Risk card showed $675K but Excel source (2026 APAC Performance.xlsx) showed $578K for FY2026
+- Attrition data in database was not aligned with the latest Excel source
+
+### Root Cause
+
+The `burc_attrition` and `financial_alerts` tables had stale attrition data that didn't match the Excel source of truth (Attrition sheet).
+
+### Fix Applied
+
+Created sync scripts to extract attrition data from Excel and update both database tables:
+- Script: `scripts/sync-attrition-fixed.mjs` - Syncs financial_alerts attrition_risk records
+- Script: `scripts/sync-burc-attrition.mjs` - Syncs burc_attrition table
+
+### Before/After
+
+| Metric | Before | After (Excel) |
+|--------|--------|---------------|
+| Revenue at Risk | $675K | **$578K** |
+| Clients at Risk | Various | **4 clients** |
+
+**FY2026 Attrition from Excel:**
+- Parkway: $457K (Full attrition)
+- GHA Regional Opal: $83K (Partial)
+- Sing Health KKH iPro and Capsule: $18K (Partial)
+- Sing Health DMD Licences: $20K (Partial)
+
+## Final Reconciliation Summary
+
+All BURC Performance metrics now reconciled with Excel source (2026 APAC Performance.xlsx):
+
+| Metric | Dashboard | Excel | Status |
+|--------|-----------|-------|--------|
+| Target EBITA | $6.2M | $6.2M | ✓ |
+| Committed Revenue | $19.7M | $19.7M | ✓ |
+| Pipeline Value | $11.0M | $11.0M | ✓ |
+| Revenue at Risk | $578K | $578K | ✓ Fixed |
+| Renewals Pending | $125K | $125K | ✓ Fixed |
+
 ## Files Changed
 
 - `src/app/(dashboard)/aging-accounts/compliance/components/KPICard.tsx` - Safari SVG fix
-- `financial_alerts` table - Removed invalid Western Health renewal alert
+- `financial_alerts` table - Updated renewal and attrition alerts
+- `burc_attrition` table - Synced with Excel attrition data
 - `scripts/check-renewals.mjs` - Diagnostic script (new)
 - `scripts/fix-renewals.mjs` - Fix script (new)
 - `scripts/verify-renewals.mjs` - Verification script (new)
+- `scripts/sync-renewal-alerts.mjs` - Renewal sync script (new)
+- `scripts/sync-attrition-fixed.mjs` - Attrition alerts sync script (new)
+- `scripts/sync-burc-attrition.mjs` - Attrition table sync script (new)
+- `scripts/reconcile-financials.mjs` - Financial reconciliation script (new)
+- `scripts/detailed-reconcile.mjs` - Detailed reconciliation script (new)
+- `scripts/read-performance-excel.mjs` - Excel reader script (new)
 
 ## Testing Performed
 
