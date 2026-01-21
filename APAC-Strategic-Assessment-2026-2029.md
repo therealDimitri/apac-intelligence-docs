@@ -10,7 +10,7 @@
 
 The APAC region faces a critical inflection point. We have **$2.72M in confirmed attrition** against **$8.36M in weighted pipeline**, which appears healthy on paper. However, deeper analysis reveals structural vulnerabilities that, if unaddressed, could cascade into a regional crisis by 2028.
 
-**The Unspoken Truth:** Our pipeline assumes 100% conversion. At realistic rates (35%), we barely cover attrition. Meanwhile, 62% of our attrition is concentrated in a single departure (Sing Health), and our largest remaining client (SA Health, 21% of maintenance) has an NPS of 6.1—placing $6.8M of annual revenue in the "at-risk" category.
+**The Unspoken Truth:** Our pipeline assumes 100% conversion. At realistic rates (35%), we barely cover attrition. Meanwhile, 62% of our attrition is concentrated in a single departure (Sing Health/Synapxe), and the Synapxe NEHR opportunity ($2M+) in our pipeline is with this same departing client—meaning our pipeline is overstated. Our largest remaining client (SA Health, 21% of maintenance) has volatile NPS (avg 6.1, range 1-9)—placing $6.8M of annual revenue in the "uncertain" category.
 
 This document provides a frank assessment of where we stand and a structured plan to turn the situation around.
 
@@ -65,7 +65,7 @@ This document provides a frank assessment of where we stand and a structured pla
 | Tracey Bland | CSE | $1.93M | GHA extension ($176K), AWH ($159K) |
 | **CSE Total** | | **$8.36M** | |
 | Anu Pradhan | CAM | $4.67M | Vic HIE portfolio, SA Health support |
-| Nikki Wei | CAM | $2.49M | Asia portfolio incl. NCS/MINDEF, Synapxe |
+| Nikki Wei | CAM | $2.49M | Asia portfolio (Sing Health/Synapxe departing) |
 | **CAM Total** | | **$7.15M** | |
 
 *Source: APAC 2026 Sales Budget 14Jan2026 v0.1.xlsx, CSE Summary Wgt ACV sheet*
@@ -88,7 +88,7 @@ Adjusted Position:            -$6.59M catastrophic loss
 
 **Unspoken Truth #5:** Our pipeline looks healthy, but it's built on fragile assumptions. Johnathan Salisbury's entire year depends on one deal (WA Health, 82% of target). Laura Messing's $2.68M target is at risk because the client she's selling to (SA Health) is unhappy with our service.
 
-**Unspoken Truth #6:** The Synapxe NEHR RFP ($2M+ opportunity) is marked "Omitted" in the pipeline. Synapxe is part of the NCS/MINDEF ecosystem (Singapore government healthcare IT), separate from Sing Health (the healthcare provider cluster). This deal could offset Sing Health losses, but **MINDEF NPS is declining (-1.3 trend)** and NCS has $272K attrition flagged for FY2028. The government IT relationship is deteriorating—we need to stabilise before we can expand.
+**Unspoken Truth #6:** The Synapxe NEHR RFP ($2M+ opportunity) is marked "Omitted" in the pipeline. **Synapxe IS Sing Health's technology arm**—this opportunity is part of the same ecosystem that's departing. The $2M+ is not a replacement for Sing Health revenue; it's additional exposure to the same client relationship we're losing. The pipeline is overstated by counting an opportunity with a departing client.
 
 ### 1.4 EBITA Trajectory
 
@@ -271,8 +271,8 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 |----------|-------|--------|----------------|
 | 1 | Laura Messing + Anu Pradhan | SA Health Stakeholder Mapping | NPS 6.1 avg masks volatility (1-9 range). Identify promoters vs detractors by department. Target expansion to satisfied stakeholders. |
 | 2 | Johnathan Salisbury | WA Health Renewal Conversation | NPS improving (+1.2 trend). Lead with recovery narrative—recent scores 7,7,8 vs historical lows. $1.03M = 82% of target. |
-| 3 | New Asia CSE | MINDEF Relationship Recovery | NPS declining (-1.3 trend). Address root cause before Synapxe NEHR pursuit. Government trust at stake. |
-| 4 | Nikki Wei | NCS/MINDEF Health Check | $272K FY2028 attrition + declining MINDEF NPS. Stabilise before $2M+ Synapxe expansion. |
+| 3 | New Asia CSE | MINDEF Relationship Recovery | NPS declining (-1.3 trend). Government contract ($272K FY2028 attrition risk). Protect remaining SG revenue. |
+| 4 | Nikki Wei | Singapore Market Rebuild | Sing Health/Synapxe departing ($1.69M). Identify NEW Singapore opportunities outside Sing Health ecosystem. |
 | 5 | Tracey Bland | Epworth Rescue Plan | Lowest NPS (4.8) AND declining (-0.7). Only genuinely deteriorating AU account. Urgent intervention. |
 
 ### 4.2 Short-Term Actions (This Month)
@@ -290,7 +290,7 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 **Pipeline Acceleration:**
 1. **Upsell Activation** - Convert top 5 of the $14M opportunities (target satisfied accounts first)
 2. **CPI Collection** - Execute all 8 CPI opportunities ($890K)
-3. **Synapxe NEHR** - Pursue only after MINDEF trend stabilises
+3. **Pipeline Cleanup** - Remove Synapxe NEHR ($2M+) from active pipeline—it's part of departing Sing Health ecosystem
 
 **Operational Discipline:**
 1. **Action Item Amnesty** - Clear backlog, reset tracking system
@@ -302,7 +302,7 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 | Initiative | Owner | Target | Investment |
 |------------|-------|--------|------------|
 | SA Health NPS Recovery | Laura Messing | NPS 6.1 → 7.5 | Executive time |
-| Singapore Market Rebuild | Nikki Wei | Stabilise NCS/MINDEF, win Synapxe NEHR, replace 50% of Sing Health | Sales focus |
+| Singapore Market Rebuild | Nikki Wei | Find NEW opportunities outside Sing Health/Synapxe ecosystem. MINDEF/NCS is separate and at risk. | Sales focus |
 | Product Perception Fix | Product Team | Address "outdated" feedback | Roadmap comm |
 | Upsell Conversion | All CSEs | $3M of $14M pipeline | Sales effort |
 | Client Diversification | All CAMs | Reduce top-3 to <40% | New logos |
@@ -350,7 +350,7 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 | New Asia CSE | MAH/MINDEF delivery | No new Asia attrition |
 | Tracey Bland | GHA/AWH expansion | Vic HIE growth |
 | Anu Pradhan | Australian NPS improvement | AU pipeline support |
-| Nikki Wei | NCS/MINDEF retention + Synapxe NEHR | Singapore market rebuild |
+| Nikki Wei | MINDEF/NCS retention | New Singapore opportunities (outside Sing Health) |
 
 ---
 
@@ -382,7 +382,7 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 
 6. **GHA (NPS 8.1, improving) is a reference site candidate.** Highest-rated improving account. Use for case studies and peer referrals.
 
-7. **Synapxe NEHR ($2M+) could offset Sing Health losses.** Requires stabilising MINDEF relationship first (NPS declining), but the opportunity exists in a separate part of Singapore ecosystem.
+7. **MINDEF/NCS is a separate Singapore relationship.** While Sing Health/Synapxe departs ($1.69M), MINDEF/NCS ($272K attrition risk, NPS declining) is a different government contract. Stabilising this protects remaining Singapore presence.
 
 8. **The team knows the challenges.** This document exists because leadership wants to face reality. That's the first step.
 
