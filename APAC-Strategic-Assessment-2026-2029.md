@@ -23,16 +23,27 @@ This document provides a frank assessment of where we stand and a structured pla
 | Fiscal Year | Amount | Sing Health | Other Clients |
 |-------------|--------|-------------|---------------|
 | FY2025 | $92K | — | Parkway $92K |
-| FY2026 | $578K | $38K (DMD, KKH iPro) | Parkway $457K, GHA $83K |
-| FY2027 | $658K | $526K (SGH, SKH, NCCS, CGH, DMD) | GHA $132K |
+| FY2026 | $578K | $38K (DMD, KKH iPro) | Parkway $457K, GHA Opal $83K* |
+| FY2027 | $658K | $526K (SGH, SKH, NCCS, CGH, DMD) | GHA Opal $132K* |
 | FY2028 | $1.39M | **$1.12M (Sunrise All)** | NCS $272K |
 | **TOTAL** | **$2.72M** | **$1.69M (62%)** | **$1.03M (38%)** |
 
 *Source: burc_attrition table, verified against 2026 APAC Performance.xlsx Attrition sheet*
 
+**GHA Opal ($83K + $132K = $215K):* "Partial" risk type indicates scope reduction on Opal product, not client departure. GHA overall is a ~$3M/year account with NPS 8.1. See Unspoken Truth #2 for context.
+
 **Unspoken Truth #1:** Sing Health attrition is **phased over 3 years**, with the largest hit ($1.12M Sunrise) not until **FY2028**. This provides runway for replacement—but also means the pain is still ahead of us. The iPro/Capsule products churn FY2026-27; Sunrise (core EMR) churns FY2028.
 
-**Unspoken Truth #2:** Parkway ($549K across FY2025-26) and NCS ($272K, FY2028) are confirmed attrition receiving minimal attention. Combined with GHA Regional Opal ($215K), non-Sing Health attrition totals $1.03M—38% of the problem that's being overshadowed by Sing Health focus.
+**Unspoken Truth #2:** Parkway ($549K across FY2025-26) and NCS ($272K, FY2028) are confirmed attrition receiving minimal attention. Non-Sing Health attrition totals $1.03M—38% of the problem that's being overshadowed by Sing Health focus.
+
+**GHA Regional Opal Context:** The GHA Opal attrition ($215K) warrants nuanced interpretation:
+- **Phased over two years:** FY2026 $83K, FY2027 $132K
+- **Risk type "Partial":** Scope reduction on Opal product specifically, not relationship churn
+- **GHA is a healthy account:** ~$3M/year revenue, NPS 8.1 average (12 responses), positive feedback
+- **Upside potential:** $1.6M pipeline opportunity (GHA Reg Sched PS) and $125K renewal due March 2026
+- **Unknown:** No documented reason for Opal reduction in database (reason, status, mitigation fields are null)
+
+This appears to be a product-specific adjustment within a strategically strong relationship, not a client health concern.
 
 ### 1.2 Revenue Concentration Risk
 
@@ -285,7 +296,7 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 **Maintain Improving Accounts (Protect Momentum):**
 1. **WA Health** (+1.2 trend) - Acknowledge improvement in renewal talks. Don't assume crisis.
 2. **Mount Alvernia** (+2.2 trend) - Best improvement in portfolio. Study what's working.
-3. **GHA** (+1.4 trend, NPS 8.1) - Highest NPS improving account. Reference site candidate.
+3. **GHA** (NPS 8.1, ~$3M/year) - Highest NPS account. Reference site candidate. **Action required:** Investigate Opal scope reduction ($215K phased FY26-27) - no documented reason in system. Understand if this is budget-driven, technology consolidation, or service issue. The $125K renewal (March 2026) and $1.6M Reg Sched PS opportunity depend on clarity here.
 
 **Pipeline Acceleration:**
 1. **Upsell Activation** - Convert top 5 of the $14M opportunities (target satisfied accounts first)
@@ -380,7 +391,7 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 
 5. **SA Health volatility means opportunity.** Some stakeholders score 8-9. Identify and expand with satisfied departments while fixing detractor issues.
 
-6. **GHA (NPS 8.1, improving) is a reference site candidate.** Highest-rated improving account. Use for case studies and peer referrals.
+6. **GHA (NPS 8.1, 12 responses, range 6-10) is a reference site candidate.** Highest-rated improving account with ~$3M/year revenue and $1.6M pipeline opportunity. The Opal scope reduction ($215K phased over 2 years) is product-specific, not relationship risk. Client feedback: "Good customer relations. Willing to listen and innovate."
 
 7. **MINDEF/NCS is a separate Singapore relationship.** While Sing Health/Synapxe departs ($1.69M), MINDEF/NCS ($272K attrition risk, NPS declining) is a different government contract. Stabilising this protects remaining Singapore presence.
 
@@ -451,6 +462,7 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 | **Synapxe** | Technology arm of Singapore public healthcare (part of Sing Health ecosystem). Not a separate opportunity. |
 | **MINDEF/NCS** | Singapore Ministry of Defence / NCS (IT services). Separate government contract from Sing Health. |
 | **SA Health** | South Australia Health. Largest APAC client by maintenance revenue ($6.8M). Comprises multiple LHNs. |
+| **GHA** | Gippsland Healthcare Alliance (Victoria, Australia). ~$3M/year client. NPS 8.1. Partial Opal attrition ($215K over FY26-27) is scope reduction, not relationship risk. |
 
 ---
 
