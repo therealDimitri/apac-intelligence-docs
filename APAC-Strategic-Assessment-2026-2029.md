@@ -177,25 +177,24 @@ Adjusted Position:            -$6.59M catastrophic loss
 
 ### 2.3 Operational Execution
 
-**Action Item Completion Rate: 0%**
+**Action Item Tracking: No Data Available**
 
-| Status | Count | Percentage |
-|--------|-------|------------|
-| Open | 847 | 72% |
-| In Progress | 156 | 13% |
-| Completed | 0 | 0% |
-| Overdue | 174 | 15% |
+The actions table contains no records. This indicates either:
+- The action tracking system is not being used
+- Actions are tracked outside the system (spreadsheets, emails)
+- The system was recently implemented and has no historical data
 
-*Source: actions table, status field*
+*Source: actions table query returned no data*
 
-**Unspoken Truth #11:** We have **zero completed actions** in the system. This suggests either (a) the action tracking system isn't being used properly, or (b) we're not closing the loop on client commitments. Either way, it indicates an execution discipline gap.
+**Unspoken Truth #11:** We have **no visibility into action item completion** because the tracking system isn't being used. Without this data, we cannot measure execution discipline or accountability.
 
 **Meeting Activity:**
-- Total meetings logged: 1,247
-- Meetings with documented outcomes: 312 (25%)
-- Follow-up actions created: 89 (7%)
+- Total meetings logged: 210
+- Meetings with documented notes: 207 (99%)
 
-**Unspoken Truth #12:** We're having meetings but not converting them into tracked, accountable actions. 75% of meetings have no documented outcome.
+*Source: unified_meetings table*
+
+**Unspoken Truth #12:** Meeting documentation is strong (99% have notes), but the gap is in **action tracking**—we document discussions but don't systematically track follow-through.
 
 ### 2.4 Alert Response
 
@@ -203,12 +202,13 @@ Adjusted Position:            -$6.59M catastrophic loss
 
 | Alert Type | Count | Total Financial Impact |
 |------------|-------|------------------------|
-| Upsell Opportunity | 47 | $14.05M |
-| CPI Opportunity | 8 | $890K |
-| Churn Risk | 12 | $3.2M |
-| Renewal Risk | 6 | $2.1M |
+| Upsell Opportunity | 8 | $14.05M |
+| Confirmed Churn | 6 | $1.0M |
+| Attrition Risk | 4 | $578K |
+| CPI Opportunity | 4 | $21K |
+| Renewal Due | 1 | $125K |
 
-*Source: financial_alerts table, status IN ('open', 'acknowledged')*
+*Source: financial_alerts table, status IN ('open', 'acknowledged'). Total: 23 alerts.*
 
 **Unspoken Truth #13:** We have **$14.05M in identified upsell opportunities** sitting untouched. This is 5x our total attrition. The revenue replacement opportunity exists—we're just not executing on it.
 
@@ -267,15 +267,16 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 
 ### 3.3 Geographic Risk Concentration
 
-| Market | Revenue % | NPS | Responses | Trend |
-|--------|-----------|-----|-----------|-------|
-| Australia | 68% | -28 | 156 | Stable |
-| Singapore | 22% | -33 | 43 | Declining (Sing Health exit) |
-| Other Asia | 10% | -42 | — | At risk |
+| Market | Revenue | % of Total | NPS | Responses | Trend |
+|--------|---------|------------|-----|-----------|-------|
+| Australia | $13.8M | 69% | -28 | 156 | Stable |
+| Singapore | $5.9M | 29% | -33 | 43 | Declining (Sing Health exit) |
+| Other (NZ) | $0.3M | 2% | — | — | — |
 
 *Singapore NPS breakdown: MINDEF 7.6 avg (8 responses), Mount Alvernia 5.7 avg (15), SingHealth 7.0 avg (20)*
+*Source: burc_revenue_detail, fiscal_year=2026, revenue_type='Maint'*
 
-**Unspoken Truth #16:** Singapore was 22% of our business. Post-Sing Health, it drops to ~8%. We're retreating to Australia precisely when Australian clients are showing dissatisfaction.
+**Unspoken Truth #16:** Singapore is currently **29% of maintenance revenue** ($5.9M). Post-Sing Health departure ($4.7M), it drops to **~8%** ($1.2M of $15.2M remaining). We're retreating to near-total Australia dependence (91% post-Sing Health) precisely when Australian clients are showing dissatisfaction.
 
 ---
 
@@ -329,11 +330,11 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 
 | Current State | Target State | How |
 |---------------|--------------|-----|
-| 44% in top 3 clients | <35% in top 3 | New logo acquisition, mid-market focus |
+| 72% in top 3 clients | <50% in top 3 | New logo acquisition, mid-market focus |
 | NPS -35 | NPS +10 | Product investment, service recovery |
-| 0% action completion | >80% completion | Operational discipline programme |
+| No action tracking | >80% completion | Implement and use action tracking system |
 | 62% attrition in one client | <20% concentration | Diversified client base |
-| 35% pipeline conversion | 50% conversion | Realistic forecasting, better qualification |
+| ~35% pipeline conversion | 50% conversion | Realistic forecasting, better qualification |
 
 ---
 
@@ -348,7 +349,7 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 | Declining Accounts | 3 (Epworth, MINDEF, RVEEH) | ≤2 | ≤1 | 0 |
 | Improving Accounts | 6 | Maintain | ≥8 | ≥10 |
 | Pipeline Conversion | ~35% | 38% | 42% | 50% |
-| Action Completion | 0% | 50% | 70% | 85% |
+| Action Completion | No tracking | Implement system | 70% | 85% |
 | Upsell Realised | $0 | $2M | $5M | $10M |
 | New Attrition | $2.72M confirmed | $0 new | $0 new | $0 new |
 
@@ -380,7 +381,7 @@ MINDEF Singapore: NPS 7.6 but DECLINING (-1.3)
 
 3. **We're trying to grow accounts with mixed sentiment.** Laura's entire pipeline is with SA Health (NPS 6.1 avg from 46 responses, but volatile 1-9 range—some love us, some don't). Johnathan's year depends on WA Health (NPS 5.5 avg from 19 responses, but **improving +1.2 trend**). The nuance matters for strategy.
 
-4. **Our operational execution is broken.** Zero action completions. 75% of meetings with no outcomes. We're not closing loops.
+4. **Our operational execution lacks visibility.** Action tracking system is not being used—we have no data on follow-through. While meeting documentation is strong (99% have notes), we don't systematically track actions to completion.
 
 5. **The pipeline looks better than it is.** At realistic conversion rates, we barely cover attrition. One more major loss and we're in serious trouble.
 
