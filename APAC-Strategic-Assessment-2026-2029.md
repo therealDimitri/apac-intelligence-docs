@@ -20,19 +20,19 @@ This document provides a frank assessment of where we stand and a structured pla
 
 ### 1.1 The Attrition Trajectory
 
-| Fiscal Year | Attrition Amount | Key Clients |
-|-------------|------------------|-------------|
-| FY2025 | $215K | GHA Regional Opal |
-| FY2026 | $1.69M | Sing Health (all entities) |
-| FY2027 | $549K | Parkway |
-| FY2028 | $272K | NCS |
-| **TOTAL** | **$2.72M** | |
+| Fiscal Year | Amount | Sing Health | Other Clients |
+|-------------|--------|-------------|---------------|
+| FY2025 | $92K | — | Parkway $92K |
+| FY2026 | $578K | $38K (DMD, KKH iPro) | Parkway $457K, GHA $83K |
+| FY2027 | $658K | $526K (SGH, SKH, NCCS, CGH, DMD) | GHA $132K |
+| FY2028 | $1.39M | **$1.12M (Sunrise All)** | NCS $272K |
+| **TOTAL** | **$2.72M** | **$1.69M (62%)** | **$1.03M (38%)** |
 
 *Source: burc_attrition table, verified against 2026 APAC Performance.xlsx Attrition sheet*
 
-**Unspoken Truth #1:** Sing Health represents **62% of total attrition**. This is not a diversified risk—it's a single-point-of-failure that has already occurred. The departure is confirmed; the question is how we manage the exit and prevent reputational contagion in the Singapore market.
+**Unspoken Truth #1:** Sing Health attrition is **phased over 3 years**, with the largest hit ($1.12M Sunrise) not until **FY2028**. This provides runway for replacement—but also means the pain is still ahead of us. The iPro/Capsule products churn FY2026-27; Sunrise (core EMR) churns FY2028.
 
-**Unspoken Truth #2:** Parkway ($549K, FY2027) and NCS ($272K, FY2028) are currently flagged but receiving minimal attention. If these proceed unchallenged, we lose an additional $821K beyond Sing Health.
+**Unspoken Truth #2:** Parkway ($549K across FY2025-26) and NCS ($272K, FY2028) are confirmed attrition receiving minimal attention. Combined with GHA Regional Opal ($215K), non-Sing Health attrition totals $1.03M—38% of the problem that's being overshadowed by Sing Health focus.
 
 ### 1.2 Revenue Concentration Risk
 
