@@ -105,15 +105,16 @@ Adjusted Position:            -$6.59M catastrophic loss
 
 ### 1.4 EBITA Trajectory
 
-| Metric | FY2024 | FY2025 | FY2026 Target | FY2026 Forecast |
-|--------|--------|--------|---------------|-----------------|
-| Gross Revenue | $32.1M | $25.7M | $31.0M | $28.4M |
-| EBITA | $7.2M | $5.8M | $6.2M | $5.1M |
-| EBITA Margin | 22.4% | 22.6% | 20.0% | 18.0% |
+| Metric | FY2024 Actual | FY2025 Actual | FY2026 Forecast | FY2026 3-Year Plan |
+|--------|---------------|---------------|-----------------|-------------------|
+| Gross Revenue | $33.0M | $26.3M | $31.5M | — |
+| EBITA | $5.4M | $4.0M | $5.6M | $8.5M |
+| EBITA Margin | 16.4% | 15.0% | 17.8% | 27.0% |
+| **Gap to Plan** | — | — | **-$2.9M** | — |
 
-*Source: burc_annual_financials, 2026 APAC Performance.xlsx EBITA sheet*
+*Source: burc_annual_financials, 2026 APAC Performance.xlsx, APAC 2026 Budget GAP_ver3.xlsx*
 
-**Unspoken Truth #7:** We had a **20% revenue drop from FY2024 to FY2025**. The FY2026 target assumes recovery, but our forecast shows we're tracking $2.6M below target. We're not recovering—we're stabilising at a lower baseline.
+**Unspoken Truth #7:** We had a **20% revenue drop from FY2024 to FY2025** ($33.0M → $26.3M). FY2026 shows revenue recovery to $31.5M, but EBITA is **$2.9M below the 3-year strategic plan** ($5.6M forecast vs $8.5M plan). The gap is driven primarily by R&D cross-charge increases ($2.74M) and FX headwinds ($0.66M). We're recovering revenue but not profitability.
 
 ---
 
