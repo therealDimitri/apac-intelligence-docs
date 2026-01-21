@@ -10,7 +10,7 @@
 
 The APAC region faces a critical inflection point. We have **$2.72M in confirmed attrition** against **$8.36M in weighted pipeline**, which appears healthy on paper. However, deeper analysis reveals structural vulnerabilities that, if unaddressed, could cascade into a regional crisis by 2028.
 
-**The Unspoken Truth:** Our pipeline assumes 100% conversion. At realistic rates (35%), we barely cover attrition. Meanwhile, 62% of our attrition is concentrated in a single departure (Sing Health/Synapxe), and the Synapxe NEHR opportunity ($2M+) in our pipeline is with this same departing client—meaning our pipeline is overstated. Our largest remaining client (SA Health, 21% of maintenance) has volatile NPS (avg 6.1, range 1-9)—placing $6.8M of annual revenue in the "uncertain" category.
+**The Unspoken Truth:** Our pipeline assumes 100% conversion. At realistic rates (35%), we barely cover attrition. Meanwhile, 62% of our attrition is concentrated in a single departure (Sing Health/Synapxe), and the Synapxe NEHR opportunity ($2M+) in our pipeline is with this same departing client—meaning our pipeline is overstated. Our largest remaining client (SA Health, **34% of maintenance**) has volatile NPS (avg 6.1, range 1-9)—placing $6.8M of annual revenue in the "uncertain" category.
 
 This document provides a frank assessment of where we stand and a structured plan to turn the situation around.
 
@@ -49,20 +49,22 @@ This appears to be a product-specific adjustment within a strategically strong r
 
 **Top 10 Maintenance Clients (FY2026):**
 
-| Rank | Client | Annual Revenue | Cumulative % |
-|------|--------|----------------|--------------|
-| 1 | SA Health | $6.8M | 21.4% |
-| 2 | WA Health | $4.2M | 34.6% |
-| 3 | Sing Health | $3.1M | 44.4% |
-| 4 | GHA | $1.8M | 50.1% |
-| 5 | Western Health | $1.2M | 53.9% |
-| 6-10 | Others | $4.6M | 68.4% |
+| Rank | Client | Annual Revenue | % of Total | Cumulative % |
+|------|--------|----------------|------------|--------------|
+| 1 | SA Health | $6.8M | 34.1% | 34.1% |
+| 2 | Sing Health | $4.7M | 23.3% | 57.4% |
+| 3 | WA Health | $2.9M | 14.3% | 71.7% |
+| 4 | GHA | $1.4M | 7.1% | 78.8% |
+| 5 | SLMC | $0.8M | 4.2% | 83.0% |
+| 6 | GRMC | $0.6M | 2.9% | 85.9% |
+| 7 | Western Health | $0.5M | 2.4% | 88.3% |
+| 8-10 | Others (NCS, Waikato, AWH) | $1.0M | 5.0% | 93.3% |
 
-*Source: burc_revenue_detail table, fiscal_year=2026, revenue_type='Maint'*
+*Source: burc_revenue_detail table, fiscal_year=2026, revenue_type='Maint'. Total APAC Maintenance: $19.9M*
 
-**Unspoken Truth #3:** Three clients represent **44% of maintenance revenue**. Losing any one of them would be catastrophic. SA Health alone is larger than our entire attrition exposure—and their NPS averages 6.1 across 46 responses with high volatility (scores range 1-9, some stakeholders satisfied, others severely dissatisfied).
+**Unspoken Truth #3:** Three clients represent **72% of maintenance revenue**—far worse than previously understood. SA Health alone (34%) is larger than our entire attrition exposure ($2.72M). Their NPS averages 6.1 across 46 responses with high volatility (scores range 1-9, some stakeholders satisfied, others severely dissatisfied).
 
-**Unspoken Truth #4:** Post-Sing Health departure, our top-3 concentration actually *increases* to **~52%** of remaining maintenance base. We're becoming more dependent on fewer clients, not less.
+**Unspoken Truth #4:** Post-Sing Health departure, SA Health alone becomes **44% of remaining maintenance base** ($6.8M of $15.3M). The top-2 (SA Health + WA Health) would represent **63%**. We're not just concentrated—we're critically dependent on one client.
 
 ### 1.3 Pipeline Reality Check
 
@@ -220,19 +222,19 @@ Adjusted Position:            -$6.59M catastrophic loss
 ```
 Current State:
 ┌─────────────────────────────────────────┐
-│  Top 3 Clients = 44% of Revenue         │
+│  Top 3 Clients = 72% of Revenue         │
 │  ↓                                      │
-│  Sing Health departs (-$3.1M)           │
+│  Sing Health departs (-$4.7M)           │
 │  ↓                                      │
-│  Top 2 Clients = 52% of remaining       │
+│  SA Health alone = 44% of remaining     │
 │  ↓                                      │
 │  SA Health volatile (NPS 6.1 avg, 1-9)  │
 │  ↓                                      │
-│  If SA Health leaves = 30%+ revenue loss│
+│  If SA Health leaves = 44% revenue loss │
 └─────────────────────────────────────────┘
 ```
 
-**The Cascade Risk:** Our client concentration is increasing, not decreasing. Each departure makes us more dependent on fewer clients, who are themselves showing warning signs.
+**The Cascade Risk:** Our client concentration is critical, not just concerning. SA Health alone represents more than a third of maintenance revenue today, and nearly half after Sing Health departs. One unhappy stakeholder escalation could threaten $6.8M.
 
 ### 3.2 Pipeline-Satisfaction Reality (Nuanced)
 
