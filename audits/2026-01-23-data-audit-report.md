@@ -8,48 +8,57 @@
 
 ## Executive Summary
 
-A comprehensive audit of the APAC Intelligence dashboard and Supabase database identified **27 issues** across 5 categories. The most critical findings involve data reconciliation failures between tables that cause 15+ clients to be invisible in the Portfolio Health view, and performance inefficiencies causing excessive re-renders.
+A comprehensive audit of the APAC Intelligence dashboard and Supabase database identified **25 issues** across data quality, performance, and reconciliation. The most critical findings involve orphaned records (89 meetings, 12 actions without client linkage), client name mismatches causing join failures, and performance inefficiencies causing excessive re-renders.
+
+**Note**: The client count discrepancy (34 in database vs 19 on dashboard) is **correct by design** - the database includes child entities and inactive clients that roll up under parent accounts.
 
 ### Severity Distribution
 | Severity | Count | Impact |
 |----------|-------|--------|
-| 🔴 Critical | 5 | Data loss/visibility |
+| 🔴 Critical | 3 | Data loss/visibility |
 | 🟠 High | 8 | Functionality impaired |
 | 🟡 Medium | 9 | UX degradation |
 | 🟢 Low | 5 | Technical debt |
 
 ---
 
-## 1. Data Discrepancies
+## 1. Data Model Clarification
 
-### 🔴 CRITICAL: Client Count Mismatch
-- **Dashboard shows**: 19 clients
-- **Supabase clients table**: 34 clients
-- **Impact**: 15 clients (44%) are invisible in Portfolio Health
+### ✅ RESOLVED: Client Count Is Correct
+- **Dashboard shows**: 19 active parent clients
+- **Supabase clients table**: 34 entries (includes children + inactive)
+- **Status**: Working as designed
 
-**Root Cause**: Dashboard only shows clients that exist in `client_segmentation` table. 16 clients have no segmentation records:
-```
-Alexandra Health Pte Ltd
-Austin Health
-Changi General Hospital
-Hunter New England Health
-Internal
-KK Women's and Children's Hospital
-Mater Health
-National Cancer Centre Of Singapore Pte Ltd
-National Heart Centre Of Singapore Pte Ltd
-NCIG
-NCS PTE Ltd
-Sengkang General Hospital Pte. Ltd.
-Singapore General Hospital Pte Ltd
-South Western Sydney PHN
-Strategic Asia Pacific Partners
-The Royal Victorian Eye and Ear Hospital
-```
+The `clients` table contains 34 entries which include:
 
-**Recommendation**: Create migration to populate `client_segmentation` for all active clients, or modify dashboard to show all clients with "No Segment" indicator.
+**Child entities (rolled up under parent):**
+| Child Entry | Parent Client |
+|-------------|---------------|
+| Changi General Hospital | SingHealth |
+| KK Women's and Children's Hospital | SingHealth |
+| National Cancer Centre Of Singapore Pte Ltd | SingHealth |
+| National Heart Centre Of Singapore Pte Ltd | SingHealth |
+| Sengkang General Hospital Pte. Ltd. | SingHealth |
+| Singapore General Hospital Pte Ltd | SingHealth |
+| NCS PTE Ltd | NCS/MinDef Singapore |
+| Strategic Asia Pacific Partners | GRMC (SAPPI) |
+
+**Inactive clients:**
+- Alexandra Health Pte Ltd
+- Austin Health
+- Hunter New England Health
+- Mater Health
+- NCIG
+- South Western Sydney PHN
+
+**Not a client:**
+- Internal (placeholder entry)
+
+**Recommendation**: Mark these entries with `is_active = false` or add `client_type` column (parent/child/inactive) for clarity.
 
 ---
+
+## 2. Data Discrepancies
 
 ### 🔴 CRITICAL: Orphaned Meetings (89 records)
 - **89 meetings** have `client_uuid = null`
@@ -90,7 +99,7 @@ Meetings with `deleted = true` still occupy database space.
 
 ---
 
-## 2. Client Name Inconsistencies
+## 3. Client Name Inconsistencies
 
 ### 🔴 CRITICAL: Cross-Table Name Mismatches
 
@@ -118,7 +127,7 @@ Meetings with `deleted = true` still occupy database space.
 
 ---
 
-## 3. Status Field Inconsistencies
+## 4. Status Field Inconsistencies
 
 ### 🟠 HIGH: Meeting Status Case Mismatch
 ```
@@ -137,7 +146,7 @@ Current statuses: Open, To Do, In Progress, Completed, Cancelled
 
 ---
 
-## 4. Performance Issues
+## 5. Performance Issues
 
 ### 🔴 CRITICAL: Excessive Re-Renders
 Console logs show memos executing multiple times per second:
@@ -184,7 +193,7 @@ Same calculation runs twice per client.
 
 ---
 
-## 5. Data Staleness
+## 6. Data Staleness
 
 ### 🟠 HIGH: Health History Snapshots Outdated
 - **Latest snapshot**: 2026-01-16 (7 days ago)
@@ -208,20 +217,20 @@ Dashboard shows "Meetings Held: 0" for last 30 days despite 189 completed meetin
 
 ---
 
-## 6. Reconciliation Issues
+## 7. Reconciliation Issues
 
 ### Summary Table
 
-| Relationship | Expected | Actual | Gap |
-|-------------|----------|--------|-----|
-| Clients → Segmentation | 34 | 18 | 16 missing |
-| Meetings → Clients (via UUID) | 210 | 121 | 89 orphaned |
-| Actions → Clients (via UUID) | 160 | 148 | 12 orphaned |
-| Aged Accounts → Clients | 11 | 4 | 7 name mismatches |
+| Relationship | Expected | Actual | Gap | Notes |
+|-------------|----------|--------|-----|-------|
+| Clients → Segmentation | 19 | 19 | ✅ None | Correct (children/inactive excluded) |
+| Meetings → Clients (via UUID) | 210 | 121 | 89 orphaned | Internal/declined meetings |
+| Actions → Clients (via UUID) | 160 | 148 | 12 orphaned | Needs cleanup |
+| Aged Accounts → Clients | 11 | 4 | 7 name mismatches | Alias mapping needed |
 
 ---
 
-## 7. Optimisation Recommendations
+## 8. Optimisation Recommendations
 
 ### Immediate (This Sprint)
 
@@ -234,7 +243,7 @@ Dashboard shows "Meetings Held: 0" for last 30 days despite 189 completed meetin
    ('St Luke''s Medical Center Global City Inc', 'Saint Luke''s Medical Centre (SLMC)', true);
    ```
 
-2. **Create segmentation records** for 16 missing clients with default "Unassigned" tier.
+2. **Mark child/inactive clients** with `is_active = false` or add `client_type` column for clarity.
 
 3. **Normalise meeting statuses** to lowercase.
 
