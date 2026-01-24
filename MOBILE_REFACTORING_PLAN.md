@@ -2,9 +2,10 @@
 
 ## CS Intelligence Dashboard - Full Mobile Optimisation
 
-**Document Version:** 1.0
+**Document Version:** 1.1
 **Created:** 2026-01-24
-**Target Devices:** iPhone 12-16 series, Samsung Galaxy S22-S24, Google Pixel 7-8
+**Updated:** 2026-01-24
+**Target Devices:** iPhone 12-16 series, iPad (10th gen, Air, Pro), Samsung Galaxy S22-S24, Samsung Galaxy Tab S8/S9, Google Pixel 7-8
 
 ---
 
@@ -59,7 +60,7 @@ xl: 1280px  /* MacBook 14" */
 
 ## 2. Target Device Specifications
 
-### 2.1 Screen Dimensions
+### 2.1 Phone Screen Dimensions
 
 | Device | Viewport (CSS px) | Physical px | Safe Areas |
 |--------|------------------|-------------|------------|
@@ -74,18 +75,73 @@ xl: 1280px  /* MacBook 14" */
 | Pixel 7 | 411 x 914 | 1080 x 2400 | Top: 24px, Bottom: 0px |
 | Pixel 8 | 411 x 914 | 1080 x 2400 | Top: 24px, Bottom: 0px |
 
-### 2.2 Proposed Breakpoint System
+### 2.2 Tablet Screen Dimensions
+
+| Device | Viewport (CSS px) | Physical px | Orientation | Safe Areas |
+|--------|------------------|-------------|-------------|------------|
+| **iPads** |
+| iPad (10th gen) | 820 x 1180 | 2360 x 1640 | Portrait | None |
+| iPad (10th gen) | 1180 x 820 | 1640 x 2360 | Landscape | None |
+| iPad Air (M2) | 820 x 1180 | 2360 x 1640 | Portrait | None |
+| iPad Air (M2) | 1180 x 820 | 1640 x 2360 | Landscape | None |
+| iPad Pro 11" (M4) | 834 x 1194 | 2388 x 1668 | Portrait | None |
+| iPad Pro 11" (M4) | 1194 x 834 | 1668 x 2388 | Landscape | None |
+| iPad Pro 13" (M4) | 1024 x 1366 | 2732 x 2048 | Portrait | None |
+| iPad Pro 13" (M4) | 1366 x 1024 | 2048 x 2732 | Landscape | None |
+| iPad mini (6th gen) | 744 x 1133 | 2266 x 1488 | Portrait | None |
+| iPad mini (6th gen) | 1133 x 744 | 1488 x 2266 | Landscape | None |
+| **Samsung Tablets** |
+| Galaxy Tab S8 | 800 x 1280 | 1600 x 2560 | Portrait | Top: 24px |
+| Galaxy Tab S8 | 1280 x 800 | 2560 x 1600 | Landscape | Top: 24px |
+| Galaxy Tab S8+ | 800 x 1280 | 1752 x 2800 | Portrait | Top: 24px |
+| Galaxy Tab S8+ | 1280 x 800 | 2800 x 1752 | Landscape | Top: 24px |
+| Galaxy Tab S8 Ultra | 900 x 1440 | 1848 x 2960 | Portrait | Top: 24px |
+| Galaxy Tab S8 Ultra | 1440 x 900 | 2960 x 1848 | Landscape | Top: 24px |
+| Galaxy Tab S9 | 800 x 1280 | 1600 x 2560 | Portrait | Top: 24px |
+| Galaxy Tab S9+ | 800 x 1280 | 1752 x 2800 | Portrait | Top: 24px |
+| Galaxy Tab S9 Ultra | 900 x 1440 | 1848 x 2960 | Portrait | Top: 24px |
+
+### 2.3 Tablet-Specific Considerations
+
+| Consideration | iPad | Samsung Galaxy Tab |
+|---------------|------|-------------------|
+| **Split View Support** | Yes (multitasking) | Yes (Multi Window) |
+| **Stylus Input** | Apple Pencil | S Pen |
+| **Keyboard Attach** | Magic Keyboard | Book Cover Keyboard |
+| **Default Browser** | Safari | Samsung Internet/Chrome |
+| **Touch Target** | 44px (Apple HIG) | 48dp (Material Design) |
+
+**Tablet-Specific UX Patterns:**
+- **Split View**: App may run in 1/3, 1/2, or 2/3 width modes
+- **Pointer Support**: iPadOS and Android tablets support trackpad/mouse
+- **Keyboard Navigation**: Tab key navigation must be functional
+- **Hover States**: Restore hover interactions when pointer detected
+
+### 2.4 Proposed Breakpoint System
 
 ```css
 /* New breakpoints to add */
-xs: 320px   /* Smallest phones (SE, older models) */
-sm: 375px   /* iPhone mini series */
-md: 428px   /* iPhone Pro Max / Large Android */
-lg: 768px   /* Tablet portrait / Mobile landscape */
-xl: 1024px  /* Tablet landscape / Small desktop */
-2xl: 1280px /* Desktop */
-3xl: 1536px /* Large desktop */
+xs: 320px    /* Smallest phones (SE, older models) */
+sm: 375px    /* iPhone mini series */
+md: 428px    /* iPhone Pro Max / Large Android phones */
+lg: 768px    /* iPad mini portrait / Large phone landscape */
+xl: 834px    /* iPad Pro 11" portrait / iPad Air portrait */
+2xl: 1024px  /* iPad Pro 13" portrait / iPad landscape */
+3xl: 1280px  /* Desktop / iPad Pro 13" landscape */
+4xl: 1536px  /* Large desktop / External displays */
 ```
+
+### 2.5 Device Class Mapping
+
+| Breakpoint | Devices | Layout Strategy |
+|------------|---------|-----------------|
+| xs-sm (320-374px) | iPhone SE, older Androids | Single column, stacked |
+| sm-md (375-427px) | iPhone 12-16, Galaxy S series | Single column, 2-col KPI |
+| md-lg (428-767px) | Pro Max phones, landscape phones | 2-column hybrid |
+| lg-xl (768-833px) | iPad mini, small tablets portrait | 2-3 column, sidebar optional |
+| xl-2xl (834-1023px) | iPad Air/Pro portrait, Tab S8 | 3 column, sidebar visible |
+| 2xl-3xl (1024-1279px) | iPad landscape, Tab S8+ landscape | Full desktop layout |
+| 3xl+ (1280px+) | Desktop, iPad Pro 13" landscape | Full desktop with margins |
 
 ---
 
@@ -362,6 +418,7 @@ export const mobileConfig = {
 
 ### 6.1 Device Testing Matrix
 
+#### Phones
 | Device | OS Version | Browser | Priority |
 |--------|------------|---------|----------|
 | iPhone 14 Pro | iOS 17 | Safari | 🔴 Critical |
@@ -370,6 +427,28 @@ export const mobileConfig = {
 | Pixel 8 | Android 14 | Chrome | 🟡 High |
 | iPhone SE 3 | iOS 16 | Safari | 🟡 High |
 | Samsung S22 | Android 13 | Samsung Browser | 🟢 Medium |
+
+#### Tablets
+| Device | OS Version | Browser | Priority |
+|--------|------------|---------|----------|
+| iPad Pro 11" (M4) | iPadOS 17 | Safari | 🔴 Critical |
+| iPad Air (M2) | iPadOS 17 | Safari | 🔴 Critical |
+| iPad (10th gen) | iPadOS 17 | Safari | 🟡 High |
+| iPad mini (6th gen) | iPadOS 17 | Safari | 🟡 High |
+| Galaxy Tab S9+ | Android 14 | Chrome | 🔴 Critical |
+| Galaxy Tab S8 | Android 13 | Samsung Internet | 🟡 High |
+| Galaxy Tab S9 Ultra | Android 14 | Chrome | 🟢 Medium |
+
+#### Tablet-Specific Test Cases
+| Test Case | Devices | Priority |
+|-----------|---------|----------|
+| Portrait orientation | All tablets | 🔴 Critical |
+| Landscape orientation | All tablets | 🔴 Critical |
+| Split View (50/50) | iPad Pro, Tab S9 | 🟡 High |
+| Split View (1/3 width) | iPad Pro, Tab S9 | 🟡 High |
+| Apple Pencil / S Pen hover | iPad Pro, Tab S9 | 🟢 Medium |
+| External keyboard navigation | All tablets | 🟡 High |
+| Trackpad/mouse pointer | iPad, Tab S8+ | 🟡 High |
 
 ### 6.2 Testing Approach
 

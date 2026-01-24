@@ -2,7 +2,22 @@
 
 ## Visual Reference for Key Screen Adaptations
 
-**Reference widths:** 375px (iPhone 12) | 768px (iPad mini) | 1440px (Desktop)
+**Reference widths:**
+- 375px (iPhone 12/13/14)
+- 430px (iPhone Pro Max)
+- 744px (iPad mini portrait)
+- 820px (iPad Air/10th gen portrait)
+- 834px (iPad Pro 11" portrait)
+- 1024px (iPad Pro 13" portrait)
+- 1180px (iPad Air landscape)
+- 1366px (iPad Pro 13" landscape)
+- 1440px (Desktop)
+
+**Samsung Galaxy Tab reference widths:**
+- 800px (Tab S8/S9 portrait)
+- 900px (Tab S9 Ultra portrait)
+- 1280px (Tab S8/S9 landscape)
+- 1440px (Tab S9 Ultra landscape)
 
 ---
 
@@ -29,7 +44,7 @@
 └────────────┴────────────────────────────────────────────────────────────────────┘
 ```
 
-### Tablet Portrait (768px)
+### iPad mini Portrait (744px) / Galaxy Tab S8 Portrait (800px)
 ```
 ┌───────────────────────────────────────────────────────┐
 │                  COMMAND CENTRE                        │
@@ -50,6 +65,91 @@
 │ │ Home │Client│ Meet │Action│ More │                  │
 │ └──────┴──────┴──────┴──────┴──────┘                  │
 └───────────────────────────────────────────────────────┘
+```
+
+### iPad Air/Pro Portrait (820-834px)
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     COMMAND CENTRE                           │
+│                                                              │
+│ ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐     │
+│ │  Health   │ │    NPS    │ │  Actions  │ │ Meetings  │     │
+│ │   Score   │ │   Score   │ │    Due    │ │ This Week │     │
+│ │    85     │ │   +45     │ │    12     │ │     8     │     │
+│ │  Healthy  │ │   Great   │ │           │ │           │     │
+│ └───────────┘ └───────────┘ └───────────┘ └───────────┘     │
+│                                                              │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │                    PRIORITY MATRIX                       │ │
+│ │  ┌─────────────────────┬─────────────────────┐          │ │
+│ │  │    HIGH / URGENT    │    HIGH / MEDIUM    │          │ │
+│ │  │  • Acme follow-up   │  • Beta NPS review  │          │ │
+│ │  │  • Gamma escalation │  • Delta onboard    │          │ │
+│ │  ├─────────────────────┼─────────────────────┤          │ │
+│ │  │   MEDIUM / URGENT   │    LOW PRIORITY     │          │ │
+│ │  │  • Epsilon meeting  │  • Zeta renewal     │          │ │
+│ │  └─────────────────────┴─────────────────────┘          │ │
+│ └─────────────────────────────────────────────────────────┘ │
+│                                                              │
+│ ┌────────┬────────┬────────┬────────┬────────┐ Bottom Nav  │
+│ │  Home  │ Clients│Meetings│ Actions│  More  │              │
+│ └────────┴────────┴────────┴────────┴────────┘              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### iPad Landscape (1180px) / Galaxy Tab S8+ Landscape (1280px)
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ┌──────────┐                     COMMAND CENTRE                              │
+│ │ [Sidebar]│                                                                 │
+│ │          │ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐            │
+│ │ Home     │ │ Health   │ │ NPS      │ │ Actions  │ │ Meetings │            │
+│ │ Clients  │ │ Score    │ │ Score    │ │ Due      │ │ This Week│            │
+│ │ Meetings │ │   85     │ │   +45    │ │   12     │ │    8     │            │
+│ │ Actions  │ └──────────┘ └──────────┘ └──────────┘ └──────────┘            │
+│ │ Analytics│                                                                 │
+│ │          │ ┌───────────────────────────────────────────────────────────┐  │
+│ │ ──────── │ │                     PRIORITY MATRIX                        │  │
+│ │          │ │  ┌─────────────────┬─────────────────┐                     │  │
+│ │ NPS      │ │  │  HIGH / URGENT  │  HIGH / MEDIUM  │                     │  │
+│ │ Working  │ │  │ • Acme follow   │ • Beta NPS      │                     │  │
+│ │ Capital  │ │  ├─────────────────┼─────────────────┤                     │  │
+│ │ ChaSen AI│ │  │  MED / URGENT   │  LOW PRIORITY   │                     │  │
+│ │          │ │  │ • Epsilon call  │ • Zeta renewal  │                     │  │
+│ │          │ │  └─────────────────┴─────────────────┘                     │  │
+│ │          │ └───────────────────────────────────────────────────────────┘  │
+│ └──────────┘                                                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+  ^ Collapsible sidebar (visible in landscape, hidden option available)
+```
+
+### iPad Pro 13" Landscape (1366px) / Tab S9 Ultra Landscape (1440px)
+```
+┌───────────────────────────────────────────────────────────────────────────────────┐
+│ ┌────────────┐                        COMMAND CENTRE                               │
+│ │  [Sidebar] │                                                                     │
+│ │            │ Good morning, Sarah! • 12 clients • CSM                             │
+│ │  Home      │                                                                     │
+│ │  Clients   │ ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐        │
+│ │  Meetings  │ │   Health   │ │    NPS     │ │  Actions   │ │  Meetings  │        │
+│ │  Actions   │ │   Score    │ │   Score    │ │    Due     │ │ This Week  │        │
+│ │  Analytics │ │     85     │ │    +45     │ │     12     │ │      8     │        │
+│ │            │ │  ● Healthy │ │   Great    │ │            │ │            │        │
+│ │ ────────── │ └────────────┘ └────────────┘ └────────────┘ └────────────┘        │
+│ │            │                                                                     │
+│ │  NPS       │ ┌─────────────────────────────────────────────────────────────────┐│
+│ │  Working   │ │                       PRIORITY MATRIX                            ││
+│ │  Capital   │ │  ┌───────────────────────┬───────────────────────┐              ││
+│ │  ChaSen AI │ │  │     HIGH / URGENT     │     HIGH / MEDIUM     │              ││
+│ │            │ │  │  • Acme Corp follow   │  • Beta Industries    │              ││
+│ │            │ │  │  • Gamma Tech escal.  │  • Delta onboarding   │              ││
+│ │            │ │  ├───────────────────────┼───────────────────────┤              ││
+│ │            │ │  │    MEDIUM / URGENT    │     LOW PRIORITY      │              ││
+│ │ [Sign Out] │ │  │  • Epsilon meeting    │  • Zeta renewal prep  │              ││
+│ │            │ │  └───────────────────────┴───────────────────────┘              ││
+│ └────────────┘ └─────────────────────────────────────────────────────────────────┘│
+└───────────────────────────────────────────────────────────────────────────────────┘
+  ^ Full desktop experience with persistent sidebar
 ```
 
 ### Mobile (375px)
@@ -412,7 +512,118 @@ Small Mobile (320px): 1 column (stacked)
 
 ---
 
-## 8. Animation Behaviour (Reduced Motion)
+## 8. iPad Split View / Samsung Multi Window
+
+### iPad Split View - 50/50 Mode (590px each side)
+```
+┌────────────────────────────────┬────────────────────────────────┐
+│  CS INTELLIGENCE DASHBOARD     │  SAFARI / EMAIL / OTHER APP    │
+│                                │                                │
+│ ┌─────────────────────────┐    │                                │
+│ │ COMMAND CENTRE          │    │                                │
+│ └─────────────────────────┘    │                                │
+│                                │                                │
+│ ┌──────────┐ ┌──────────┐     │                                │
+│ │Health: 85│ │ NPS: +45 │     │                                │
+│ └──────────┘ └──────────┘     │                                │
+│                                │                                │
+│ ┌─────────────────────────┐    │                                │
+│ │ PRIORITY ACTIONS        │    │                                │
+│ │ • Acme follow-up        │    │                                │
+│ │ • Beta NPS review       │    │                                │
+│ │ • Gamma escalation      │    │                                │
+│ └─────────────────────────┘    │                                │
+│                                │                                │
+│ ┌────┬────┬────┬────┬────┐    │                                │
+│ │Home│Cli │Meet│Act │More│    │                                │
+│ └────┴────┴────┴────┴────┘    │                                │
+└────────────────────────────────┴────────────────────────────────┘
+  ^ App runs in mobile-like layout   ^ Other app
+```
+
+### iPad Split View - 1/3 Mode (Compact ~400px)
+```
+┌──────────────────────┬─────────────────────────────────────────────┐
+│  CS INTELLIGENCE     │           MAIN APP (EMAIL, ETC)             │
+│                      │                                             │
+│ ┌──────────────────┐ │                                             │
+│ │ COMMAND CENTRE   │ │                                             │
+│ └──────────────────┘ │                                             │
+│                      │                                             │
+│ ┌────────┐ ┌────────┐│                                             │
+│ │H: 85   │ │NPS: +45││                                             │
+│ └────────┘ └────────┘│                                             │
+│                      │                                             │
+│ ─ PRIORITY ────────  │                                             │
+│                      │                                             │
+│ ┌──────────────────┐ │                                             │
+│ │ Acme follow-up   │ │                                             │
+│ │ Due: Today       │ │                                             │
+│ └──────────────────┘ │                                             │
+│                      │                                             │
+│ ┌──────────────────┐ │                                             │
+│ │ Beta NPS review  │ │                                             │
+│ │ Due: Tomorrow    │ │                                             │
+│ └──────────────────┘ │                                             │
+│                      │                                             │
+│ ┌───┬───┬───┬───┬───┐│                                             │
+│ │ H │ C │ M │ A │ ☰ ││                                             │
+│ └───┴───┴───┴───┴───┘│                                             │
+└──────────────────────┴─────────────────────────────────────────────┘
+  ^ Compact mobile view      ^ 2/3 width for main app
+```
+
+### Samsung Galaxy Tab Multi Window (Side-by-Side)
+```
+┌─────────────────────────────────┬─────────────────────────────────┐
+│  CS INTELLIGENCE DASHBOARD      │  SAMSUNG NOTES / EMAIL         │
+│                                 │                                 │
+│  Good morning, Sarah!           │                                 │
+│  12 clients • CSM               │                                 │
+│                                 │                                 │
+│ ┌───────────┐ ┌───────────┐    │                                 │
+│ │ Health    │ │   NPS     │    │                                 │
+│ │   85      │ │  +45      │    │                                 │
+│ └───────────┘ └───────────┘    │                                 │
+│                                 │                                 │
+│ ┌───────────┐ ┌───────────┐    │                                 │
+│ │ Actions   │ │ Meetings  │    │                                 │
+│ │   12      │ │    8      │    │                                 │
+│ └───────────┘ └───────────┘    │                                 │
+│                                 │                                 │
+│ ─── PRIORITY ACTIONS ────────   │                                 │
+│                                 │                                 │
+│ ┌─────────────────────────────┐│                                 │
+│ │ 🔴 Acme Corp follow-up      ││                                 │
+│ │    Due: Today               ││                                 │
+│ └─────────────────────────────┘│                                 │
+│                                 │                                 │
+│ ┌─────┬─────┬─────┬─────┬─────┐│                                 │
+│ │Home │Clnts│Meet │Actns│More ││                                 │
+│ └─────┴─────┴─────┴─────┴─────┘│                                 │
+└─────────────────────────────────┴─────────────────────────────────┘
+```
+
+### Split View Implementation Notes
+
+| Scenario | Viewport Width | Layout Strategy |
+|----------|---------------|-----------------|
+| iPad 50/50 | ~590px | 2-column KPI, stacked content |
+| iPad 1/3 | ~400px | Single column, phone layout |
+| iPad 2/3 | ~780px | 3-column KPI, tablet layout |
+| Tab S8 50/50 | ~640px | 2-column KPI, stacked content |
+| Tab S9 Ultra 50/50 | ~720px | 3-column KPI possible |
+
+**Detection Code:**
+```typescript
+// Detect Split View / Multi Window
+const isNarrowViewport = window.innerWidth < 500
+const isSplitView = window.innerWidth < window.screen.width * 0.6
+```
+
+---
+
+## 9. Animation Behaviour (Reduced Motion)
 
 ### Standard Animations
 ```css
@@ -434,6 +645,48 @@ easing: cubic-bezier(0.32, 0.72, 0, 1)
 
 ---
 
+## 10. Tablet Navigation Patterns
+
+### iPad with Keyboard Attached
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  When Magic Keyboard / Smart Folio Keyboard is attached:                         │
+│                                                                                  │
+│  • Bottom navigation bar HIDDEN (keyboard occupies that space)                   │
+│  • Navigation via sidebar (always visible in landscape)                          │
+│  • Keyboard shortcuts enabled:                                                   │
+│    - ⌘1: Home    ⌘2: Clients    ⌘3: Meetings    ⌘4: Actions                     │
+│    - ⌘K: Quick search / Command palette                                         │
+│    - ⌘/: Help overlay                                                           │
+│    - Tab: Navigate between interactive elements                                  │
+│                                                                                  │
+│  Pointer/Trackpad behaviour:                                                     │
+│  • Hover states restored for buttons and cards                                   │
+│  • Cursor changes on interactive elements                                        │
+│  • Right-click context menus available                                           │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Samsung DeX Mode (Desktop Experience)
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  When connected to external display or DeX pad:                                  │
+│                                                                                  │
+│  • Full desktop layout (same as 1440px+ breakpoint)                              │
+│  • Windowed mode support (resizable)                                             │
+│  • Mouse/keyboard input fully supported                                          │
+│  • Hover states and context menus enabled                                        │
+│  • Bottom navigation hidden, sidebar persistent                                  │
+│                                                                                  │
+│  DeX-specific considerations:                                                    │
+│  • Window minimum size: 320px width                                              │
+│  • Taskbar height: 48px (reserve space at bottom)                                │
+│  • Multi-window: App may run alongside others                                    │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## Implementation Notes
 
 1. **Card components should use `flexbox` with `wrap`** to flow naturally
@@ -441,8 +694,12 @@ easing: cubic-bezier(0.32, 0.72, 0, 1)
 3. **All interactive elements need `role` attributes** for accessibility
 4. **Touch feedback should use `:active` pseudo-class** not `:hover`
 5. **Safe areas must use `env()` function** for notch handling
+6. **Tablets: Detect pointer capability** to restore hover states
+7. **iPadOS: Listen for keyboard attach/detach** to adjust navigation
+8. **Split View: Use ResizeObserver** to detect viewport changes dynamically
 
 ---
 
-**Document Version:** 1.0
+**Document Version:** 1.1
 **Created:** 2026-01-24
+**Updated:** 2026-01-24 (Added iPad and Samsung tablet specifications)
