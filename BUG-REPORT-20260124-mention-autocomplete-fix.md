@@ -6,7 +6,7 @@
 
 ## Summary
 
-Typing "@" followed by a name in comment fields did not trigger the user mention autocomplete dropdown. The TipTap rich text editor's mention extension was failing silently. This bug had three root causes that were fixed in sequence.
+Typing "@" followed by a name in comment fields did not trigger the user mention autocomplete dropdown. The TipTap rich text editor's mention extension was failing silently. This bug had four root causes that were fixed in sequence.
 
 ## Root Causes
 
@@ -53,6 +53,22 @@ The root cause was a stale closure issue with TipTap's `ReactRenderer`. When `Re
 - The `command` prop passed by TipTap changes on each keystroke with updated editor context
 - Handlers using `useCallback` or direct closure captured the old `command` function
 
+### Issue 4: Missing CSS Styling for Mention Chips (Fixed Fourth)
+
+After fixing Issues 1-3, the mention was being inserted correctly but appeared as plain text (e.g., "@Laura Messing") instead of a styled pill/chip like Microsoft Teams, LinkedIn, or Slack.
+
+The TipTap Mention extension was configured with Tailwind classes (`bg-purple-100 text-purple-700 rounded px-1 font-medium`), but Tailwind v4's JIT compiler doesn't scan JavaScript strings for class names. The classes were never included in the compiled CSS.
+
+**Symptoms:**
+- Mentions functionally worked (could be clicked, extracted for notifications)
+- Mentions appeared as plain text without any visual distinction
+- No purple background, no pill shape, no hover effects
+
+**Technical Details:**
+- Tailwind v4 uses Just-in-Time compilation that scans source files for class names
+- Classes defined in JavaScript strings (like TipTap's HTMLAttributes) are not detected
+- The `.mention` class existed but had no CSS rules applied to it
+
 ## Solutions
 
 ### Fix 1: API Authentication
@@ -73,6 +89,14 @@ Refactored the `MentionList` component to use refs instead of closures:
 5. Remove `useCallback` wrappers that were capturing stale values
 
 This pattern ensures handlers always access the current props values regardless of when they were created.
+
+### Fix 4: Global CSS for Mention Styling
+Added explicit CSS rules in `src/app/globals.css` for the `.mention` class to create LinkedIn/Teams-style pill chips:
+- Purple gradient background (`linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%)`)
+- Rounded pill shape (`border-radius: 9999px`)
+- Hover effect with lift animation
+- Subtle border and shadow
+- Consistent styling in both editor and rendered content
 
 ## Files Modified
 
@@ -136,6 +160,29 @@ Added git submodule fetch to build command to ensure latest scripts are deployed
   command = "git submodule update --init --recursive && npm run build"
 ```
 
+### 5. `src/app/globals.css` (MODIFIED)
+Added CSS rules for mention chip styling:
+```css
+/* Mention chip - styled like LinkedIn, Microsoft Teams, Slack */
+.mention {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  margin: 0 0.125rem;
+  background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%);
+  color: #7c3aed;
+  font-weight: 500;
+  font-size: 0.9em;
+  border-radius: 9999px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(124, 58, 237, 0.1);
+  border: 1px solid rgba(124, 58, 237, 0.15);
+}
+```
+
 ## Testing Performed
 
 - [x] Build passes without TypeScript errors
@@ -147,6 +194,8 @@ Added git submodule fetch to build command to ensure latest scripts are deployed
 - [x] Pressing Enter on a highlighted suggestion inserts the mention
 - [x] Arrow key navigation works correctly
 - [x] Mention appears as "@Laura Messing" in the editor
+- [x] Mention displays as styled purple pill chip (not plain text)
+- [x] Mention hover effect works (lift animation, darker background)
 - [x] Verified on localhost with Playwright automated testing
 
 ## Technical Details
