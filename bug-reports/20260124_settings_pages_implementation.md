@@ -123,6 +123,33 @@ All pages tested and verified working:
 - Health details and Test Connection buttons functional
 - API Information section displays environment details
 
+## Bug Fixes (2026-01-25)
+
+### Data Sync Manual Sync Errors - Fixed
+**Issue**: Clicking "Sync Now" on Data Sync page caused multiple errors:
+- "Method Not Allowed" - health-snapshot cron only had GET handler
+- "Unknown sync source: outlook_actions" - POST handler missing cases
+
+**Fix**:
+1. Added POST handler to `/api/cron/health-snapshot/route.ts` (refactored to use shared `handleSnapshot` function)
+2. Added cases for `outlook_actions` and `nps_responses` in `/api/admin/data-sync/route.ts`
+3. Disabled sync buttons for `outlook_actions` and `nps_responses` in the UI since these sources don't have dedicated sync endpoints
+
+**Files Changed**:
+- `src/app/api/cron/health-snapshot/route.ts`
+- `src/app/api/admin/data-sync/route.ts`
+- `src/app/(dashboard)/admin/data-sync/page.tsx`
+
+### Integration Test Handler Missing - Fixed
+**Issue**: "Unknown integration: invoice_tracker" when testing integrations
+
+**Fix**: Added cases for `invoice_tracker`, `burc`, and `email` in the POST handler of `/api/admin/integrations/route.ts`
+
+### UserPreferencesModal Not Updated - Fixed
+**Issue**: Settings modal still showed "Coming Soon" labels instead of links to new admin pages
+
+**Fix**: Updated `src/components/UserPreferencesModal.tsx` to replace disabled divs with Link components pointing to the new admin pages
+
 ## Notes
 
 - TypeScript compilation passes (`npx tsc --noEmit`)
