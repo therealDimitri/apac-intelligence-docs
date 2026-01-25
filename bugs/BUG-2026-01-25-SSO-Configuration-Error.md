@@ -1,73 +1,212 @@
-# Bug Report: SSO Configuration Error After Azure AD Changes
+# Bug Report: SSO Configuration Error - PKCE Cookie Verification Failing
 
 **Date**: 2026-01-25
 **Priority**: Critical
-**Status**: Workaround Deployed
+**Status**: Unresolved - Requires Further Investigation
+**Error Displayed**: `Configuration` (generic NextAuth error)
 
 ## Summary
 
-Azure AD SSO authentication fails with "Configuration" error after Azure AD app settings were modified during debugging.
+Azure AD SSO authentication fails at the callback stage with a "Configuration" error. Through extensive debugging, we've identified that:
+1. The actual error is `InvalidCheck` (PKCE cookie verification failing)
+2. NextAuth converts this to "Configuration" error for security (to avoid leaking internal errors)
+3. The PKCE cookie IS being set correctly with `sameSite: 'none'`
+4. The cookie appears to be present before redirect but verification still fails
 
-## Root Cause
+## Key Discovery: Error Flow
 
-Azure AD is redirecting the OAuth authorization code to the wrong URL:
-- **Expected**: `https://apac-cs-dashboards.com/api/auth/callback/azure-ad?code=...`
-- **Actual**: `https://apac-cs-dashboards.com/?code=...` (bare root path)
+The "Configuration" error is a **security wrapper**. In `@auth/core/index.js`:
 
-This causes PKCE verification to fail because:
-1. Azure AD redirects code to wrong URL after MFA (DeviceAuthTls/reprocess flow)
-2. Middleware intercepts and redirects to callback URL
-3. But PKCE verifier cookie isn't available at the new URL
-4. Token exchange fails with "Configuration" error
+```javascript
+const isClientSafeErrorType = isClientError(error);
+const type = isClientSafeErrorType ? error.type : "Configuration";
+```
 
-## Azure AD Changes Made During Debugging
+The `InvalidCheck` error is NOT in the `clientErrors` set, so it gets converted to "Configuration".
 
-1. **Unchecked "ID tokens (used for implicit and hybrid flows)"** - This may affect the OAuth flow
-2. App was tagged as `singlePageApp` which has different redirect behavior
-
-## Fix Required (Azure AD Portal)
-
-1. Go to **Azure AD Portal** → **App Registrations** → **CS Connect Dashboard - Auth**
-2. Navigate to **Authentication** section
-3. **RE-ENABLE "ID tokens (used for implicit and hybrid flows)"**
-4. Verify platform is configured as **"Web"** (not SPA)
-5. Verify redirect URIs include:
-   - `https://apac-cs-dashboards.com/api/auth/callback/azure-ad`
-
-## Workaround Deployed
-
-Team bypass authentication is now visible to all users on the signin page. Users can access the dashboard using secure team authentication while the Azure AD configuration is being fixed.
+The `InvalidCheck` error is thrown in `@auth/core/lib/actions/callback/oauth/checks.js` when:
+- PKCE cookie is missing
+- PKCE cookie cannot be parsed
+- State validation fails
 
 ## Technical Details
 
-### Middleware Fix Attempted
-Added middleware to intercept OAuth code at root path and redirect to callback:
+### Cookie Configuration
+
+Current auth.ts cookie config:
 ```typescript
-if (pathname === '/' && searchParams.has('code') && (searchParams.has('state') || searchParams.has('session_state'))) {
-  const callbackUrl = new URL('/api/auth/callback/azure-ad', request.url)
-  searchParams.forEach((value, key) => callbackUrl.searchParams.set(key, value))
-  return NextResponse.redirect(callbackUrl)
+cookies: {
+  pkceCodeVerifier: {
+    name: `${process.env.NODE_ENV === 'production' ? '__Secure-' : ''}next-auth.pkce.code_verifier`,
+    options: {
+      httpOnly: true,
+      sameSite: 'none',  // Required for cross-site Azure AD redirects
+      path: '/',
+      secure: true,
+      maxAge: 60 * 15,   // 15 minutes
+    },
+  },
+  state: {
+    name: `${process.env.NODE_ENV === 'production' ? '__Secure-' : ''}next-auth.state`,
+    options: {
+      httpOnly: true,
+      sameSite: 'none',
+      path: '/',
+      secure: true,
+      maxAge: 60 * 15,
+    },
+  },
 }
 ```
 
-### Provider Migration
-Migrated from deprecated `AzureADProvider` to `MicrosoftEntraID` provider for NextAuth v5 compatibility.
+### Important Finding: Cookie Prefix Mismatch
 
-### Environment Variables Verified
-- `AZURE_AD_CLIENT_ID`: e4c2a55f-afc5-4b67-9b17-3ee7d73b52d3 ✓
-- `AZURE_AD_TENANT_ID`: d4066c36-17ca-4e33-95d2-0db68e44900f ✓
-- `AZURE_AD_CLIENT_SECRET`: DGy8Q~... (APAC Intelligence Hub - Production) ✓
-- `NEXTAUTH_URL`: https://apac-cs-dashboards.com ✓
-- `NEXTAUTH_SECRET`: Set ✓
+The DEFAULT cookie prefix in `@auth/core` v5 is `authjs.`:
+```javascript
+// @auth/core/lib/utils/cookie.js
+pkceCodeVerifier: {
+    name: `${cookiePrefix}authjs.pkce.code_verifier`,
+    ...
+}
+```
 
-## Commits Related to This Issue
+Our custom config uses `next-auth.` prefix. The merge SHOULD work, but this is a potential source of issues if the merge isn't applied correctly in all code paths.
 
-- `5a78b65c` - Fix OAuth redirect: intercept misdirected code at root path
-- `11ca7e7e` - Fix OAuth intercept: check for session_state, not just state
-- `d3b5c9d3` - Add client-side fallback for misdirected OAuth code
-- `61f4717b` - Switch to MicrosoftEntraID provider (non-deprecated)
-- `20ddb5c8` - Enable team bypass button for all users during SSO issues
+### Browser Test Results
 
-## Resolution
+Cookies ARE being set correctly:
+```json
+{
+  "name": "__Secure-next-auth.pkce.code_verifier",
+  "domain": "apac-cs-dashboards.com",
+  "sameSite": "None"
+}
+```
 
-Awaiting user to restore Azure AD settings (re-enable ID tokens).
+### Azure AD Configuration (Verified Correct)
+
+- **Platform**: Web (NOT SPA)
+- **Redirect URI**: `https://apac-cs-dashboards.com/api/auth/callback/azure-ad`
+- **Client Secret**: Valid, expires Nov 2027, starts with `DGy8`
+- **Tenant ID**: `d4066c36-17ca-4e33-95d2-0db68e44900f`
+- **Client ID**: `e4c2a55f-afc5-4b67-9b17-3ee7d73b52d3`
+
+### Authorization URL (Captured from Browser)
+
+```
+https://login.microsoftonline.com/d4066c36-17ca-4e33-95d2-0db68e44900f/oauth2/v2.0/authorize?
+  response_type=code&
+  client_id=e4c2a55f-afc5-4b67-9b17-3ee7d73b52d3&
+  redirect_uri=https://apac-cs-dashboards.com/api/auth/callback/azure-ad&
+  scope=openid+profile+email+offline_access+User.Read+People.Read+Calendars.Read&
+  prompt=select_account&
+  response_mode=query&
+  code_challenge=7mepgtLejl8Gr6UGbrxv6ycYAsojJqJ8TbSYOKApT88&
+  code_challenge_method=S256
+```
+
+PKCE challenge IS being generated correctly.
+
+## Debugging Approaches Tried
+
+| Approach | Result | Notes |
+|----------|--------|-------|
+| `sameSite: 'none'` on PKCE cookies | Still fails | Cookie is set but not verified |
+| `sameSite: 'none'` on ALL auth cookies | Still fails | - |
+| Disable PKCE (`checks: []`) | Error changes to "OAuthCallbackError" | Token exchange fails |
+| `checks: ['state']` only | Still fails | - |
+| `checks: ['nonce']` only | Still fails | - |
+| Middleware rewrite | Still fails | Rewrite happens but verification fails |
+| Disable middleware | Still fails | Confirms issue is not middleware |
+| Remove incorrect Azure AD URIs | Still fails | User removed 5 URIs, kept only correct one |
+| Test corporate security bypass | Still fails | Same error on `.netlify.app` domain |
+
+## Code Changes Made
+
+### Files Modified:
+1. **`src/auth.ts`** - Added custom cookie config with `sameSite: 'none'`
+2. **`src/middleware.ts`** - Added OAuth code intercept at root path
+3. **`src/app/api/auth/[...nextauth]/route.ts`** - Added debug logging
+4. **`src/app/api/debug-cookies/route.ts`** - New diagnostic endpoint
+
+### Git Commits:
+```
+94670f65 Add cookie diagnostics for SSO debugging
+d91a9c9b Document SSO fix: Azure AD portal configuration required
+10caf5af Disable OAuth intercept to test raw Azure AD flow
+0d1d0196 Try nonce-based verification for SSO
+b263541e Disable ALL auth checks to diagnose SSO failure
+a82655ac Temporarily disable PKCE to diagnose SSO failure
+a6b730af Fix SSO: Use sameSite='none' for PKCE cookies
+f8bf7ad5 Use rewrite instead of redirect to preserve OAuth cookies
+7106d693 Configure all PKCE cookies with explicit path settings
+ce90facb Revert auth.ts to original working configuration
+61f4717b Switch to MicrosoftEntraID provider (non-deprecated)
+28f16425 Enable auth debug mode temporarily
+11ca7e7e Fix OAuth intercept: check for session_state, not just state
+5a78b65c Fix OAuth redirect: intercept misdirected code at root path
+```
+
+## Hypotheses to Investigate
+
+### 1. Cookie Not Being Sent on Redirect
+Even with `sameSite: 'none'`, the browser might not be sending the cookie on the redirect from Azure AD. Possible causes:
+- Safari's Intelligent Tracking Prevention (ITP)
+- Third-party cookie blocking
+- Cookie not associated with the correct domain
+
+### 2. Cookie Name Mismatch in Reading
+The cookie might be set correctly but NextAuth might be looking for a different name when verifying. Check if the merge of custom cookie config is working correctly.
+
+### 3. Cookie Timing Issue
+The cookie might be expiring or getting cleared between the authorization request and callback.
+
+### 4. Netlify Edge Function Issue
+Netlify might be handling cookies differently in Edge Functions.
+
+### 5. NextAuth v5 Beta Bug
+Using `next-auth@5.0.0-beta.30` - there might be a bug in the beta version.
+
+## Potential Solutions to Try
+
+1. **Try `authjs.` prefix instead of `next-auth.`** - Match the default naming convention
+2. **Add explicit cookie handling in callback** - Manually verify cookie presence before NextAuth processes
+3. **Upgrade/downgrade NextAuth version** - Try a different beta version
+4. **Try without custom cookie config** - Let NextAuth use defaults and see if that works
+5. **Add Netlify configuration** - Check if Netlify needs special cookie handling headers
+
+## Workaround (Currently Active)
+
+**Team Bypass Authentication** is available for all users on the signin page. Users can access the dashboard using secure team authentication while the SSO issue is being investigated.
+
+## Next Steps for New Session
+
+1. First verify: Is the PKCE cookie actually being sent in the callback request?
+   - Check request headers in callback handler
+   - Log all cookies received
+
+2. Try using default cookie names:
+   - Remove custom cookie config entirely
+   - Let NextAuth use its default `authjs.` prefix
+
+3. Check if cookie verification code path is different:
+   - The merge might not apply to all code paths
+   - Log what cookie name NextAuth is looking for
+
+4. Consider NextAuth version:
+   - Check for known issues with beta.30
+   - Try a different version
+
+## Debug Endpoints Available
+
+- `/api/debug-cookies` - Shows all cookies in request
+- `/api/debug-oauth-url` - Shows OAuth configuration
+- `/api/debug-auth` - Shows runtime environment
+
+## Key Files to Review
+
+- `src/auth.ts` - Main auth configuration
+- `src/middleware.ts` - OAuth intercept logic
+- `src/app/api/auth/[...nextauth]/route.ts` - Auth handler with debug logging
+- `node_modules/@auth/core/lib/actions/callback/oauth/checks.js` - PKCE verification code
+- `node_modules/@auth/core/lib/utils/cookie.js` - Default cookie configuration
