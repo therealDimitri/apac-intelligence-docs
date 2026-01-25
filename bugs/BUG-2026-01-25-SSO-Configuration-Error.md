@@ -210,3 +210,71 @@ Using `next-auth@5.0.0-beta.30` - there might be a bug in the beta version.
 - `src/app/api/auth/[...nextauth]/route.ts` - Auth handler with debug logging
 - `node_modules/@auth/core/lib/actions/callback/oauth/checks.js` - PKCE verification code
 - `node_modules/@auth/core/lib/utils/cookie.js` - Default cookie configuration
+
+---
+
+## Fix Applied: 2026-01-25
+
+### Root Cause Analysis
+
+After systematic debugging investigation, the following issues were identified:
+
+1. **Cookie Prefix Mismatch**: The custom config used `next-auth.` prefix but `@auth/core` v5 uses `authjs.` prefix internally. While the merge logic should handle this, there were potential edge cases.
+
+2. **sameSite: 'none' Issue**: Using `sameSite: 'none'` was causing cookies to be blocked by Safari's Intelligent Tracking Prevention (ITP) and other browser privacy features. This is counterintuitive because:
+   - OAuth callbacks are **top-level navigations** (user clicks link, browser navigates)
+   - Top-level GET navigations preserve `sameSite: 'lax'` cookies
+   - `sameSite: 'none'` is for **embedded contexts** (iframes, fetch requests), not redirects
+
+3. **Known NextAuth v5 Beta Issue**: Multiple GitHub issues document this exact problem with `next-auth@5.0.0-beta.30` and Azure AD:
+   - [Discussion #10502](https://github.com/nextauthjs/next-auth/discussions/10502)
+   - [Issue #10458](https://github.com/nextauthjs/next-auth/issues/10458)
+
+### Changes Made
+
+#### 1. Changed Cookie Prefix from `next-auth.` to `authjs.`
+This matches the `@auth/core` v5 default and eliminates any potential merge issues.
+
+#### 2. Changed sameSite from `'none'` to `'lax'`
+- OAuth callbacks are top-level GET navigations
+- `sameSite: 'lax'` allows cookies on top-level navigations
+- This avoids Safari ITP and browser privacy feature blocking
+
+#### 3. Updated Middleware and Debug Endpoints
+- Middleware now checks for both old (`next-auth.`) and new (`authjs.`) session cookies
+- Debug endpoint provides detailed prefix checking
+- Route handler logs both prefix types
+
+### Files Modified
+
+1. **`src/auth.ts`**
+   - Changed cookie prefix from `next-auth.` to `authjs.`
+   - Changed sameSite from `'none'` to `'lax'` for PKCE and state cookies
+   - Enabled debug logging for production troubleshooting
+
+2. **`src/middleware.ts`**
+   - Added support for both old and new cookie prefixes during migration
+
+3. **`src/app/api/auth/[...nextauth]/route.ts`**
+   - Enhanced debug logging to check both cookie prefixes
+
+4. **`src/app/api/debug-cookies/route.ts`**
+   - Added detailed prefix checking for both old and new formats
+
+### Testing Required
+
+1. Deploy to Netlify
+2. Clear browser cookies
+3. Attempt SSO login with Azure AD
+4. Check server logs for cookie presence
+5. Verify login completes successfully
+
+### Rollback Plan
+
+If this fix doesn't work, revert to the previous `next-auth.` prefix but keep `sameSite: 'lax'`. The key insight is that `sameSite: 'lax'` should work for OAuth callbacks.
+
+### References
+
+- [NextAuth Discussion #10502](https://github.com/nextauthjs/next-auth/discussions/10502) - Azure AD PKCE cookie missing
+- [NextAuth Issue #10458](https://github.com/nextauthjs/next-auth/issues/10458) - PKCE cookie missing on v5 upgrade
+- [MDN: SameSite cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) - Lax allows top-level navigations
