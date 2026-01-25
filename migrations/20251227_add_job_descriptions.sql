@@ -12,9 +12,12 @@ UPDATE cse_profiles SET job_description = 'Oversees business operations, project
 
 UPDATE cse_profiles SET job_description = 'Leads pre-sales and solutions consulting, working with prospects and clients to design optimal Altera solutions. Manages clinical and technical consulting resources.' WHERE role = 'VP Solutions';
 
-UPDATE cse_profiles SET job_description = 'Primary client relationship owner responsible for client health, satisfaction, and retention. Conducts regular check-ins, coordinates support issues, and drives adoption of Altera solutions.' WHERE role = 'Client Success Executive';
+-- Note: CSE focuses on commercial aspects, CAM focuses on relationship management (corrected 2026-01-25)
+UPDATE cse_profiles SET job_description = 'Manages commercial aspects of client relationships including contract renewals, upsells, and account growth opportunities. Works closely with CAMs on account strategy.' WHERE role = 'Client Success Executive';
+UPDATE cse_profiles SET job_description = 'Manages commercial aspects of client relationships including contract renewals, upsells, and account growth opportunities. Works closely with CAMs on account strategy.' WHERE role = 'CSE';
 
-UPDATE cse_profiles SET job_description = 'Manages commercial aspects of client relationships including contract renewals, upsells, and account growth opportunities. Works closely with CSEs on account strategy.' WHERE role = 'Client Account Manager';
+UPDATE cse_profiles SET job_description = 'Primary client relationship owner responsible for client health, satisfaction, and retention. Conducts regular check-ins, coordinates support issues, and drives adoption of Altera solutions.' WHERE role = 'Client Account Manager';
+UPDATE cse_profiles SET job_description = 'Primary client relationship owner responsible for client health, satisfaction, and retention. Conducts regular check-ins, coordinates support issues, and drives adoption of Altera solutions.' WHERE role = 'CAM';
 
 UPDATE cse_profiles SET job_description = 'Senior solutions consultant providing technical and clinical expertise for complex implementations and strategic accounts.' WHERE role = 'Director Solutions';
 
