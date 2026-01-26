@@ -109,11 +109,45 @@ const calculateRealHealthScore = (clientName, npsScore, wcPercent) => {
   - SingHealth: 70 (healthy, 67% compliance)
   - Dept of Health Victoria: 30 (critical, 0% compliance - data issue)
 
+## Materialized View Migration Applied
+
+**Additional Issues Found During Migration**:
+
+1. **Non-existent Table**: `segmentation_clients` table referenced in view doesn't exist
+   - **Fix**: Removed the join, used `c.segment` from `nps_clients` directly
+
+2. **Wrong Column Names in unified_meetings**:
+   - View used `client` → Actual column is `client_name`
+   - View used `date` → Actual column is `meeting_date`
+
+3. **Wrong Column Names in aging_accounts**:
+   - View used `ar_0_30` → Actual column is `days_1_to_30`
+   - View used `ar_31_60` → Actual column is `days_31_to_60`
+   - View used `ar_61_90` → Actual column is `days_61_to_90`
+   - View used `total_ar` → Actual column is `total_outstanding`
+
+4. **Wrong Column Names in nps_responses**:
+   - View used `submitted_at` → Actual column is `created_at`
+
+5. **Mixed Date Formats in actions.Due_Date**:
+   - Some values in YYYY-MM-DD format (e.g., "2026-01-13")
+   - Some values in DD/MM/YYYY format (e.g., "31/12/2025")
+   - **Fix**: Added regex pattern matching to handle both formats
+
+**Migration Results**:
+```
+Albury Wodonga Health: compliance=100%, health=82, status=healthy
+Barwon Health Australia: compliance=100%, health=76, status=healthy
+Mount Alvernia Hospital: compliance=100%, health=81, status=healthy
+Department of Health - Victoria: compliance=100%, health=73, status=at-risk
+SA Health: compliance=0%, health=47, status=critical
+GRMC: compliance=60%, health=49, status=critical
+```
+
 ## Known Remaining Issues
 
 1. **SA Health Children**: SA Health (Sunrise), SA Health (iPro), SA Health (iQemo) have no compliance records - need to be added
-2. **Department of Health - Victoria**: Shows 0/35 actual events - may be a data entry issue
-3. **Materialized View**: The `client_health_summary` view still needs the SQL fix applied directly to Supabase
+2. **SA Health Parent**: Shows 0% compliance - compliance data may need to be linked
 
 ## Prevention
 
@@ -121,3 +155,5 @@ const calculateRealHealthScore = (clientName, npsScore, wcPercent) => {
 2. When querying segmentation data, always filter by active records
 3. When year changes, ensure compliance queries include previous year data
 4. Consider implementing a client name normalization layer
+5. **New**: Standardise date formats in the actions table (currently mixed YYYY-MM-DD and DD/MM/YYYY)
+6. **New**: Update database schema documentation when column names change
