@@ -47,46 +47,73 @@ debug: process.env.NODE_ENV === 'development',
 
 ---
 
-### 2. Admin Routes Missing JWT Validation (Critical)
+### 2. Admin Routes Session Validation (Critical)
 
-**File:** `src/middleware.ts:71-82`
+**Files:** `src/middleware.ts`, `src/lib/session-validator.ts`, `src/app/api/admin/data-sync/route.ts`
 
-**Before (Vulnerable):**
+**Problem:** The admin routes need to validate sessions from two sources:
+1. **NextAuth sessions** (Azure AD OAuth) - encrypted JWTs (JWE)
+2. **Team-bypass sessions** - signed JWTs (JWS) with HS256
+
+NextAuth v5's `auth()` function only works with encrypted JWTs, causing 401 errors for team-bypass authenticated users.
+
+**Solution - Defence in Depth:**
+
+1. **Middleware** (lightweight check): Cookie presence verification
+2. **API Routes** (full validation): Unified session validator
+
+**Middleware (src/middleware.ts):**
 ```typescript
+// Note: Full JWT validation is complex due to NextAuth v5's encrypted JWE format.
+// Middleware performs lightweight cookie presence checks.
+// API routes use validateSession() for proper session validation.
+
 if (adminPaths.some(path => pathname.startsWith(path))) {
   if (!hasSessionCookie) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
-  return NextResponse.next()  // Only checks cookie existence!
-}
-```
-
-**Risk:** An attacker could forge a session cookie with any value. The middleware only checked if a cookie named `authjs.session-token` existed, not whether it contained a valid, signed JWT.
-
-**After (Fixed):**
-```typescript
-if (adminPaths.some(path => pathname.startsWith(path))) {
-  if (!hasSessionCookie) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  // SECURITY: Validate JWT signature for admin endpoints
-  const sessionToken = getSessionToken(allCookies)
-  if (sessionToken) {
-    const isValid = await validateJwtSignature(sessionToken)
-    if (!isValid) {
-      console.warn(`[Middleware] Invalid JWT signature for admin access: ${pathname}`)
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-  }
-
   return NextResponse.next()
 }
 ```
 
-Added helper functions:
-- `getSessionToken()` - Extracts token from cookies (handles both prefixes and chunked cookies)
-- `validateJwtSignature()` - Uses `jose` library to verify HMAC-SHA256 signature with `NEXTAUTH_SECRET`
+**Unified Session Validator (src/lib/session-validator.ts):**
+```typescript
+export async function validateSession(): Promise<ValidatedSession | null> {
+  // First, try NextAuth's auth() for Azure AD OAuth sessions
+  try {
+    const nextAuthSession = await auth()
+    if (nextAuthSession?.user?.email) {
+      return { user: {...}, isBypassSession: false }
+    }
+  } catch (error) {
+    // auth() throws if token format unexpected - try bypass next
+  }
+
+  // If NextAuth didn't return a session, try team-bypass JWT
+  const token = await getSessionToken()
+  if (token) {
+    const bypassSession = verifyBypassToken(token)
+    if (bypassSession) {
+      return bypassSession
+    }
+  }
+
+  return null
+}
+```
+
+**API Route Usage:**
+```typescript
+import { validateSession } from '@/lib/session-validator'
+
+export async function GET() {
+  const session = await validateSession()
+  if (!session?.user?.email) {
+    return createErrorResponse('UNAUTHORIZED', 'Authentication required', 401)
+  }
+  // ... protected code
+}
+```
 
 ---
 
@@ -137,7 +164,9 @@ const cookieName = isProduction ? '__Secure-authjs.session-token' : 'authjs.sess
 | File | Changes |
 |------|---------|
 | `src/auth.ts` | Conditional debug logging based on NODE_ENV |
-| `src/middleware.ts` | Added JWT signature validation for admin routes, helper functions |
+| `src/middleware.ts` | Simplified to cookie presence check (defence in depth layer 1) |
+| `src/lib/session-validator.ts` | **NEW** - Unified session validator for both NextAuth and team-bypass |
+| `src/app/api/admin/data-sync/route.ts` | Uses `validateSession()` for proper session validation |
 | `src/app/api/auth/team-bypass/route.ts` | Rate limiting, input validation, correct cookie prefix |
 
 ---
