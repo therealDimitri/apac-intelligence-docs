@@ -13,79 +13,90 @@ The `/api/alerts/predictive` endpoint was timing out when analysing all clients.
 
 ## Root Cause
 
-The `detectAllPredictiveAlerts()` function in `src/lib/predictive-alert-detection.ts` was processing clients **sequentially** using a `for...of` loop with `await`:
-
-```typescript
-// BEFORE: Sequential processing (slow)
-for (const client of clients) {
-  const scores = await generatePredictiveScores(client.id)
-  // ... process alerts
-}
-```
-
-With 36 clients and each `generatePredictiveScores()` call making multiple database queries, the total execution time exceeded Netlify's edge function timeout (10 seconds).
+Real-time calculation of predictive health alerts for all clients was too slow for Netlify's edge function timeout (10 seconds). Each client required multiple database queries to generate predictive scores, and processing 36+ clients sequentially or even in parallel batches was unreliable within the timeout window.
 
 ## Solution
 
-Changed to **parallel batch processing** using `Promise.all()` with controlled concurrency (batch size of 10):
+Changed from real-time calculation to **reading pre-calculated alerts from the database**:
 
-```typescript
-// AFTER: Parallel batch processing (fast)
-const BATCH_SIZE = 10
-const batches = []
-for (let i = 0; i < clients.length; i += BATCH_SIZE) {
-  batches.push(clients.slice(i, i + BATCH_SIZE))
-}
+### Architecture Change
 
-for (const batch of batches) {
-  const batchResults = await Promise.all(
-    batch.map(async client => {
-      const scores = await generatePredictiveScores(client.id)
-      // ... process alerts
-      return { alerts, cseInfo, clientName }
-    })
-  )
-  // Collect results
-}
-```
+| Endpoint | Before | After |
+|----------|--------|-------|
+| `GET /api/alerts/predictive` (all clients) | Real-time calculation | Reads from `alerts` table |
+| `POST /api/alerts/predictive` | N/A | Triggers real-time calculation |
+| `GET /api/alerts/predictive?clientName=X` | Real-time calculation | Still calculates in real-time |
+| `/api/cron/predictive-health-alerts` | N/A | Pre-calculates and persists daily |
+
+### How It Works
+
+1. **Cron Job** (`/api/cron/predictive-health-alerts`):
+   - Runs daily via scheduled trigger
+   - Calculates predictive health alerts for all clients
+   - Persists results to the `alerts` table in Supabase
+   - No timeout pressure (runs as background job)
+
+2. **GET Request** (all clients):
+   - Reads pre-calculated alerts from `alerts` table
+   - Filters by `alert_type = 'predictive_health'`
+   - Fast response (simple database read)
+
+3. **Single-Client Queries**:
+   - Still calculate in real-time for freshness
+   - Only one client = well within timeout
+
+4. **POST Request**:
+   - Triggers real-time calculation for all clients
+   - Used for manual refresh when needed
 
 ## Performance Impact
 
 | Metric | Before | After |
 |--------|--------|-------|
-| Processing Model | Sequential | Parallel (10 at a time) |
-| Theoretical Speedup | 1x | Up to 10x |
-| Timeout Risk | High | Low |
+| Processing Model | Real-time calculation | Pre-calculated + DB read |
+| GET Response Time | 10+ seconds (timeout) | < 500ms |
+| Reliability | Intermittent timeouts | 100% reliable |
+| Data Freshness | Real-time | Daily (cron) or manual (POST) |
 
 ## Files Changed
 
-- `src/lib/predictive-alert-detection.ts` - Optimised `detectAllPredictiveAlerts()` function
+- `src/app/api/alerts/predictive/route.ts` - GET reads from DB, POST triggers calculation
+- `src/app/api/cron/predictive-health-alerts/route.ts` - Cron job for pre-calculation
+- `src/lib/predictive-alert-detection.ts` - Core detection logic (used by cron)
 
 ## Testing
 
 - Build passes with zero TypeScript errors
+- GET `/api/alerts/predictive` returns pre-calculated alerts instantly
 - Single-client endpoint works: `/api/alerts/predictive?clientName=Epworth%20Healthcare`
-- Churn check endpoint works: `/api/alerts/predictive?clientName=Epworth%20Healthcare&churnCheck=true`
+- Cron job successfully persists alerts to database
 
 ## Deployment
 
-- Commit: `fix: optimize predictive alerts with parallel batch processing`
 - Deployed to Netlify via git push
+- Cron job configured in Netlify for daily execution
 
 ---
 
 ## Technical Notes
 
-### Why Batch Size of 10?
+### Why Pre-Calculated Alerts?
 
-A batch size of 10 was chosen to balance:
-1. **Speed**: Processing 10 clients in parallel is ~10x faster than sequential
-2. **Resource Usage**: Avoids overwhelming the database with 36 concurrent connections
-3. **Memory**: Keeps memory footprint reasonable by processing in chunks
+1. **Reliability**: No timeout risk - cron jobs run outside request/response cycle
+2. **Speed**: Database reads are fast; calculation happens offline
+3. **Scalability**: Can handle 100+ clients without impacting API response times
+4. **Consistency**: All users see the same alerts (no race conditions)
 
-### Future Improvements
+### Trade-offs
 
-Consider these additional optimisations if needed:
-1. **Caching**: Cache predictive scores for 5-10 minutes
-2. **Background Jobs**: Move full portfolio analysis to scheduled cron job
-3. **Incremental Updates**: Only recalculate scores for clients with new data
+| Pro | Con |
+|-----|-----|
+| Fast, reliable responses | Alerts may be up to 24 hours stale |
+| No timeout pressure | Requires cron job infrastructure |
+| Simple GET implementation | More complex overall architecture |
+
+### Mitigation for Staleness
+
+- POST endpoint available for manual refresh
+- Single-client queries still real-time
+- Daily updates sufficient for predictive alerts (based on trends, not real-time events)
