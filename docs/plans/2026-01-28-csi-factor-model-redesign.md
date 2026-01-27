@@ -440,7 +440,7 @@ All analysis in this document is derived from:
 - **NPS Q4 2025 Survey Data:** 43 responses, 142 sent, NPS -18.60 (Supabase `nps_responses`)
 - **NPS Historical Data:** 199 total responses across 5 periods (2023, Q2 24, Q4 24, Q2 25, Q4 25)
 - **Support SLA Metrics (Actual):** Supabase `support_sla_latest`, 9 clients, Q4 2025 data sourced from client-specific ServiceNow dashboard Excel exports (Albury Wodonga, Barwon, Epworth, Grampians, RVEEH, SA Health, SA Health iPro, WA Health, Western Health)
-- **APAC Case Stats (Detailed):** 2,179 individual ServiceNow case records, Jan 2024–Nov 2025, 14 APAC clients, case-level priority, state, resolution duration, product, and environment data. Source: `APAC Case Stats since 2024.xlsx` (OneDrive shared library)
+- **APAC Case Stats (Detailed):** 2,179 individual ServiceNow case records, Jan 2024–Nov 2025, 14 APAC clients, case-level priority, state, resolution duration, product, and environment data. Source: `APAC Case Stats since 2024.xlsx` (OneDrive shared library). **Imported to Supabase `support_case_details`** — 1,924 total records (1,884 from case stats import + 40 pre-existing SLA dashboard records). 1,788 records have resolution duration populated.
 - **APAC Client Segmentation Data (Q2 2025):** Excel workbook, 6 sheets, 20 clients
 - **Client Health History:** Supabase `client_health_history`, 500+ records, health score v4.0
 - **NPS Update Q4 2025:** Client Concerns & Forward Plan (January 2026)
