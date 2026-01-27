@@ -194,7 +194,7 @@ SA Health (75% resolution SLA) and WA Health (89%) both have negative NPS, but t
 
 ### 3.7 Detailed Case Data Analysis (2,179 ServiceNow Cases, Jan 2024–Nov 2025)
 
-The APAC Case Stats dataset contains 2,179 individual case records across 14 APAC clients, with case-level detail including priority, state, created/resolved dates, resolution duration, and product. This is the most granular support data available.
+The APAC Case Stats dataset contains 2,179 individual case records across 17 accounts (14 APAC clients + 3 non-APAC: Bolton NHS, Shared Health, Winnipeg RHA), with case-level detail including priority, state, created/resolved dates, resolution duration, and product. Analysis below uses the 14 APAC clients (~2,070 records). This is the most granular support data available.
 
 #### Per-Client Case Metrics (Full Dataset)
 
@@ -301,7 +301,7 @@ WHERE client_name = ? AND completed = true
 
 > **Note:** The `segmentation_events` table includes multiple event types (partnership reviews, ops plans, QBRs, training). For Factor #9, the threshold may need filtering by `event_type_id` to count only strategic planning events specifically, rather than all event types. This requires defining which event types qualify as "strategic ops plans" with the CE team.
 
-This increases automatable factors from **7 to 9 of 14**.
+This increases automatable factors from **7 to 8 of 14**.
 
 **4. Engagement quality (not quantity) is the true signal**
 
@@ -451,7 +451,7 @@ The full-dataset validated model maintains 100% retroactive accuracy whilst bein
 | 13 | Communication/Transparency | CE team qualitative assessment | CE team | Per review cycle | Low — qualitative but definable (proactive updates, documented cadence, transparency on issues) |
 | 14 | NPS Promoter | Supabase `nps_responses` | Automated | Real-time | **High — already in database** |
 
-**9 of 14 factors fully automatable** from existing data (1, 2, 3, 7, 9, 11, 12, 14) — support backlog via `support_sla_latest`, avg resolution time from `support_case_details`, engagement frequency from `segmentation_events` + `unified_meetings`, NPS factors from `nps_responses`.
+**8 of 14 factors fully automatable** from existing data (1, 2, 3, 7, 9, 11, 12, 14) — support backlog via `support_sla_latest`, avg resolution time from `support_case_details`, engagement frequency from `segmentation_events` + `unified_meetings`, NPS factors from `nps_responses`.
 **1 factor** requires data already tracked monthly (6) — R&D defect reports.
 **2 factors** unchanged from current model (5, 8) — manual but well-established.
 **1 factor** remains manual (10) — C-Suite turnover from CS leadership.
@@ -518,7 +518,7 @@ Bain's longitudinal research across healthcare IT shows that **a 12-point NPS im
 | Risk | Mitigation |
 |------|-----------|
 | Small sample size (10 clients with retroactive test, 199 total responses) | Validated across all 5 NPS periods, not just Q4 2025. Further validate against Q2 2026 cycle. |
-| 5 new factors added (vs v1's 9 factors) | 9 of 14 factors are fully automatable from Supabase. 1 factor requires monthly R&D reports (Defect Rate). 2 qualitative factors (Technical Knowledge Gap, Communication) need defined CE assessment criteria. |
+| 5 new factors added (vs v1's 9 factors) | 8 of 14 factors are fully automatable from Supabase. 1 factor requires monthly R&D reports (Defect Rate). 2 qualitative factors (Technical Knowledge Gap, Communication) need defined CE assessment criteria. |
 | Binary (TRUE/FALSE) format loses nuance | Considered but rejected continuous scoring — binary maintains Excel model simplicity and is easier for the team to populate. Revisit if accuracy drops. |
 | Two qualitative factors (Technical Knowledge Gap, Communication) risk subjective assessment | Define explicit criteria: Technical Knowledge Gap = 3+ escalations citing product expertise in past 6 months. Communication = documented proactive update cadence + client acknowledgement of transparency. |
 | Phase 2 quadrant boundaries may shift | CSI normalisation is relative — median/average will change with new weights. Recompute boundaries after factor update. |
@@ -543,4 +543,4 @@ All analysis in this document is derived from:
 
 ---
 
-*This design document proposes a CSI factor model redesign based on observed correlation between model factors and actual NPS outcomes across all 199 responses, 5 NPS periods (2023–Q4 2025), 2,179 ServiceNow cases, 807 segmentation events, and 282 meeting records. All factor weights are backed by full-dataset evidence, not single-period analysis. 9 of 14 factors are fully automatable from existing Supabase data. Recommendations are evidence-based and verifiable against the cited data sources.*
+*This design document proposes a CSI factor model redesign based on observed correlation between model factors and actual NPS outcomes across all 199 responses, 5 NPS periods (2023–Q4 2025), 2,179 ServiceNow cases, 807 segmentation events, and 282 meeting records. All factor weights are backed by full-dataset evidence, not single-period analysis. 8 of 14 factors are fully automatable from existing Supabase data. Recommendations are evidence-based and verifiable against the cited data sources.*
