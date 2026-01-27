@@ -215,6 +215,43 @@ The materialised view's `event_counts` CTE resolves event client names to canoni
 
 ---
 
+## Issue 9: Event Double-Counting Across All Clients Due to Self-Mapping Alias Rows
+
+**Symptom:** Event counts in the materialised view were exactly double the actual database counts for most clients. For example, Albury Wodonga showed 24 Insight Touch Points in the view but only 12 existed in the database. This inflated compliance scores — clients appeared more compliant than they actually were.
+
+**Root Cause:** The `client_name_aliases` table contained 15 explicit self-mapping rows where `display_name = canonical_name` (case-insensitive). The materialised view's `client_name_mapping` CTE already adds `canonical_name → canonical_name` self-mappings via its `UNION ALL` clause. Having both the explicit row and the CTE-generated row caused the `LEFT JOIN` to match twice per event, doubling the `COUNT(*)` for every event.
+
+Additionally, 2 duplicate alias entries were found (SingHealth, WA Health).
+
+**Affected Clients:** All 17 clients with alias entries (every client except RVEEH, which was already fixed in Issue 8).
+
+**Fix Applied:**
+1. Removed 15 explicit self-mapping rows from `client_name_aliases` where `LOWER(display_name) = LOWER(canonical_name)`
+2. Removed 2 duplicate alias entries
+3. Refreshed materialised view
+
+**Compliance Score Changes (before → after, 2025):**
+
+| Client | Before (doubled) | After (correct) | Change |
+|--------|-----------------|-----------------|--------|
+| Barwon Health Australia | 88% | 75% | -13% |
+| Epworth Healthcare | 80% | 70% | -10% |
+| GRMC | 40% | 20% | -20% |
+| NCS/MinDef Singapore | 100% | 89% | -11% |
+| SA Health (iPro) | 100% | 88% | -12% |
+| SA Health (iQemo) | 82% | 73% | -9% |
+| SA Health (Sunrise) | 100% | 92% | -8% |
+| SLMC | 60% | 30% | -30% |
+| SingHealth | 83% | 33% | -50% |
+| WA Health | 50% | 25% | -25% |
+| Western Health | 100% | 88% | -12% |
+
+Overall portfolio: 50% → 42% (327/521 events, previously showed 563/521)
+
+**Lesson:** The `client_name_mapping` CTE's `UNION ALL` already handles self-mappings. Never add explicit `display_name = canonical_name` rows to `client_name_aliases` — they will cause double-counting in any LEFT JOIN that uses the mapping.
+
+---
+
 ## Related Files
 
 - `src/hooks/useEventCompliance.ts` - Year handling fix, cross-year window fix for list view
