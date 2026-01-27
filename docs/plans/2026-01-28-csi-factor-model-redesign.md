@@ -376,7 +376,7 @@ Mining the 1,924 case records, 807 segmentation events, and 282 meeting records 
 1. **Weight factors by observed NPS correlation across all periods** — themes that correlate with lowest scores across all 199 responses get highest weights, not just Q4 2025.
 2. **Measure outcomes, not inputs** — MTTR (outcome) over SLA binary (input); defect rate (outcome) over software version (input).
 3. **Include protective factors** — Communication/Transparency (+21.0 NPS delta) and Relationship/Engagement (+25.4 delta) are the strongest NPS protective signals. The model must reward positive behaviours, not only penalise risks.
-4. **Discount weak predictors** — consecutive decline and product defects are weaker across all periods than Q4-only data suggested. Weight accordingly.
+4. **Discount weak predictors** — consecutive decline is weak across all periods (+5 reversed). Product defects are severe per-verbatim (-34.7 delta) but concentrated in 7% of responses — weight reduced from 12 to 8 to reflect concentration, not systemic prevalence.
 5. **Retain business risk factors at reduced weights** — M&A and attrition are real risks but are not satisfaction drivers.
 6. **Keep binary (TRUE/FALSE) format** — maintains compatibility with existing Excel model structure.
 
@@ -389,7 +389,7 @@ Mining the 1,924 case records, 807 segmentation events, and 282 meeting records 
 | 3 | Avg Resolution >700 hours | 10 | Average case resolution time exceeds 700hrs (~29 days) | Actual case data: avg resolution >700h = NPS -50 vs +42 below (**-92 NPS delta**). Spearman rho = -0.582 (strongest single predictor from 2,179 cases). Replaces arbitrary 45hr threshold with data-driven cutoff. |
 | 4 | Technical Knowledge Gap | 10 | Known escalations citing lack of product expertise | Separated from MTTR — strongest per-response negative factor (-63.2 NPS delta, avg score 4.5 when mentioned). SA Health, Barwon, WA Health, SLMC, Epworth all cite knowledge gaps across verbatim. |
 | 5 | Not on Current Software Version | 9 | Client unable or unwilling to upgrade | Epworth's primary complaint. Upgrade inability compounds defect frustration. Unchanged from v1. |
-| 6 | Product Defect Rate >30/client | 8 | >30 avg new defects per client | Reduced from 12: all-period NPS delta only -7 (vs -50 Q4-only). Concentrated in 3-4 clients, not systemic. |
+| 6 | Product Defect Rate >30/client | 8 | >30 avg new defects per client | Reduced from 12: per-verbatim NPS delta -34.7 but only 6/81 mentions (7%). Severe when present (avg score 4.8) but concentrated in Epworth, SA Health, and Grampians — not systemic. |
 | 7 | NPS No Response | 8 | No NPS response in most recent cycle | Non-response correlates with disengagement. Grampians, Western Health — both declining. |
 | 8 | At Risk M&A/Attrition | 7 | Known M&A, contract termination, or competitor RFP | SingHealth (EPIC 2028), Parkway (2026). Commercial risk — real but not satisfaction-driven. |
 | 9 | Strategic Ops Plans <2x/yr | 6 | Fewer than 2 partnership meetings per year | Engagement frequency matters (GHA improved through engagement) but is an input, not outcome. |
