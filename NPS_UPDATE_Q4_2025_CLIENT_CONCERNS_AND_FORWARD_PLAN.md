@@ -167,7 +167,7 @@ The "5 in 25" programme is our 2025 Client Success improvement initiative, deliv
 | AI in SNOW for Quality Updates | Stephen Oster | In Progress | ServiceNow AI case summarisation live; knowledge article creation automated. **MTTR:** baseline 49 hours, target <45 hours, current 56 hours (regression — adoption strategy in development to accelerate benefits realisation) |
 | Backlog Reduction | Stephen Oster | Ongoing | Target: reduce Opal backlog to <120 cases by end of year (from 150-case baseline). Backlog rose to 145 before dedicated R&D developer was assigned — now trending down. Proactive client meetings established to collaboratively reduce backlogs |
 | Sunrise Support Resolution Times | Stephen Oster | In Progress | Target: match US first/third/fifth-day resolution rates. Baseline: FDR US 38% vs APAC 27%; 3DR US 57% vs APAC 44%; 5DR US 61% vs APAC 50%. Shift rosters adjusted; individual team-level stats under review |
-| Mid-Project Check-In | Keryn Kondoprias | Active | Template developed; 6 check-ins completed; scores: 8 (Jul), 6 (Aug), 7 (Oct) — average 7.0 |
+| Mid-Project Check-In | Keryn Kondoprias | Active | Template developed; 5 check-ins completed: 8 (Jul — WA Health, Barwon), 6 (Aug — GHA EMR Expansion, SA Health Opal), 7 (Oct — SALHN AIMS) — average 7.0. SA Health SRMS review pending scheduling |
 
 #### Theme 3: Demonstrating Altera Value
 
@@ -199,7 +199,33 @@ The "5 in 25" programme is our 2025 Client Success improvement initiative, deliv
 - **2 OPERATIONAL** — APAC Delivery Framework, APAC PMO
 - **1 DISCONTINUED** — Health Checks (no client interest)
 
-### 3.2 Opal Code Quality Improvement
+### 3.2 Post-Activation Interview (PAI) and Mid-Project Check-In Scores
+
+These structured client feedback mechanisms provide real-time signals on project delivery quality:
+
+**Post-Activation Interviews (PAI) — 2025:**
+
+| Month | Client | Score | Notes |
+|-------|--------|-------|-------|
+| Jan | SLMC | 8 | |
+| Apr | SingHealth (AIMS) | 8 | |
+| May | GHA (iPro/Surgery) | 8 | |
+| Nov | GRMC (SCC & RIS) | **5** | Significant drop — requires follow-up |
+| Dec | GHA (EMR Expansion) | 8 | Grampians PAI pending scheduling |
+
+**PAI average: 7.4** (5 completed). The November GRMC score of 5 is a red flag — the only PAI score below 8 in 2025. This warrants investigation given GRMC's historical NPS decline (-50 in Q4 2024 and Q2 2025, no Q4 2025 response).
+
+**Mid-Project Check-Ins — 2025:**
+
+| Month | Client(s) | Score | Notes |
+|-------|-----------|-------|-------|
+| Jul | WA Health, Barwon | 8 | |
+| Aug | GHA EMR Expansion, SA Health Opal | 6 | SA Health project score below target |
+| Oct | SALHN AIMS | 7 | |
+
+**Check-in average: 7.0** (5 completed across 3 months). SA Health SRMS review pending scheduling as of December 2025.
+
+### 3.3 Opal Code Quality Improvement
 
 This is the single most impactful technical initiative and directly addresses the #1 NPS theme (Product Quality):
 
@@ -212,7 +238,7 @@ This is the single most impactful technical initiative and directly addresses th
 - **Defect density:** Target <30 average new Opal defects per client by end of year; current rate is 37 — gap being addressed through preventative actions based on root cause analysis and prioritised test case development aligned to UAT incidents
 - **Test coverage:** 72% against end-of-year target of 90% (per tracking board); discrepancy with 100% Critical/High figure above reflects different measurement scopes — 100% applies to critical/high severity modules only, while 72% covers all functional modules
 
-### 3.3 Client Dashboard Platform Improvements
+### 3.4 Client Dashboard Platform Improvements
 
 The [APAC CS Dashboards](https://apac-cs-dashboards.com) platform has undergone significant NPS-related improvements:
 
@@ -336,9 +362,32 @@ The local Sunrise development team (Australia + India) has been established and 
 #### Referenceability Programme
 2025 target: +1 new reference client. As of Q4 2025, no new reference client has been formally added. Gippsland Health Alliance (NPS: +100, CSI: 100) remains the primary candidate with discussions underway.
 
+**2025 reference activity:**
+- April: SA Health completed a reference call with PCH (USA) — demonstrating willingness to advocate despite low NPS
+- May: WA Health EOI responded to for Statewide EMR opportunity
+- August–December: No further reference or advocacy activity recorded
+
 **Leverage Te Whatu Ora Waikato** (most recent NPS: +100, Q2 2025; no Q4 2025 response) as an existing advocacy client in the Collaborate segment — consistently the highest-scoring APAC client across all NPS cycles since 2023.
 
-### 5.4 Technology and Data Capability
+### 5.4 APAC Sales Performance (2025)
+
+Commercial health provides context for client satisfaction investment decisions:
+
+| Quarter | Baseline Wgt ACV | Actual Sold Wgt ACV | % of Quarterly Target | Cumulative |
+|---------|-----------------|--------------------|-----------------------|------------|
+| Q1 2025 | $1,667,500 | $672,154 | 41% | $672,154 |
+| Q2 2025 | $1,667,500 | $3,015,467 | 133% | $3,687,621 |
+| Q3 2025 | $1,667,500 | Forecast: $1,207,985 | — | — |
+| Q4 2025 | $1,667,500 | Forecast: $1,350,529 | — | — |
+| **Full Year** | **$6,670,000** | **$3,687,621 sold + $2,558,514 forecast** | — | **$5,507,698 (83%)** |
+
+- Q2 2025 TCV: $12 million (includes SA Health new bookings ACV of $2.7m)
+- Year-end forecast of 83% against annual target reflects strong Q2 performance offsetting a slow Q1
+- SA Health remains the largest contributor to both revenue and new bookings
+
+**Relevance to NPS:** Commercial momentum depends on client retention. The attrition of Parkway (2026) and SWSPHN (2025) reduces the addressable base. Converting detractors and passives is not just a satisfaction goal — it directly protects revenue.
+
+### 5.5 Technology and Data Capability
 
 The APAC CS Dashboards platform continues to be developed to provide real-time visibility into client health:
 
