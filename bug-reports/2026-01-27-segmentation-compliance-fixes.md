@@ -308,9 +308,61 @@ Cache version bumped from `v9_list_cross_year_window` to `v10_list_keep_all_year
 
 ---
 
+## Issue 11: Health Score Discrepancy Between Portfolio Card and Client Profile (FOUC)
+
+**Symptom:** Portfolio Health cards showed correct health scores (e.g. 91 for Mount Alvernia Hospital) but the client profile detail page showed a different, lower score (31 for Mount Alvernia). The detail page would briefly flash the correct score before settling on the wrong value (FOUC — Flash of Unstyled Content).
+
+**Root Cause — Two Bugs:**
+
+1. **Year mismatch between contexts:**
+   - `ClientPortfolioContext` (card view) used `useAllClientsCompliance(priorYear)` → 2025 compliance
+   - `ClientMetricsContext` (detail view) used `useEventCompliance(clientName, currentYear)` → 2026 compliance
+   - `page.tsx` (v2 route) also used `useEventCompliance(client, currentYear)` → 2026 compliance
+   - In January 2026, current year compliance is ~0% for all clients since events haven't been logged yet
+   - Compliance is weighted at 60% of the health score, so 0% vs 100% = 60-point swing (explaining 91 → 31)
+
+2. **Stale `useMemo` in LeftColumn:**
+   - Health score `useMemo` at line 510-603 of `LeftColumn.tsx` used `eventCompliance?.overall_compliance_score`
+   - But dependency array was only `[client]`, missing `eventCompliance`
+   - When compliance data loaded asynchronously, the memo never recalculated — causing FOUC
+
+**Fix Applied:**
+
+1. Changed `ClientMetricsContext.tsx` to use `priorYear` instead of `currentYear` for compliance:
+   ```typescript
+   const priorYear = currentYear - 1
+   useEventCompliance(clientName, priorYear)
+   ```
+
+2. Changed `page.tsx` (v2) to use `priorYear` for both compliance and predictions:
+   ```typescript
+   const priorYear = currentYear - 1
+   useEventCompliance(client?.name || '', priorYear)
+   useCompliancePredictions(client?.name || '', priorYear)
+   ```
+
+3. Added `eventCompliance` to LeftColumn useMemo dependency array:
+   ```typescript
+   }, [client, eventCompliance])
+   ```
+
+**Files changed:**
+- `src/contexts/ClientMetricsContext.tsx`
+- `src/app/(dashboard)/clients/[clientId]/v2/page.tsx`
+- `src/app/(dashboard)/clients/[clientId]/components/v2/LeftColumn.tsx`
+
+**Result:** Mount Alvernia now shows 91 in both the Portfolio Health card and the client profile detail page. No FOUC observed.
+
+**Lesson:** When multiple contexts calculate health scores independently, they must use the same compliance year parameter. The `useMemo` dependency array must include ALL reactive values referenced inside the memo — missing an async data source causes stale renders.
+
+---
+
 ## Related Files
 
 - `src/hooks/useEventCompliance.ts` - Year handling fix, cross-year window fix for list view
+- `src/contexts/ClientMetricsContext.tsx` - Year mismatch fix (Issue 11)
+- `src/app/(dashboard)/clients/[clientId]/v2/page.tsx` - Year mismatch fix (Issue 11)
+- `src/app/(dashboard)/clients/[clientId]/components/v2/LeftColumn.tsx` - Stale useMemo fix (Issue 11)
 - `src/lib/segment-deadline-utils.ts` - Segment change detection and deadline calculation
 - `supabase/migrations/20251127_seed_tier_requirements.sql` - Original seed (stale, not modified)
 - `supabase/migrations/20251223000000_update_compliance_view_with_exclusions.sql` - Materialised view definition
