@@ -238,3 +238,105 @@
 ---
 
 *All field values are <255 characters for direct Excel cell population.*
+
+
+
+ **Primary sources read and cross-referenced:**                                     
+
+​                                                           
+
+1. **NPS Q4 2025 survey data** — extracted via background agent af7cf0a from NPS/2025 NPS                
+
+ Q4/Surveys/Responses/APAC/Final Data Files/APAC_NPS_Q4_2025_ with Analysis.xlsx                   
+
+2. **NPS Update Q4 2025 document** — /Users/jimmy.leimonitis/Documents/GitHub/apac-intelligence-docs/NPS_UPDATE_Q4_2025
+
+ _CLIENT_CONCERNS_AND_FORWARD_PLAN.md (526 lines, read multiple times this session)                 
+
+3. **APAC Client Success Updates 2025 PPTX** — extracted via python3-pptx from                     
+
+ /Users/jimmy.leimonitis/Library/CloudStorage/OneDrive-AlteraDigitalHealth/APAC Clients - Client Success/5 in    
+
+ 25/APAC Client Success Updates-2025.pptx (32 slides). Source for: PAI scores, mid-project check-in scores, sales  
+
+ ACV data, monthly initiative progress, MTTR figures.                                
+
+4. **5 in 25 Initiative Detail DOCX** — extracted via python3-docx from the same OneDrive folder. Source for: project  
+
+ owners, KPIs, status per initiative, team details.                                 
+
+5. **NPS Project Tracking Board Excel** — /Users/jimmy.leimonitis/Downloads/NPS Project Tracking Board-2.xlsx (13 APAC 
+
+ rows, 19 columns). Source for: all Q4 2024 and Q2 2025 existing values, baselines, KPIs.              
+
+6. **Client segmentation data** — extracted via background agent aa8dfe6 from Client Segmentation/2025/APAC Client   
+
+ Segmentation Data - editable.xlsx. Source for: segment assignments, spend figures, TEA cadences.          
+
+7. **Historical NPS data** — extracted via agent a3668d1 from NPS/Data/APAC/APAC_NPS_Historical_Trend_Analysis_2025   
+
+ 11.xlsx and APAC Historical NPS Detail.xlsx.                                    
+
+​                                                           
+
+ **Specific data point traceability:**                                          
+
+ ┌─────────────────────────────────────────────────┬────────────────────────────────────────────────┐        
+
+ │          Data Point          │           Source           │        
+
+ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
+
+ │ NPS -18.60, 43 responses, 142 sent       │ Source 1 (survey data)             │        
+
+ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
+
+ │ Theme percentages (Product Quality 39.5%, etc.) │ Source 2 (NPS doc Section 2.1)         │        
+
+ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
+
+ │ MTTR 56hrs, baseline 49hrs, target <45hrs    │ Source 3 (PPTX) + Source 5 (Excel Row 7)    │        
+
+ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
+
+ │ Test coverage 72%, defects/client 37      │ Source 5 (Excel Row 9) + Source 3 (PPTX)    │        
+
+ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
+
+ │ FDR/3DR/5DR baselines (27%/44%/50% vs US)    │ Source 5 (Excel Row 14)            │        
+
+ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
+
+ │ PAI scores (8,8,8,5,8 — avg 7.4)        │ Source 3 (PPTX monthly slides)         │        
+
+ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
+
+ │ Mid-project check-ins (8,6,7 — avg 7.0)     │ Source 3 (PPTX) + Source 2 (Section 3.2)    │        
+
+ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
+
+ │ SA Health $8.0m spend, NPS -54.55        │ Source 6 (segmentation) + Source 1       │        
+
+ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
+
+ │ Revenue $3.687m actual H1, $90k dev target   │ Source 3 (PPTX sales slides)          │        
+
+ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
+
+ │ 75+ Provation articles, ICs 3→8         │ Source 3 (PPTX) + Source 4 (initiative detail) │        
+
+ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
+
+ │ Keep/Toss/Pivot decisions            │ Derived from Sources 1-6 combined       │        
+
+ └─────────────────────────────────────────────────┴────────────────────────────────────────────────┘        
+
+ **What is derived (not raw data):**                                           
+
+​                                                           
+
+ The 2026 KPI targets, 2026 Projects, and Keep/Toss/Pivot decisions are **recommendations** — clearly labelled as such. 
+
+ They're derived from the real data but represent proposed next steps, not existing measurements. Every baseline and
+
+  current-state figure backing those recommendations is from the verified sources above.  
