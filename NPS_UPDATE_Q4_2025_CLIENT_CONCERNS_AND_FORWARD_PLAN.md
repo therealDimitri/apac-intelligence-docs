@@ -25,7 +25,7 @@ All data referenced in this document is drawn from verified NPS survey responses
 |--------|-------------|-----------|---------------|---------------|-----|-----------|----------|------------|-------|
 | 2023 | — | 13 | — | 6.69 | -23.08 | 15.4% | 46.2% | 38.5% | Baseline |
 | Q2 2024 | — | 24 | — | 6.08 | -33.33 | 12.5% | 41.7% | 45.8% | Declining |
-| Q4 2024 | ~155 | 75 | ~49% | 6.51 | -34.67 | 10.7% | 44.0% | 45.3% | Declining |
+| Q4 2024 | ~155 | 76 | ~49% | 6.51 | -34.67 | 10.7% | 44.0% | 45.3% | Declining |
 | Q2 2025 | 153 | 46 | 30.1% | 5.83 | -52.17 | 6.5% | 34.8% | 58.7% | Lowest |
 | **Q4 2025** | **142** | **43** | **30.3%** | **6.86** | **-18.60** | **16.3%** | **48.8%** | **34.9%** | **Recovery** |
 
@@ -103,7 +103,7 @@ All data referenced in this document is drawn from verified NPS survey responses
 — Matt Malone, Epworth Healthcare
 
 **Critical Risk — SA Health, Multiple Respondents (Average Score: 6.0)**
-> "Continuing inability to deliver quickly and consistently on products and services."
+> "Inability to deliver quickly and consistently on products and services."
 — Wendy Sutton, Executive/VP, SA Health (Score: 3)
 
 > "Product is subpar. Doesn't have basic modern functions such as electronic referral receipt, two-way SMS. Several screens require duplicate data entry."
@@ -127,10 +127,10 @@ All data referenced in this document is drawn from verified NPS survey responses
 — Joel Surtida, SAPPI/GRMC (Score: 9)
 
 > "Pro-actively managing our current issues, and working in partnership on strategic infrastructure changes ahead."
-— RVEEH Respondent (Score: 9)
+— Kate Rezenbrink, C-Suite, RVEEH (Score: 9)
 
-> "You have a direct connection to the team that can create change."
-— C-Suite, Gippsland Health Alliance (Score: 9)
+> "Agile and accessible."
+— Adrian Shearer, CIO, Gippsland Health Alliance (Score: 9)
 
 ### 2.3 Three Core Themes Across All NPS Cycles
 
@@ -167,7 +167,7 @@ The "5 in 25" programme is our 2025 Client Success improvement initiative, deliv
 | AI in SNOW for Quality Updates | Stephen Oster | In Progress | ServiceNow AI case summarisation live; knowledge article creation automated. **MTTR:** baseline 49 hours, target <45 hours, current 56 hours (regression — adoption strategy in development to accelerate benefits realisation) |
 | Backlog Reduction | Stephen Oster | Ongoing | Target: reduce Opal backlog to <120 cases by end of year (from 150-case baseline). Backlog rose to 145 before dedicated R&D developer was assigned — now trending down. Proactive client meetings established to collaboratively reduce backlogs |
 | Sunrise Support Resolution Times | Stephen Oster | In Progress | Target: match US first/third/fifth-day resolution rates. Baseline: FDR US 38% vs APAC 27%; 3DR US 57% vs APAC 44%; 5DR US 61% vs APAC 50%. Shift rosters adjusted; individual team-level stats under review |
-| Mid-Project Check-In | Keryn Kondoprias | Active | Template developed; 6 check-ins completed; scores averaging 7-8 |
+| Mid-Project Check-In | Keryn Kondoprias | Active | Template developed; 6 check-ins completed; scores: 8 (Jul), 6 (Aug), 7 (Oct) — average 7.0 |
 
 #### Theme 3: Demonstrating Altera Value
 
@@ -175,7 +175,7 @@ The "5 in 25" programme is our 2025 Client Success improvement initiative, deliv
 |---------|-------|--------|--------|
 | Improved Opal Code Quality | David Beck | Ongoing | Test coverage: 100% Critical/High, 80% Medium, 50% Low modules; monthly RCA of missed defects |
 | Health Checks for APAC Clients | Todd Haebich | **DISCONTINUED** | Offered to clients but no interest; dropped May 2025 |
-| Local Sunrise Development Capability | David Beck | **COMPLETE** | Developers recruited (AU + India); SCM localisation, Medicare integration, FHIR AU Core work underway; revenue target $90k USD |
+| Local Sunrise Development Capability | David Beck | In Progress | Capability established; 2 of 4 developers recruited (AU + India); SCM localisation, Medicare integration, FHIR AU Core work underway; revenue target $90k USD. Recruitment for remaining 2 positions ongoing |
 | Increasing Referenceability | Ben Stevenson | Slow progress | Target: +1 reference client by end 2025; not yet achieved as of Q4; GHA discussions commenced but product upgrade issues impeding progress |
 
 #### Theme 4: Improving Internal Communication
@@ -189,13 +189,13 @@ The "5 in 25" programme is our 2025 Client Success improvement initiative, deliv
 
 | Project | Owner | Status | Impact |
 |---------|-------|--------|--------|
-| APAC Delivery Framework | Corey Popelier | Operational | Included in all SOWs; QA audit results informing 2026 focus areas |
+| APAC Delivery Framework | Corey Popelier | Operational | Included in all SOWs; QA audits (Oct 2025) identified need to strengthen consistency and completeness of design and as-built documentation — key 2026 focus area |
 | APAC PMO | Keryn Kondoprias | Operational | Dashboard live; PM status via Clarity; forecasting variance reduced to 10% |
 | Quality Assurance Framework | Keryn Kondoprias | In Progress | QA audit framework developed; H2 2025 audits underway; target 80% compliance |
 
 **Completion Summary (18 projects — 17 original "5 in 25" + 1 added Q2 2025):**
-- **6 COMPLETE** — Client Education on Support, Services Org Comms (verified: no further NPS commentary on PS governance — "Toss" confirmed), Upskill Support (Opal), Upskill Support (Third Party), Local Sunrise Dev, Upskilling Services
-- **9 IN PROGRESS** — Opal Release Education, AI in SNOW, Backlog Reduction, Opal Code Quality, Referenceability, Support Coaching, Mid-Project Check-In, QA Framework, Sunrise Support Resolution Times (added Q2 2025)
+- **5 COMPLETE** — Client Education on Support, Services Org Comms (verified: no further NPS commentary on PS governance — "Toss" confirmed), Upskill Support (Opal), Upskill Support (Third Party), Upskilling Services
+- **10 IN PROGRESS** — Opal Release Education, AI in SNOW, Backlog Reduction, Opal Code Quality, Local Sunrise Dev (capability established; 2 of 4 developers recruited), Referenceability, Support Coaching, Mid-Project Check-In, QA Framework, Sunrise Support Resolution Times (added Q2 2025)
 - **2 OPERATIONAL** — APAC Delivery Framework, APAC PMO
 - **1 DISCONTINUED** — Health Checks (no client interest)
 
@@ -285,7 +285,7 @@ Giants and Sleeping Giants receive the highest "Time, Energy, and Attention" (TE
 ### 5.3 Strategic Initiatives (90-180 Days)
 
 #### Converting Passives to Promoters
-APAC's passive share (48.8%) is 9.8 percentage points higher than global. Converting even a fraction of these passives to promoters would transform our NPS score.
+APAC's passive share (48.8%) is 8.5 percentage points higher than global. Converting even a fraction of these passives to promoters would transform our NPS score.
 
 **Target clients for Passive-to-Promoter conversion:**
 - Ministry of Defence Singapore (score: 7.6, 5 responses)
@@ -368,7 +368,7 @@ The APAC CS Dashboards platform continues to be developed to provide real-time v
 | SA Health NPS | -54.55 | -25 | -15 |
 | Support Backlog (Opal) | 145 | <120 | <100 |
 | Opal Test Coverage (Critical/High) | 100% | 100% | 100% |
-| Reference Clients | 1 (Te Whatu Ora) | 2 | 3 |
+| Reference Clients | 2 (SingHealth, Parkway — both attriting) | 3 | 4 |
 | Satisfaction Action Plans (Maintain) | 2 of 6 | 6 of 6 | 6 of 6 |
 
 ---
@@ -424,7 +424,7 @@ Based on APAC's NPS data, client feedback, and programme gaps, the following ini
 
 ## 9. Conclusion
 
-The Q4 2025 NPS result of -18.60 is a genuine recovery — the largest single-period improvement in APAC's NPS history (+33.57 points). This was not accidental. It reflects 6 completed "5 in 25" projects, 9 in-progress projects (including Sunrise Support Resolution Times added in Q2 2025), a 4x increase in Opal test automation coverage, AI-enhanced support tools, and a structured engagement model that allocates more time and attention to higher-risk clients.
+The Q4 2025 NPS result of -18.60 is a genuine recovery — the largest single-period improvement in APAC's NPS history (+33.57 points). This was not accidental. It reflects 5 completed "5 in 25" projects, 10 in-progress projects (including Sunrise Support Resolution Times added in Q2 2025), a 4x increase in Opal test automation coverage, AI-enhanced support tools, and a structured engagement model that allocates more time and attention to higher-risk clients.
 
 The work is not done. Product quality remains the dominant concern across all client segments. SA Health, our largest account, needs a breakthrough in satisfaction. Our passive-to-promoter conversion opportunity is significant and addressable. And our local development capability — something clients have asked for repeatedly — is now operational and delivering.
 
