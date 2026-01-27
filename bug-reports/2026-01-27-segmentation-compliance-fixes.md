@@ -150,6 +150,35 @@ The original seed SQL file (`20251127_seed_tier_requirements.sql`) was stale (ba
 
 **Note:** `nps_responses` (46 rows) and `unified_meetings` (20+ rows) still use bare "SA Health" as an umbrella name across all products. These are legitimate references to SA Health as a whole and were not changed.
 
+### Issue 7: List View Missing Cross-Year Events for Re-Segmented Clients
+
+**Problem:** The `useAllClientsCompliance` hook (used by the compliance list view) only queried the current year's data from `event_compliance_summary`. For re-segmented clients whose assessment window extends into the following year (e.g. Sep 2025 → Jun 30 2026), events logged in the next year's portion (Jan-Jun 2026) were not included in the compliance calculation.
+
+The single-client hook `useEventCompliance` correctly fetched both years' data, so the detail view showed accurate scores. This created an inconsistency where the list view would show lower scores than the detail view for re-segmented clients as events accumulated in the extended window.
+
+**11 affected clients** (all re-segmented in September 2025):
+- Department of Health - Victoria (Collaboration → Nurture)
+- Epworth Healthcare (Leverage → Maintain)
+- GHA (Collaboration → Leverage)
+- Grampians Health (Collaboration → Leverage)
+- GRMC (Leverage → Maintain)
+- NCS/MinDef Singapore (Maintain → Leverage)
+- SA Health (iPro) (Nurture → Collaboration)
+- SA Health (Sunrise) (Sleeping Giant → Giant)
+- SingHealth (Nurture → Sleeping Giant)
+- SLMC (Leverage → Maintain)
+- WA Health (Nurture → Sleeping Giant)
+
+**Fix:** Updated `useAllClientsCompliance` to:
+1. Identify re-segmented clients after batch deadline detection
+2. Fetch next year's data from `event_compliance_summary` for those clients (1 additional query)
+3. Combine events from both years: current year from change month onwards + next year Jan-Jun
+4. Recalculate compliance using the combined event set (matching `useEventCompliance` logic)
+
+Cache version bumped from `v8_list_segment_recalc` to `v9_list_cross_year_window`.
+
+**File changed:** `src/hooks/useEventCompliance.ts`
+
 ### Known Remaining Issues
 
 None.
@@ -158,7 +187,8 @@ None.
 
 ## Related Files
 
-- `src/hooks/useEventCompliance.ts` - Year handling fix
+- `src/hooks/useEventCompliance.ts` - Year handling fix, cross-year window fix for list view
+- `src/lib/segment-deadline-utils.ts` - Segment change detection and deadline calculation
 - `supabase/migrations/20251127_seed_tier_requirements.sql` - Original seed (stale, not modified)
 - `supabase/migrations/20251223000000_update_compliance_view_with_exclusions.sql` - Materialised view definition
 
