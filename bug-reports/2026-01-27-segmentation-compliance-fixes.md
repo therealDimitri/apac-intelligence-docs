@@ -252,6 +252,62 @@ Overall portfolio: 50% → 42% (327/521 events, previously showed 563/521)
 
 ---
 
+## Issue 10: Extended Window Recalculation Discarding Pre-Change Events
+
+**Symptom:** Six re-segmented clients (SA Health (Sunrise), WA Health, SingHealth, GHA, Grampians Health, NCS/MinDef Singapore) showed 0% compliance on the segmentation page's 2025 view, despite having significant event data in the database and correct scores in the materialised view.
+
+**Root Cause:** The `useAllClientsCompliance` hook's extended window recalculation filtered current-year events to only those from the segment change month (September) onwards. For clients that changed segment in September 2025, this discarded all events from January–August 2025 — typically 60–89% of their completed events.
+
+For example:
+- SA Health (Sunrise): 74 total events → 22 kept (52 discarded, 70% lost)
+- SingHealth: 44 total events → 5 kept (39 discarded, 89% lost)
+- GHA: 27 total events → 9 kept (18 discarded, 67% lost)
+
+The filtering code used `eventDate.getMonth() + 1 >= changeMonth` which only kept events from September onwards, throwing away all pre-change events that had already been counted by the materialised view.
+
+**Fix:** Changed the recalculation to keep ALL current-year events from the materialised view (which already evaluates against the correct tier's requirements) and only ADD next-year Jan–Jun events on top. The materialised view's `combined_requirements` CTE already uses each client's latest segment, so pre-change events are correctly assessed against the new tier.
+
+**Before (broken):**
+```typescript
+// Current year: events from change month onwards (DISCARDS Jan-Aug)
+const filteredEvents = (ec.events || []).filter((e) => {
+  const eventDate = new Date(e.event_date)
+  return eventDate.getMonth() + 1 >= changeMonth
+})
+```
+
+**After (fixed):**
+```typescript
+// Keep ALL current year events from materialised view (already correct)
+// Only ADD next year Jan-Jun events on top
+for (const ec of eventCompliance) {
+  currentCounts[ec.event_type_id] = {
+    expected: ec.expected_count,
+    actual: ec.actual_count,  // Use view's count, not filtered
+    events: ec.events || []
+  }
+}
+```
+
+**Compliance Score Changes (2025, segmentation page):**
+
+| Client | Before Fix | After Fix |
+|--------|-----------|-----------|
+| SA Health (Sunrise) | 0% | 100% |
+| GHA | 0% | 100% |
+| Grampians Health | 0% | 100% |
+| NCS/MinDef Singapore | 0% | 89% |
+| WA Health | 0% | 25% |
+| SingHealth | 0% | 33% |
+
+Cache version bumped from `v9_list_cross_year_window` to `v10_list_keep_all_year_events`.
+
+**File changed:** `src/hooks/useEventCompliance.ts`
+
+**Lesson:** When the materialised view already evaluates events against the correct (latest) tier requirements, client-side recalculation should not discard events — it should only add cross-year events on top. The view is the source of truth for current-year compliance.
+
+---
+
 ## Related Files
 
 - `src/hooks/useEventCompliance.ts` - Year handling fix, cross-year window fix for list view
