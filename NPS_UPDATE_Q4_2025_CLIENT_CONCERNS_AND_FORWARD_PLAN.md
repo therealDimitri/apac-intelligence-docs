@@ -379,7 +379,7 @@ Commercial health provides context for client satisfaction investment decisions:
 | Q2 2025 | $1,667,500 | $3,015,467 | 133% | $3,687,621 |
 | Q3 2025 | $1,667,500 | Forecast: $1,207,985 | — | — |
 | Q4 2025 | $1,667,500 | Forecast: $1,350,529 | — | — |
-| **Full Year** | **$6,670,000** | **$3,687,621 sold + $2,558,514 forecast** | — | **$5,507,698 (83%)** |
+| **Full Year** | **$6,670,000** | **$3,687,621 actual (H1)** | — | **$5,507,698 (83%)** |
 
 - Q2 2025 TCV: $12 million (includes SA Health new bookings ACV of $2.7m)
 - Year-end forecast of 83% against annual target reflects strong Q2 performance offsetting a slow Q1
@@ -450,8 +450,8 @@ The following discrepancies exist between this document and the NPS Project Trac
 | Backlog target | Previously <100 | <120 by end of year | **Corrected** to <120 in this document |
 | Sunrise Support Resolution Times | Not included | Active Q2 2025 project | **Added** to Theme 2 in this document |
 | MTTR (AI in SNOW) | Not disclosed | Baseline 49hrs, current 56hrs (regression) | **Added** to Theme 2 in this document |
-| Defect per client rate | Not included | Target <30, current 37 | **Added** to Section 3.2 in this document |
-| Test coverage (all modules) | 100% Critical/High | 72% overall target 90% | **Clarified** scope difference in Section 3.2 |
+| Defect per client rate | Not included | Target <30, current 37 | **Added** to Section 3.3 in this document |
+| Test coverage (all modules) | 100% Critical/High | 72% overall target 90% | **Clarified** scope difference in Section 3.3 |
 | Services Org Comms | Listed as COMPLETE | Marked "Toss" (objective achieved) | **Confirmed** as verified win — no further NPS commentary on PS governance |
 
 ### 8.3 Recommended 2026 Initiatives
