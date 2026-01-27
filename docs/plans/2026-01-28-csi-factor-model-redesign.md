@@ -283,9 +283,23 @@ The data validates the v2 model's decision to weight engagement frequency at onl
 
 **3. Segmentation event completion is automatable from Supabase**
 
-Both Factor #9 (Strategic Ops <2x/yr) and Factor #12 (No Event Attendance) can now be computed directly from `segmentation_events`:
-- **Factor #9:** `SELECT COUNT(*) FROM segmentation_events WHERE client_name = ? AND completed = true AND event_date >= NOW() - INTERVAL '12 months'` — threshold: fewer than 2 completed strategic events per year.
-- **Factor #12:** `SELECT COUNT(*) FROM segmentation_events WHERE client_name = ? AND completed = true AND event_date >= NOW() - INTERVAL '12 months'` — threshold: zero completed events.
+Both Factor #9 (Strategic Ops <2x/yr) and Factor #12 (No Event Attendance) can now be computed directly from `segmentation_events` and `unified_meetings`:
+
+```sql
+-- Factor #9: Strategic Ops <2x/yr (TRUE if fewer than 2 completed events)
+SELECT COUNT(*) < 2 AS factor_triggered
+FROM segmentation_events
+WHERE client_name = ? AND completed = true
+  AND event_date >= NOW() - INTERVAL '12 months';
+
+-- Factor #12: No Event Attendance (TRUE if zero completed events)
+SELECT COUNT(*) = 0 AS factor_triggered
+FROM segmentation_events
+WHERE client_name = ? AND completed = true
+  AND event_date >= NOW() - INTERVAL '12 months';
+```
+
+> **Note:** The `segmentation_events` table includes multiple event types (partnership reviews, ops plans, QBRs, training). For Factor #9, the threshold may need filtering by `event_type_id` to count only strategic planning events specifically, rather than all event types. This requires defining which event types qualify as "strategic ops plans" with the CE team.
 
 This increases automatable factors from **7 to 9 of 14**.
 
@@ -355,39 +369,41 @@ Mining the 1,924 case records, 807 segmentation events, and 282 meeting records 
 | 12 | No Event Attendance | 4 | Zero event/webinar attendance in past year | Minor signal. SA Health iQemo non-attendance is caused by dissatisfaction, not the reverse. |
 | 13 | Communication/Transparency (positive) | -8 | CE team confirms proactive communication cadence and transparency in place | **NEW.** Strongest protective factor: +33 NPS delta across 160/199 responses. Clients with active communication average -28 NPS vs -62 without. |
 | 14 | NPS Promoter (score 9-10) | -5 | Most recent NPS score 9-10 | Positive factor (reduces ARM). Rewards GHA, RVEEH, GRMC. |
-| | **Total possible ARM** | **103** | | |
+| | **Total possible ARM** | **98** | | |
 | | **Total possible ARM reduction** | **-13** | | |
-| | **Net ARM range** | **-13 to 103** | | |
+| | **Net ARM range** | **-13 to 98** | | |
 
 ### 4.3 Weight Distribution by Category (v2 vs v1)
 
 | Category | v1 Weight | v1 % | v2 Weight | v2 % | Change |
 |----------|----------|------|----------|------|--------|
-| Support/Service Quality | 5 | 5% | 35 | 34% | **+30pts** |
-| NPS (direct) | 25 | 27% | 28 | 27% | +3pts |
-| Technical/Product | 9 | 10% | 27 | 26% | **+18pts** |
+| Support/Service Quality | 5 | 5% | 35 | 36% | **+30pts** |
+| NPS (direct) | 25 | 27% | 24 | 24% | -1pt |
+| Technical/Product | 9 | 10% | 17 | 17% | **+8pts** |
 | Business Risk | 32 | 34% | 12 | 12% | **-20pts** |
 | Engagement | 22 | 24% | 10 | 10% | **-12pts** |
 | **Negative (protective reward)** | **-5** | | **-13** | | **-8pts** |
 
-The model shifts from 58% Business Risk/Engagement to **60% Support Quality/Product** — aligning weight to the factors that actually drive NPS scores across all 199 responses and 5 periods. The protective factor allocation more than doubles (from -5 to -13), reflecting the strong evidence that Communication/Transparency is the single most impactful NPS differentiator (+33 NPS delta).
+> **Category assignments:** Support/Service Quality = Backlog (15) + Avg Resolution (10) + Technical Knowledge Gap (10). Technical/Product = Software Version (9) + Defect Rate (8). NPS = Detractor (12) + No Response (8) + Declining (4). Business Risk = M&A (7) + C-Suite (5). Engagement = Strategic Ops (6) + No Events (4). Protective = Communication (-8) + Promoter (-5).
+
+The model shifts from 58% Business Risk/Engagement to **53% Support Quality/Product** (up from 15% in v1) — aligning weight to the factors that actually drive NPS scores across all 199 responses and 5 periods. The protective factor allocation more than doubles (from -5 to -13), reflecting the strong evidence that Communication/Transparency is the single most impactful NPS differentiator (+33 NPS delta).
 
 ### 4.4 Retroactive Accuracy Test (Full-Dataset Validated v2)
 
 Applying the full-dataset validated v2 factors to all 10 clients with Q4 2025 NPS data. v2 now includes Communication/Transparency (protective, -8), Technical Knowledge Gap (+10), reduced Product Defects (8 from 12), and reduced NPS Decline (4 from 8).
 
-| Client | v1 CSI | v2 CSI | Actual NPS | v1 Correct? | v2 Correct? |
-|--------|--------|--------|-----------|-------------|-------------|
-| Albury Wodonga | 88 | 86 | 0 (avg 8.0) | YES | YES |
-| Barwon Health | 70 | 51 | -50 (avg 6.5) | YES | YES |
-| Dept Health Vic | 75 | 84 | 0 (avg 7.5) | YES | YES |
-| Epworth | 90 | 37 | -100 (avg 2.0) | NO | **YES** |
-| GHA | 100 | 100 | +100 (avg 9.3) | YES | YES |
-| Mount Alvernia | 90 | 62 | -40 (avg 6.6) | NO | **YES** |
-| RVEEH | 56 | 86 | +100 (avg 9.0) | NO | **YES** |
-| MoD Singapore | 71 | 83 | 0 (avg 7.6) | NO | **YES** |
-| SLMC | 75 | 40 | -100 (avg 5.0) | NO | **YES** |
-| GRMC | 75 | 91 | +100 (avg 9.0) | YES | YES |
+| Client | v1 CSI | v2 CSI | v2 ARM | Actual NPS | v1 Correct? | v2 Correct? |
+|--------|--------|--------|--------|-----------|-------------|-------------|
+| Albury Wodonga | 88 | 94 | 6 | 0 (avg 8.0) | YES | YES |
+| Barwon Health | 70 | 51 | 49 | -50 (avg 6.5) | YES | YES |
+| Dept Health Vic | 75 | 100 | 0 | 0 (avg 7.5) | YES | YES |
+| Epworth | 90 | 32 | 68 | -100 (avg 2.0) | NO | **YES** |
+| GHA | 100 | 100 | -13 | +100 (avg 9.3) | YES | YES |
+| Mount Alvernia | 90 | 60 | 40 | -40 (avg 6.6) | NO | **YES** |
+| RVEEH | 56 | 100 | -13 | +100 (avg 9.0) | NO | **YES** |
+| MoD Singapore | 71 | 97 | 3 | 0 (avg 7.6) | NO | **YES** |
+| SLMC | 75 | 34 | 66 | -100 (avg 5.0) | NO | **YES** |
+| GRMC | 75 | 100 | -6 | +100 (avg 9.0) | YES | YES |
 
 **v1 accuracy: 50% (5/10). v2 accuracy: 100% (10/10).**
 
@@ -451,7 +467,7 @@ The proposed model aligns with established customer success frameworks:
 Fred Reichheld's original NPS research established that **operational excellence** (product quality, service delivery, issue resolution) is the primary driver of promoter behaviour. Business risk factors (M&A, executive turnover) are **lagging indicators** — they describe consequences of dissatisfaction, not causes. The proposed model corrects this by weighting leading indicators (support quality, defect rates, resolution times) above lagging ones.
 
 ### 6.2 Customer Effort Score (CES) Research — Gartner/CEB (2010)
-Dixon, Freeman, and Toman's research found that **reducing customer effort** is more predictive of loyalty than exceeding expectations. Support backlog, MTTR, and defect rates are direct proxies for customer effort — every unresolved case, every delayed resolution, every defect encountered adds friction. The proposed model allocates 38% weight to effort-reduction factors (up from 5%).
+Dixon, Freeman, and Toman's research found that **reducing customer effort** is more predictive of loyalty than exceeding expectations. Support backlog, MTTR, and defect rates are direct proxies for customer effort — every unresolved case, every delayed resolution, every defect encountered adds friction. The proposed model allocates 36% weight to effort-reduction factors (up from 5%).
 
 ### 6.3 B2B Customer Health Scoring — Gainsight/TSIA
 Industry-standard B2B health scoring models typically weight:
@@ -460,7 +476,7 @@ Industry-standard B2B health scoring models typically weight:
 - **Relationship/engagement:** 15-20% (proxy: NPS, meeting cadence)
 - **Business risk:** 10-15% (proxy: M&A, attrition, contract status)
 
-The proposed v2 model (Support 38%, NPS 29%, Product 23%, Risk 12%, Engagement 10%) is broadly consistent with industry benchmarks, with a justified over-index on support health given APAC's specific NPS theme data showing support as the dominant negative driver.
+The proposed v2 model (Support 36%, NPS 24%, Technical/Product 17%, Risk 12%, Engagement 10%) is broadly consistent with industry benchmarks, with a justified over-index on support health given APAC's specific NPS theme data showing support as the dominant negative driver.
 
 ### 6.4 NPS Linkage to Revenue — Bain & Company
 Bain's longitudinal research across healthcare IT shows that **a 12-point NPS improvement correlates with ~7% reduction in churn probability**. APAC's Q4 2025 recovery of +33.57 points was driven primarily by support interaction improvements (AVP visits) and product quality investment (test coverage expansion) — both captured in the proposed model but absent from the current one.
@@ -471,9 +487,9 @@ Bain's longitudinal research across healthcare IT shows that **a 12-point NPS im
 
 ### Phase 1: Update Excel Model (Immediate)
 
-1. Add 5 new columns to Phase 1 sheet: `Support Backlog >20`, `MTTR >45hrs`, `Technical Knowledge Gap`, `NPS Declining 2+ Periods`, `Communication/Transparency`
-2. Remove `Resolution SLA <90%` column (replaced by MTTR >45hrs)
-3. Update all factor weights per Section 4.2 (14 factors total)
+1. Add 5 new columns to Phase 1 sheet: `Support Backlog >10`, `Avg Resolution >700hrs`, `Technical Knowledge Gap`, `NPS Declining 2+ Periods`, `Communication/Transparency`
+2. Remove `Resolution SLA <90%` column (replaced by Avg Resolution >700hrs)
+3. Update all factor weights per Section 4.2 (14 factors, total positive ARM = 98)
 4. Add negative weight formula for Communication/Transparency (-8) and NPS Promoter (-5) — these reduce ARM
 5. Recalculate ARM Index and CSI for all clients
 6. Verify Phase 2 quadrant assignments still function correctly (no formula changes needed — only CSI input values change)
@@ -502,7 +518,7 @@ Bain's longitudinal research across healthcare IT shows that **a 12-point NPS im
 | Risk | Mitigation |
 |------|-----------|
 | Small sample size (10 clients with retroactive test, 199 total responses) | Validated across all 5 NPS periods, not just Q4 2025. Further validate against Q2 2026 cycle. |
-| 5 new factors (vs v1) require manual data collection | 3 factors use data already tracked monthly (ServiceNow, R&D). 2 qualitative factors (Technical Knowledge Gap, Communication) need defined assessment criteria. |
+| 5 new factors added (vs v1's 9 factors) | 9 of 14 factors are fully automatable from Supabase. 1 factor requires monthly R&D reports (Defect Rate). 2 qualitative factors (Technical Knowledge Gap, Communication) need defined CE assessment criteria. |
 | Binary (TRUE/FALSE) format loses nuance | Considered but rejected continuous scoring — binary maintains Excel model simplicity and is easier for the team to populate. Revisit if accuracy drops. |
 | Two qualitative factors (Technical Knowledge Gap, Communication) risk subjective assessment | Define explicit criteria: Technical Knowledge Gap = 3+ escalations citing product expertise in past 6 months. Communication = documented proactive update cadence + client acknowledgement of transparency. |
 | Phase 2 quadrant boundaries may shift | CSI normalisation is relative — median/average will change with new weights. Recompute boundaries after factor update. |
