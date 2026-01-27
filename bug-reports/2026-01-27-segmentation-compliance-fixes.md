@@ -128,10 +128,19 @@ Investigation confirmed the database `tier_event_requirements` table already mat
 
 The original seed SQL file (`20251127_seed_tier_requirements.sql`) was stale (based on August 2024 guide) but the live database had already been updated.
 
+### Issue 5: RVEEH Name Duplication Across Tables
+
+**Problem:** `nps_clients` used "The Royal Victorian Eye and Ear Hospital" while `client_segmentation` and `segmentation_events` used "Royal Victorian Eye and Ear Hospital" (without "The"). This caused a ghost duplicate entry in the `event_compliance_summary` materialised view (3 rows instead of 2).
+
+**Fix:** Updated all tables to the canonical name "Royal Victorian Eye and Ear Hospital":
+- `nps_clients`: 1 row updated
+- `nps_responses`: 2 rows updated
+- `actions`: 1 row updated
+- Refreshed `event_compliance_summary` materialised view (now 37 rows, down from 38)
+
 ### Known Remaining Issues
 
-1. **RVEEH name duplication:** `nps_clients` uses "The Royal Victorian Eye and Ear Hospital" while `client_segmentation` uses "Royal Victorian Eye and Ear Hospital" (without "The"). Both appear in the 2026 view.
-2. **SA Health duplicate:** "SA Health" appears as a separate Giant entry in 2025 alongside "SA Health (Sunrise)". These may need consolidation.
+1. **SA Health duplicate:** "SA Health" appears as a separate Giant entry in 2025 alongside "SA Health (Sunrise)". These may need consolidation.
 
 ---
 
