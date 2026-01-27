@@ -138,9 +138,21 @@ The original seed SQL file (`20251127_seed_tier_requirements.sql`) was stale (ba
 - `actions`: 1 row updated
 - Refreshed `event_compliance_summary` materialised view (now 37 rows, down from 38)
 
+### Issue 6: SA Health Bare Name Duplicate in Segmentation
+
+**Problem:** A bare "SA Health" entry existed alongside the three legitimate product-based entities (SA Health (Sunrise), SA Health (iQemo), SA Health (iPro)). The bare entry was a legacy Giant-segment record for 2025 only, duplicating SA Health (Sunrise) which is also Giant. It showed as 0% critical in the compliance view.
+
+**Fix:**
+- Deleted bare "SA Health" from `client_segmentation` (1 closed 2025 record)
+- Reassigned 1 segmentation event from "SA Health" to "SA Health (Sunrise)"
+- Deleted bare "SA Health" from `nps_clients` (ghost placeholder with null score/ARR/CDH)
+- Refreshed `event_compliance_summary` materialised view (now 36 rows, down from 37)
+
+**Note:** `nps_responses` (46 rows) and `unified_meetings` (20+ rows) still use bare "SA Health" as an umbrella name across all products. These are legitimate references to SA Health as a whole and were not changed.
+
 ### Known Remaining Issues
 
-1. **SA Health duplicate:** "SA Health" appears as a separate Giant entry in 2025 alongside "SA Health (Sunrise)". These may need consolidation.
+None.
 
 ---
 
