@@ -25,7 +25,7 @@ All data referenced in this document is drawn from verified NPS survey responses
 |--------|-------------|-----------|---------------|---------------|-----|-----------|----------|------------|-------|
 | 2023 | — | 13 | — | 6.69 | -23.08 | 15.4% | 46.2% | 38.5% | Baseline |
 | Q2 2024 | — | 24 | — | 6.08 | -33.33 | 12.5% | 41.7% | 45.8% | Declining |
-| Q4 2024 | ~155 | 76 | ~49% | 6.51 | -34.67 | 10.7% | 44.0% | 45.3% | Declining |
+| Q4 2024 | ~155 | 75 | ~49% | 6.51 | -34.67 | 10.7% | 44.0% | 45.3% | Declining |
 | Q2 2025 | 153 | 46 | 30.1% | 5.83 | -52.17 | 6.5% | 34.8% | 58.7% | Lowest |
 | **Q4 2025** | **142** | **43** | **30.3%** | **6.86** | **-18.60** | **16.3%** | **48.8%** | **34.9%** | **Recovery** |
 
@@ -73,7 +73,7 @@ All data referenced in this document is drawn from verified NPS survey responses
 | NPS Score | -18.6 | -6.7 | -11.9 |
 | Promoters | 16.3% | 26.5% | -10.2% |
 | Passives | 48.8% | 40.3% | +8.5% |
-| Detractors | 34.9% | 33.2% | -1.7% |
+| Detractors | 34.9% | 33.2% | +1.7% |
 
 **Insight:** APAC's detractor rate is nearly identical to global (34.9% vs 33.2%) — the 11.9-point NPS gap is driven by a significantly lower promoter rate (16.3% vs 26.5%). The high passive share (48.8%) represents our primary conversion opportunity.
 
@@ -336,7 +336,7 @@ The local Sunrise development team (Australia + India) has been established and 
 #### Referenceability Programme
 2025 target: +1 new reference client. As of Q4 2025, no new reference client has been formally added. Gippsland Health Alliance (NPS: +100, CSI: 100) remains the primary candidate with discussions underway.
 
-**Leverage Te Whatu Ora Waikato** (most recent NPS: +100, Q2 2025; no Q4 2025 response) as an existing advocacy client — their feedback consistently highlights "great collaboration" and "direct connection to the team that can create change."
+**Leverage Te Whatu Ora Waikato** (most recent NPS: +100, Q2 2025; no Q4 2025 response) as an existing advocacy client in the Collaborate segment — consistently the highest-scoring APAC client across all NPS cycles since 2023.
 
 ### 5.4 Technology and Data Capability
 
