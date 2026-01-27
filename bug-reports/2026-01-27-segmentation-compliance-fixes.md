@@ -357,6 +357,47 @@ Cache version bumped from `v9_list_cross_year_window` to `v10_list_keep_all_year
 
 ---
 
+### Issue 12: SLMC Health Score Discrepancy — Single-Client Hook Discarded Pre-Change Events
+
+**Symptom:** Saint Luke's Medical Centre (SLMC) showed health score 37 on the Portfolio Health card but 25 on the client profile page. The card showed "Seg% 100%" but the profile's Segmentation Actions card showed 10% compliance.
+
+**Root Cause:** The two compliance hooks handled re-segmented clients with contradictory logic:
+
+- **`useAllClientsCompliance` (batch, card view)** — Lines 622-625: Kept ALL current-year events and added next-year Jan-Jun events on top. Comment explicitly stated: "We do NOT discard pre-change events — they still count toward the current year's compliance." Result: 3/10 event types met target = 30%.
+
+- **`useEventCompliance` (single-client, profile view)** — Lines 322-329: Filtered events to only include those from the change month onwards. For SLMC (changed Sep 2025), this discarded Jan-Aug events, leaving only Sep-Dec events. Result: 1/10 event types met target = 10%.
+
+**Score calculation trace:**
+- Card (37): NPS(null→0)=10 + Compliance(30%)=18 + WC(0/0)=0 + Actions(11/12)=9 = 37
+- Profile (25): NPS(null→0)=10 + Compliance(10%)=6 + WC(0/0)=0 + Actions(11/12)=9 = 25
+
+**Note:** The card's "Seg% 100%" display is a separate issue — it reads `client.compliance_percentage` from the materialised view (which measures action item completion: 11/12 ≈ 100%), not the event type compliance used by the health score formula.
+
+**Fix:** Updated `useEventCompliance` segment-change path to match the batch hook's approach — keep ALL current-year events (using `ec.actual_count` directly from the materialised view) and ADD next-year Jan-Jun events on top:
+
+```typescript
+// BEFORE (discarded pre-change events):
+const filteredEvents = (ec.events || []).filter((e) => {
+  return eventDate.getMonth() + 1 >= changeMonth
+})
+
+// AFTER (keeps ALL current-year events):
+combinedEvents[ec.event_type_id] = {
+  expected: ec.expected_count,
+  actual: ec.actual_count,
+  events: ec.events || [],
+}
+```
+
+**Files changed:**
+- `src/hooks/useEventCompliance.ts`
+
+**Result:** SLMC now shows 37 in both the Portfolio Health card and the client profile detail page. Compliance displays as 30% in both views.
+
+**Lesson:** When two hooks implement the same business logic for different contexts (batch vs single-client), any divergence in event filtering creates silent score discrepancies. The batch hook had the correct rationale: pre-change events were legitimately performed and should count toward compliance regardless of when the segment changed.
+
+---
+
 ## Related Files
 
 - `src/hooks/useEventCompliance.ts` - Year handling fix, cross-year window fix for list view
