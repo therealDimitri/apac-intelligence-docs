@@ -21,13 +21,13 @@ All data referenced in this document is drawn from verified NPS survey responses
 
 ### 1.1 Historical Trend
 
-| Period | Responses | Average Score | NPS | Promoters | Passives | Detractors | Trend |
-|--------|-----------|---------------|-----|-----------|----------|------------|-------|
-| 2023 | 13 | 6.69 | -23.08 | 15.4% | 46.2% | 38.5% | Baseline |
-| Q2 2024 | 24 | 6.08 | -33.33 | 12.5% | 41.7% | 45.8% | Declining |
-| Q4 2024 | 75 | 6.51 | -34.67 | 10.7% | 44.0% | 45.3% | Declining |
-| Q2 2025 | 46 | 5.83 | -52.17 | 6.5% | 34.8% | 58.7% | Lowest |
-| **Q4 2025** | **43** | **6.86** | **-18.60** | **16.3%** | **48.8%** | **34.9%** | **Recovery** |
+| Period | Surveys Sent | Responses | Response Rate | Average Score | NPS | Promoters | Passives | Detractors | Trend |
+|--------|-------------|-----------|---------------|---------------|-----|-----------|----------|------------|-------|
+| 2023 | — | 13 | — | 6.69 | -23.08 | 15.4% | 46.2% | 38.5% | Baseline |
+| Q2 2024 | — | 24 | — | 6.08 | -33.33 | 12.5% | 41.7% | 45.8% | Declining |
+| Q4 2024 | ~155 | 75 | ~49% | 6.51 | -34.67 | 10.7% | 44.0% | 45.3% | Declining |
+| Q2 2025 | 153 | 46 | 30.1% | 5.83 | -52.17 | 6.5% | 34.8% | 58.7% | Lowest |
+| **Q4 2025** | **142** | **43** | **30.3%** | **6.86** | **-18.60** | **16.3%** | **48.8%** | **34.9%** | **Recovery** |
 
 **Key observations:**
 - Q4 2025 represents the best NPS result in over two years
@@ -148,7 +148,7 @@ Reviewing feedback from 2023 through Q4 2025, three themes have been consistentl
 
 ### 3.1 The "5 in 25" Programme
 
-The "5 in 25" programme is our 2025 Client Success improvement initiative, delivering **5 strategic initiative themes** across 17+ discrete projects. It builds on lessons learned from the predecessor "24 in 24" programme (24 projects executed across 2023-2024).
+The "5 in 25" programme is our 2025 Client Success improvement initiative, delivering **5 strategic initiative themes** across **17 discrete projects** (3 + 5 + 4 + 2 + 3). It builds on lessons learned from the predecessor "24 in 24" programme (24 projects executed across 2023-2024).
 
 #### Theme 1: Improving Client Communication
 
@@ -165,7 +165,7 @@ The "5 in 25" programme is our 2025 Client Success improvement initiative, deliv
 | Upskill Support Team — Opal | Stephen Oster | **COMPLETE** | Product training completed; dedicated Opal 22.1 environment for support staff; AI-assisted case auditing |
 | Upskill Support Team — Third Party Products | Stephen Oster | **COMPLETE** | iPro and iQemo workflows updated; 75+ Provation knowledge articles obtained |
 | AI in SNOW for Quality Updates | Stephen Oster | In Progress | ServiceNow AI case summarisation live; knowledge article creation automated |
-| Backlog Reduction | Stephen Oster | Ongoing | Target: reduce Opal backlog by 20% from 120-case baseline; dedicated R&D developer assigned |
+| Backlog Reduction | Stephen Oster | Ongoing | Target: reduce Opal backlog by 20% from 120-case baseline (Q1 2025); backlog rose to 145 before dedicated R&D developer was assigned — now trending down |
 | Mid-Project Check-In | Keryn Kondoprias | Active | Template developed; 6 check-ins completed; scores averaging 7-8 |
 
 #### Theme 3: Demonstrating Altera Value
@@ -175,7 +175,7 @@ The "5 in 25" programme is our 2025 Client Success improvement initiative, deliv
 | Improved Opal Code Quality | David Beck | Ongoing | Test coverage: 100% Critical/High, 80% Medium, 50% Low modules; monthly RCA of missed defects |
 | Health Checks for APAC Clients | Todd Haebich | **DISCONTINUED** | Offered to clients but no interest; dropped May 2025 |
 | Local Sunrise Development Capability | David Beck | **COMPLETE** | Developers recruited (AU + India); SCM localisation, Medicare integration, FHIR AU Core work underway; revenue target $90k USD |
-| Increasing Referenceability | Ben Stevenson | Slow progress | Target: +1 reference client by end 2025; Gippsland Health Alliance discussions commenced |
+| Increasing Referenceability | Ben Stevenson | Slow progress | Target: +1 reference client by end 2025; not yet achieved as of Q4; GHA discussions commenced but product upgrade issues impeding progress |
 
 #### Theme 4: Improving Internal Communication
 
@@ -192,11 +192,11 @@ The "5 in 25" programme is our 2025 Client Success improvement initiative, deliv
 | APAC PMO | Keryn Kondoprias | Operational | Dashboard live; PM status via Clarity; forecasting variance reduced to 10% |
 | Quality Assurance Framework | Keryn Kondoprias | In Progress | QA audit framework developed; H2 2025 audits underway; target 80% compliance |
 
-**Completion Summary:**
-- **6 projects COMPLETE** — Client Education on Support, Services Org Comms, Upskill Support (Opal), Upskill Support (Third Party), Local Sunrise Dev, Upskilling Services
-- **8 projects IN PROGRESS** — Opal Release Education, AI in SNOW, Backlog Reduction, Opal Code Quality, Referenceability, Support Coaching, PMO, QA Framework
-- **1 project OPERATIONAL** — APAC Delivery Framework
-- **1 project DISCONTINUED** — Health Checks (no client interest)
+**Completion Summary (17 projects):**
+- **6 COMPLETE** — Client Education on Support, Services Org Comms, Upskill Support (Opal), Upskill Support (Third Party), Local Sunrise Dev, Upskilling Services
+- **8 IN PROGRESS** — Opal Release Education, AI in SNOW, Backlog Reduction, Opal Code Quality, Referenceability, Support Coaching, Mid-Project Check-In, QA Framework
+- **2 OPERATIONAL** — APAC Delivery Framework, APAC PMO
+- **1 DISCONTINUED** — Health Checks (no client interest)
 
 ### 3.2 Opal Code Quality Improvement
 
@@ -321,17 +321,17 @@ SingHealth ($6.6m spend) is transitioning to EPIC by 2028. While long-term attri
 #### Local Development Capability Expansion
 The local Sunrise development team (Australia + India) has been established and is now operational. This directly addresses the "Market Specific" theme — clients want features built for the Australian/APAC market.
 
-**In progress:**
+**Active workstreams:**
 - SCM localisation
 - Medicare integration
 - FHIR AU Core compliance
 - PBS (Pharmaceutical Benefits Scheme) integration
 - GHA Prescription Pad development
 - SA Health Renal proposal (expected to sign)
-- Revenue target: $90k USD by end 2025
+- 2025 revenue target: $90k USD (tracking against year-end target; final outcome to be confirmed post-close)
 
 #### Referenceability Programme
-Target: +1 new reference client by end 2025. Gippsland Health Alliance (NPS: +100, CSI: 100) is the primary candidate.
+2025 target: +1 new reference client. As of Q4 2025, no new reference client has been formally added. Gippsland Health Alliance (NPS: +100, CSI: 100) remains the primary candidate with discussions underway.
 
 **Leverage Te Whatu Ora Waikato** (most recent NPS: +100, Q2 2025; no Q4 2025 response) as an existing advocacy client — their feedback consistently highlights "great collaboration" and "direct connection to the team that can create change."
 
