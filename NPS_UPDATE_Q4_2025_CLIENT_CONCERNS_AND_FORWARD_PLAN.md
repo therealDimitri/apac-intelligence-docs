@@ -148,7 +148,7 @@ Reviewing feedback from 2023 through Q4 2025, three themes have been consistentl
 
 ### 3.1 The "5 in 25" Programme
 
-The "5 in 25" programme is our 2025 Client Success improvement initiative, delivering **5 strategic initiative themes** across **17 discrete projects** (3 + 5 + 4 + 2 + 3). It builds on lessons learned from the predecessor "24 in 24" programme (24 projects executed across 2023-2024).
+The "5 in 25" programme is our 2025 Client Success improvement initiative, delivering **5 strategic initiative themes** across **18 projects** (3 + 6 + 4 + 2 + 3, including one project added in Q2 2025). It builds on lessons learned from the predecessor "24 in 24" programme (24 projects executed across 2023-2024).
 
 #### Theme 1: Improving Client Communication
 
@@ -164,8 +164,9 @@ The "5 in 25" programme is our 2025 Client Success improvement initiative, deliv
 |---------|-------|--------|--------|
 | Upskill Support Team — Opal | Stephen Oster | **COMPLETE** | Product training completed; dedicated Opal 22.1 environment for support staff; AI-assisted case auditing |
 | Upskill Support Team — Third Party Products | Stephen Oster | **COMPLETE** | iPro and iQemo workflows updated; 75+ Provation knowledge articles obtained |
-| AI in SNOW for Quality Updates | Stephen Oster | In Progress | ServiceNow AI case summarisation live; knowledge article creation automated |
-| Backlog Reduction | Stephen Oster | Ongoing | Target: reduce Opal backlog by 20% from 120-case baseline (Q1 2025); backlog rose to 145 before dedicated R&D developer was assigned — now trending down |
+| AI in SNOW for Quality Updates | Stephen Oster | In Progress | ServiceNow AI case summarisation live; knowledge article creation automated. **MTTR:** baseline 49 hours, target <45 hours, current 56 hours (regression — adoption strategy in development to accelerate benefits realisation) |
+| Backlog Reduction | Stephen Oster | Ongoing | Target: reduce Opal backlog to <120 cases by end of year (from 150-case baseline). Backlog rose to 145 before dedicated R&D developer was assigned — now trending down. Proactive client meetings established to collaboratively reduce backlogs |
+| Sunrise Support Resolution Times | Stephen Oster | In Progress | Target: match US first/third/fifth-day resolution rates. Baseline: FDR US 38% vs APAC 27%; 3DR US 57% vs APAC 44%; 5DR US 61% vs APAC 50%. Shift rosters adjusted; individual team-level stats under review |
 | Mid-Project Check-In | Keryn Kondoprias | Active | Template developed; 6 check-ins completed; scores averaging 7-8 |
 
 #### Theme 3: Demonstrating Altera Value
@@ -192,9 +193,9 @@ The "5 in 25" programme is our 2025 Client Success improvement initiative, deliv
 | APAC PMO | Keryn Kondoprias | Operational | Dashboard live; PM status via Clarity; forecasting variance reduced to 10% |
 | Quality Assurance Framework | Keryn Kondoprias | In Progress | QA audit framework developed; H2 2025 audits underway; target 80% compliance |
 
-**Completion Summary (17 projects):**
-- **6 COMPLETE** — Client Education on Support, Services Org Comms, Upskill Support (Opal), Upskill Support (Third Party), Local Sunrise Dev, Upskilling Services
-- **8 IN PROGRESS** — Opal Release Education, AI in SNOW, Backlog Reduction, Opal Code Quality, Referenceability, Support Coaching, Mid-Project Check-In, QA Framework
+**Completion Summary (18 projects — 17 original "5 in 25" + 1 added Q2 2025):**
+- **6 COMPLETE** — Client Education on Support, Services Org Comms (verified: no further NPS commentary on PS governance — "Toss" confirmed), Upskill Support (Opal), Upskill Support (Third Party), Local Sunrise Dev, Upskilling Services
+- **9 IN PROGRESS** — Opal Release Education, AI in SNOW, Backlog Reduction, Opal Code Quality, Referenceability, Support Coaching, Mid-Project Check-In, QA Framework, Sunrise Support Resolution Times (added Q2 2025)
 - **2 OPERATIONAL** — APAC Delivery Framework, APAC PMO
 - **1 DISCONTINUED** — Health Checks (no client interest)
 
@@ -206,8 +207,10 @@ This is the single most impactful technical initiative and directly addresses th
 - **Medium severity:** 80% coverage
 - **Low severity:** 50% coverage
 - **Monthly Root Cause Analysis** of missed defects implemented
-- **Hundreds of new test cases** added throughout the year
+- **Hundreds of new test cases** added throughout the year (80+ new cases covering requirements traceability matrix)
 - **Customer UAT test case review** process ongoing with client input
+- **Defect density:** Target <30 average new Opal defects per client by end of year; current rate is 37 — gap being addressed through preventative actions based on root cause analysis and prioritised test case development aligned to UAT incidents
+- **Test coverage:** 72% against end-of-year target of 90% (per tracking board); discrepancy with 100% Critical/High figure above reflects different measurement scopes — 100% applies to critical/high severity modules only, while 72% covers all functional modules
 
 ### 3.3 Client Dashboard Platform Improvements
 
@@ -275,7 +278,7 @@ Giants and Sleeping Giants receive the highest "Time, Energy, and Attention" (TE
 |--------|-------------------|-------|----------------|
 | Deploy support knowledge base improvements from AI case auditing | All | Stephen Oster | Case resolution time reduced by 15% |
 | Deliver Opal PR8.5 validation results and upgrade path to Epworth Healthcare | Epworth | David Beck | Validation complete; upgrade timeline agreed |
-| Complete SA Health support backlog dedicated sprint | SA Health | Stephen Oster + R&D | Backlog reduced from 145 to <100 |
+| Complete SA Health support backlog dedicated sprint | SA Health | Stephen Oster + R&D | Backlog reduced from 145 to <120 |
 | Hold whitespace demonstrations for all Sleeping Giant and Giant clients | SA Health, WA Health, SingHealth | Solutions/PS | Demos completed; opportunities documented |
 | Publish product roadmap update to all APAC clients | All | David Beck | Published on portal; webinar scheduled |
 
@@ -363,7 +366,7 @@ The APAC CS Dashboards platform continues to be developed to provide real-time v
 | Detractor Share | 34.9% | 28% | 22% |
 | Response Rate | 30.3% | 35% | 40% |
 | SA Health NPS | -54.55 | -25 | -15 |
-| Support Backlog (Opal) | 145 | <100 | <80 |
+| Support Backlog (Opal) | 145 | <120 | <100 |
 | Opal Test Coverage (Critical/High) | 100% | 100% | 100% |
 | Reference Clients | 1 (Te Whatu Ora) | 2 | 3 |
 | Satisfaction Action Plans (Maintain) | 2 of 6 | 6 of 6 | 6 of 6 |
@@ -383,9 +386,45 @@ The APAC CS Dashboards platform continues to be developed to provide real-time v
 
 ---
 
-## 8. Conclusion
+## 8. 2026 Planning: Gaps and Recommended Initiatives
 
-The Q4 2025 NPS result of -18.60 is a genuine recovery — the largest single-period improvement in APAC's NPS history (+33.57 points). This was not accidental. It reflects 6 completed "5 in 25" projects, 8 in-progress projects, a 4x increase in Opal test automation coverage, AI-enhanced support tools, and a structured engagement model that allocates more time and attention to higher-risk clients.
+### 8.1 Current State
+
+Cross-referencing APAC's "5 in 25" programme against the global NPS Project Tracking Board reveals a critical planning gap: **APAC has no 2026 initiatives defined**. All other business units have populated their 2026 columns with new or carried-over initiatives.
+
+### 8.2 Tracking Board Alignment
+
+The following discrepancies exist between this document and the NPS Project Tracking Board:
+
+| Item | Document | Tracking Board | Resolution |
+|------|----------|---------------|------------|
+| Backlog target | Previously <100 | <120 by end of year | **Corrected** to <120 in this document |
+| Sunrise Support Resolution Times | Not included | Active Q2 2025 project | **Added** to Theme 2 in this document |
+| MTTR (AI in SNOW) | Not disclosed | Baseline 49hrs, current 56hrs (regression) | **Added** to Theme 2 in this document |
+| Defect per client rate | Not included | Target <30, current 37 | **Added** to Section 3.2 in this document |
+| Test coverage (all modules) | 100% Critical/High | 72% overall target 90% | **Clarified** scope difference in Section 3.2 |
+| Services Org Comms | Listed as COMPLETE | Marked "Toss" (objective achieved) | **Confirmed** as verified win — no further NPS commentary on PS governance |
+
+### 8.3 Recommended 2026 Initiatives
+
+Based on APAC's NPS data, client feedback, and programme gaps, the following initiatives are recommended for 2026 planning:
+
+| # | Recommended Initiative | Rationale | Proposed KPI |
+|---|----------------------|-----------|--------------|
+| 1 | **Client-Specific NPS Action Plans** | 48.8% passive share represents the largest conversion opportunity; individual action plans per client targeting specific blockers identified in verbatim feedback | 100% of Maintain/Nurture/Sleeping Giant clients have documented action plans by Q2 2026 |
+| 2 | **Support MTTR Recovery** | MTTR has regressed from 49 to 56 hours against a <45 hour target; AI in SNOW benefits not yet realised | MTTR <45 hours by Q2 2026 |
+| 3 | **Opal Defect Density Reduction** | Current rate of 37 defects per client exceeds <30 target; directly addresses #1 NPS theme (Product Quality) | Average new defects per client <30 by Q2 2026 |
+| 4 | **SA Health Stabilisation Programme** | Largest revenue account ($8.0m) with NPS of -54.55; requires dedicated cross-functional programme | SA Health NPS improved to -25 by Q2 2026 |
+| 5 | **Executive Engagement Compliance** | Segment model prescribes 4x yearly EVP engagement for Giants/Sleeping Giants; compliance tracking needed | 100% TEA cadence compliance for Giant and Sleeping Giant segments |
+| 6 | **Sunrise Support Resolution Parity** | APAC trails US on all resolution metrics (FDR 27% vs 38%, 3DR 44% vs 57%, 5DR 50% vs 61%) | APAC resolution rates within 5 percentage points of US by Q4 2026 |
+
+**Note:** These are recommendations for discussion. Formal 2026 initiative registration on the NPS Project Tracking Board should be completed as a priority action.
+
+---
+
+## 9. Conclusion
+
+The Q4 2025 NPS result of -18.60 is a genuine recovery — the largest single-period improvement in APAC's NPS history (+33.57 points). This was not accidental. It reflects 6 completed "5 in 25" projects, 9 in-progress projects (including Sunrise Support Resolution Times added in Q2 2025), a 4x increase in Opal test automation coverage, AI-enhanced support tools, and a structured engagement model that allocates more time and attention to higher-risk clients.
 
 The work is not done. Product quality remains the dominant concern across all client segments. SA Health, our largest account, needs a breakthrough in satisfaction. Our passive-to-promoter conversion opportunity is significant and addressable. And our local development capability — something clients have asked for repeatedly — is now operational and delivering.
 
@@ -410,6 +449,7 @@ Every data point in this document is verifiable on the [APAC CS Dashboards](http
 | 24 in 24 Programme | `24 in 24/24 in 24.pdf` |
 | APAC CS Dashboards | [https://apac-cs-dashboards.com](https://apac-cs-dashboards.com) |
 | NPS Bug Reports & Features | `apac-intelligence-docs/bug-reports/` (36+ NPS-related documents) |
+| NPS Project Tracking Board | SharePoint: `NPS/Lists/NPS Project Tracking Board` (cross-BU initiative tracking with KPIs and status by quarter) |
 
 ## Appendix B: Previous NPS Cycles (Abbreviated)
 
