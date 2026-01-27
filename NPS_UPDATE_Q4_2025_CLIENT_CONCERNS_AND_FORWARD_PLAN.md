@@ -1,6 +1,6 @@
 # APAC NPS Update: Addressing Client Concerns & Forward Plan
 
-**Date:** January 2025
+**Date:** January 2026
 **Author:** APAC Client Success
 **Period:** Q4 2025 (October 2025)
 **Dashboard Reference:** [APAC CS Dashboards](https://apac-cs-dashboards.com)
@@ -11,7 +11,7 @@
 
 After reaching a historic low of **-52.17** in Q2 2025, the APAC NPS has recovered to **-18.60** in Q4 2025 — a **+33.57-point rebound** and our strongest result since the 2023 baseline (-23.08). This recovery reflects targeted action across our "5 in 25" initiative programme, improved support operations, and a deliberate shift in how we engage with clients at every level.
 
-However, -18.60 remains below the global Altera average of -5.3, and several critical-risk clients continue to score poorly. This document outlines what our clients told us, what we have done, what has worked, and what we plan to do next.
+However, -18.60 remains below the global Altera average of -6.7, and several critical-risk clients continue to score poorly. This document outlines what our clients told us, what we have done, what has worked, and what we plan to do next.
 
 All data referenced in this document is drawn from verified NPS survey responses, the APAC CS Dashboards platform, client segmentation records, and initiative tracking files. No assumptions have been made.
 
@@ -40,9 +40,9 @@ All data referenced in this document is drawn from verified NPS survey responses
 
 | Client | NPS | Avg Score | Responses | Primary Theme | Segment |
 |--------|-----|-----------|-----------|---------------|---------|
-| Gippsland Health Alliance | **+100** | 9.33 | 3 | Communication | Giant |
-| Royal Victorian Eye & Ear Hospital | **+100** | 9.00 | 1 | Product Quality | Leverage |
-| SAPPI Pte Ltd (Guam) | **+100** | 9.00 | 1 | Communication | Leverage |
+| Gippsland Health Alliance | **+100** | 9.33 | 3 | Communication | Leverage |
+| Royal Victorian Eye & Ear Hospital | **+100** | 9.00 | 1 | Product Quality | Maintain |
+| SAPPI Pte Ltd (Guam) | **+100** | 9.00 | 1 | Communication | Maintain |
 | Ministry of Defence Singapore | 0 | 7.60 | 5 | General Feedback | Leverage |
 | Singapore Health Services | 0 | 7.80 | 5 | Product Customisation | Sleeping Giant |
 | Dept of Health - Victoria | 0 | 7.50 | 2 | General Feedback | Nurture |
@@ -50,7 +50,7 @@ All data referenced in this document is drawn from verified NPS survey responses
 | WA Department of Health | -25 | 6.25 | 4 | General Feedback | Sleeping Giant |
 | Mount Alvernia Hospital | -40 | 6.60 | 5 | General Feedback | Leverage |
 | Barwon Health Australia | -50 | 6.50 | 2 | Product Quality | Maintain |
-| SA Health | **-55** | 6.00 | 11 | Product Quality | Giant |
+| SA Health (consolidated) | **-54.55** | 6.00 | 11 | Product Quality | Giant / Collaborate / Nurture |
 | St Luke's Medical Centre (Philippines) | **-100** | 5.00 | 2 | Support Responsiveness | Maintain |
 | Epworth Healthcare | **-100** | 2.00 | 1 | Product Quality | Maintain |
 
@@ -70,12 +70,12 @@ All data referenced in this document is drawn from verified NPS survey responses
 
 | Metric | APAC | Global | Gap |
 |--------|------|--------|-----|
-| NPS Score | -18.6 | -5.3 | -13.3 |
-| Promoters | 16.3% | 27.7% | -11.4% |
-| Passives | 48.8% | 39.0% | +9.8% |
-| Detractors | 34.9% | 33.0% | -1.9% |
+| NPS Score | -18.6 | -6.7 | -11.9 |
+| Promoters | 16.3% | 26.5% | -10.2% |
+| Passives | 48.8% | 40.3% | +8.5% |
+| Detractors | 34.9% | 33.2% | -1.7% |
 
-**Insight:** APAC's detractor rate is nearly identical to global — the gap is driven by a significantly lower promoter rate. The high passive share (48.8%) represents our primary conversion opportunity.
+**Insight:** APAC's detractor rate is nearly identical to global (34.9% vs 33.2%) — the 11.9-point NPS gap is driven by a significantly lower promoter rate (16.3% vs 26.5%). The high passive share (48.8%) represents our primary conversion opportunity.
 
 ---
 
@@ -103,8 +103,11 @@ All data referenced in this document is drawn from verified NPS survey responses
 — Matt Malone, Epworth Healthcare
 
 **Critical Risk — SA Health, Multiple Respondents (Average Score: 6.0)**
-> "Continuing inability to deliver comprehensive fit for purpose solutions to SA Health. Quality of Patch Releases delivered to SA Health. Lack of proactive urgency and time taken to resolve defects."
-— Director/Manager, SA Health (Score: 2)
+> "Continuing inability to deliver quickly and consistently on products and services."
+— Wendy Sutton, Executive/VP, SA Health (Score: 3)
+
+> "Product is subpar. Doesn't have basic modern functions such as electronic referral receipt, two-way SMS. Several screens require duplicate data entry."
+— Chris Tan, Applications, SA Health (Score: 1)
 
 > "I have several outstanding Snow cases related to the IPWL, OPWL, Referrals and Scheduling which I am not getting much traction on. There appears to be no one with the technical knowledge in Altera to be able to investigate and resolve these issues."
 — Director/Manager, SA Health (Score: 3)
@@ -190,10 +193,10 @@ The "5 in 25" programme is our 2025 Client Success improvement initiative, deliv
 | Quality Assurance Framework | Keryn Kondoprias | In Progress | QA audit framework developed; H2 2025 audits underway; target 80% compliance |
 
 **Completion Summary:**
-- **6 projects COMPLETE** (1a, 1b, 2a, 2b, 3c, 4a)
-- **8 projects IN PROGRESS** (1c, 2c, 2d, 3a, 3d, 4b, 2e, 3e)
-- **1 project OPERATIONAL** (1e)
-- **1 project DISCONTINUED** (3b — Health Checks)
+- **6 projects COMPLETE** — Client Education on Support, Services Org Comms, Upskill Support (Opal), Upskill Support (Third Party), Local Sunrise Dev, Upskilling Services
+- **8 projects IN PROGRESS** — Opal Release Education, AI in SNOW, Backlog Reduction, Opal Code Quality, Referenceability, Support Coaching, PMO, QA Framework
+- **1 project OPERATIONAL** — APAC Delivery Framework
+- **1 project DISCONTINUED** — Health Checks (no client interest)
 
 ### 3.2 Opal Code Quality Improvement
 
@@ -294,7 +297,7 @@ APAC's passive share (48.8%) is 9.8 percentage points higher than global. Conver
 4. Follow up with a personal touch-point from the CSE before the next survey
 
 #### SA Health Stabilisation (Giant Strategy)
-SA Health represents $8.0m annual spend and an NPS of -55. With 11 respondents in Q4 2025, SA Health is our most-responded-to client and our largest revenue account.
+SA Health represents $8.0m annual spend and a consolidated NPS of -54.55 (across Sunrise, iPro, and iQemo sub-brands). With 11 respondents in Q4 2025, SA Health is our most-responded-to client and our largest revenue account.
 
 **Committed actions:**
 - Hosting proposal issued; awaiting decision
@@ -304,7 +307,7 @@ SA Health represents $8.0m annual spend and an NPS of -55. With 11 respondents i
 - 5 executive meetings held in H1 2025 (target: 5 by EOY — achieved)
 - New bookings ACV of $2.7m in Q2 2025
 
-**Target NPS:** Improve from -55 to -25 by Q2 2026 through backlog reduction, code quality improvements, and proactive executive engagement.
+**Target NPS:** Improve from -54.55 to -25 by Q2 2026 through backlog reduction, code quality improvements, and proactive executive engagement.
 
 #### SingHealth Transition Management (Sleeping Giant)
 SingHealth ($6.6m spend) is transitioning to EPIC by 2028. While long-term attrition is expected, the goal is to maintain satisfaction and maximise value during the transition period.
@@ -330,7 +333,7 @@ The local Sunrise development team (Australia + India) has been established and 
 #### Referenceability Programme
 Target: +1 new reference client by end 2025. Gippsland Health Alliance (NPS: +100, CSI: 100) is the primary candidate.
 
-**Leverage Te Whatu Ora Waikato** (NPS: +100) as an existing advocacy client — their feedback consistently highlights "great collaboration" and "direct connection to the team that can create change."
+**Leverage Te Whatu Ora Waikato** (most recent NPS: +100, Q2 2025; no Q4 2025 response) as an existing advocacy client — their feedback consistently highlights "great collaboration" and "direct connection to the team that can create change."
 
 ### 5.4 Technology and Data Capability
 
@@ -359,7 +362,7 @@ The APAC CS Dashboards platform continues to be developed to provide real-time v
 | Promoter Share | 16.3% | 22% | 28% |
 | Detractor Share | 34.9% | 28% | 22% |
 | Response Rate | 30.3% | 35% | 40% |
-| SA Health NPS | -55 | -25 | -15 |
+| SA Health NPS | -54.55 | -25 | -15 |
 | Support Backlog (Opal) | 145 | <100 | <80 |
 | Opal Test Coverage (Critical/High) | 100% | 100% | 100% |
 | Reference Clients | 1 (Te Whatu Ora) | 2 | 3 |
@@ -412,21 +415,21 @@ Every data point in this document is verifiable on the [APAC CS Dashboards](http
 
 | Client | 2023 NPS | Q2 2024 | Q4 2024 | Q2 2025 | Q4 2025 | Direction |
 |--------|----------|---------|---------|---------|---------|-----------|
-| Albury Wodonga Health | 0 | — | +100 | — | 0 | Fluctuating |
-| Barwon Health | 0 | -50 | -25 | -75 | -50 | Volatile (improved Q4) |
-| Dept of Health - Victoria | 0 | — | -78 | -100 | 0 | Recovering |
-| Epworth HealthCare | — | -100 | -40 | -100 | -100 | Critical |
+| Albury Wodonga Health | 0 | — | 0 | — | 0 | Stable |
+| Barwon Health | 0 | -50 | -75 | -75 | -50 | Improving from low |
+| Dept of Health - Victoria | 0 | — | -100 | -100 | 0 | Strong recovery |
+| Epworth HealthCare | — | -100 | -100 | -100 | -100 | Critical |
 | Gippsland Health Alliance | 0 | 0 | 0 | +33 | +100 | Strong improvement |
-| Grampians Health Alliance | — | — | -100 | -50 | — | No Q4 response |
-| GRMC | — | 0 | 0 | -50 | — | No Q4 response |
-| SA Health | -33 | 0 | -50 | -60 | -55 | Slight improvement |
+| Grampians Health Alliance | — | — | -50 | -50 | — | No Q4 response |
+| GRMC | — | 0 | -50 | -50 | — | No Q4 response |
+| SA Health | -33 | 0 | -60 | -60 | -54.55 | Slight improvement |
 | Ministry of Defence | — | — | 0 | 0 | 0 | Stable |
-| Mount Alvernia Hospital | — | -100 | -60 | -67 | -40 | Improving |
+| Mount Alvernia Hospital | — | -100 | -67 | -67 | -40 | Improving |
 | SingHealth | — | -33 | -33 | -33 | 0 | Improving |
-| SLMC | — | -100 | -100 | -75 | -100 | Critical |
-| Te Whatu Ora Waikato | +50 | +100 | +80 | +100 | — | Strong (no Q4 response) |
-| WA Health | -100 | -25 | -50 | -100 | -25 | Volatile (improved Q4) |
-| Western Health | 0 | — | -50 | -100 | — | No Q4 response |
+| SLMC | — | -100 | -75 | -75 | -100 | Critical |
+| Te Whatu Ora Waikato | +50 | +100 | +100 | +100 | — | Strong (no Q4 response) |
+| WA Health | -100 | -25 | -100 | -100 | -25 | Volatile (improved Q4) |
+| Western Health | 0 | — | -100 | -100 | — | No Q4 response |
 
 ---
 
