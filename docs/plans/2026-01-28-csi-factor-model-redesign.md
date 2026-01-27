@@ -2,9 +2,9 @@
 
 **Date:** 28 January 2026
 **Author:** APAC Client Success
-**Status:** Proposed (Updated — full-dataset validation)
+**Status:** Proposed (Updated — full-dataset validation + engagement data)
 **Scope:** CSI factor model (Excel segmentation) only
-**Data:** 199 NPS responses across 5 periods (2023–Q4 2025); 2,179 ServiceNow cases (Jan 2024–Nov 2025)
+**Data:** 199 NPS responses across 5 periods (2023–Q4 2025); 2,179 ServiceNow cases (Jan 2024–Nov 2025); 807 segmentation events; 282 meeting records
 
 ---
 
@@ -14,10 +14,11 @@ The current APAC Client Satisfaction Index (CSI) has **50% accuracy** when teste
 
 The root cause is that the model measures **business risk** (C-Suite turnover, M&A/attrition, engagement frequency) rather than **client satisfaction drivers** (support responsiveness, technical knowledge, communication quality). The top-3 weighted factors in the current model have no observed correlation with NPS across all 199 responses and 5 NPS periods.
 
-> **Note:** This document has undergone three rounds of validation:
+> **Note:** This document has undergone four rounds of validation:
 > 1. **Initial (Q4 2025 only):** 43 NPS responses, 10 clients
 > 2. **Full NPS dataset:** All 199 NPS responses across 5 periods (2023–Q4 2025). Revealed Communication/Transparency as the strongest protective factor (+33 NPS delta).
 > 3. **ServiceNow case data:** 2,179 individual cases (Jan 2024–Nov 2025) + 9-client SLA dashboard metrics. Confirmed resolution time (rho = -0.582) as the strongest support predictor. Revised MTTR threshold from 45h to 700h based on actual data. Confirmed case priority is NOT predictive of NPS.
+> 4. **Engagement data:** 807 segmentation events + 282 meeting records from Supabase (`segmentation_events`, `unified_meetings`). Confirmed engagement frequency has near-zero NPS correlation (rho = 0.074). Factors #9 and #12 now automatable from database. Identified additional data types for model strengthening.
 
 ---
 
@@ -248,6 +249,81 @@ The original CSI model proposed MTTR >45 hours as a threshold. The actual case d
 
 The ServiceNow dashboard data (Section 3.6) showed -69 NPS delta at >10 open cases. The full case dataset confirms this: clients with >10 currently open cases (Barwon, SA Health, WA Health) average NPS -33 vs +12 for those with ≤10 (**-46 NPS delta**). Both analyses converge on >10 as the correct threshold.
 
+### 3.8 Engagement Data Validation (807 Segmentation Events + 282 Meetings)
+
+Supabase `segmentation_events` (807 records, 96.7% completion rate) and `unified_meetings` (282 records) were analysed to validate engagement-related CSI factors. Each completed segmentation event represents a critical structured meeting (partnership reviews, ops plans, quarterly business reviews). Meeting records capture additional ad-hoc touchpoints.
+
+#### Combined Engagement Per Client (2025)
+
+| Client | Meetings | Seg Events | Combined | Per Month | Q4 NPS |
+|--------|:--------:|:----------:|:--------:|:---------:|:------:|
+| SA Health | 29 | 171 | 200 | 18.2 | -25 |
+| GHA | 0 | 57 | 57 | 5.2 | +100 |
+| Dept Health Vic | 0 | 57 | 57 | 5.2 | 0 |
+| SingHealth | 5 | 44 | 49 | 4.5 | 0 |
+| Mount Alvernia | 2 | 44 | 46 | 4.2 | -40 |
+| WA Health | 3 | 42 | 45 | 4.1 | -25 |
+| Epworth Healthcare | 1 | 39 | 40 | 3.6 | -100 |
+| Albury Wodonga Health | 0 | 37 | 37 | 3.4 | 0 |
+| RVEEH | 0 | 33 | 33 | 3.0 | +100 |
+| Barwon Health | 1 | 30 | 31 | 2.8 | -50 |
+| NCS/MoD Singapore | 0 | 27 | 27 | 2.5 | 0 |
+| SLMC | 1 | 22 | 23 | 2.1 | -100 |
+| GRMC | 0 | 17 | 17 | 1.5 | +100 |
+
+#### Key Findings From Engagement Data
+
+**1. Engagement frequency has near-zero NPS correlation (rho = 0.074)**
+
+Combined engagement touchpoints per month show essentially no relationship with Q4 NPS. SA Health has **12x more engagement** than GRMC (18.2 vs 1.5/month) yet worse NPS (-25 vs +100). Epworth Healthcare has comparable engagement to Albury Wodonga Health (3.6 vs 3.4/month) but opposite NPS outcomes (-100 vs 0). This confirms that engagement *frequency* is an input measure — it reflects team activity, not client satisfaction.
+
+**2. Factor #9 (Strategic Ops <2x/yr) is correctly weighted low**
+
+The data validates the v2 model's decision to weight engagement frequency at only 6 points (down from 12 in v1). Frequency alone does not predict NPS. The existing threshold of <2 strategic ops per year remains reasonable as a minimum engagement floor but should not carry significant weight.
+
+**3. Segmentation event completion is automatable from Supabase**
+
+Both Factor #9 (Strategic Ops <2x/yr) and Factor #12 (No Event Attendance) can now be computed directly from `segmentation_events`:
+- **Factor #9:** `SELECT COUNT(*) FROM segmentation_events WHERE client_name = ? AND completed = true AND event_date >= NOW() - INTERVAL '12 months'` — threshold: fewer than 2 completed strategic events per year.
+- **Factor #12:** `SELECT COUNT(*) FROM segmentation_events WHERE client_name = ? AND completed = true AND event_date >= NOW() - INTERVAL '12 months'` — threshold: zero completed events.
+
+This increases automatable factors from **7 to 9 of 14**.
+
+**4. Engagement quality (not quantity) is the true signal**
+
+The Communication/Transparency factor (weight -8) captures what engagement frequency cannot — whether the engagement is *effective*. GHA (5.2/month, NPS +100) and SA Health (18.2/month, NPS -25) have similar or higher engagement intensity, but GHA's engagement is characterised by proactive transparency and responsiveness. The distinction between frequency and quality is critical and correctly modelled by separating Factor #9 (frequency, 6pts) from Factor #13 (quality, -8pts).
+
+### 3.9 Additional Data Types for Model Strengthening
+
+Mining the 1,924 case records, 807 segmentation events, and 282 meeting records identified the following candidate signals. Six case-data signals were tested; none were strong enough to add as new factors. The model's primary weakness is not missing factors but factor automation.
+
+#### Case Data Signals Tested and Rejected
+
+| Candidate | Metric | Result | Why Rejected |
+|-----------|--------|--------|-------------|
+| Resolution Time Trend | 2024→2025 avg resolution change | **Reversed** (-46 NPS delta: improving clients have worse NPS) | NPS is a lagging indicator; clients with worst 2024 performance improved most but still carry cumulative damage |
+| Defect Close Code Rate | % cases closed as "Defect/Data Correction" | **Reversed** (-34 NPS delta: high defect% = better NPS) | High defect identification reflects better triage quality, not more defects experienced |
+| H2 2025 Case Volume | Cases opened Jul–Nov 2025 | Weak | Correlates with client size, not satisfaction |
+| Contact Concentration | Cases per unique contact | Weak | No clear threshold separating NPS outcomes |
+| On Hold Case Ratio | % open cases in "On Hold" state | Moderate | WA Health 19/28 on hold, but confounded by other factors |
+| Multi-Product Complexity | Number of distinct products | Weak | GHA (3 products, NPS +100) vs SA Health (3 products, NPS -25) |
+
+#### Recommended Additional Data Types (Priority Order)
+
+| Priority | Data Type | Source | Expected Signal | Impact on Model |
+|----------|-----------|--------|----------------|----------------|
+| **High** | Escalation Records | ServiceNow / CE team | Escalation count and reason codes per client | Would automate Factor #4 (Technical Knowledge Gap, weight 10) — currently the highest-weight non-automatable factor |
+| **High** | R&D Defect Backlog Per Client | David Beck / R&D tracking | Open defect count with client impact | Would validate Factor #6 (Defect Rate >30, weight 8) threshold with actual data instead of arbitrary value |
+| **High** | Actual Meeting Frequency | Supabase `unified_meetings` + `segmentation_events` | Combined touchpoints per year | **Now available** — automates Factor #9 (weight 6) and Factor #12 (weight 4) |
+| Medium | Contract Renewal Dates | Commercial / Salesforce | Months to renewal | Clients approaching renewal (SingHealth EPIC 2028, Parkway 2026) may have different satisfaction dynamics |
+| Medium | Software Version Gap Severity | Product team / initiative tracking | Version gap (current vs latest release) | Would refine Factor #5 (weight 9) — Epworth is 3+ versions behind vs others at 1 version |
+| Medium | Training/Enablement Hours | CE team records | Hours delivered per client | Could proxy for Technical Knowledge Gap mitigation |
+| Low | Feature Request Volume | ServiceNow / product backlog | Requests per client | Distinct from defects — indicates product fit |
+| Low | Go-Live Recency | Implementation records | Months since last go-live | Recently gone-live clients have different support patterns |
+| Low | Executive Sponsor Engagement | CE team | Direct C-Suite interaction frequency | Distinct from team-level ops meetings |
+
+**Single most impactful acquisition:** Escalation records from ServiceNow. This would make Factor #4 (Technical Knowledge Gap, weight 10) partially automatable by counting escalations citing expertise gaps, converting the model's highest-weight qualitative factor into a data-driven one.
+
 ---
 
 ## 4. Proposed CSI Factor Model v2
@@ -352,16 +428,17 @@ The full-dataset validated model maintains 100% retroactive accuracy whilst bein
 | 6 | Defect Rate >30/client | R&D defect tracking | David Beck | Monthly report exists | Medium — requires manual entry |
 | 7 | NPS No Response | Supabase `nps_responses` | Automated | Per NPS cycle | **High — already in database** |
 | 8 | At Risk M&A/Attrition | CS leadership | Manual | Already in model | Existing |
-| 9 | Strategic Ops <2x/yr | Meeting records | CE team | Already in model | Existing |
+| 9 | Strategic Ops <2x/yr | Supabase `segmentation_events` (807 records, 96.7% completion) + `unified_meetings` (282 records) | Automated | **Available now** — combined engagement touchpoints per client computed from completed segmentation events and meeting records | **High — automatable from database** (rho = 0.074 confirms frequency is weak predictor; threshold <2 completed strategic events/year) |
 | 10 | C-Suite Turnover | CS leadership | Manual | Already in model | Existing |
 | 11 | NPS Declining 2+ periods | Supabase `nps_responses` | Calculated | Historical data available | **High — can automate from existing data** |
-| 12 | No Event Attendance | Event records | CE team | Already in model | Existing |
+| 12 | No Event Attendance | Supabase `segmentation_events` + `unified_meetings` | Automated | **Available now** — zero completed events in past 12 months flags disengagement | **High — automatable from database** |
 | 13 | Communication/Transparency | CE team qualitative assessment | CE team | Per review cycle | Low — qualitative but definable (proactive updates, documented cadence, transparency on issues) |
 | 14 | NPS Promoter | Supabase `nps_responses` | Automated | Real-time | **High — already in database** |
 
-**7 of 14 factors fully automatable** from existing data (1, 2, 3, 7, 11, 12, 14) — support backlog via `support_sla_latest`, avg resolution time from APAC Case Stats Excel.
+**9 of 14 factors fully automatable** from existing data (1, 2, 3, 7, 9, 11, 12, 14) — support backlog via `support_sla_latest`, avg resolution time from `support_case_details`, engagement frequency from `segmentation_events` + `unified_meetings`, NPS factors from `nps_responses`.
 **1 factor** requires data already tracked monthly (6) — R&D defect reports.
-**4 factors** unchanged from current model (5, 8, 9, 10).
+**2 factors** unchanged from current model (5, 8) — manual but well-established.
+**1 factor** remains manual (10) — C-Suite turnover from CS leadership.
 **2 new factors** require qualitative CE assessment (4, 13) — definable criteria but not automatable. These are justified by being the strongest per-client negative correlator (Technical Knowledge: -0.83 avg) and strongest protective factor (Communication: +33 NPS delta) in the dataset.
 
 ---
@@ -441,6 +518,7 @@ All analysis in this document is derived from:
 - **NPS Historical Data:** 199 total responses across 5 periods (2023, Q2 24, Q4 24, Q2 25, Q4 25)
 - **Support SLA Metrics (Actual):** Supabase `support_sla_latest`, 9 clients, Q4 2025 data sourced from client-specific ServiceNow dashboard Excel exports (Albury Wodonga, Barwon, Epworth, Grampians, RVEEH, SA Health, SA Health iPro, WA Health, Western Health)
 - **APAC Case Stats (Detailed):** 2,179 individual ServiceNow case records, Jan 2024–Nov 2025, 14 APAC clients, case-level priority, state, resolution duration, product, and environment data. Source: `APAC Case Stats since 2024.xlsx` (OneDrive shared library). **Imported to Supabase `support_case_details`** — 1,924 total records (1,884 from case stats import + 40 pre-existing SLA dashboard records). 1,788 records have resolution duration populated.
+- **Segmentation Events (Engagement):** Supabase `segmentation_events`, 807 records (96.7% completed), 19 clients, structured engagement touchpoints (partnership reviews, ops plans, QBRs). Combined with `unified_meetings` (282 records) provides engagement frequency per client. Spearman rho = 0.074 against NPS (near-zero correlation) — confirms frequency is not predictive.
 - **APAC Client Segmentation Data (Q2 2025):** Excel workbook, 6 sheets, 20 clients
 - **Client Health History:** Supabase `client_health_history`, 500+ records, health score v4.0
 - **NPS Update Q4 2025:** Client Concerns & Forward Plan (January 2026)
@@ -449,4 +527,4 @@ All analysis in this document is derived from:
 
 ---
 
-*This design document proposes a CSI factor model redesign based on observed correlation between model factors and actual NPS outcomes across all 199 responses and 5 NPS periods (2023–Q4 2025). All factor weights are backed by full-dataset evidence, not single-period analysis. Recommendations are evidence-based and verifiable against the cited data sources.*
+*This design document proposes a CSI factor model redesign based on observed correlation between model factors and actual NPS outcomes across all 199 responses, 5 NPS periods (2023–Q4 2025), 2,179 ServiceNow cases, 807 segmentation events, and 282 meeting records. All factor weights are backed by full-dataset evidence, not single-period analysis. 9 of 14 factors are fully automatable from existing Supabase data. Recommendations are evidence-based and verifiable against the cited data sources.*
