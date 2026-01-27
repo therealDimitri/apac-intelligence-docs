@@ -185,6 +185,36 @@ None.
 
 ---
 
+## Issue 8: RVEEH Showing 0% Compliance Despite 33 Completed Events
+
+**Symptom:** Royal Victorian Eye and Ear Hospital (RVEEH) displayed 0% compliance on the 2025 compliance page, despite having 33 completed segmentation events in the database.
+
+**Root Cause:** The `client_name_aliases` table had a mismatched canonical name. The canonical name was set to `"The Royal Victorian Eye and Ear Hospital"` (with "The" prefix), but `client_segmentation` uses `"Royal Victorian Eye and Ear Hospital"` (without "The").
+
+The materialised view's `event_counts` CTE resolves event client names to canonical names via aliases, then JOINs to `combined_requirements` (which uses `client_segmentation` names). Because the canonical name didn't match the segmentation name, the JOIN produced zero matches — making all RVEEH events invisible to compliance calculations.
+
+**Investigation Steps:**
+1. Confirmed 33 completed events exist in `segmentation_events` for RVEEH (created 2026-01-10)
+2. Confirmed materialised view was refreshed after events were created (2026-01-27)
+3. Confirmed event type IDs match: 7 of 8 Maintain tier requirements have events
+4. Queried `client_name_aliases` — found canonical = `"The Royal Victorian Eye and Ear Hospital"`
+5. Queried `client_segmentation` — found name = `"Royal Victorian Eye and Ear Hospital"`
+6. Traced the JOIN logic in `supabase/migrations/20260111_fix_compliance_view_client_aliases.sql`:
+   - `event_counts` CTE maps events → canonical via `COALESCE(cnm.canonical_name, se.client_name)`
+   - `event_type_compliance` CTE JOINs `combined_requirements cr` with `event_counts ec` ON `ec.client_name = cr.client_name`
+   - This JOIN fails when canonical ≠ segmentation name
+
+**Fix Applied:**
+1. Updated `client_name_aliases` canonical name from `"The Royal Victorian Eye and Ear Hospital"` to `"Royal Victorian Eye and Ear Hospital"` (5 rows updated)
+2. Removed explicit self-mapping row (`display="Royal Victorian Eye and Ear Hospital"` → `canonical="Royal Victorian Eye and Ear Hospital"`) since the CTE's `UNION ALL` already handles self-mappings — keeping it would cause duplicate JOIN rows
+3. Refreshed materialised view via `scripts/refresh-compliance-view.mjs`
+
+**Result:** RVEEH now shows **75% compliance** (6/8 event types compliant, 33 of 21 events completed) — up from 0%.
+
+**Lesson:** Canonical names in `client_name_aliases` must always match the names used in `client_segmentation`. Any mismatch silently breaks the materialised view JOIN, causing events to be invisible.
+
+---
+
 ## Related Files
 
 - `src/hooks/useEventCompliance.ts` - Year handling fix, cross-year window fix for list view
