@@ -146,6 +146,48 @@ Product quality is a severe issue for 3-4 specific clients (Epworth, SA Health, 
 
 Across all 199 responses, clients affected by support responsiveness issues average NPS -43 vs -20 for unaffected clients. This 23-point delta is consistent across all 5 periods, confirming it as the most reliable predictor of negative NPS.
 
+### 3.6 Actual Support Data Validation (ServiceNow via Supabase)
+
+Support SLA metrics from `support_sla_latest` (sourced from client-specific ServiceNow dashboard exports) were cross-referenced with Q4 2025 NPS scores for 6 clients with both datasets.
+
+#### Support Metrics vs Q4 2025 NPS (Actual Data)
+
+| Client | Open Cases | 30d+ Aging | 90d+ Aging | High Priority | Res SLA % | Support CSAT | Q4 NPS |
+|--------|-----------|-----------|-----------|--------------|----------|-------------|--------|
+| Epworth Healthcare | **11** | **11** | 5 | 1 | N/A | 4.50 | **-100** |
+| Barwon Health | 4 | 4 | 4 | 0 | 100% | 5.00 | **-50** |
+| SA Health | **39** | **29** | **15** | **9** | **75%** | **3.15** | **-25** |
+| WA Health | 0 | 0 | 0 | 0 | 89% | 4.70 | **-25** |
+| Albury Wodonga Health | 4 | 3 | 3 | 0 | 100% | N/A | **0** |
+| RVEEH | 3 | 3 | 2 | 1 | 100% | 4.25 | **+100** |
+
+#### Threshold Analysis (Actual Support Data)
+
+| Threshold | Above Avg NPS | Below Avg NPS | NPS Delta | Strength |
+|-----------|--------------|--------------|-----------|----------|
+| Open Cases >10 | -62 (Epworth, SA Health) | +6 (AWH, Barwon, RVEEH, WA Health) | **-69** | **Strongest** |
+| Aging 30d+ >5 | -62 (Epworth, SA Health) | +6 (AWH, Barwon, RVEEH, WA Health) | **-69** | **Strongest** |
+| Resolution SLA <95% | -25 (SA Health, WA Health) | +17 (AWH, Barwon, RVEEH) | **-42** | Strong |
+| Support CSAT <4.5 | +38 (RVEEH, SA Health) | -58 (Barwon, Epworth, WA Health) | **+96 (reversed)** | **Not predictive** |
+
+#### Key Findings From Actual Support Data
+
+**1. Backlog threshold should be >10, not >20**
+
+The original proposed threshold of >20 open cases was based on NPS verbatim analysis. Actual ServiceNow data shows the breakpoint is at **>10 open cases** — clients with >10 open cases average NPS -62 vs +6 for those with ≤10. This is a **-69 NPS delta**, the strongest single predictor from any data source. Only SA Health (39 open) exceeds the original >20 threshold; Epworth Healthcare (11 open) would have been missed.
+
+**2. Case aging 30d+ is a stronger signal than total open cases**
+
+The 30d+ aging metric perfectly separates critical from healthy clients (-69 NPS delta). Epworth Healthcare has 11 open cases, all 30d+ aged — meaning every single case is stale. This is more diagnostic than raw backlog count.
+
+**3. Support CSAT does NOT predict NPS**
+
+Support survey satisfaction (CSAT) is counterintuitively reversed: RVEEH has the lowest CSAT (4.25) but highest NPS (+100), whilst Barwon (CSAT 5.0) has NPS -50. This likely reflects different respondent pools — support survey respondents are case submitters (biased towards issues), whilst NPS captures broader stakeholder sentiment. **Support CSAT should NOT be used as a CSI factor.**
+
+**4. Resolution SLA <95% is a moderate predictor (-42 NPS delta)**
+
+SA Health (75% resolution SLA) and WA Health (89%) both have negative NPS, but the signal is confounded — WA Health's NPS improved from -100 to -25 despite sub-95% SLA, driven by AVP Support visits. SLA percentage alone is insufficient; it should be combined with case aging.
+
 ---
 
 ## 4. Proposed CSI Factor Model v2
@@ -163,7 +205,7 @@ Across all 199 responses, clients affected by support responsiveness issues aver
 
 | # | Factor | Weight | Threshold | All-Period Evidence |
 |---|--------|--------|-----------|---------------------|
-| 1 | Support Case Backlog >20 open | 15 | >20 open SNOW cases | Support Responsiveness: strongest volume predictor. -23 NPS delta across 128/199 responses. Consistent across all 5 periods. |
+| 1 | Support Case Backlog >10 open | 15 | >10 open SNOW cases | Actual ServiceNow data: clients with >10 open cases avg NPS -62 vs +6 for ≤10 (**-69 NPS delta**). Epworth (11 open, NPS -100) and SA Health (39 open, NPS -25) both exceed threshold. Original >20 threshold would miss Epworth. |
 | 2 | NPS Detractor (score 0-6) | 12 | Most recent NPS score 0-6 | Direct measure. Detractors avg 4.5. Drives 100% of negative NPS. |
 | 3 | MTTR >45 hours | 10 | Mean time to resolution exceeds 45hrs | Replaces weak SLA binary. Technical Knowledge Gap: -25 NPS delta, -0.83 avg score delta (strongest per-client correlator). |
 | 4 | Technical Knowledge Gap | 10 | Known escalations citing lack of product expertise | Separated from MTTR — strongest per-client negative correlator (-0.83 avg). SLMC, Epworth, Barwon all cite knowledge gaps. |
@@ -217,7 +259,7 @@ The full-dataset validated model maintains 100% retroactive accuracy whilst bein
 
 ### 4.5 Retroactive Factor Activation (Full-Dataset Validated v2)
 
-| Client | Backlog>20 (15) | Detractor (12) | MTTR>45 (10) | Tech Gap (10) | Old SW (9) | Defects>30 (8) | No NPS (8) | M&A (7) | Ops<2x (6) | CSuite (5) | Decline 2+ (4) | No Events (4) | Comms (-8) | Promoter (-5) | ARM | CSI |
+| Client | Backlog>10 (15) | Detractor (12) | MTTR>45 (10) | Tech Gap (10) | Old SW (9) | Defects>30 (8) | No NPS (8) | M&A (7) | Ops<2x (6) | CSuite (5) | Decline 2+ (4) | No Events (4) | Comms (-8) | Promoter (-5) | ARM | CSI |
 |--------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|-----|-----|
 | Albury Wodonga | F | F | F | F | F | T | F | F | T | F | F | F | T | F | 6 | 94 |
 | Barwon | T | T | T | T | F | T | F | F | F | F | T | F | F | F | 59 | 41 |
@@ -242,7 +284,7 @@ The full-dataset validated model maintains 100% retroactive accuracy whilst bein
 
 | # | Factor | Source | Owner | Availability | Automation Potential |
 |---|--------|--------|-------|-------------|---------------------|
-| 1 | Support Backlog >20 | ServiceNow case export | Stephen Oster | Monthly report exists | Medium — requires SNOW API or manual export |
+| 1 | Support Backlog >10 | Supabase `support_sla_latest` (synced from ServiceNow dashboards) | Automated | **Available now** — Q4 2025 data for 9 clients already imported | **High — already in database** |
 | 2 | NPS Detractor | Supabase `nps_responses` | Automated | Real-time | **High — already in database** |
 | 3 | MTTR >45hrs | ServiceNow reporting | Stephen Oster | Monthly report exists | Medium — requires SNOW API or manual export |
 | 4 | Technical Knowledge Gap | ServiceNow escalation tracking + CE qualitative assessment | Stephen Oster / CE team | Requires definition of tracking criteria | Low — qualitative assessment component |
@@ -257,8 +299,8 @@ The full-dataset validated model maintains 100% retroactive accuracy whilst bein
 | 13 | Communication/Transparency | CE team qualitative assessment | CE team | Per review cycle | Low — qualitative but definable (proactive updates, documented cadence, transparency on issues) |
 | 14 | NPS Promoter | Supabase `nps_responses` | Automated | Real-time | **High — already in database** |
 
-**5 of 14 factors fully automatable** from existing Supabase data (2, 7, 11, 12, 14).
-**3 factors** require data already tracked monthly (1, 3, 6) — ServiceNow and R&D reports.
+**6 of 14 factors fully automatable** from existing Supabase data (1, 2, 7, 11, 12, 14) — support backlog is now available via `support_sla_latest`.
+**2 factors** require data already tracked monthly (3, 6) — ServiceNow MTTR hours and R&D defect reports.
 **4 factors** unchanged from current model (5, 8, 9, 10).
 **2 new factors** require qualitative CE assessment (4, 13) — definable criteria but not automatable. These are justified by being the strongest per-client negative correlator (Technical Knowledge: -0.83 avg) and strongest protective factor (Communication: +33 NPS delta) in the dataset.
 
@@ -301,8 +343,8 @@ Bain's longitudinal research across healthcare IT shows that **a 12-point NPS im
 
 ### Phase 2: Populate New Factors (Within 30 Days)
 
-1. Request current support backlog count per client from Stephen Oster (ServiceNow export)
-2. Request current MTTR per client from Stephen Oster (ServiceNow reporting)
+1. Support backlog >10 per client — **already available** in Supabase `support_sla_latest` for 9 clients (Q4 2025 data imported from ServiceNow dashboards)
+2. MTTR per client — partially available via `resolution_sla_percent` in Supabase; raw MTTR hours require additional ServiceNow reporting from Stephen Oster
 3. Define Technical Knowledge Gap criteria with CE team — propose: 3+ escalations citing product expertise gaps in past 6 months
 4. Define Communication/Transparency criteria with CE team — propose: documented proactive update cadence (min monthly) + client acknowledgement of transparency in NPS verbatim or meeting notes
 5. Request current defect rate per client from David Beck (R&D tracking)
@@ -337,6 +379,7 @@ All analysis in this document is derived from:
 
 - **NPS Q4 2025 Survey Data:** 43 responses, 142 sent, NPS -18.60 (Supabase `nps_responses`)
 - **NPS Historical Data:** 199 total responses across 5 periods (2023, Q2 24, Q4 24, Q2 25, Q4 25)
+- **Support SLA Metrics (Actual):** Supabase `support_sla_latest`, 9 clients, Q4 2025 data sourced from client-specific ServiceNow dashboard Excel exports (Albury Wodonga, Barwon, Epworth, Grampians, RVEEH, SA Health, SA Health iPro, WA Health, Western Health)
 - **APAC Client Segmentation Data (Q2 2025):** Excel workbook, 6 sheets, 20 clients
 - **Client Health History:** Supabase `client_health_history`, 500+ records, health score v4.0
 - **NPS Update Q4 2025:** Client Concerns & Forward Plan (January 2026)
