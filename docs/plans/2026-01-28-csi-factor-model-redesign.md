@@ -4,7 +4,7 @@
 **Author:** APAC Client Success
 **Status:** Proposed (Updated — full-dataset validation)
 **Scope:** CSI factor model (Excel segmentation) only
-**Data:** 199 NPS responses across 5 periods (2023–Q4 2025)
+**Data:** 199 NPS responses across 5 periods (2023–Q4 2025); 2,179 ServiceNow cases (Jan 2024–Nov 2025)
 
 ---
 
@@ -14,7 +14,10 @@ The current APAC Client Satisfaction Index (CSI) has **50% accuracy** when teste
 
 The root cause is that the model measures **business risk** (C-Suite turnover, M&A/attrition, engagement frequency) rather than **client satisfaction drivers** (support responsiveness, technical knowledge, communication quality). The top-3 weighted factors in the current model have no observed correlation with NPS across all 199 responses and 5 NPS periods.
 
-> **Note:** This document was initially validated against Q4 2025 data only (43 responses). It has been updated with full-dataset validation across all 199 NPS responses and 5 periods (2023, Q2 2024, Q4 2024, Q2 2025, Q4 2025). This broader dataset strengthened some findings, weakened others, and revealed a new protective factor (Communication/Transparency) not visible in single-period analysis.
+> **Note:** This document has undergone three rounds of validation:
+> 1. **Initial (Q4 2025 only):** 43 NPS responses, 10 clients
+> 2. **Full NPS dataset:** All 199 NPS responses across 5 periods (2023–Q4 2025). Revealed Communication/Transparency as the strongest protective factor (+33 NPS delta).
+> 3. **ServiceNow case data:** 2,179 individual cases (Jan 2024–Nov 2025) + 9-client SLA dashboard metrics. Confirmed resolution time (rho = -0.582) as the strongest support predictor. Revised MTTR threshold from 45h to 700h based on actual data. Confirmed case priority is NOT predictive of NPS.
 
 ---
 
@@ -188,6 +191,63 @@ Support survey satisfaction (CSAT) is counterintuitively reversed: RVEEH has the
 
 SA Health (75% resolution SLA) and WA Health (89%) both have negative NPS, but the signal is confounded — WA Health's NPS improved from -100 to -25 despite sub-95% SLA, driven by AVP Support visits. SLA percentage alone is insufficient; it should be combined with case aging.
 
+### 3.7 Detailed Case Data Analysis (2,179 ServiceNow Cases, Jan 2024–Nov 2025)
+
+The APAC Case Stats dataset contains 2,179 individual case records across 14 APAC clients, with case-level detail including priority, state, created/resolved dates, resolution duration, and product. This is the most granular support data available.
+
+#### Per-Client Case Metrics (Full Dataset)
+
+| Client | Total Cases | Avg Res (h) | Median Res (h) | P90 Res (h) | Open | C+H% | Q4 NPS |
+|--------|------------|-------------|----------------|-------------|------|------|--------|
+| SA Health | 427 | 969 | 308 | 3,191 | 15 | 37.7% | -25 |
+| WA Health | 306 | **1,383** | **502** | **4,277** | **30** | 15.7% | -25 |
+| Barwon Health | 225 | 513 | 176 | 1,530 | 11 | 18.2% | -50 |
+| Grampians | 197 | 952 | 313 | 3,030 | 13 | 28.4% | N/R |
+| GHA | 183 | 564 | 219 | 1,656 | 8 | 45.9% | **+100** |
+| Western Health | 145 | 739 | 220 | 2,042 | 3 | 35.2% | N/R |
+| Epworth Healthcare | 134 | **938** | **338** | **2,834** | 10 | 35.8% | **-100** |
+| RVEEH | 105 | 436 | 145 | 1,205 | 2 | 35.2% | **+100** |
+| SingHealth | 100 | 711 | 512 | 1,848 | 7 | 39.0% | 0 |
+| Waikato DHB | 96 | 747 | 508 | 1,919 | 3 | 25.0% | N/R |
+| Albury Wodonga Health | 64 | 541 | 121 | 1,182 | 3 | 45.3% | 0 |
+| SLMC | 64 | 729 | 345 | 1,606 | 3 | 45.3% | **-100** |
+| GRMC | 15 | **294** | **48** | 688 | 2 | 40.0% | **+100** |
+| NCS/MoD Singapore | 9 | 623 | 408 | 1,338 | 1 | 22.2% | 0 |
+
+#### Spearman Rank Correlations: Support Metrics vs Q4 2025 NPS (n=11 clients)
+
+| Metric | Spearman rho | Direction | Strength | CSI Model Relevance |
+|--------|-------------|-----------|----------|-------------------|
+| **Avg Resolution Time** | **-0.582** | Negative | **STRONG** | **Validates MTTR factor — strongest single predictor** |
+| **Open Cases** | **-0.509** | Negative | **STRONG** | Validates backlog factor |
+| P90 Resolution Time | -0.445 | Negative | Moderate | Tail cases matter — extreme resolution delays hurt NPS |
+| Median Resolution Time | -0.291 | Negative | Weak | Average is better predictor than median |
+| Total Case Volume | -0.282 | Negative | Weak | Volume alone is not diagnostic |
+| Critical+High % | +0.191 | **Positive (wrong)** | Weak | **NOT predictive — GHA has highest C+H% (45.9%) and NPS +100** |
+| Critical Cases | +0.055 | Positive (wrong) | Negligible | **NOT predictive — should not be a CSI factor** |
+
+#### Key Findings From Case Data
+
+**1. Resolution time is the strongest NPS predictor (rho = -0.582)**
+
+Average resolution time across all cases is the single best support metric for predicting NPS. Clients with avg resolution >700 hours have average NPS **-50** vs **+42** for those below 700 hours (**-92 NPS delta**). This is stronger than open case count, which has already been shown to predict NPS at -69 delta.
+
+**2. Case priority mix does NOT predict NPS**
+
+Critical+High percentage has a *positive* Spearman correlation with NPS (+0.191), meaning clients with MORE high-priority cases actually tend to have BETTER NPS. GHA has the highest C+H% (45.9%) and NPS +100. Albury Wodonga has C+H% 45.3% and NPS 0. This counterintuitive result likely reflects that engaged clients raise more urgent cases — urgency reflects engagement, not dissatisfaction. **Case priority should not be used as a CSI factor.**
+
+**3. Total case volume is a weak predictor (rho = -0.282)**
+
+Volume alone does not distinguish satisfied from dissatisfied clients. SA Health (427 cases, NPS -25) and GHA (183 cases, NPS +100) are both high-volume clients with opposite NPS outcomes. Volume reflects client size and product complexity, not satisfaction.
+
+**4. The MTTR threshold should be 700 hours, not 45 hours**
+
+The original CSI model proposed MTTR >45 hours as a threshold. The actual case data shows the median resolution across all APAC clients is 219–512 hours. The **-92 NPS delta** threshold is at 700 hours average resolution. 45 hours would flag nearly every client. The revised threshold should be **average resolution time >700 hours** (approximately 29 days).
+
+**5. Open case count >10 validated at -46 NPS delta from case data**
+
+The ServiceNow dashboard data (Section 3.6) showed -69 NPS delta at >10 open cases. The full case dataset confirms this: clients with >10 currently open cases (Barwon, SA Health, WA Health) average NPS -33 vs +12 for those with ≤10 (**-46 NPS delta**). Both analyses converge on >10 as the correct threshold.
+
 ---
 
 ## 4. Proposed CSI Factor Model v2
@@ -207,7 +267,7 @@ SA Health (75% resolution SLA) and WA Health (89%) both have negative NPS, but t
 |---|--------|--------|-----------|---------------------|
 | 1 | Support Case Backlog >10 open | 15 | >10 open SNOW cases | Actual ServiceNow data: clients with >10 open cases avg NPS -62 vs +6 for ≤10 (**-69 NPS delta**). Epworth (11 open, NPS -100) and SA Health (39 open, NPS -25) both exceed threshold. Original >20 threshold would miss Epworth. |
 | 2 | NPS Detractor (score 0-6) | 12 | Most recent NPS score 0-6 | Direct measure. Detractors avg 4.5. Drives 100% of negative NPS. |
-| 3 | MTTR >45 hours | 10 | Mean time to resolution exceeds 45hrs | Replaces weak SLA binary. Technical Knowledge Gap: -25 NPS delta, -0.83 avg score delta (strongest per-client correlator). |
+| 3 | Avg Resolution >700 hours | 10 | Average case resolution time exceeds 700hrs (~29 days) | Actual case data: avg resolution >700h = NPS -50 vs +42 below (**-92 NPS delta**). Spearman rho = -0.582 (strongest single predictor from 2,179 cases). Replaces arbitrary 45hr threshold with data-driven cutoff. |
 | 4 | Technical Knowledge Gap | 10 | Known escalations citing lack of product expertise | Separated from MTTR — strongest per-client negative correlator (-0.83 avg). SLMC, Epworth, Barwon all cite knowledge gaps. |
 | 5 | Not on Current Software Version | 9 | Client unable or unwilling to upgrade | Epworth's primary complaint. Upgrade inability compounds defect frustration. Unchanged from v1. |
 | 6 | Product Defect Rate >30/client | 8 | >30 avg new defects per client | Reduced from 12: all-period NPS delta only -7 (vs -50 Q4-only). Concentrated in 3-4 clients, not systemic. |
@@ -243,7 +303,7 @@ Applying the full-dataset validated v2 factors to all 10 clients with Q4 2025 NP
 | Client | v1 CSI | v2 CSI | Actual NPS | v1 Correct? | v2 Correct? |
 |--------|--------|--------|-----------|-------------|-------------|
 | Albury Wodonga | 88 | 86 | 0 (avg 8.0) | YES | YES |
-| Barwon Health | 70 | 47 | -50 (avg 6.5) | YES | YES |
+| Barwon Health | 70 | 51 | -50 (avg 6.5) | YES | YES |
 | Dept Health Vic | 75 | 84 | 0 (avg 7.5) | YES | YES |
 | Epworth | 90 | 37 | -100 (avg 2.0) | NO | **YES** |
 | GHA | 100 | 100 | +100 (avg 9.3) | YES | YES |
@@ -259,10 +319,10 @@ The full-dataset validated model maintains 100% retroactive accuracy whilst bein
 
 ### 4.5 Retroactive Factor Activation (Full-Dataset Validated v2)
 
-| Client | Backlog>10 (15) | Detractor (12) | MTTR>45 (10) | Tech Gap (10) | Old SW (9) | Defects>30 (8) | No NPS (8) | M&A (7) | Ops<2x (6) | CSuite (5) | Decline 2+ (4) | No Events (4) | Comms (-8) | Promoter (-5) | ARM | CSI |
+| Client | Backlog>10 (15) | Detractor (12) | AvgRes>700h (10) | Tech Gap (10) | Old SW (9) | Defects>30 (8) | No NPS (8) | M&A (7) | Ops<2x (6) | CSuite (5) | Decline 2+ (4) | No Events (4) | Comms (-8) | Promoter (-5) | ARM | CSI |
 |--------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|-----|-----|
 | Albury Wodonga | F | F | F | F | F | T | F | F | T | F | F | F | T | F | 6 | 94 |
-| Barwon | T | T | T | T | F | T | F | F | F | F | T | F | F | F | 59 | 41 |
+| Barwon | T | T | F | T | F | T | F | F | F | F | T | F | F | F | 49 | 51 |
 | Dept Health Vic | F | F | F | F | F | T | F | F | F | F | F | F | T | F | 0 | 100 |
 | Epworth | T | T | T | T | T | T | F | F | F | F | T | F | F | F | 68 | 32 |
 | GHA | F | F | F | F | F | F | F | F | F | F | F | F | T | T | -13 | 100 |
@@ -286,7 +346,7 @@ The full-dataset validated model maintains 100% retroactive accuracy whilst bein
 |---|--------|--------|-------|-------------|---------------------|
 | 1 | Support Backlog >10 | Supabase `support_sla_latest` (synced from ServiceNow dashboards) | Automated | **Available now** — Q4 2025 data for 9 clients already imported | **High — already in database** |
 | 2 | NPS Detractor | Supabase `nps_responses` | Automated | Real-time | **High — already in database** |
-| 3 | MTTR >45hrs | ServiceNow reporting | Stephen Oster | Monthly report exists | Medium — requires SNOW API or manual export |
+| 3 | Avg Resolution >700hrs | APAC Case Stats Excel (2,179 cases, Jan 2024–Nov 2025) + ServiceNow | Stephen Oster | **Available now** — historical data imported, ongoing via SNOW export | **High — case-level data with resolution duration already extracted** |
 | 4 | Technical Knowledge Gap | ServiceNow escalation tracking + CE qualitative assessment | Stephen Oster / CE team | Requires definition of tracking criteria | Low — qualitative assessment component |
 | 5 | Not on current SW | Initiative tracking | David Beck | Already in model | Existing |
 | 6 | Defect Rate >30/client | R&D defect tracking | David Beck | Monthly report exists | Medium — requires manual entry |
@@ -299,8 +359,8 @@ The full-dataset validated model maintains 100% retroactive accuracy whilst bein
 | 13 | Communication/Transparency | CE team qualitative assessment | CE team | Per review cycle | Low — qualitative but definable (proactive updates, documented cadence, transparency on issues) |
 | 14 | NPS Promoter | Supabase `nps_responses` | Automated | Real-time | **High — already in database** |
 
-**6 of 14 factors fully automatable** from existing Supabase data (1, 2, 7, 11, 12, 14) — support backlog is now available via `support_sla_latest`.
-**2 factors** require data already tracked monthly (3, 6) — ServiceNow MTTR hours and R&D defect reports.
+**7 of 14 factors fully automatable** from existing data (1, 2, 3, 7, 11, 12, 14) — support backlog via `support_sla_latest`, avg resolution time from APAC Case Stats Excel.
+**1 factor** requires data already tracked monthly (6) — R&D defect reports.
 **4 factors** unchanged from current model (5, 8, 9, 10).
 **2 new factors** require qualitative CE assessment (4, 13) — definable criteria but not automatable. These are justified by being the strongest per-client negative correlator (Technical Knowledge: -0.83 avg) and strongest protective factor (Communication: +33 NPS delta) in the dataset.
 
@@ -344,7 +404,7 @@ Bain's longitudinal research across healthcare IT shows that **a 12-point NPS im
 ### Phase 2: Populate New Factors (Within 30 Days)
 
 1. Support backlog >10 per client — **already available** in Supabase `support_sla_latest` for 9 clients (Q4 2025 data imported from ServiceNow dashboards)
-2. MTTR per client — partially available via `resolution_sla_percent` in Supabase; raw MTTR hours require additional ServiceNow reporting from Stephen Oster
+2. Avg Resolution Time per client — **already available** from APAC Case Stats Excel (2,179 cases with resolution duration). Threshold: >700 hours avg. Spearman rho = -0.582 against NPS.
 3. Define Technical Knowledge Gap criteria with CE team — propose: 3+ escalations citing product expertise gaps in past 6 months
 4. Define Communication/Transparency criteria with CE team — propose: documented proactive update cadence (min monthly) + client acknowledgement of transparency in NPS verbatim or meeting notes
 5. Request current defect rate per client from David Beck (R&D tracking)
@@ -380,6 +440,7 @@ All analysis in this document is derived from:
 - **NPS Q4 2025 Survey Data:** 43 responses, 142 sent, NPS -18.60 (Supabase `nps_responses`)
 - **NPS Historical Data:** 199 total responses across 5 periods (2023, Q2 24, Q4 24, Q2 25, Q4 25)
 - **Support SLA Metrics (Actual):** Supabase `support_sla_latest`, 9 clients, Q4 2025 data sourced from client-specific ServiceNow dashboard Excel exports (Albury Wodonga, Barwon, Epworth, Grampians, RVEEH, SA Health, SA Health iPro, WA Health, Western Health)
+- **APAC Case Stats (Detailed):** 2,179 individual ServiceNow case records, Jan 2024–Nov 2025, 14 APAC clients, case-level priority, state, resolution duration, product, and environment data. Source: `APAC Case Stats since 2024.xlsx` (OneDrive shared library)
 - **APAC Client Segmentation Data (Q2 2025):** Excel workbook, 6 sheets, 20 clients
 - **Client Health History:** Supabase `client_health_history`, 500+ records, health score v4.0
 - **NPS Update Q4 2025:** Client Concerns & Forward Plan (January 2026)
