@@ -3,9 +3,6 @@ title: "APAC Client Success Intelligence Hub"
 subtitle: "Quarterly Review — Q1 2026"
 author: "Dimitri Leimonitis"
 date: "January 2026"
-cover-page: true
-confidential: true
-toc: true
 ---
 
 # Executive Summary
