@@ -2,7 +2,7 @@
 
 **Date:** 28 January 2026
 **Author:** APAC Client Success
-**Status:** Proposed (Updated — full-dataset validation + engagement data + multi-period accuracy test + data integrity audit)
+**Status:** Proposed (Updated — full-dataset validation + engagement data + multi-period accuracy test + data integrity audit + financial cross-reference)
 **Scope:** CSI factor model (Excel segmentation) only
 **Data:** 199 NPS responses across 5 periods (2023–Q4 2025); 2,179 ServiceNow cases (Jan 2024–Nov 2025); 807 segmentation events; 282 meeting records
 
@@ -31,7 +31,7 @@ The current APAC Client Satisfaction Index (CSI) has **40% accuracy** when teste
 
 The root cause is that the model measures **business risk** (C-Suite turnover, M&A/attrition, engagement frequency) rather than **client satisfaction drivers** (support responsiveness, technical knowledge, communication quality). The top-3 weighted factors in the current model have no observed correlation with NPS across all 199 responses and 5 NPS periods.
 
-> **Note:** This document has undergone seven rounds of validation:
+> **Note:** This document has undergone eight rounds of validation:
 > 1. **Initial (Q4 2025 only):** 43 NPS responses, 10 clients
 > 2. **Full NPS dataset:** All 199 NPS responses across 5 periods (2023–Q4 2025). Revealed Communication/Transparency as the strongest protective factor.
 > 3. **ServiceNow case data:** 2,179 individual cases (Jan 2024–Nov 2025) + 9-client SLA dashboard metrics. Confirmed resolution time (rho = -0.582) as the strongest support predictor. Revised MTTR threshold from 45h to 700h based on actual data. Confirmed case priority is NOT predictive of NPS.
@@ -39,6 +39,7 @@ The root cause is that the model measures **business risk** (C-Suite turnover, M
 > 5. **Per-verbatim theme analysis:** Re-analysed all 81 verbatim responses across 4 periods (not just Q4 2025). Classified themes per-response rather than per-client. Confirmed all factor directions. Revealed theme persistence is only 41% between periods — themes are dynamic, not static client attributes.
 > 6. **Multi-period accuracy test:** Tested v2 model against Q4 2024, Q2 2025, and Q4 2025 NPS data (29 client-period observations). Overall accuracy: 86% (25/29). Contemporaneous accuracy: 100% (Q4 2025). Historical accuracy: 79% (15/19). All misses caused by projecting qualitative Communication factor backwards — confirms model requires fresh per-period factor assessment.
 > 7. **Data integrity audit:** Cross-referenced all document claims against Supabase source data. Corrected: SA Health Q4 NPS (-25 → -55, verified from 11 individual scores), v1 accuracy table (3 classification errors: Dept Vic, SLMC, GRMC — accuracy 50% → 40%), SLMC Backlog>10 (TRUE → FALSE, only 3 open cases), Factor #2 threshold definition (clarified as NPS < 0, not individual score ≤ 6). Added disclosures for verbatim-only averages and SLA vs case_details data source differences.
+> 8. **Financial data cross-reference:** Cross-referenced Factor #8 (M&A/Attrition) against 2026 APAC Performance workbook Attrition sheet. Updated: GHA M&A=TRUE (confirmed partial attrition Jul 2026, $215K + expired maintenance contract), NCS/MoD Singapore M&A=TRUE (confirmed full attrition Mar 2028, $272K), Factor #8 evidence expanded with full attrition schedule ($2.722M total), Section 3.9 contract renewal dates corrected with 4 expired contracts identified.
 
 ---
 
@@ -385,7 +386,7 @@ Mining the 1,924 case records, 807 segmentation events, and 282 meeting records 
 | **High** | Escalation Records | ServiceNow / CE team | Escalation count and reason codes per client | Would automate Factor #4 (Technical Knowledge Gap, weight 10) — currently the highest-weight non-automatable factor |
 | **High** | R&D Defect Backlog Per Client | David Beck / R&D tracking | Open defect count with client impact | Would validate Factor #6 (Defect Rate >30, weight 8) threshold with actual data instead of arbitrary value |
 | **High** | Actual Meeting Frequency | Supabase `unified_meetings` + `segmentation_events` | Combined touchpoints per year | **Now available** — automates Factor #9 (weight 6) and Factor #12 (weight 4) |
-| Medium | Contract Renewal Dates | Commercial / Salesforce | Months to renewal | Clients approaching renewal (SingHealth EPIC 2028, Parkway 2026) may have different satisfaction dynamics |
+| Medium | Contract Renewal Dates | Commercial / Salesforce | Months to renewal | Clients with expired or approaching renewals: Epworth (Nov 2025, expired), GHA Regional (Jul 2025, expired — "if consolidation done won't renew"), Grampians (Sep 2025, expired), RVEEH (Dec 2024, expired 13+ months). Active attrition: Parkway (Oct 2025, occurred), SingHealth (phased Nov 2026–Sep 2028), NCS (Mar 2028). Contract status may affect satisfaction dynamics. |
 | Medium | Software Version Gap Severity | Product team / initiative tracking | Version gap (current vs latest release) | Would refine Factor #5 (weight 9) — Epworth is 3+ versions behind vs others at 1 version |
 | Medium | Training/Enablement Hours | CE team records | Hours delivered per client | Could proxy for Technical Knowledge Gap mitigation |
 | Low | Feature Request Volume | ServiceNow / product backlog | Requests per client | Distinct from defects — indicates product fit |
@@ -418,7 +419,7 @@ Mining the 1,924 case records, 807 segmentation events, and 282 meeting records 
 | 5 | Not on Current Software Version | 9 | Client unable or unwilling to upgrade | Epworth's primary complaint. Upgrade inability compounds defect frustration. Unchanged from v1. |
 | 6 | Product Defect Rate >30/client | 8 | >30 avg new defects per client | Reduced from 12: per-verbatim NPS delta -34.7 but only 6/81 mentions (7%). Severe when present (avg score 4.8) but concentrated in Epworth, SA Health, and Grampians — not systemic. |
 | 7 | NPS No Response | 8 | No NPS response in most recent cycle | Non-response correlates with disengagement. Grampians, Western Health — both declining. |
-| 8 | At Risk M&A/Attrition | 7 | Known M&A, contract termination, or competitor RFP | SingHealth (EPIC 2028), Parkway (2026). Commercial risk — real but not satisfaction-driven. |
+| 8 | At Risk M&A/Attrition | 7 | Known M&A, contract termination, or competitor RFP | Confirmed attrition: Parkway (Full, Oct 2025, $549K — already occurred), GHA Regional Opal (Partial, Jul 2026, $215K), SingHealth (phased withdrawal Nov 2026–Sep 2028: 6 events totalling $1.686M across iPro+Capsule and Sunrise), NCS (Full, Mar 2028, $272K). Total pipeline attrition: $2.722M. Commercial risk — real but not satisfaction-driven. |
 | 9 | Strategic Ops Plans <2x/yr | 6 | Fewer than 2 partnership meetings per year | Engagement frequency matters (GHA improved through engagement) but is an input, not outcome. |
 | 10 | C-Suite Turnover | 5 | CIO/CEO change in past 12 months | Weak NPS correlation. MoD Singapore has turnover but stable NPS. Reduced from 17. |
 | 11 | NPS Declining 2+ Consecutive Periods | 4 | Average score dropped in 2+ consecutive periods | Reduced from 8: all-period gap only +5 NPS and reversed direction. GHA and GRMC both declined 2+ periods then recovered. Weak predictor. |
@@ -454,10 +455,10 @@ Applying the full-dataset validated v2 factors to all 10 clients with Q4 2025 NP
 | Barwon Health | 70 | 51 | 49 | -50 (avg 6.5) | YES | YES |
 | Dept Health Vic | 75 | 100 | 0 | 0 (avg 7.5) | NO | YES |
 | Epworth | 90 | 32 | 68 | -100 (avg 2.0) | NO | **YES** |
-| GHA | 100 | 100 | -13 | +100 (avg 9.3) | YES | YES |
+| GHA | 100 | 100 | -6 | +100 (avg 9.3) | YES | YES |
 | Mount Alvernia | 90 | 60 | 40 | -40 (avg 6.6) | NO | **YES** |
 | RVEEH | 56 | 100 | -13 | +100 (avg 9.0) | NO | **YES** |
-| MoD Singapore | 71 | 97 | 3 | 0 (avg 7.6) | NO | **YES** |
+| MoD Singapore | 71 | 90 | 10 | 0 (avg 7.6) | NO | **YES** |
 | SLMC | 75 | 49 | 51 | -100 (avg 5.0) | YES | **YES** |
 | GRMC | 75 | 100 | -6 | +100 (avg 9.0) | NO | YES |
 
@@ -496,10 +497,10 @@ All 4 historical misses share the same pattern: the model classifies the client 
 | Barwon | T | T | F | T | F | T | F | F | F | F | T | F | F | F | 49 | 51 |
 | Dept Health Vic | F | F | F | F | F | T | F | F | F | F | F | F | T | F | 0 | 100 |
 | Epworth | T | T | T | T | T | T | F | F | F | F | T | F | F | F | 68 | 32 |
-| GHA | F | F | F | F | F | F | F | F | F | F | F | F | T | T | -13 | 100 |
+| GHA | F | F | F | F | F | F | F | **T** | F | F | F | F | T | T | -6 | 100 |
 | Mount Alvernia | F | T | T | T | F | T | F | F | F | F | F | F | F | F | 40 | 60 |
 | RVEEH | F | F | F | F | F | F | F | F | F | F | F | F | T | T | -13 | 100 |
-| MoD Singapore | F | F | F | F | F | F | F | F | T | T | F | F | T | F | 3 | 97 |
+| MoD Singapore | F | F | F | F | F | F | F | **T** | T | T | F | F | T | F | 10 | 90 |
 | SLMC | F | T | T | T | F | T | F | T | F | F | T | F | F | F | 51 | 49 |
 | GRMC | F | F | F | F | F | F | F | T | F | F | F | F | T | T | -6 | 100 |
 
@@ -621,6 +622,7 @@ All analysis in this document is derived from:
 - **NPS Update Q4 2025:** Client Concerns & Forward Plan (January 2026)
 - **APAC Client Success Updates 2025:** 32-slide PPTX with full-year programme data
 - **APAC 5 in 25 Initiative Detail:** Project-level tracking with KPIs and status
+- **2026 APAC Performance Workbook:** Attrition schedule (10 events, $2.722M total USD across 2025–2028), Opal Maintenance Contracts (8 clients, AUD $2.187M annual), Deal Pipeline Risk Profile (Dial 2). Source: OneDrive — APAC Central Management Reports / Financials / BURC / 2026.
 
 ---
 
