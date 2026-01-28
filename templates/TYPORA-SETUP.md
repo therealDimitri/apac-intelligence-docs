@@ -48,13 +48,13 @@ Then install the required LaTeX packages:
 
 Verify: `~/Library/TinyTeX/bin/universal-darwin/xelatex --version` should show XeTeX.
 
-## Step 3: Install Inter Font
+## Step 3: Install Montserrat Font
 
 ```bash
-brew install --cask font-inter
+brew install --cask font-montserrat
 ```
 
-This installs the Inter font family to `~/Library/Fonts/`.
+This installs the Montserrat font family to `~/Library/Fonts/`. Alternatively, extract `Montserrat.zip` from the OneDrive brand assets folder.
 
 ## Step 4: Install Template Files
 
@@ -139,8 +139,8 @@ toc: false                # true = adds table of contents after cover
 - **Cover page** with Altera logo, title, subtitle, author, and date
 - **Header** on every page: Altera logo (left) + document title (right)
 - **Footer**: Page X of Y (centre) + optional "Confidential" label (right)
-- **Blue headings** using Altera brand colour (#2563EB)
-- **Inter font** throughout
+- **Blue headings** using Altera brand colour (#1e40af)
+- **Montserrat font** throughout (SemiBold body, Black headings)
 - **Blue-themed tables** with branded header row
 - **Syntax-highlighted code blocks** with grey background
 
@@ -162,9 +162,9 @@ If you see `! LaTeX Error: File 'xyz.sty' not found`, install the missing packag
 
 ### Font not found
 
-Ensure Inter is installed: `fc-list | grep -i inter`. If empty, reinstall:
+Ensure Montserrat is installed: `fc-list | grep -i montserrat`. If empty, reinstall:
 ```bash
-brew install --cask font-inter
+brew install --cask font-montserrat
 ```
 
 ### Logo not appearing
