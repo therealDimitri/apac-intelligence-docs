@@ -125,7 +125,7 @@ Support Responsiveness mentions declined from 42% to 26% (Q2→Q4 2025), consist
 
 | Client | NPS Change | Evidence-Backed Driver |
 |--------|-----------|----------------------|
-| GHA | 0 → +100 | Proactive CE engagement, transparency. Adrian Shearer: "Agile and accessible." |
+| GHA | +33 → +100 | Proactive CE engagement, transparency. Adrian Shearer: "Agile and accessible." |
 | Dept of Health Vic | -100 → 0 | Engagement recovery — no current model factor explains the shift. |
 | Mount Alvernia | -67 → -40 | Team engagement improvement. Bruce Leong: "Altera is becoming more engaging." |
 | SingHealth | -33 → 0 | Customisation focus, monthly Sleeping Giant reviews per TEA model. |
