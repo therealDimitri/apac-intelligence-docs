@@ -8,6 +8,23 @@
 
 ---
 
+## Executive Summary
+
+The current APAC Client Satisfaction Index (CSI) correctly classifies only **4 of 10 clients** (40% accuracy) when tested against actual NPS outcomes. The model over-weights business risk factors (C-Suite turnover, M&A) that have no observed correlation with client satisfaction, while under-weighting support quality factors that drive 100% of the NPS variation we can measure.
+
+This document proposes a redesigned 14-factor model validated against **199 NPS responses across 5 periods**, **2,179 ServiceNow cases**, **807 segmentation events**, and **282 meeting records**. The key changes:
+
+- **Support/Service Quality weight increases from 5% to 36%** — reflecting that support backlog (>10 open cases = -84 NPS delta) and average resolution time (>700 hours = -98 NPS delta) are the two strongest predictors of client dissatisfaction
+- **Business Risk weight decreases from 34% to 12%** — C-Suite turnover and M&A are real commercial risks but do not predict NPS scores
+- **Two new protective factors** reward proactive communication (-8 ARM) and promoter status (-5 ARM), capturing the strongest positive NPS signals observed in verbatim feedback
+- **8 of 14 factors are fully automatable** from existing Supabase data, up from approximately 3 of 9 in the current model
+
+The redesigned model achieves **100% accuracy on Q4 2025 data** (10/10 clients correctly classified) and **86% accuracy across three NPS periods** (25/29 client-period observations). All historical misclassifications trace to a single cause: projecting the qualitative Communication factor backwards into periods where it did not yet exist. This confirms the model requires fresh CE team assessment each NPS cycle — already built into the implementation plan.
+
+**Recommended next steps:** Update the Excel segmentation model with the 14 revised factors (Phase 1), populate new factor values with CE team input within 30 days (Phase 2), and validate against Q2 2026 NPS results (Phase 3).
+
+---
+
 ## 1. Problem Statement
 
 The current APAC Client Satisfaction Index (CSI) has **40% accuracy** when tested against actual Q4 2025 NPS outcomes. 6 of 10 clients with Q4 2025 NPS data are misclassified — the model says they're healthy when they're critical, or critical when they're healthy.
