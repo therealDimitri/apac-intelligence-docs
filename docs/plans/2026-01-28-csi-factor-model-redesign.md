@@ -2,7 +2,7 @@
 
 **Date:** 28 January 2026
 **Author:** APAC Client Success
-**Status:** Proposed (Updated — full-dataset validation + engagement data + multi-period accuracy test)
+**Status:** Proposed (Updated — full-dataset validation + engagement data + multi-period accuracy test + data integrity audit)
 **Scope:** CSI factor model (Excel segmentation) only
 **Data:** 199 NPS responses across 5 periods (2023–Q4 2025); 2,179 ServiceNow cases (Jan 2024–Nov 2025); 807 segmentation events; 282 meeting records
 
@@ -10,17 +10,18 @@
 
 ## 1. Problem Statement
 
-The current APAC Client Satisfaction Index (CSI) has **50% accuracy** when tested against actual Q4 2025 NPS outcomes. 5 of 10 clients with Q4 2025 NPS data are misclassified — the model says they're healthy when they're critical, or critical when they're healthy.
+The current APAC Client Satisfaction Index (CSI) has **40% accuracy** when tested against actual Q4 2025 NPS outcomes. 6 of 10 clients with Q4 2025 NPS data are misclassified — the model says they're healthy when they're critical, or critical when they're healthy.
 
 The root cause is that the model measures **business risk** (C-Suite turnover, M&A/attrition, engagement frequency) rather than **client satisfaction drivers** (support responsiveness, technical knowledge, communication quality). The top-3 weighted factors in the current model have no observed correlation with NPS across all 199 responses and 5 NPS periods.
 
-> **Note:** This document has undergone six rounds of validation:
+> **Note:** This document has undergone seven rounds of validation:
 > 1. **Initial (Q4 2025 only):** 43 NPS responses, 10 clients
 > 2. **Full NPS dataset:** All 199 NPS responses across 5 periods (2023–Q4 2025). Revealed Communication/Transparency as the strongest protective factor.
 > 3. **ServiceNow case data:** 2,179 individual cases (Jan 2024–Nov 2025) + 9-client SLA dashboard metrics. Confirmed resolution time (rho = -0.582) as the strongest support predictor. Revised MTTR threshold from 45h to 700h based on actual data. Confirmed case priority is NOT predictive of NPS.
 > 4. **Engagement data:** 807 segmentation events + 282 meeting records from Supabase (`segmentation_events`, `unified_meetings`). Confirmed engagement frequency has near-zero NPS correlation (rho = 0.074). Factors #9 and #12 now automatable from database. Identified additional data types for model strengthening.
 > 5. **Per-verbatim theme analysis:** Re-analysed all 81 verbatim responses across 4 periods (not just Q4 2025). Classified themes per-response rather than per-client. Confirmed all factor directions. Revealed theme persistence is only 41% between periods — themes are dynamic, not static client attributes.
 > 6. **Multi-period accuracy test:** Tested v2 model against Q4 2024, Q2 2025, and Q4 2025 NPS data (29 client-period observations). Overall accuracy: 86% (25/29). Contemporaneous accuracy: 100% (Q4 2025). Historical accuracy: 79% (15/19). All misses caused by projecting qualitative Communication factor backwards — confirms model requires fresh per-period factor assessment.
+> 7. **Data integrity audit:** Cross-referenced all document claims against Supabase source data. Corrected: SA Health Q4 NPS (-25 → -55, verified from 11 individual scores), v1 accuracy table (3 classification errors: Dept Vic, SLMC, GRMC — accuracy 50% → 40%), SLMC Backlog>10 (TRUE → FALSE, only 3 open cases), Factor #2 threshold definition (clarified as NPS < 0, not individual score ≤ 6). Added disclosures for verbatim-only averages and SLA vs case_details data source differences.
 
 ---
 
@@ -33,7 +34,7 @@ The root cause is that the model measures **business risk** (C-Suite turnover, M
 | 1 | C-Suite Turnover in Past Year | 17 | Business Risk |
 | 2 | At Risk M&A/Attrition | 15 | Business Risk |
 | 3 | Strategic Ops Plans <2x/yr | 12 | Engagement |
-| 4 | NPS Detractor (0-6) | 10 | NPS |
+| 4 | NPS Detractor (NPS < 0) | 10 | NPS |
 | 5 | NPS No Response | 10 | NPS |
 | 6 | No Event Attendance | 10 | Engagement |
 | 7 | Not on Current Software Version | 9 | Technical |
@@ -93,16 +94,18 @@ Support Responsiveness mentions declined from 42% to 26% (Q2→Q4 2025), consist
 |--------|-----|-------------|-----------|----------|
 | Albury Wodonga Health | 88 | 0 | 8.0 | YES |
 | Barwon Health | 70 | -50 | 6.5 | YES |
-| Dept of Health Vic | 75 | 0 | 7.5 | YES |
+| Dept of Health Vic | 75 | 0 | 7.5 | **NO** |
 | Epworth Healthcare | 90 | -100 | 2.0 | **NO** |
 | Gippsland Health Alliance | 100 | +100 | 9.3 | YES |
 | Mount Alvernia Hospital | 90 | -40 | 6.6 | **NO** |
 | RVEEH | 56 | +100 | 9.0 | **NO** |
 | MoD Singapore | 71 | 0 | 7.6 | **NO** |
-| SLMC | 75 | -100 | 5.0 | **NO** |
-| GRMC | 75 | +100 | 9.0 | YES |
+| SLMC | 75 | -100 | 5.0 | YES |
+| GRMC | 75 | +100 | 9.0 | **NO** |
 
-**Accuracy: 50%** (5 of 10 correct). A coin flip performs equally well.
+**Accuracy: 40%** (4 of 10 correct). Worse than a coin flip.
+
+> **Classification criteria:** CSI ≥ 80 = healthy, CSI < 80 = at-risk. NPS ≥ 0 = healthy, NPS < 0 = at-risk. "Correct" = both agree. **Corrections from prior version:** Dept Health Vic (CSI 75 at-risk, NPS 0 healthy = mismatch, changed YES→NO), SLMC (CSI 75 at-risk, NPS -100 at-risk = match, changed NO→YES), GRMC (CSI 75 at-risk, NPS +100 healthy = mismatch, changed YES→NO).
 
 ### 3.3 Why the Model Fails: Case Studies
 
@@ -141,7 +144,7 @@ The per-verbatim theme analysis (Section 3.1, n=81) was complemented with score-
 
 12 clients had verbatim feedback in both Q2 2025 and Q4 2025, allowing direct comparison of theme changes over one period:
 
-| Client | Q2 Avg → Q4 Avg | Themes Persisted | Themes Resolved | Themes New |
+| Client | Q2 Avg → Q4 Avg* | Themes Persisted | Themes Resolved | Themes New |
 |--------|:---------------:|:----------------:|:---------------:|:----------:|
 | SA Health | 5.6 → 6.0 | 6 | 0 | 0 |
 | Barwon Health | 4.0 → 6.5 | 4 | 1 | 0 |
@@ -155,6 +158,8 @@ The per-verbatim theme analysis (Section 3.1, n=81) was complemented with score-
 | GRMC | 6.0 → 9.0 | 0 | 4 | 1 |
 | MoD Singapore | 8.0 → 8.2 | 0 | 0 | 4 |
 | WA Health | 5.5 → 3.0 | 0 | 2 | 1 |
+
+> **\*Averages note:** The "Q2 Avg → Q4 Avg" column uses averages computed **only from respondents who provided verbatim feedback**, not all respondents. This can diverge significantly from the all-respondent average — e.g. WA Health verbatim-only Q4 avg is 3.0 (n=1) vs all-respondent avg 6.2 (n=4). The verbatim-only averages are shown because this table tracks theme persistence, which requires verbatim content, but they should not be interpreted as representative client NPS averages.
 
 **Persistence: 41%. Resolved: 39%. New: 20%.** Themes are dynamic — they change substantially between periods. This validates the per-verbatim approach over client-level retroactive assignment. Notably, GRMC's improvement from 6.0 to 9.0 coincided with 4 themes resolving and Communication/Transparency emerging.
 
@@ -190,7 +195,7 @@ Support SLA metrics from `support_sla_latest` (sourced from client-specific Serv
 |--------|-----------|-----------|-----------|--------------|----------|-------------|--------|
 | Epworth Healthcare | **11** | **11** | 5 | 1 | N/A | 4.50 | **-100** |
 | Barwon Health | 4 | 4 | 4 | 0 | 100% | 5.00 | **-50** |
-| SA Health | **39** | **29** | **15** | **9** | **75%** | **3.15** | **-25** |
+| SA Health | **39** | **29** | **15** | **9** | **75%** | **3.15** | **-55** |
 | WA Health | 0 | 0 | 0 | 0 | 89% | 4.70 | **-25** |
 | Albury Wodonga Health | 4 | 3 | 3 | 0 | 100% | N/A | **0** |
 | RVEEH | 3 | 3 | 2 | 1 | 100% | 4.25 | **+100** |
@@ -199,20 +204,22 @@ Support SLA metrics from `support_sla_latest` (sourced from client-specific Serv
 
 | Threshold | Above Avg NPS | Below Avg NPS | NPS Delta | Strength |
 |-----------|--------------|--------------|-----------|----------|
-| Open Cases >10 | -62 (Epworth, SA Health) | +6 (AWH, Barwon, RVEEH, WA Health) | **-69** | **Strongest** |
-| Aging 30d+ >5 | -62 (Epworth, SA Health) | +6 (AWH, Barwon, RVEEH, WA Health) | **-69** | **Strongest** |
-| Resolution SLA <95% | -25 (SA Health, WA Health) | +17 (AWH, Barwon, RVEEH) | **-42** | Strong |
-| Support CSAT <4.5 | +38 (RVEEH, SA Health) | -58 (Barwon, Epworth, WA Health) | **+96 (reversed)** | **Not predictive** |
+| Open Cases >10 | -78 (Epworth, SA Health) | +6 (AWH, Barwon, RVEEH, WA Health) | **-84** | **Strongest** |
+| Aging 30d+ >5 | -78 (Epworth, SA Health) | +6 (AWH, Barwon, RVEEH, WA Health) | **-84** | **Strongest** |
+| Resolution SLA <95% | -40 (SA Health, WA Health) | +17 (AWH, Barwon, RVEEH) | **-57** | Strong |
+| Support CSAT <4.5 | +23 (RVEEH, SA Health) | -58 (Barwon, Epworth, WA Health) | **+81 (reversed)** | **Not predictive** |
+
+> **Data source note:** The "Open Cases" column above uses `support_sla_latest` (point-in-time ServiceNow dashboard snapshots from Oct–Nov 2025). These counts differ from `support_case_details` (current case state): WA Health shows 0 open (SLA dashboard) vs 28 currently open (case_details), Barwon shows 4 vs 11, Epworth shows 11 vs 14. The SLA dashboard reflects the state at the time of each client's dashboard export; `support_case_details` reflects current state. For the CSI model, the SLA dashboard snapshot is the more appropriate source as it captures the state during the NPS measurement period.
 
 #### Key Findings From Actual Support Data
 
 **1. Backlog threshold should be >10, not >20**
 
-The original proposed threshold of >20 open cases was based on NPS verbatim analysis. Actual ServiceNow data shows the breakpoint is at **>10 open cases** — clients with >10 open cases average NPS -62 vs +6 for those with ≤10. This is a **-69 NPS delta**, the strongest single predictor from any data source. Only SA Health (39 open) exceeds the original >20 threshold; Epworth Healthcare (11 open) would have been missed.
+The original proposed threshold of >20 open cases was based on NPS verbatim analysis. Actual ServiceNow data shows the breakpoint is at **>10 open cases** — clients with >10 open cases average NPS -78 vs +6 for those with ≤10. This is a **-84 NPS delta**, the strongest single predictor from any data source. Only SA Health (39 open) exceeds the original >20 threshold; Epworth Healthcare (11 open) would have been missed.
 
 **2. Case aging 30d+ is a stronger signal than total open cases**
 
-The 30d+ aging metric perfectly separates critical from healthy clients (-69 NPS delta). Epworth Healthcare has 11 open cases, all 30d+ aged — meaning every single case is stale. This is more diagnostic than raw backlog count.
+The 30d+ aging metric perfectly separates critical from healthy clients (-84 NPS delta). Epworth Healthcare has 11 open cases, all 30d+ aged — meaning every single case is stale. This is more diagnostic than raw backlog count.
 
 **3. Support CSAT does NOT predict NPS**
 
@@ -230,7 +237,7 @@ The APAC Case Stats dataset contains 2,179 individual case records across 17 acc
 
 | Client | Total Cases | Avg Res (h) | Median Res (h) | P90 Res (h) | Open | C+H% | Q4 NPS |
 |--------|------------|-------------|----------------|-------------|------|------|--------|
-| SA Health | 427 | 969 | 308 | 3,191 | 15 | 37.7% | -25 |
+| SA Health | 427 | 969 | 308 | 3,191 | 15 | 37.7% | -55 |
 | WA Health | 306 | **1,383** | **502** | **4,277** | **30** | 15.7% | -25 |
 | Barwon Health | 225 | 513 | 176 | 1,530 | 11 | 18.2% | -50 |
 | Grampians | 197 | 952 | 313 | 3,030 | 13 | 28.4% | N/R |
@@ -249,7 +256,7 @@ The APAC Case Stats dataset contains 2,179 individual case records across 17 acc
 
 | Metric | Spearman rho | Direction | Strength | CSI Model Relevance |
 |--------|-------------|-----------|----------|-------------------|
-| **Avg Resolution Time** | **-0.582** | Negative | **STRONG** | **Validates MTTR factor — strongest single predictor** |
+| **Avg Resolution Time** | **-0.582**† | Negative | **STRONG** | **Validates MTTR factor — strongest single predictor** |
 | **Open Cases** | **-0.509** | Negative | **STRONG** | Validates backlog factor |
 | P90 Resolution Time | -0.445 | Negative | Moderate | Tail cases matter — extreme resolution delays hurt NPS |
 | Median Resolution Time | -0.291 | Negative | Weak | Average is better predictor than median |
@@ -257,11 +264,13 @@ The APAC Case Stats dataset contains 2,179 individual case records across 17 acc
 | Critical+High % | +0.191 | **Positive (wrong)** | Weak | **NOT predictive — GHA has highest C+H% (45.9%) and NPS +100** |
 | Critical Cases | +0.055 | Positive (wrong) | Negligible | **NOT predictive — should not be a CSI factor** |
 
+> **†Spearman note:** Correlations were originally computed with SA Health Q4 NPS = -25. SA Health's verified NPS is -55 (11 respondents, 0 promoters, 6 detractors). This strengthens the negative correlation for resolution time (SA Health has high avg resolution and worse NPS than originally recorded). Directional conclusions and rank ordering are unchanged.
+
 #### Key Findings From Case Data
 
 **1. Resolution time is the strongest NPS predictor (rho = -0.582)**
 
-Average resolution time across all cases is the single best support metric for predicting NPS. Clients with avg resolution >700 hours have average NPS **-50** vs **+42** for those below 700 hours (**-92 NPS delta**). This is stronger than open case count, which has already been shown to predict NPS at -69 delta.
+Average resolution time across all cases is the single best support metric for predicting NPS. Clients with avg resolution >700 hours have average NPS **-56** vs **+42** for those below 700 hours (**-98 NPS delta**). This is stronger than open case count, which has already been shown to predict NPS at -84 delta.
 
 **2. Case priority mix does NOT predict NPS**
 
@@ -269,15 +278,15 @@ Critical+High percentage has a *positive* Spearman correlation with NPS (+0.191)
 
 **3. Total case volume is a weak predictor (rho = -0.282)**
 
-Volume alone does not distinguish satisfied from dissatisfied clients. SA Health (427 cases, NPS -25) and GHA (183 cases, NPS +100) are both high-volume clients with opposite NPS outcomes. Volume reflects client size and product complexity, not satisfaction.
+Volume alone does not distinguish satisfied from dissatisfied clients. SA Health (427 cases, NPS -55) and GHA (183 cases, NPS +100) are both high-volume clients with opposite NPS outcomes. Volume reflects client size and product complexity, not satisfaction.
 
 **4. The MTTR threshold should be 700 hours, not 45 hours**
 
-The original CSI model proposed MTTR >45 hours as a threshold. The actual case data shows the median resolution across all APAC clients is 219–512 hours. The **-92 NPS delta** threshold is at 700 hours average resolution. 45 hours would flag nearly every client. The revised threshold should be **average resolution time >700 hours** (approximately 29 days).
+The original CSI model proposed MTTR >45 hours as a threshold. The actual case data shows the median resolution across all APAC clients is 219–512 hours. The **-98 NPS delta** threshold is at 700 hours average resolution. 45 hours would flag nearly every client. The revised threshold should be **average resolution time >700 hours** (approximately 29 days).
 
 **5. Open case count >10 validated at -46 NPS delta from case data**
 
-The ServiceNow dashboard data (Section 3.6) showed -69 NPS delta at >10 open cases. The full case dataset confirms this: clients with >10 currently open cases (Barwon, SA Health, WA Health) average NPS -33 vs +12 for those with ≤10 (**-46 NPS delta**). Both analyses converge on >10 as the correct threshold.
+The ServiceNow dashboard data (Section 3.6) showed -84 NPS delta at >10 open cases. The full case dataset confirms this: clients with >10 currently open cases (Barwon, SA Health, WA Health) average NPS -43 vs +12 for those with ≤10 (**-56 NPS delta**). Both analyses converge on >10 as the correct threshold.
 
 ### 3.8 Engagement Data Validation (807 Segmentation Events + 282 Meetings)
 
@@ -287,7 +296,7 @@ Supabase `segmentation_events` (807 records, 96.7% completion rate) and `unified
 
 | Client | Meetings | Seg Events | Combined | Per Month | Q4 NPS |
 |--------|:--------:|:----------:|:--------:|:---------:|:------:|
-| SA Health | 29 | 171 | 200 | 18.2 | -25 |
+| SA Health | 29 | 171 | 200 | 18.2 | -55 |
 | GHA | 0 | 57 | 57 | 5.2 | +100 |
 | Dept Health Vic | 0 | 57 | 57 | 5.2 | 0 |
 | SingHealth | 5 | 44 | 49 | 4.5 | 0 |
@@ -305,7 +314,7 @@ Supabase `segmentation_events` (807 records, 96.7% completion rate) and `unified
 
 **1. Engagement frequency has near-zero NPS correlation (rho = 0.074)**
 
-Combined engagement touchpoints per month show essentially no relationship with Q4 NPS. SA Health has **12x more engagement** than GRMC (18.2 vs 1.5/month) yet worse NPS (-25 vs +100). Epworth Healthcare has comparable engagement to Albury Wodonga Health (3.6 vs 3.4/month) but opposite NPS outcomes (-100 vs 0). This confirms that engagement *frequency* is an input measure — it reflects team activity, not client satisfaction.
+Combined engagement touchpoints per month show essentially no relationship with Q4 NPS. SA Health has **12x more engagement** than GRMC (18.2 vs 1.5/month) yet worse NPS (-55 vs +100). Epworth Healthcare has comparable engagement to Albury Wodonga Health (3.6 vs 3.4/month) but opposite NPS outcomes (-100 vs 0). This confirms that engagement *frequency* is an input measure — it reflects team activity, not client satisfaction.
 
 **2. Factor #9 (Strategic Ops <2x/yr) is correctly weighted low**
 
@@ -335,7 +344,7 @@ This increases automatable factors from **7 to 8 of 14**.
 
 **4. Engagement quality (not quantity) is the true signal**
 
-The Communication/Transparency factor (weight -8) captures what engagement frequency cannot — whether the engagement is *effective*. GHA (5.2/month, NPS +100) and SA Health (18.2/month, NPS -25) have similar or higher engagement intensity, but GHA's engagement is characterised by proactive transparency and responsiveness. The distinction between frequency and quality is critical and correctly modelled by separating Factor #9 (frequency, 6pts) from Factor #13 (quality, -8pts).
+The Communication/Transparency factor (weight -8) captures what engagement frequency cannot — whether the engagement is *effective*. GHA (5.2/month, NPS +100) and SA Health (18.2/month, NPS -55) have similar or higher engagement intensity, but GHA's engagement is characterised by proactive transparency and responsiveness. The distinction between frequency and quality is critical and correctly modelled by separating Factor #9 (frequency, 6pts) from Factor #13 (quality, -8pts).
 
 ### 3.9 Additional Data Types for Model Strengthening
 
@@ -350,7 +359,7 @@ Mining the 1,924 case records, 807 segmentation events, and 282 meeting records 
 | H2 2025 Case Volume | Cases opened Jul–Nov 2025 | Weak | Correlates with client size, not satisfaction |
 | Contact Concentration | Cases per unique contact | Weak | No clear threshold separating NPS outcomes |
 | On Hold Case Ratio | % open cases in "On Hold" state | Moderate | WA Health 19/28 on hold, but confounded by other factors |
-| Multi-Product Complexity | Number of distinct products | Weak | GHA (3 products, NPS +100) vs SA Health (3 products, NPS -25) |
+| Multi-Product Complexity | Number of distinct products | Weak | GHA (3 products, NPS +100) vs SA Health (3 products, NPS -55) |
 
 #### Recommended Additional Data Types (Priority Order)
 
@@ -385,9 +394,9 @@ Mining the 1,924 case records, 807 segmentation events, and 282 meeting records 
 
 | # | Factor | Weight | Threshold | All-Period Evidence |
 |---|--------|--------|-----------|---------------------|
-| 1 | Support Case Backlog >10 open | 15 | >10 open SNOW cases | Actual ServiceNow data: clients with >10 open cases avg NPS -62 vs +6 for ≤10 (**-69 NPS delta**). Epworth (11 open, NPS -100) and SA Health (39 open, NPS -25) both exceed threshold. Original >20 threshold would miss Epworth. |
-| 2 | NPS Detractor (score 0-6) | 12 | Most recent NPS score 0-6 | Direct measure. Detractors avg 4.5. Drives 100% of negative NPS. |
-| 3 | Avg Resolution >700 hours | 10 | Average case resolution time exceeds 700hrs (~29 days) | Actual case data: avg resolution >700h = NPS -50 vs +42 below (**-92 NPS delta**). Spearman rho = -0.582 (strongest single predictor from 2,179 cases). Replaces arbitrary 45hr threshold with data-driven cutoff. |
+| 1 | Support Case Backlog >10 open | 15 | >10 open SNOW cases | Actual ServiceNow data: clients with >10 open cases avg NPS -78 vs +6 for ≤10 (**-84 NPS delta**). Epworth (11 open, NPS -100) and SA Health (39 open, NPS -55) both exceed threshold. Original >20 threshold would miss Epworth. |
+| 2 | NPS Detractor (NPS < 0) | 12 | Client's most recent NPS is negative (net detractor) | Direct measure. Applied as net NPS < 0 (not individual score ≤ 6). Clients with individual scores 0-6 but net NPS ≥ 0 (e.g. MoD Singapore score 5, NPS 0; SingHealth score 6, NPS 0) do NOT trigger this factor — the net score is what matters for client-level risk classification. |
+| 3 | Avg Resolution >700 hours | 10 | Average case resolution time exceeds 700hrs (~29 days) | Actual case data: avg resolution >700h = NPS -56 vs +42 below (**-98 NPS delta**). Spearman rho = -0.582 (strongest single predictor from 2,179 cases). Replaces arbitrary 45hr threshold with data-driven cutoff. |
 | 4 | Technical Knowledge Gap | 10 | Known escalations citing lack of product expertise | Separated from MTTR — strongest per-response negative factor (-63.2 NPS delta, avg score 4.5 when mentioned). SA Health, Barwon, WA Health, SLMC, Epworth all cite knowledge gaps across verbatim. |
 | 5 | Not on Current Software Version | 9 | Client unable or unwilling to upgrade | Epworth's primary complaint. Upgrade inability compounds defect frustration. Unchanged from v1. |
 | 6 | Product Defect Rate >30/client | 8 | >30 avg new defects per client | Reduced from 12: per-verbatim NPS delta -34.7 but only 6/81 mentions (7%). Severe when present (avg score 4.8) but concentrated in Epworth, SA Health, and Grampians — not systemic. |
@@ -426,16 +435,16 @@ Applying the full-dataset validated v2 factors to all 10 clients with Q4 2025 NP
 |--------|--------|--------|--------|-----------|-------------|-------------|
 | Albury Wodonga | 88 | 94 | 6 | 0 (avg 8.0) | YES | YES |
 | Barwon Health | 70 | 51 | 49 | -50 (avg 6.5) | YES | YES |
-| Dept Health Vic | 75 | 100 | 0 | 0 (avg 7.5) | YES | YES |
+| Dept Health Vic | 75 | 100 | 0 | 0 (avg 7.5) | NO | YES |
 | Epworth | 90 | 32 | 68 | -100 (avg 2.0) | NO | **YES** |
 | GHA | 100 | 100 | -13 | +100 (avg 9.3) | YES | YES |
 | Mount Alvernia | 90 | 60 | 40 | -40 (avg 6.6) | NO | **YES** |
 | RVEEH | 56 | 100 | -13 | +100 (avg 9.0) | NO | **YES** |
 | MoD Singapore | 71 | 97 | 3 | 0 (avg 7.6) | NO | **YES** |
-| SLMC | 75 | 34 | 66 | -100 (avg 5.0) | NO | **YES** |
-| GRMC | 75 | 100 | -6 | +100 (avg 9.0) | YES | YES |
+| SLMC | 75 | 49 | 51 | -100 (avg 5.0) | YES | **YES** |
+| GRMC | 75 | 100 | -6 | +100 (avg 9.0) | NO | YES |
 
-**v1 accuracy: 50% (5/10). v2 accuracy: 100% (10/10) for Q4 2025.**
+**v1 accuracy: 40% (4/10). v2 accuracy: 100% (10/10) for Q4 2025.**
 
 #### Multi-Period v2 Accuracy Test
 
@@ -474,13 +483,13 @@ All 4 historical misses share the same pattern: the model classifies the client 
 | Mount Alvernia | F | T | T | T | F | T | F | F | F | F | F | F | F | F | 40 | 60 |
 | RVEEH | F | F | F | F | F | F | F | F | F | F | F | F | T | T | -13 | 100 |
 | MoD Singapore | F | F | F | F | F | F | F | F | T | T | F | F | T | F | 3 | 97 |
-| SLMC | T | T | T | T | F | T | F | T | F | F | T | F | F | F | 66 | 34 |
+| SLMC | F | T | T | T | F | T | F | T | F | F | T | F | F | F | 51 | 49 |
 | GRMC | F | F | F | F | F | F | F | T | F | F | F | F | T | T | -6 | 100 |
 
 **Key observations:**
 - Epworth (actual NPS -100) now scores CSI 32 — correctly flagged as critical. ARM driven by 7 risk factors including the new Technical Knowledge Gap.
 - RVEEH (actual NPS +100) now scores CSI 100 — correctly flagged as healthy. Communication and Promoter protective factors offset the previously penalising business risk factors.
-- SLMC (actual NPS -100) scores CSI 34 — correctly flagged as critical. Technical Knowledge Gap adds 10 ARM points not captured in v1.
+- SLMC (actual NPS -100) scores CSI 49 — correctly flagged as critical. Support Backlog factor is FALSE (only 3 open cases in `support_case_details`, no SLA dashboard record). Risk driven by Avg Resolution >700h, Technical Knowledge Gap, Detractor, Defect Rate, M&A, and Decline 2+ periods.
 - Dept Health Vic (actual NPS 0, avg 7.5) scores CSI 100 — Communication protective factor offsets the minor defect risk, correctly reflecting their neutral-positive NPS.
 
 ---
