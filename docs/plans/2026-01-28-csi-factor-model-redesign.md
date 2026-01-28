@@ -2,9 +2,9 @@
 
 **Date:** 28 January 2026
 **Author:** APAC Client Success
-**Status:** Proposed (Updated — full-dataset validation + engagement data + multi-period accuracy test + data integrity audit + financial cross-reference)
+**Status:** Proposed (Updated — full-dataset validation + engagement data + multi-period accuracy test + data integrity audit + financial cross-reference + CLC event attendance)
 **Scope:** CSI factor model (Excel segmentation) only
-**Data:** 199 NPS responses across 5 periods (2023–Q4 2025); 2,179 ServiceNow cases (Jan 2024–Nov 2025); 807 segmentation events; 282 meeting records
+**Data:** 199 NPS responses across 5 periods (2023–Q4 2025); 2,179 ServiceNow cases (Jan 2024–Nov 2025); 807 segmentation events; 282 meeting records; 235 CLC event attendees across 8 events (2022–2025)
 
 ---
 
@@ -12,7 +12,7 @@
 
 The current APAC Client Satisfaction Index (CSI) correctly classifies only **4 of 10 clients** (40% accuracy) when tested against actual NPS outcomes. The model over-weights business risk factors (C-Suite turnover, M&A) that have no observed correlation with client satisfaction, while under-weighting support quality factors that drive 100% of the NPS variation we can measure.
 
-This document proposes a redesigned 14-factor model validated against **199 NPS responses across 5 periods**, **2,179 ServiceNow cases**, **807 segmentation events**, and **282 meeting records**. The key changes:
+This document proposes a redesigned 14-factor model validated against **199 NPS responses across 5 periods**, **2,179 ServiceNow cases**, **807 segmentation events**, **282 meeting records**, and **235 CLC event attendees**. The key changes:
 
 - **Support/Service Quality weight increases from 5% to 36%** — reflecting that support backlog (>10 open cases = -84 NPS delta) and average resolution time (>700 hours = -98 NPS delta) are the two strongest predictors of client dissatisfaction
 - **Business Risk weight decreases from 34% to 12%** — C-Suite turnover and M&A are real commercial risks but do not predict NPS scores
@@ -31,7 +31,7 @@ The current APAC Client Satisfaction Index (CSI) has **40% accuracy** when teste
 
 The root cause is that the model measures **business risk** (C-Suite turnover, M&A/attrition, engagement frequency) rather than **client satisfaction drivers** (support responsiveness, technical knowledge, communication quality). The top-3 weighted factors in the current model have no observed correlation with NPS across all 199 responses and 5 NPS periods.
 
-> **Note:** This document has undergone eight rounds of validation:
+> **Note:** This document has undergone nine rounds of validation:
 > 1. **Initial (Q4 2025 only):** 43 NPS responses, 10 clients
 > 2. **Full NPS dataset:** All 199 NPS responses across 5 periods (2023–Q4 2025). Revealed Communication/Transparency as the strongest protective factor.
 > 3. **ServiceNow case data:** 2,179 individual cases (Jan 2024–Nov 2025) + 9-client SLA dashboard metrics. Confirmed resolution time (rho = -0.582) as the strongest support predictor. Revised MTTR threshold from 45h to 700h based on actual data. Confirmed case priority is NOT predictive of NPS.
@@ -40,6 +40,7 @@ The root cause is that the model measures **business risk** (C-Suite turnover, M
 > 6. **Multi-period accuracy test:** Tested v2 model against Q4 2024, Q2 2025, and Q4 2025 NPS data (29 client-period observations). Overall accuracy: 86% (25/29). Contemporaneous accuracy: 100% (Q4 2025). Historical accuracy: 79% (15/19). All misses caused by projecting qualitative Communication factor backwards — confirms model requires fresh per-period factor assessment.
 > 7. **Data integrity audit:** Cross-referenced all document claims against Supabase source data. Corrected: SA Health Q4 NPS (-25 → -55, verified from 11 individual scores), v1 accuracy table (3 classification errors: Dept Vic, SLMC, GRMC — accuracy 50% → 40%), SLMC Backlog>10 (TRUE → FALSE, only 3 open cases), Factor #2 threshold definition (clarified as NPS < 0, not individual score ≤ 6). Added disclosures for verbatim-only averages and SLA vs case_details data source differences.
 > 8. **Financial data cross-reference:** Cross-referenced Factor #8 (M&A/Attrition) against 2026 APAC Performance workbook Attrition sheet. Updated: GHA M&A=TRUE (confirmed partial attrition Jul 2026, $215K + expired maintenance contract), NCS/MoD Singapore M&A=TRUE (confirmed full attrition Mar 2028, $272K), Factor #8 evidence expanded with full attrition schedule ($2.722M total), Section 3.9 contract renewal dates corrected with 4 expired contracts identified.
+> 9. **CLC event attendance analysis:** Analysed 235 client attendees across 8 Customer Leadership Council events (2022–2025) from Supabase `clc_events` and `clc_event_attendees`. Confirmed event attendance has **weak negative** NPS correlation (rho = -0.142, p = 0.66) — same finding as segmentation events. Clients with ≥10 attendances have avg NPS -20.7 vs -5.0 for <10 attendances (reversed direction). Feedback submission correlates strongly negative (rho = -0.635, p = 0.03) — clients who submit feedback have issues to report. CLC data enhances Factor #12 automation but does NOT justify a new factor. Learning interests from CLC feedback provide qualitative intelligence for Factor #4 (Technical Knowledge Gap) assessment.
 
 ---
 
@@ -395,6 +396,87 @@ Mining the 1,924 case records, 807 segmentation events, and 282 meeting records 
 
 **Single most impactful acquisition:** Escalation records from ServiceNow. This would make Factor #4 (Technical Knowledge Gap, weight 10) partially automatable by counting escalations citing expertise gaps, converting the model's highest-weight qualitative factor into a data-driven one.
 
+### 3.10 CLC Event Attendance Analysis (235 Attendees, 8 Events, 2022–2025)
+
+Customer Leadership Council (CLC) events — including Client Executive Summits, Client Forums, Opal User Forum, and iQemo User Forum — provide an additional engagement signal. Supabase `clc_events` (8 events) and `clc_event_attendees` (341 records, 235 client-facing) were analysed to determine whether CLC event attendance should be a CSI factor.
+
+#### CLC Attendance vs Q4 2025 NPS (12 Matched Clients)
+
+| Client | Attendances | Events | Feedback | Q4 NPS |
+|--------|:-----------:|:------:|:--------:|:------:|
+| SingHealth | 64 | 4 | 1 | 0 |
+| SA Health | 40 | 6 | 8 | -55 |
+| NCS/MoD Singapore | 24 | 4 | 3 | 0 |
+| GHA | 14 | 3 | 3 | +100 |
+| Barwon Health | 12 | 3 | 4 | -50 |
+| Mount Alvernia Hospital | 11 | 3 | 1 | -40 |
+| SLMC | 11 | 4 | 5 | -100 |
+| Epworth Healthcare | 9 | 3 | 3 | -100 |
+| Albury Wodonga Health | 6 | 2 | 1 | 0 |
+| WA Health | 4 | 2 | 1 | -25 |
+| Dept of Health Vic | 1 | 1 | 0 | 0 |
+| GRMC | 1 | 1 | 0 | +100 |
+
+#### Spearman Rank Correlations: CLC Metrics vs Q4 2025 NPS (n=12)
+
+| Metric | Spearman rho | p-value | Direction | Strength |
+|--------|:-----------:|:-------:|-----------|----------|
+| Total Attendances | -0.142 | 0.661 | Negative | **Weak (not significant)** |
+| Events Attended | -0.458 | 0.135 | Negative | Moderate |
+| Feedback Submitted | **-0.635** | **0.027** | **Negative** | **Strong (significant)** |
+
+#### Key Findings From CLC Event Data
+
+**1. CLC attendance has weak/no NPS correlation (rho = -0.142)**
+
+Identical finding to segmentation events (rho = 0.074). Attendance frequency reflects client size and engagement intensity, not satisfaction. SingHealth (64 attendances, NPS 0) and SA Health (40 attendances, NPS -55) are both large, highly-engaged clients with poor NPS, whilst GRMC (1 attendance, NPS +100) is small but satisfied.
+
+**2. CLC feedback submission correlates NEGATIVELY with NPS (rho = -0.635, p = 0.027)**
+
+Clients who submit post-event feedback have **worse** NPS than those who don't. This is because feedback submission is driven by having issues to report — SA Health submitted 8 pieces of feedback (NPS -55), SLMC submitted 5 (NPS -100). The feedback itself is valuable intelligence but submission rate is not a positive signal.
+
+**3. Threshold analysis shows reversed direction**
+
+| Threshold | n | Avg NPS | Delta |
+|-----------|:-:|:------:|:-----:|
+| Attendances >= 10 | 7 | -20.7 | — |
+| Attendances < 10 | 5 | -5.0 | **-15.7 (reversed)** |
+| Events <= 1 | 2 | +50.0 | — |
+| Events >= 3 | 8 | -30.6 | **+80.6 (reversed)** |
+
+Higher CLC engagement is associated with **worse** NPS, not better. This mirrors the segmentation events finding and confirms that engagement frequency is an input measure (reflects client importance) not an outcome measure (reflects satisfaction).
+
+**4. CLC event attendance should NOT be a new CSI factor**
+
+The data does not support CLC event attendance as a standalone factor. Adding it would penalise large, engaged clients (SingHealth, SA Health) who attend more events but have complex product footprints and more issues. Factor #12 (No Event Attendance, weight 4) already captures the disengagement signal with appropriately low weight.
+
+**5. CLC data enhances Factor #12 automation and adds to data sources**
+
+Factor #12 can now incorporate CLC event attendance alongside `segmentation_events` and `unified_meetings`:
+
+```sql
+-- Factor #12: No Event Attendance (TRUE if zero events across all sources)
+SELECT
+  (seg_count + meeting_count + clc_count) = 0 AS factor_triggered
+FROM (
+  SELECT
+    (SELECT COUNT(*) FROM segmentation_events WHERE client_name = ? AND completed = true AND event_date >= NOW() - INTERVAL '12 months') AS seg_count,
+    (SELECT COUNT(*) FROM unified_meetings WHERE client = ? AND meeting_date >= NOW() - INTERVAL '12 months') AS meeting_count,
+    (SELECT COUNT(*) FROM clc_event_attendees WHERE client_name = ? AND attended = true AND event_id IN (SELECT id FROM clc_events WHERE event_date >= NOW() - INTERVAL '12 months')) AS clc_count
+) counts;
+```
+
+**6. Learning interests provide qualitative intelligence**
+
+CLC event feedback includes "learning interests" from 35 attendees — topics they want to learn more about. These provide qualitative signals for Factor #4 (Technical Knowledge Gap) assessment:
+
+- **AI/Technology trends:** "AI applications within EMR systems" (Mount Alvernia), "AI in population health" (NCS/MoD), "Real life use case AI usage" (NCS/MoD)
+- **Product roadmap:** "Future plans / road maps" (SA Health), "More details about upgrades and new features" (Epworth)
+- **Integration:** "Integration with biomedical devices" (SLMC), "Integration with 3rd party applications, API" (SLMC)
+- **Cross-client collaboration:** "More collaboration time between sites to discuss current issues" (Barwon Health)
+
+These interests inform the CE team's Technical Knowledge Gap assessment by revealing what clients need but aren't getting.
+
 ---
 
 ## 4. Proposed CSI Factor Model v2
@@ -423,7 +505,7 @@ Mining the 1,924 case records, 807 segmentation events, and 282 meeting records 
 | 9 | Strategic Ops Plans <2x/yr | 6 | Fewer than 2 partnership meetings per year | Engagement frequency matters (GHA improved through engagement) but is an input, not outcome. |
 | 10 | C-Suite Turnover | 5 | CIO/CEO change in past 12 months | Weak NPS correlation. MoD Singapore has turnover but stable NPS. Reduced from 17. |
 | 11 | NPS Declining 2+ Consecutive Periods | 4 | Average score dropped in 2+ consecutive periods | Reduced from 8: all-period gap only +5 NPS and reversed direction. GHA and GRMC both declined 2+ periods then recovered. Weak predictor. |
-| 12 | No Event Attendance | 4 | Zero event/webinar attendance in past year | Minor signal. SA Health iQemo non-attendance is caused by dissatisfaction, not the reverse. |
+| 12 | No Event Attendance | 4 | Zero event/webinar attendance in past year | Minor signal. Now automatable from three sources: `segmentation_events`, `unified_meetings`, and `clc_event_attendees`. CLC attendance analysis (n=12, rho=-0.142) confirms frequency is not predictive — higher attendance correlates with worse NPS. Factor retained at low weight (4) to flag complete disengagement only. |
 | 13 | Communication/Transparency (positive) | -8 | CE team confirms proactive communication cadence and transparency in place | **NEW.** Protective factor: +21.0 NPS delta per-verbatim (32/81 mentions). Combined with Relationship/Engagement (+25.4 delta), captures the positive engagement signal through a single qualitative CE assessment. |
 | 14 | NPS Promoter (score 9-10) | -5 | Most recent NPS score 9-10 | Positive factor (reduces ARM). Rewards GHA, RVEEH, GRMC. |
 | | **Total possible ARM** | **98** | | |
@@ -527,7 +609,7 @@ All 4 historical misses share the same pattern: the model classifies the client 
 | 9 | Strategic Ops <2x/yr | Supabase `segmentation_events` (807 records, 96.7% completion) + `unified_meetings` (282 records) | Automated | **Available now** — combined engagement touchpoints per client computed from completed segmentation events and meeting records | **High — automatable from database** (rho = 0.074 confirms frequency is weak predictor; threshold <2 completed strategic events/year) |
 | 10 | C-Suite Turnover | CS leadership | Manual | Already in model | Existing |
 | 11 | NPS Declining 2+ periods | Supabase `nps_responses` | Calculated | Historical data available | **High — can automate from existing data** |
-| 12 | No Event Attendance | Supabase `segmentation_events` + `unified_meetings` | Automated | **Available now** — zero completed events in past 12 months flags disengagement | **High — automatable from database** |
+| 12 | No Event Attendance | Supabase `segmentation_events` + `unified_meetings` + `clc_event_attendees` | Automated | **Available now** — zero completed events across all three engagement sources in past 12 months flags disengagement. CLC data adds 235 client attendees across 8 events. | **High — automatable from database** |
 | 13 | Communication/Transparency | CE team qualitative assessment | CE team | Per review cycle | Low — qualitative but definable (proactive updates, documented cadence, transparency on issues) |
 | 14 | NPS Promoter | Supabase `nps_responses` | Automated | Real-time | **High — already in database** |
 
@@ -623,7 +705,8 @@ All analysis in this document is derived from:
 - **APAC Client Success Updates 2025:** 32-slide PPTX with full-year programme data
 - **APAC 5 in 25 Initiative Detail:** Project-level tracking with KPIs and status
 - **2026 APAC Performance Workbook:** Attrition schedule (10 events, $2.722M total USD across 2025–2028), Opal Maintenance Contracts (8 clients, AUD $2.187M annual), Deal Pipeline Risk Profile (Dial 2). Source: OneDrive — APAC Central Management Reports / Financials / BURC / 2026.
+- **CLC Event Attendance Data:** Supabase `clc_events` (8 events: CES 2022–2025, Client Forum 2024–2025, Opal User Forum 2024, iQemo User Forum 2025) and `clc_event_attendees` (341 records, 235 client-facing). Sourced from Customer Leadership Council Excel/CSV exports (OneDrive — APAC Clients / Customer Leadership Council / Sources). Includes registration status, attendance, feedback ratings, and learning interests. 36 attendees provided post-event feedback. Spearman rho = -0.142 against NPS (n=12 matched clients) — confirms event attendance frequency is not predictive of satisfaction.
 
 ---
 
-*This design document proposes a CSI factor model redesign based on observed correlation between model factors and actual NPS outcomes across all 199 responses (81 with per-verbatim theme analysis), 5 NPS periods (2023–Q4 2025), 2,179 ServiceNow cases, 807 segmentation events, and 282 meeting records. Multi-period accuracy: 86% overall (25/29 client-period observations), 100% contemporaneous (Q4 2025), 79% historical (Q4 2024 + Q2 2025). All factor weights are backed by full-dataset evidence with per-response theme classification, not single-period or client-level retroactive analysis. 8 of 14 factors are fully automatable from existing Supabase data. Recommendations are evidence-based and verifiable against the cited data sources.*
+*This design document proposes a CSI factor model redesign based on observed correlation between model factors and actual NPS outcomes across all 199 responses (81 with per-verbatim theme analysis), 5 NPS periods (2023–Q4 2025), 2,179 ServiceNow cases, 807 segmentation events, 282 meeting records, and 235 CLC event attendees. Multi-period accuracy: 86% overall (25/29 client-period observations), 100% contemporaneous (Q4 2025), 79% historical (Q4 2024 + Q2 2025). All factor weights are backed by full-dataset evidence with per-response theme classification, not single-period or client-level retroactive analysis. 8 of 14 factors are fully automatable from existing Supabase data. Recommendations are evidence-based and verifiable against the cited data sources.*
