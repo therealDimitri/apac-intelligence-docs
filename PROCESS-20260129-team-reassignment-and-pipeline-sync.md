@@ -22,6 +22,7 @@ BoonTeck Lim and Gilbert So left the company. Their Asia + Guam clients were tem
 | `nps_clients` | 5 | Open Role CSE → Nikki Wei |
 | `aging_accounts` | 5 | Open Role CSE → Nikki Wei |
 | `pipeline_opportunities` | 21 | Open Role CSE/CAM → Nikki Wei |
+| `cse_client_assignments` | 15 | Open Role → Nikki Wei |
 | `email_recipient_config` | 2 | Boon/Gil → is_active=false |
 
 ### Verification
@@ -81,3 +82,18 @@ Useful for future team changes.
 - Summary rows (Green/Yellow/Red headers, totals) were skipped during import
 - Existing CSE/CAM assignments were preserved during pipeline sync
 - New opportunities default to Nikki Wei as interim CSE/CAM
+
+## Important: CSE Assignment Tables
+
+When reassigning CSEs, ensure ALL of these tables are updated:
+
+| Table | Purpose |
+|-------|---------|
+| `client_segmentation` | Client segmentation status |
+| `nps_clients` | NPS survey ownership |
+| `aging_accounts` | Weekly AR snapshot data |
+| `pipeline_opportunities` | Sales pipeline ownership |
+| `cse_client_assignments` | **Invoice Tracker CSE mapping** (used by Working Capital page) |
+| `email_recipient_config` | Weekly email distribution |
+
+**Critical**: The `cse_client_assignments` table is used by `/api/invoice-tracker/aging-by-cse` to map Invoice Tracker clients to CSEs. Missing this table causes "Open Role" to display on the Working Capital dashboard even when other tables are correct.
