@@ -125,15 +125,49 @@ Added drill-down capability to see individual client completion status for each 
 - Back button returns to activity list
 - Legend showing Completed/Outstanding indicators
 
-**Mock Data:**
-Currently uses `MOCK_CLIENTS` array with 18 clients across all segment tiers. In production, this should be replaced with data from `nps_clients` table.
-
 **Commits:**
 - `3d928984` - feat(operating-rhythm): add client mini-orbit for activity completion tracking
+
+## Real Client Data Integration (29 Jan 2026)
+
+**Problem:** The client mini-orbit was using hardcoded `MOCK_CLIENTS` array instead of real client data from the database.
+
+**Solution:**
+- Created `/api/clients/segments` API endpoint to fetch clients from `nps_clients` table
+- Added `ClientData` interface for typed client data
+- `AnnualOrbitView` now accepts `clients` prop for real data
+- Operating Rhythm page fetches clients on mount and passes to component
+- Short names auto-generated from client names (first letters of each word)
+
+**API Response:**
+```json
+{
+  "success": true,
+  "clients": [
+    { "name": "Albury Wodonga Health", "shortName": "AWH", "tier": "Leverage" },
+    { "name": "Barwon Health Australia", "shortName": "BHA", "tier": "Maintain" },
+    ...
+  ],
+  "clientCounts": {
+    "Giant": 1, "Sleeping Giant": 2, "Collaboration": 2,
+    "Nurture": 2, "Leverage": 5, "Maintain": 6
+  },
+  "totalClients": 18
+}
+```
+
+**Files Changed:**
+- `src/app/api/clients/segments/route.ts` (new)
+- `src/components/operating-rhythm/AnnualOrbitView.tsx`
+- `src/components/operating-rhythm/index.ts`
+- `src/app/(dashboard)/operating-rhythm/page.tsx`
+
+**Commits:**
+- `c2ed1e54` - feat(operating-rhythm): connect client mini-orbit to real nps_clients data
 
 ## Future Considerations
 
 - Create database table for tracking actual activity completions
-- Replace mock client data with live data from `nps_clients` table
 - Add ability for users to mark activities as completed
 - Add click-through from client bubble to client profile page
+- Fix short name generation for clients with parentheses (e.g., "GHA(" from "Gippsland Health Alliance (GHA)")
