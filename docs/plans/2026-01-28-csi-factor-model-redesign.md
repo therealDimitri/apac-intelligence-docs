@@ -1,3 +1,11 @@
+---
+title: "CSI Factor Model Redesign"
+subtitle: "Evidence-Based Client Segmentation"
+author: "APAC Client Success"
+date: "28 January 2026"
+cover-page: true
+---
+
 # CSI Factor Model Redesign: Evidence-Based Client Segmentation
 
 **Date:** 28 January 2026
@@ -51,7 +59,7 @@ The root cause is that the model measures **business risk** (C-Suite turnover, M
 
 **Method:** 9 binary (TRUE/FALSE) risk factors, each with a fixed weight. ARM Index = sum of weights for TRUE factors. CSI = 100 - ARM.
 
-| # | Factor | Weight | Category |
+| No. | Factor | Weight | Category |
 |---|--------|--------|----------|
 | 1 | C-Suite Turnover in Past Year | 17 | Business Risk |
 | 2 | At Risk M&A/Attrition | 15 | Business Risk |
@@ -495,7 +503,7 @@ These interests inform the CE team's Technical Knowledge Gap assessment by revea
 
 ### 4.2 Proposed Factor Weights (Full-Dataset Validated)
 
-| # | Factor | Weight | Threshold | All-Period Evidence |
+| No. | Factor | Weight | Threshold | All-Period Evidence |
 |---|--------|--------|-----------|---------------------|
 | 1 | Support Case Backlog >10 open | 15 | >10 open SNOW cases | Actual ServiceNow data: clients with >10 open cases avg NPS -78 vs +6 for ≤10 (**-84 NPS delta**). Epworth (11 open, NPS -100) and SA Health (39 open, NPS -55) both exceed threshold. Original >20 threshold would miss Epworth. |
 | 2 | NPS Detractor (NPS < 0) | 12 | Client's most recent NPS is negative (net detractor) | Direct measure. Applied as net NPS < 0 (not individual score ≤ 6). Clients with individual scores 0-6 but net NPS ≥ 0 (e.g. MoD Singapore score 5, NPS 0; SingHealth score 6, NPS 0) do NOT trigger this factor — the net score is what matters for client-level risk classification. |
@@ -599,7 +607,7 @@ All 4 historical misses share the same pattern: the model classifies the client 
 
 ## 5. Data Sources for New Factors
 
-| # | Factor | Source | Owner | Availability | Automation Potential |
+| No. | Factor | Source | Owner | Availability | Automation Potential |
 |---|--------|--------|-------|-------------|---------------------|
 | 1 | Support Backlog >10 | Supabase `support_sla_latest` (synced from ServiceNow dashboards) | Automated | **Available now** — Q4 2025 data for 9 clients already imported | **High — already in database** |
 | 2 | NPS Detractor | Supabase `nps_responses` | Automated | Real-time | **High — already in database** |
