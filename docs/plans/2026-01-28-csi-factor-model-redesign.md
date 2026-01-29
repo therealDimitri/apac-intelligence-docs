@@ -121,12 +121,16 @@ Of 199 total NPS responses, 81 include verbatim feedback (41% coverage). Each ve
 
 #### Theme Intensity Over Time
 
+<div style="page-break-inside: avoid;">
+
 | Period | n | Support | Tech Knowledge | Communication | Defects | Roadmap | Relationship |
 |--------|:-:|:-------:|:--------------:|:-------------:|:-------:|:-------:|:------------:|
 | 2023 | 3 | — | — | 100% | — | 33% | 67% |
 | Q2 2024 | 1 | — | — | 100% | — | — | 100% |
 | Q2 2025 | 43 | 42% | 16% | 30% | 9% | 40% | 28% |
 | Q4 2025 | 34 | 26% | 9% | **44%** | 6% | 24% | 26% |
+
+</div>
 
 Support Responsiveness mentions declined from 42% to 26% (Q2→Q4 2025), consistent with the observed NPS improvement. Communication/Transparency rose from 30% to 44%, reflecting increased proactive engagement from the CE team in H2 2025.
 
