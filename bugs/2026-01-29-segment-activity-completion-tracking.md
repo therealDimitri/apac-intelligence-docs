@@ -59,8 +59,9 @@ Enhanced the Operating Rhythm segment activity layer to keep the Next Event pane
 
 2. **Right Panel Layout**:
    - Compact Next Event card pinned at top
-   - Segment activity details shown below when hovering
-   - Activity Summary card when no specific month is hovered
+   - Segment activity details shown below when clicking a month
+   - Activity Summary card when no specific month is selected
+   - Close button (X) to dismiss the selected month view
 
 3. **Activity Detail View**:
    - Overall completion percentage with progress bar
@@ -84,11 +85,28 @@ Currently uses deterministic mock data for demonstration. In production, this sh
 
 ## Testing
 
-- Verified hover interaction on monthly bubbles shows detailed completion status
+- Verified click interaction on monthly bubbles shows detailed completion status
 - Verified Next Event panel stays visible when viewing segment activities
 - Verified progress arcs render correctly on all monthly bubbles
 - Build passes with no TypeScript errors
 - Deployed successfully to production
+
+## Bug Fix: Hover-to-Click Interaction (29 Jan 2026)
+
+**Problem:** The original hover-based interaction (`onMouseEnter`/`onMouseLeave`) was too fragile. The segment activity card would disappear immediately when the mouse cursor moved away from the small (~15px radius) bubble. Users couldn't read the card before it vanished.
+
+**Root Cause:**
+- Small SVG target elements (10-18px radius) make it difficult to keep cursor in place
+- `onMouseLeave` fires instantly when cursor moves even 1px outside the element
+- Moving toward the detail card naturally takes the cursor away from the bubble
+
+**Solution:**
+- Changed from hover-based (`hoveredMonth`) to click-based (`selectedMonth`) state
+- Click on bubble toggles selection (click again to deselect)
+- Added close button (X) to the SegmentActivityCard header for easy dismissal
+- Selection now persists until user explicitly clicks elsewhere or the close button
+
+**Commit:** `210d3997` - fix(operating-rhythm): change segment activity from hover to click-based selection
 
 ## Future Considerations
 
