@@ -41,7 +41,8 @@ The autonomous workflow for this repo is: Edit → Commit → Push → Document.
 - Dependencies: `scripts/requirements-stats.txt` (pandas, numpy, scipy, statsmodels, scikit-learn, seaborn, matplotlib, supabase)
 - Run: `python scripts/csi_statistical_analysis.py --period "Q4 25" --output-dir ./docs/plans/csi_statistics`
 - Outputs: JSON (machine-readable), Markdown (human-readable), plots/ (correlation heatmap, ROC curves, threshold sensitivity)
-- Note: Supabase `support_case_details` has fewer clients with `resolution_duration_seconds` than Excel imports — expect n=4 vs n=11 for support metrics
+- Client name matching: Uses `client_name_aliases` table for cross-table joins (commit 51d517a, 2026-01-29)
+- **Fixed (2026-01-29):** Support metric sample size increased from n=4 to n=11 by using `client_name_aliases` for client name normalization. Root cause was exact string matching between tables with different naming conventions (e.g., "Barwon Health Australia" vs "Barwon Health", "GHA" vs "Gippsland Health Alliance (GHA)")
 
 ## Statistical Review Checklist
 
