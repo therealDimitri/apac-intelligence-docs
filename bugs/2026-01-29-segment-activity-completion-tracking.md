@@ -165,9 +165,37 @@ Added drill-down capability to see individual client completion status for each 
 **Commits:**
 - `c2ed1e54` - feat(operating-rhythm): connect client mini-orbit to real nps_clients data
 
+## Client Logo Integration (29 Jan 2026)
+
+**Problem:** The client mini-orbit was displaying text initials instead of actual client logos.
+
+**Solution:**
+- Integrated with existing `client_logos` Supabase table (19 logo records)
+- Updated `/api/clients/segments` to fetch and match logos to clients
+- Implemented multi-tier name matching algorithm:
+  1. **Exact match** - Direct client_name comparison
+  2. **Legacy names** - Check `legacy_names` array for historical/alternative names
+  3. **Partial match** - Substring matching for edge cases
+
+**Database Updates:**
+- Fixed logo paths from `/assets/logos/` to `/logos/` (Next.js public folder)
+- Updated file extensions to match actual files (e.g., `.png` → `.webp`)
+
+**Name Matching Examples:**
+| nps_clients name | client_logos name | Match Type |
+|------------------|-------------------|------------|
+| Epworth Healthcare | Epworth Healthcare | Exact |
+| Albury Wodonga Health | Albury Wodonga | Legacy (in legacy_names) |
+| SingHealth | Singapore Health (SingHealth) | Partial |
+
+**Result:** All 18 clients now display their actual logos in the mini-orbit bubbles.
+
+**Commits:**
+- `8a361d66` - feat(operating-rhythm): integrate client_logos table for mini-orbit logos
+
 ## Future Considerations
 
 - Create database table for tracking actual activity completions
 - Add ability for users to mark activities as completed
 - Add click-through from client bubble to client profile page
-- Fix short name generation for clients with parentheses (e.g., "GHA(" from "Gippsland Health Alliance (GHA)")
+- ~~Fix short name generation for clients with parentheses~~ (logos now used instead)
