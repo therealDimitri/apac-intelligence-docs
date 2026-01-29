@@ -20,7 +20,7 @@ toc-depth: 3
 
 ## Executive Summary
 
-The current APAC Client Satisfaction Index (CSI) correctly classifies only **4 of 10 clients** (40% accuracy) when tested against actual NPS outcomes. The model over-weights business risk factors (C-Suite turnover, M&A) that have no observed correlation with client satisfaction, while under-weighting support quality factors that drive 100% of the NPS variation we can measure.
+The current APAC Client Satisfaction Index (CSI) correctly classifies only **5 of 13 clients** (38.5% accuracy) when tested against actual NPS outcomes. The model over-weights business risk factors (C-Suite turnover, M&A) that have no observed correlation with client satisfaction, while under-weighting support quality factors that drive 100% of the NPS variation we can measure.
 
 This document proposes a redesigned 14-factor model validated against **199 NPS responses across 5 periods**, **2,179 ServiceNow cases**, **807 segmentation events**, **282 meeting records**, and **235 CLC event attendees**. The key changes:
 
@@ -29,7 +29,7 @@ This document proposes a redesigned 14-factor model validated against **199 NPS 
 - **Two new protective factors** reward proactive communication (-8 ARM) and promoter status (-5 ARM), capturing the strongest positive NPS signals observed in verbatim feedback
 - **8 of 14 factors are fully automatable** from existing Supabase data, up from approximately 3 of 9 in the current model
 
-The redesigned model achieves **100% accuracy on Q4 2025 data** (10/10 clients correctly classified) and **86% accuracy across three NPS periods** (25/29 client-period observations). All historical misclassifications trace to a single cause: projecting the qualitative Communication factor backwards into periods where it did not yet exist. This confirms the model requires fresh CE team assessment each NPS cycle — already built into the implementation plan.
+The redesigned model achieves **100% accuracy on Q4 2025 data** (13/13 clients correctly classified) and **86% accuracy across three NPS periods** (25/29 client-period observations). All historical misclassifications trace to a single cause: projecting the qualitative Communication factor backwards into periods where it did not yet exist. This confirms the model requires fresh CE team assessment each NPS cycle — already built into the implementation plan.
 
 > **⚠️ Statistical Caveats (see Section 10.7):** These results should be interpreted with caution. The perfect ROC-AUC (1.000) may indicate methodological circularity — validate on Q1 2026 data before accepting. Power analysis shows only large effects (d ≥ 1.15) are detectable with n=13. Support metric correlations now use n=11 (after client name aliasing fix), strengthening the analysis. The model's 66.7% sensitivity means 1 in 3 at-risk clients are missed — monitor for churn among false negatives.
 
@@ -39,13 +39,13 @@ The redesigned model achieves **100% accuracy on Q4 2025 data** (10/10 clients c
 
 ## 1. Problem Statement
 
-The current APAC Client Satisfaction Index (CSI) has **40% accuracy** when tested against actual Q4 2025 NPS outcomes. 6 of 10 clients with Q4 2025 NPS data are misclassified — the model says they're healthy when they're critical, or critical when they're healthy.
+The current APAC Client Satisfaction Index (CSI) has **38.5% accuracy** when tested against actual Q4 2025 NPS outcomes. 8 of 13 clients with Q4 2025 NPS data are misclassified — the model says they're healthy when they're critical, or critical when they're healthy.
 
 The root cause is that the model measures **business risk** (C-Suite turnover, M&A/attrition, engagement frequency) rather than **client satisfaction drivers** (support responsiveness, technical knowledge, communication quality). The top-3 weighted factors in the current model have no observed correlation with NPS across all 199 responses and 5 NPS periods.
 
 **Note:** This document has undergone eleven rounds of validation:
 
-1. **Initial (Q4 2025 only):** 43 NPS responses, 10 clients
+1. **Initial (Q4 2025 only):** 43 NPS responses, 13 clients
 
 2. **Full NPS dataset:** All 199 NPS responses across 5 periods (2023–Q4 2025). Revealed Communication/Transparency as the strongest protective factor.
 
@@ -147,13 +147,16 @@ Support Responsiveness mentions declined from 42% to 26% (Q2→Q4 2025), consist
 | Dept of Health Vic | 75 | 0 | 7.5 | **NO** |
 | Epworth Healthcare | 90 | -100 | 2.0 | **NO** |
 | Gippsland Health Alliance | 100 | +100 | 9.3 | YES |
+| GRMC | 75 | +100 | 9.0 | **NO** |
+| MoD Singapore | 56 | 0 | 7.6 | **NO** |
 | Mount Alvernia Hospital | 90 | -40 | 6.6 | **NO** |
 | RVEEH | 56 | +100 | 9.0 | **NO** |
-| MoD Singapore | 71 | 0 | 7.6 | **NO** |
+| **SA Health** | 85 | -55 | 6.0 | **NO** |
+| **SingHealth** | 65 | 0 | 7.8 | **NO** |
 | SLMC | 75 | -100 | 5.0 | YES |
-| GRMC | 75 | +100 | 9.0 | **NO** |
+| **WA Health** | 53 | -25 | 6.2 | YES |
 
-**Accuracy: 40%** (4 of 10 correct). Worse than a coin flip.
+**Accuracy: 38.5%** (5 of 13 correct). Worse than a coin flip.
 
 > **Classification criteria:** CSI ≥ 80 = healthy, CSI < 80 = at-risk. NPS ≥ 0 = healthy, NPS < 0 = at-risk. "Correct" = both agree. **Corrections from prior version:** Dept Health Vic (CSI 75 at-risk, NPS 0 healthy = mismatch, changed YES→NO), SLMC (CSI 75 at-risk, NPS -100 at-risk = match, changed NO→YES), GRMC (CSI 75 at-risk, NPS +100 healthy = mismatch, changed YES→NO).
 
@@ -622,7 +625,7 @@ The model shifts from 58% Business Risk/Engagement to **53% Support Quality/Prod
 
 ### 4.4 Retroactive Accuracy Test (Full-Dataset Validated v2)
 
-Applying the full-dataset validated v2 factors to all 10 clients with Q4 2025 NPS data. v2 now includes Communication/Transparency (protective, -8), Technical Knowledge Gap (+10), reduced Product Defects (8 from 12), and reduced NPS Decline (4 from 8).
+Applying the full-dataset validated v2 factors to all 13 clients with Q4 2025 NPS data. v2 now includes Communication/Transparency (protective, -8), Technical Knowledge Gap (+10), reduced Product Defects (8 from 12), and reduced NPS Decline (4 from 8).
 
 | Client | v1 CSI | v2 CSI | v2 ARM | Actual NPS | v1 Correct? | v2 Correct? |
 |--------|--------|--------|--------|-----------|-------------|-------------|
@@ -631,13 +634,16 @@ Applying the full-dataset validated v2 factors to all 10 clients with Q4 2025 NP
 | Dept Health Vic | 75 | 100 | 0 | 0 (avg 7.5) | NO | YES |
 | Epworth | 90 | 32 | 68 | -100 (avg 2.0) | NO | **YES** |
 | GHA | 100 | 100 | -6 | +100 (avg 9.3) | YES | YES |
+| GRMC | 75 | 100 | -6 | +100 (avg 9.0) | NO | YES |
+| MoD Singapore | 56 | 90 | 10 | 0 (avg 7.6) | NO | **YES** |
 | Mount Alvernia | 90 | 60 | 40 | -40 (avg 6.6) | NO | **YES** |
 | RVEEH | 56 | 100 | -13 | +100 (avg 9.0) | NO | **YES** |
-| MoD Singapore | 71 | 90 | 10 | 0 (avg 7.6) | NO | **YES** |
+| **SA Health** | 85 | 45 | 55 | -55 (avg 6.0) | **NO** | **YES** |
+| **SingHealth** | 65 | 91 | 9 | 0 (avg 7.8) | **NO** | **YES** |
 | SLMC | 75 | 49 | 51 | -100 (avg 5.0) | YES | **YES** |
-| GRMC | 75 | 100 | -6 | +100 (avg 9.0) | NO | YES |
+| **WA Health** | 53 | 53 | 47 | -25 (avg 6.2) | YES | **YES** |
 
-**v1 accuracy: 40% (4/10). v2 accuracy: 100% (10/10) for Q4 2025.**
+**v1 accuracy: 38.5% (5/13). v2 accuracy: 100% (13/13) for Q4 2025.**
 
 #### Multi-Period v2 Accuracy Test
 
@@ -673,13 +679,19 @@ All 4 historical misses share the same pattern: the model classifies the client 
 | Dept Health Vic | F | F | F | F | F | T | F | F | F | F | F | F | T | F | 0 | 100 |
 | Epworth | T | T | T | T | T | T | F | F | F | F | T | F | F | F | 68 | 32 |
 | GHA | F | F | F | F | F | F | F | **T** | F | F | F | F | T | T | -6 | 100 |
+| GRMC | F | F | F | F | F | F | F | T | F | F | F | F | T | T | -6 | 100 |
+| MoD Singapore | F | F | F | F | F | F | F | **T** | T | T | F | F | T | F | 10 | 90 |
 | Mount Alvernia | F | T | T | T | F | T | F | F | F | F | F | F | F | F | 40 | 60 |
 | RVEEH | F | F | F | F | F | F | F | F | F | F | F | F | T | T | -13 | 100 |
-| MoD Singapore | F | F | F | F | F | F | F | **T** | T | T | F | F | T | F | 10 | 90 |
+| **SA Health** | **T** | **T** | **T** | **T** | F | **T** | F | F | F | F | F | F | F | F | 55 | 45 |
+| **SingHealth** | F | F | **T** | F | F | F | F | **T** | F | F | F | F | **T** | F | 9 | 91 |
 | SLMC | F | T | T | T | F | T | F | T | F | F | T | F | F | F | 51 | 49 |
-| GRMC | F | F | F | F | F | F | F | T | F | F | F | F | T | T | -6 | 100 |
+| **WA Health** | **T** | **T** | **T** | **T** | F | F | F | F | F | F | F | F | F | F | 47 | 53 |
 
 **Key observations:**
+- **SA Health** (actual NPS -55) scores CSI 45 — correctly flagged as critical. Highest-risk client with 5 TRUE factors: Backlog >10 (39 open cases), Detractor, Avg Resolution >700h (969h), Technical Knowledge Gap, Defects >30. Largest respondent group (n=11).
+- **WA Health** (actual NPS -25) scores CSI 53 — correctly flagged as at-risk. Four TRUE factors: Backlog >10 (30 open cases), Detractor, Avg Resolution >700h (1,383h — highest in APAC), Technical Knowledge Gap.
+- **SingHealth** (actual NPS 0) scores CSI 91 — correctly flagged as healthy. Communication protective factor (-8) offsets the M&A risk (+7) and borderline resolution time (+10). Sleeping Giant reviews per TEA model demonstrate proactive engagement.
 - Epworth (actual NPS -100) now scores CSI 32 — correctly flagged as critical. ARM driven by 7 risk factors including the new Technical Knowledge Gap.
 - RVEEH (actual NPS +100) now scores CSI 100 — correctly flagged as healthy. Communication and Promoter protective factors offset the previously penalising business risk factors.
 - SLMC (actual NPS -100) scores CSI 49 — correctly flagged as critical. Support Backlog factor is FALSE (only 3 open cases in `support_case_details`, no SLA dashboard record). Risk driven by Avg Resolution >700h, Technical Knowledge Gap, Detractor, Defect Rate, M&A, and Decline 2+ periods.
@@ -773,7 +785,7 @@ Bain's longitudinal research across healthcare IT shows that **a 12-point NPS im
 
 | Risk | Mitigation |
 |------|-----------|
-| Small sample size (10 clients with retroactive test, 199 total responses) | Validated across all 5 NPS periods, not just Q4 2025. Multi-period test: 86% overall (25/29), 100% contemporaneous. Further validate against Q2 2026 cycle. |
+| Small sample size (13 clients with retroactive test, 199 total responses) | Validated across all 5 NPS periods, not just Q4 2025. Multi-period test: 86% overall (25/29), 100% contemporaneous. Further validate against Q2 2026 cycle. |
 | Multi-period accuracy drops to 79% for historical periods | All misses caused by qualitative Communication factor projected backwards. Model requires fresh per-period CE assessment — built into Phase 2 workflow. Historical accuracy is inherently limited by point-in-time qualitative factors (theme persistence: 41%). |
 | 5 new factors added (vs v1's 9 factors) | 8 of 14 factors are fully automatable from Supabase. 1 factor requires monthly R&D reports (Defect Rate). 2 qualitative factors (Technical Knowledge Gap, Communication) need defined CE assessment criteria. |
 | Binary (TRUE/FALSE) format loses nuance | Considered but rejected continuous scoring — binary maintains Excel model simplicity and is easier for the team to populate. Revisit if accuracy drops. |
