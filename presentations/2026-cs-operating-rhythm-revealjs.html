@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 CS Operating Rhythm | APAC</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css">
+    <style>
+        :root {
+            --r-background-color: #0a0a0a;
+            --r-main-font: 'Inter', system-ui, sans-serif;
+            --r-heading-font: 'Inter', system-ui, sans-serif;
+            --r-main-color: #fafafa;
+            --r-heading-color: #fafafa;
+            --r-link-color: #3b82f6;
+            --accent-nps: #f59e0b;
+            --accent-planning: #3b82f6;
+            --accent-audit: #8b5cf6;
+            --accent-marcom: #ec4899;
+            --accent-segment: #10b981;
+        }
+
+        .reveal {
+            font-family: var(--r-main-font);
+        }
+
+        .reveal h1, .reveal h2, .reveal h3 {
+            font-weight: 700;
+            text-transform: none;
+            letter-spacing: -0.02em;
+        }
+
+        .reveal h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .reveal .subtitle {
+            font-size: 1.2em;
+            color: #a1a1aa;
+            margin-top: 0.5em;
+        }
+
+        /* Orbit Animation */
+        .orbit-container {
+            position: relative;
+            width: 600px;
+            height: 600px;
+            margin: 0 auto;
+        }
+
+        .orbit-ring {
+            position: absolute;
+            border: 2px solid #27272a;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .orbit-ring-1 { width: 200px; height: 200px; }
+        .orbit-ring-2 { width: 350px; height: 350px; }
+        .orbit-ring-3 { width: 500px; height: 500px; }
+
+        .orbit-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .orbit-center .year {
+            font-size: 3em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .orbit-center .label {
+            font-size: 0.9em;
+            color: #a1a1aa;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .orbit-event {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            font-weight: 600;
+            text-align: center;
+            padding: 8px;
+            box-sizing: border-box;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .orbit-event:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 30px currentColor;
+        }
+
+        .orbit-event.nps { background: var(--accent-nps); color: #0a0a0a; }
+        .orbit-event.planning { background: var(--accent-planning); color: #fff; }
+        .orbit-event.audit { background: var(--accent-audit); color: #fff; }
+        .orbit-event.marcom { background: var(--accent-marcom); color: #fff; }
+
+        /* Quarter positions (12 o'clock = Jan, clockwise) */
+        .q1-jan { top: 5%; left: 50%; transform: translateX(-50%); }
+        .q1-mar { top: 25%; right: 8%; }
+        .q2-apr { top: 50%; right: 0%; transform: translateY(-50%); }
+        .q2-jun { bottom: 25%; right: 8%; }
+        .q3-jul { bottom: 5%; left: 50%; transform: translateX(-50%); }
+        .q3-sep { bottom: 25%; left: 8%; }
+        .q4-oct { top: 50%; left: 0%; transform: translateY(-50%); }
+        .q4-dec { top: 25%; left: 8%; }
+
+        /* Timeline styles */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 2em 0;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 5%;
+            right: 5%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-planning), var(--accent-nps), var(--accent-audit), var(--accent-marcom));
+            border-radius: 2px;
+        }
+
+        .quarter {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .quarter-label {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 1em;
+        }
+
+        .quarter-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fafafa;
+            margin: 0 auto 1em;
+            position: relative;
+            z-index: 2;
+        }
+
+        .quarter-events {
+            font-size: 0.7em;
+            color: #a1a1aa;
+            line-height: 1.8;
+        }
+
+        .quarter-events strong {
+            color: #fafafa;
+            display: block;
+            margin-top: 0.5em;
+        }
+
+        /* Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1em;
+            padding: 1em;
+        }
+
+        .bento-card {
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 16px;
+            padding: 1.5em;
+            text-align: left;
+        }
+
+        .bento-card.large {
+            grid-column: span 2;
+        }
+
+        .bento-card.tall {
+            grid-row: span 2;
+        }
+
+        .bento-card h3 {
+            font-size: 0.9em;
+            color: #a1a1aa;
+            margin: 0 0 0.5em 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .bento-card .value {
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .bento-card .subtext {
+            font-size: 0.8em;
+            color: #71717a;
+            margin-top: 0.5em;
+        }
+
+        .bento-card.accent-nps { border-color: var(--accent-nps); }
+        .bento-card.accent-planning { border-color: var(--accent-planning); }
+        .bento-card.accent-audit { border-color: var(--accent-audit); }
+
+        /* Event Card */
+        .event-card {
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 16px;
+            padding: 2em;
+            text-align: left;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .event-card .event-type {
+            display: inline-block;
+            padding: 0.3em 0.8em;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1em;
+        }
+
+        .event-card .event-type.nps { background: var(--accent-nps); color: #0a0a0a; }
+        .event-card .event-type.planning { background: var(--accent-planning); }
+
+        .event-card h3 {
+            font-size: 1.8em;
+            margin: 0 0 0.3em 0;
+        }
+
+        .event-card .date {
+            font-size: 1.1em;
+            color: #a1a1aa;
+            margin-bottom: 1.5em;
+        }
+
+        .event-card .participants {
+            display: flex;
+            gap: 0.5em;
+            flex-wrap: wrap;
+            margin-bottom: 1.5em;
+        }
+
+        .event-card .participant {
+            background: #27272a;
+            padding: 0.3em 0.8em;
+            border-radius: 6px;
+            font-size: 0.75em;
+        }
+
+        .event-card .deliverables {
+            border-top: 1px solid #27272a;
+            padding-top: 1.5em;
+        }
+
+        .event-card .deliverables h4 {
+            font-size: 0.8em;
+            color: #a1a1aa;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 0 0 1em 0;
+        }
+
+        .event-card .deliverable-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8em;
+            margin-bottom: 0.8em;
+            font-size: 0.9em;
+        }
+
+        .event-card .deliverable-item::before {
+            content: '→';
+            color: var(--accent-planning);
+        }
+
+        /* Segment colours */
+        .segment-maintain { color: #ef4444; }
+        .segment-leverage { color: #f59e0b; }
+        .segment-nurture { color: #eab308; }
+        .segment-collaborate { color: #22c55e; }
+        .segment-giant { color: #3b82f6; }
+
+        /* Footer */
+        .slide-footer {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.6em;
+            color: #52525b;
+        }
+
+        /* Animations */
+        .fragment.grow-in {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        .fragment.grow-in.visible {
+            opacity: 1;
+            transform: scale(1);
+            transition: all 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(150px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(150px) rotate(-360deg); }
+        }
+
+        .orbiting {
+            animation: orbit 20s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Title Slide -->
+            <section>
+                <h1>2026 Operating Rhythm</h1>
+                <p class="subtitle">APAC Client Success</p>
+                <p style="margin-top: 3em; font-size: 0.8em; color: #52525b;">
+                    Charting the Course, Delivering Together
+                </p>
+            </section>
+
+            <!-- Strategic Context -->
+            <section>
+                <h2>Strategic Context</h2>
+                <div class="bento-grid" style="margin-top: 1em;">
+                    <div class="bento-card accent-nps">
+                        <h3>Confirmed Attrition</h3>
+                        <div class="value" style="color: var(--accent-nps);">$2.72M</div>
+                        <div class="subtext">FY25-28 phased over 3 years</div>
+                    </div>
+                    <div class="bento-card accent-planning">
+                        <h3>CSE Pipeline</h3>
+                        <div class="value" style="color: var(--accent-planning);">$8.36M</div>
+                        <div class="subtext">Weighted opportunities</div>
+                    </div>
+                    <div class="bento-card">
+                        <h3>Revenue Concentration</h3>
+                        <div class="value">80%</div>
+                        <div class="subtext">4 clients = maintenance revenue</div>
+                    </div>
+                </div>
+                <p style="margin-top: 1.5em; font-size: 0.8em; color: #a1a1aa;">
+                    At 35% conversion, pipeline barely covers attrition. Execution is critical.
+                </p>
+            </section>
+
+            <!-- Annual Orbit View -->
+            <section>
+                <h2>Annual Orbit</h2>
+                <div class="orbit-container">
+                    <div class="orbit-ring orbit-ring-1"></div>
+                    <div class="orbit-ring orbit-ring-2"></div>
+                    <div class="orbit-ring orbit-ring-3"></div>
+
+                    <div class="orbit-center">
+                        <div class="year">2026</div>
+                        <div class="label">Operating Rhythm</div>
+                    </div>
+
+                    <!-- Q1 Events -->
+                    <div class="orbit-event planning q1-jan fragment" data-fragment-index="1">
+                        APAC<br>Compass
+                    </div>
+
+                    <!-- Q2 Events -->
+                    <div class="orbit-event nps q2-apr fragment" data-fragment-index="2">
+                        NPS<br>Q2
+                    </div>
+
+                    <!-- Q3 Events -->
+                    <div class="orbit-event marcom q3-jul fragment" data-fragment-index="3">
+                        MarCom<br>2027
+                    </div>
+
+                    <!-- Q4 Events -->
+                    <div class="orbit-event nps q4-oct fragment" data-fragment-index="4">
+                        NPS<br>Q4
+                    </div>
+                </div>
+            </section>
+
+            <!-- Q1 Timeline -->
+            <section>
+                <h2>Q1: Foundation</h2>
+                <p style="color: #a1a1aa; margin-bottom: 1.5em;">January – March 2026</p>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1em;">
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-planning);">Jan 12</h3>
+                        <p style="font-weight: 600; margin: 0;">Sales Target Workshop</p>
+                        <p class="subtext">Define quotas & pipeline by CSE/CAM</p>
+                    </div>
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-audit);">Jan 19-23</h3>
+                        <p style="font-weight: 600; margin: 0;">CS & MarCom Audit</p>
+                        <p class="subtext">Q4 '25 learnings review</p>
+                    </div>
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-planning);">Jan 21-23</h3>
+                        <p style="font-weight: 600; margin: 0;">APAC Compass</p>
+                        <p class="subtext">Annual account planning</p>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1em; margin-top: 1em;">
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-planning);">Mar 2-6</h3>
+                        <p style="font-weight: 600; margin: 0;">Q1 Account Plan Update</p>
+                        <p class="subtext">Re-align for Q2</p>
+                    </div>
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-nps);">Mar 25</h3>
+                        <p style="font-weight: 600; margin: 0;">NPS Q2 List Prep</p>
+                        <p class="subtext">Validate recipient contacts</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- APAC Compass Deep Dive -->
+            <section>
+                <div class="event-card">
+                    <span class="event-type planning">Planning</span>
+                    <h3>APAC Compass</h3>
+                    <div class="date">21-23 January 2026 • 3 Days</div>
+
+                    <div class="participants">
+                        <span class="participant">EVP</span>
+                        <span class="participant">VP CommOps</span>
+                        <span class="participant">AVP CS</span>
+                        <span class="participant">CSEs</span>
+                        <span class="participant">CAMs</span>
+                    </div>
+
+                    <div class="deliverables">
+                        <h4>Deliverables</h4>
+                        <div class="deliverable-item">Annual account plans per client</div>
+                        <div class="deliverable-item">Pipeline opportunities with probability</div>
+                        <div class="deliverable-item">Stakeholder strategy & relationship maps</div>
+                        <div class="deliverable-item">Risk register with mitigations</div>
+                        <div class="deliverable-item">Satisfaction Action Plans (at-risk clients)</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Q2 Timeline -->
+            <section>
+                <h2>Q2: Execute & Measure</h2>
+                <p style="color: #a1a1aa; margin-bottom: 1.5em;">April – June 2026</p>
+
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1em;">
+                    <div class="bento-card large fragment">
+                        <h3 style="color: var(--accent-nps);">Apr 8-22</h3>
+                        <p style="font-weight: 600; margin: 0; font-size: 1.3em;">NPS Q2 Survey</p>
+                        <p class="subtext">2-week survey window • HubSpot deployment</p>
+                        <div style="margin-top: 1em; font-size: 0.75em; color: #71717a;">
+                            Apr 13: Non-responder pull #1<br>
+                            Apr 20: Non-responder pull #2
+                        </div>
+                    </div>
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-audit);">Apr 13-17</h3>
+                        <p style="font-weight: 600; margin: 0;">CS & MarCom Audit</p>
+                        <p class="subtext">Q1 learnings review</p>
+                    </div>
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-nps);">Apr 27 - May 30</h3>
+                        <p style="font-weight: 600; margin: 0;">NPS Analysis & Letters</p>
+                        <p class="subtext">Workshop → BU Points → EVP → Send</p>
+                    </div>
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-segment);">May 18 - Jun 12</h3>
+                        <p style="font-weight: 600; margin: 0;">Segmentation Review</p>
+                        <p class="subtext">Refresh model based on H1</p>
+                    </div>
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-planning);">Jun 4</h3>
+                        <p style="font-weight: 600; margin: 0;">2H Account Plan Review</p>
+                        <p class="subtext">H1 learnings → H2 alignment</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Q3 Timeline -->
+            <section>
+                <h2>Q3: Optimise & Plan Ahead</h2>
+                <p style="color: #a1a1aa; margin-bottom: 1.5em;">July – September 2026</p>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1em;">
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-nps);">Jul 2</h3>
+                        <p style="font-weight: 600; margin: 0;">NPS Initiatives Update</p>
+                        <p class="subtext">Q2 improvement progress</p>
+                    </div>
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-audit);">Jul 13-17</h3>
+                        <p style="font-weight: 600; margin: 0;">CS & MarCom Audit</p>
+                        <p class="subtext">Q2 learnings review</p>
+                    </div>
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-marcom);">Jul 20</h3>
+                        <p style="font-weight: 600; margin: 0;">2027 MarCom Kickoff</p>
+                        <p class="subtext">Next year planning begins</p>
+                    </div>
+                </div>
+
+                <div class="bento-card fragment" style="margin-top: 1em; text-align: center;">
+                    <h3 style="color: var(--accent-nps);">Sep 30</h3>
+                    <p style="font-weight: 600; margin: 0; font-size: 1.2em;">NPS Q4 Recipient List Deadline</p>
+                    <p class="subtext">Validate contacts • Flag unsubscribed • Upload to HubSpot</p>
+                </div>
+            </section>
+
+            <!-- Q4 Timeline -->
+            <section>
+                <h2>Q4: Close & Prepare</h2>
+                <p style="color: #a1a1aa; margin-bottom: 1.5em;">October – December 2026</p>
+
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1em;">
+                    <div class="bento-card large fragment">
+                        <h3 style="color: var(--accent-nps);">Oct 7-21</h3>
+                        <p style="font-weight: 600; margin: 0; font-size: 1.3em;">NPS Q4 Survey</p>
+                        <p class="subtext">Final survey of the year</p>
+                    </div>
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-planning);">Oct 8</h3>
+                        <p style="font-weight: 600; margin: 0;">Q4 Account Plan Update</p>
+                        <p class="subtext">Year-end prep</p>
+                    </div>
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-nps);">Oct 26-30</h3>
+                        <p style="font-weight: 600; margin: 0;">NPS Q4 Analysis</p>
+                        <p class="subtext">Cross-functional workshop</p>
+                    </div>
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-nps);">Nov 23-25</h3>
+                        <p style="font-weight: 600; margin: 0;">Client Letters</p>
+                        <p class="subtext">EVP-approved comms sent</p>
+                    </div>
+                    <div class="bento-card fragment">
+                        <h3 style="color: var(--accent-nps);">Dec 16</h3>
+                        <p style="font-weight: 600; margin: 0;">Year-End NPS Review</p>
+                        <p class="subtext">Annual trends & 2027 priorities</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Segmentation Framework -->
+            <section>
+                <h2>Segmentation Engagement</h2>
+                <p style="color: #a1a1aa; margin-bottom: 1em;">Year-round activities by segment</p>
+
+                <table style="width: 100%; font-size: 0.65em; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #27272a;">
+                            <th style="text-align: left; padding: 0.8em;">Activity</th>
+                            <th style="text-align: center; padding: 0.8em;" class="segment-maintain">Maintain</th>
+                            <th style="text-align: center; padding: 0.8em;" class="segment-leverage">Leverage</th>
+                            <th style="text-align: center; padding: 0.8em;" class="segment-nurture">Nurture</th>
+                            <th style="text-align: center; padding: 0.8em;" class="segment-collaborate">Collaborate</th>
+                            <th style="text-align: center; padding: 0.8em;" class="segment-giant">Giant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #27272a;">
+                            <td style="padding: 0.8em;">Partnership Meetings</td>
+                            <td style="text-align: center;">Monthly</td>
+                            <td style="text-align: center;">Quarterly</td>
+                            <td style="text-align: center;">Monthly</td>
+                            <td style="text-align: center;">Quarterly</td>
+                            <td style="text-align: center;">Quarterly</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #27272a;">
+                            <td style="padding: 0.8em;">Service Review</td>
+                            <td style="text-align: center;">Monthly</td>
+                            <td style="text-align: center;">Quarterly</td>
+                            <td style="text-align: center;">Monthly</td>
+                            <td style="text-align: center;">Quarterly</td>
+                            <td style="text-align: center;">Quarterly</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #27272a;">
+                            <td style="padding: 0.8em;">Health Check</td>
+                            <td style="text-align: center;">Quarterly</td>
+                            <td style="text-align: center;">Bi-annual</td>
+                            <td style="text-align: center;">Quarterly</td>
+                            <td style="text-align: center;">Bi-annual</td>
+                            <td style="text-align: center;">Bi-annual</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #27272a;">
+                            <td style="padding: 0.8em;">QBR</td>
+                            <td style="text-align: center;">Quarterly</td>
+                            <td style="text-align: center;">Quarterly</td>
+                            <td style="text-align: center;">Quarterly</td>
+                            <td style="text-align: center;">Quarterly</td>
+                            <td style="text-align: center;">Quarterly</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.8em;">Executive Engagement</td>
+                            <td style="text-align: center;">As needed</td>
+                            <td style="text-align: center;">Bi-annual</td>
+                            <td style="text-align: center;">Quarterly</td>
+                            <td style="text-align: center;">Bi-annual</td>
+                            <td style="text-align: center;">Quarterly</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Tools -->
+            <section>
+                <h2>Tools & Resources</h2>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1em; margin-top: 1em;">
+                    <div class="bento-card">
+                        <h3>📊 Dashboard</h3>
+                        <p style="font-size: 0.9em; margin: 0;">APAC Intelligence</p>
+                        <p class="subtext">apac-cs-dashboards.com</p>
+                    </div>
+                    <div class="bento-card">
+                        <h3>📋 Templates</h3>
+                        <p style="font-size: 0.9em; margin: 0;">Satisfaction Action Plans</p>
+                        <p class="subtext">OneDrive > Client Segmentation</p>
+                    </div>
+                    <div class="bento-card">
+                        <h3>📧 NPS</h3>
+                        <p style="font-size: 0.9em; margin: 0;">HubSpot Surveys</p>
+                        <p class="subtext">Automated deployment</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2em;">
+                    <p style="font-size: 0.9em; color: #a1a1aa;">
+                        Dashboard modules: Command Centre • Client Profiles • Planning Hub •
+                        Briefing Room • NPS Analytics • Working Capital • Compliance
+                    </p>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section>
+                <h2>Key Takeaways</h2>
+                <div style="text-align: left; max-width: 700px; margin: 0 auto;">
+                    <p class="fragment" style="font-size: 1.1em; margin-bottom: 1em;">
+                        <span style="color: var(--accent-planning);">→</span>
+                        <strong>38 scheduled events</strong> across the year
+                    </p>
+                    <p class="fragment" style="font-size: 1.1em; margin-bottom: 1em;">
+                        <span style="color: var(--accent-nps);">→</span>
+                        <strong>2 NPS surveys</strong> with 4-week analysis cycles
+                    </p>
+                    <p class="fragment" style="font-size: 1.1em; margin-bottom: 1em;">
+                        <span style="color: var(--accent-audit);">→</span>
+                        <strong>4 quarterly audits</strong> for continuous improvement
+                    </p>
+                    <p class="fragment" style="font-size: 1.1em; margin-bottom: 1em;">
+                        <span style="color: var(--accent-segment);">→</span>
+                        <strong>Segmentation-driven</strong> engagement cadence
+                    </p>
+                    <p class="fragment" style="font-size: 1.1em; margin-bottom: 1em;">
+                        <span style="color: var(--accent-marcom);">→</span>
+                        <strong>Plan ahead</strong> – 2027 MarCom starts in July
+                    </p>
+                </div>
+            </section>
+
+            <!-- End Slide -->
+            <section>
+                <h1 style="font-size: 2.5em;">Questions?</h1>
+                <p style="color: #a1a1aa; margin-top: 2em;">
+                    Full documentation: <code style="background: #27272a; padding: 0.3em 0.6em; border-radius: 6px;">docs/2026-CS-OPERATING-RHYTHM.md</code>
+                </p>
+                <p style="color: #52525b; margin-top: 3em; font-size: 0.8em;">
+                    APAC Client Success • 2026
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'fade',
+            transitionSpeed: 'fast',
+            backgroundTransition: 'fade',
+            center: true,
+            controls: true,
+            progress: true,
+            history: true,
+            keyboard: true,
+            overview: true,
+            touch: true,
+            loop: false,
+            rtl: false,
+            shuffle: false,
+            fragments: true,
+            embedded: false,
+            help: true,
+            showNotes: false,
+            autoPlayMedia: null,
+            autoSlide: 0,
+            mouseWheel: false,
+            hideInactiveCursor: true,
+            hideCursorTime: 3000,
+        });
+    </script>
+</body>
+</html>
