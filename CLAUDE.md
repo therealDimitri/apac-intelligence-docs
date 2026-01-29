@@ -42,3 +42,12 @@ The autonomous workflow for this repo is: Edit → Commit → Push → Document.
 - Run: `python scripts/csi_statistical_analysis.py --period "Q4 25" --output-dir ./docs/plans/csi_statistics`
 - Outputs: JSON (machine-readable), Markdown (human-readable), plots/ (correlation heatmap, ROC curves, threshold sensitivity)
 - Note: Supabase `support_case_details` has fewer clients with `resolution_duration_seconds` than Excel imports — expect n=4 vs n=11 for support metrics
+
+## Statistical Review Checklist
+
+When reviewing CSI model validation results, check for these caveats:
+- Power analysis: What's the minimum detectable effect? (n=13 → d ≥ 1.15 only)
+- CI crossing zero: Bootstrap CIs with small n may span zero despite strong point estimates
+- Perfect AUC (1.000): Suggests overfitting or methodological circularity — validate on held-out data
+- Sensitivity vs specificity trade-off: 66.7% sensitivity = 1 in 3 at-risk clients missed
+- Exploratory thresholds: Optimal cutoffs derived from same data as validation are provisional
