@@ -1,0 +1,266 @@
+{
+  "timestamp": "20260129_170852",
+  "period": "Q4 25",
+  "n_clients": 13,
+  "power_analysis": {
+    "n": 13,
+    "alpha": 0.05,
+    "power": 0.8,
+    "min_detectable_d": 1.1453711397686954,
+    "interpretation": "With n=13, can detect Cohen's d >= 1.15 at alpha=0.05, power=0.8"
+  },
+  "correlations": {
+    "Avg Resolution Time": {
+      "rho": -0.663717806762948,
+      "p_value": 0.02595928739039843,
+      "ci_lower": -0.3295004240039707,
+      "ci_upper": 0.48333021942847015,
+      "n": 11,
+      "significant": true
+    },
+    "Open Cases": {
+      "rho": -0.34048005081611105,
+      "p_value": 0.3055632246723109,
+      "ci_lower": -0.17507207431374283,
+      "ci_upper": 0.4848865130509025,
+      "n": 11,
+      "significant": false
+    },
+    "Total Cases": {
+      "rho": -0.33959366110153993,
+      "p_value": 0.3069056007637706,
+      "ci_lower": -0.16440960815555555,
+      "ci_upper": 0.48234785621193843,
+      "n": 11,
+      "significant": false
+    },
+    "CLC Attendances": {
+      "rho": -0.2813409834613007,
+      "p_value": 0.35175927133861695,
+      "ci_lower": -0.1265979220713941,
+      "ci_upper": 0.38272298462531273,
+      "n": 13,
+      "significant": false
+    },
+    "Segmentation Events": {
+      "rho": -0.04501455735380811,
+      "p_value": 0.8839050568684292,
+      "ci_lower": -0.02337952154044541,
+      "ci_upper": 0.3877142800541645,
+      "n": 13,
+      "significant": false
+    },
+    "Meetings": {
+      "rho": -0.38263441443557306,
+      "p_value": 0.1969163945305005,
+      "ci_lower": -0.16034779289912765,
+      "ci_upper": 0.3884857015018526,
+      "n": 13,
+      "significant": false
+    },
+    "Total Engagement": {
+      "rho": -0.11534980321913331,
+      "p_value": 0.707474659613334,
+      "ci_lower": -0.05332911349159454,
+      "ci_upper": 0.38123098651464,
+      "n": 13,
+      "significant": false
+    }
+  },
+  "loocv": {
+    "accuracy": 0.8461538461538461,
+    "correct": 11,
+    "total": 13,
+    "ci_lower": 0.5776536898051745,
+    "ci_upper": 0.9567418216419188,
+    "predictions": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0
+    ],
+    "actuals": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1
+    ]
+  },
+  "roc_v1": {
+    "model_name": "CSI v1",
+    "auc": 1.0,
+    "ci_lower": 1.0,
+    "ci_upper": 1.0,
+    "interpretation": "excellent"
+  },
+  "roc_v2": {
+    "model_name": "CSI v2",
+    "auc": 1.0,
+    "ci_lower": 1.0,
+    "ci_upper": 1.0,
+    "interpretation": "excellent"
+  },
+  "model_comparison": {
+    "v1_accuracy": 0.5384615384615384,
+    "v2_accuracy": 0.8461538461538461,
+    "v1_correct": 7,
+    "v2_correct": 11,
+    "total": 13,
+    "v1_wrong_v2_right": 4,
+    "v1_right_v2_wrong": 0,
+    "mcnemar_p_value": 0.125,
+    "significant_difference": false
+  },
+  "confusion_matrix": {
+    "true_positives": 4,
+    "true_negatives": 7,
+    "false_positives": 0,
+    "false_negatives": 2,
+    "sensitivity": 0.6666666666666666,
+    "specificity": 1.0,
+    "precision": 1.0,
+    "f1_score": 0.8,
+    "confusion_matrix": [
+      [
+        7,
+        0
+      ],
+      [
+        2,
+        4
+      ]
+    ]
+  },
+  "threshold_sensitivity": {
+    "resolution_time": [
+      {
+        "threshold": 100.0,
+        "n_above": 10,
+        "n_below": 1,
+        "nps_above": -12.954545454545453,
+        "nps_below": 100.0,
+        "nps_delta": -112.95454545454545,
+        "cohens_d": NaN,
+        "effect_magnitude": "insufficient data",
+        "metric": "Avg Resolution Time"
+      },
+      {
+        "threshold": 200.0,
+        "n_above": 10,
+        "n_below": 1,
+        "nps_above": -12.954545454545453,
+        "nps_below": 100.0,
+        "nps_delta": -112.95454545454545,
+        "cohens_d": NaN,
+        "effect_magnitude": "insufficient data",
+        "metric": "Avg Resolution Time"
+      },
+      {
+        "threshold": 300.0,
+        "n_above": 10,
+        "n_below": 1,
+        "nps_above": -12.954545454545453,
+        "nps_below": 100.0,
+        "nps_delta": -112.95454545454545,
+        "cohens_d": NaN,
+        "effect_magnitude": "insufficient data",
+        "metric": "Avg Resolution Time"
+      },
+      {
+        "threshold": 400.0,
+        "n_above": 10,
+        "n_below": 1,
+        "nps_above": -12.954545454545453,
+        "nps_below": 100.0,
+        "nps_delta": -112.95454545454545,
+        "cohens_d": NaN,
+        "effect_magnitude": "insufficient data",
+        "metric": "Avg Resolution Time"
+      },
+      {
+        "threshold": 500.0,
+        "n_above": 9,
+        "n_below": 2,
+        "nps_above": -14.393939393939393,
+        "nps_below": 50.0,
+        "nps_delta": -64.39393939393939,
+        "cohens_d": -0.8706165304523781,
+        "effect_magnitude": "large",
+        "metric": "Avg Resolution Time"
+      },
+      {
+        "threshold": 600.0,
+        "n_above": 6,
+        "n_below": 5,
+        "nps_above": -29.924242424242422,
+        "nps_below": 30.0,
+        "nps_delta": -59.92424242424242,
+        "cohens_d": -0.8361301081320404,
+        "effect_magnitude": "large",
+        "metric": "Avg Resolution Time"
+      },
+      {
+        "threshold": 700.0,
+        "n_above": 5,
+        "n_below": 6,
+        "nps_above": -55.9090909090909,
+        "nps_below": 41.666666666666664,
+        "nps_delta": -97.57575757575756,
+        "cohens_d": -1.6885312386098499,
+        "effect_magnitude": "large",
+        "metric": "Avg Resolution Time"
+      },
+      {
+        "threshold": 800.0,
+        "n_above": 4,
+        "n_below": 7,
+        "nps_above": -69.88636363636363,
+        "nps_below": 35.714285714285715,
+        "nps_delta": -105.60064935064935,
+        "cohens_d": -1.9057081054703457,
+        "effect_magnitude": "large",
+        "metric": "Avg Resolution Time"
+      },
+      {
+        "threshold": 900.0,
+        "n_above": 3,
+        "n_below": 8,
+        "nps_above": -59.848484848484844,
+        "nps_below": 18.75,
+        "nps_delta": -78.59848484848484,
+        "cohens_d": -1.1432087561744182,
+        "effect_magnitude": "large",
+        "metric": "Avg Resolution Time"
+      },
+      {
+        "threshold": 1000.0,
+        "n_above": 2,
+        "n_below": 9,
+        "nps_above": -39.772727272727266,
+        "nps_below": 5.555555555555555,
+        "nps_delta": -45.32828282828282,
+        "cohens_d": -0.5925916118182224,
+        "effect_magnitude": "medium",
+        "metric": "Avg Resolution Time"
+      }
+    ]
+  }
+}
