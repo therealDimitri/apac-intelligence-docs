@@ -1,4 +1,14 @@
-# NPS Project Tracking Board: APAC Q4 2025 Alignment & 2026 Recommendations
+---
+title: "NPS Project Tracking Board: APAC Q4 2025"
+subtitle: "Alignment & 2026 Recommendations"
+author: "APAC Client Success"
+date: "January 2026"
+cover-page: true
+---
+
+# NPS Project Tracking Board: APAC Q4
+
+# 2025 Alignment & 2026 Recommendations
 
 **Date:** January 2026
 **Author:** APAC Client Success
@@ -119,7 +129,7 @@
 | **2026 Initiative** | Product Quality & Defect Reduction |
 | **2026 Project** | Close coverage to 90%+. Reduce defects to <30/client. Automated regression for all PRs. Client-visible quality dashboard. Zero P1 escapes to production. |
 | **2026 KPI** | Coverage 90%+. Defects <30/client. Critical/High maintained 100%. Zero P1 to UAT. RCA actions in 30 days. |
-| **2026 Baseline** | Coverage: 72%. Critical/High: 100%. Defects: 37/client. Product Quality NPS avg: 6.18 (#1 theme, 39.5% of mentions). |
+| **2026 Baseline** | Coverage: 72%. Critical/High: 100%. Defects: 37/client. Product Quality NPS avg: 6.18 (No.1 theme, 39.5% of mentions). |
 | **2026 Current Status** | Not started as 2026 initiative. RCA and test development ongoing. Gap between 72% and 90% requires acceleration. |
 
 ---
@@ -196,7 +206,7 @@
 
 ## Summary: Keep/Toss/Pivot Decisions
 
-| # | Initiative | Decision | 2026 Action |
+| No. | Initiative | Decision | 2026 Action |
 |---|-----------|----------|-------------|
 | 1 | Client Education on Support | **Pivot** | Support Knowledge Depth & Client Confidence |
 | 2 | Services Org Communication | **Already Tossed** | Closed |
@@ -218,7 +228,7 @@
 
 ## Recommended Net-New 2026 Initiatives
 
-| # | New Initiative | Rationale | KPI |
+| No. | New Initiative | Rationale | KPI |
 |---|---------------|-----------|-----|
 | A | Client-Specific NPS Action Plans | 48.8% passive share (8.5pp above global). Target blockers per client. | 100% Maintain/Nurture/Sleeping Giant plans by Q2 2026 |
 | B | SA Health Stabilisation Programme | $8.0m account, NPS -54.55, 11 respondents. Cross-functional focus needed. | SA Health NPS to -25 by Q2 2026 |
@@ -279,57 +289,21 @@
 
 ​                                                           
 
- **Specific data point traceability:**                                          
+**Specific data point traceability:**
 
- ┌─────────────────────────────────────────────────┬────────────────────────────────────────────────┐        
-
- │          Data Point          │           Source           │        
-
- ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
-
- │ NPS -18.60, 43 responses, 142 sent       │ Source 1 (survey data)             │        
-
- ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
-
- │ Theme percentages (Product Quality 39.5%, etc.) │ Source 2 (NPS doc Section 2.1)         │        
-
- ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
-
- │ MTTR 56hrs, baseline 49hrs, target <45hrs    │ Source 3 (PPTX) + Source 5 (Excel Row 7)    │        
-
- ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
-
- │ Test coverage 72%, defects/client 37      │ Source 5 (Excel Row 9) + Source 3 (PPTX)    │        
-
- ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
-
- │ FDR/3DR/5DR baselines (27%/44%/50% vs US)    │ Source 5 (Excel Row 14)            │        
-
- ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
-
- │ PAI scores (8,8,8,5,8 — avg 7.4)        │ Source 3 (PPTX monthly slides)         │        
-
- ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
-
- │ Mid-project check-ins (8,6,7 — avg 7.0)     │ Source 3 (PPTX) + Source 2 (Section 3.2)    │        
-
- ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
-
- │ SA Health $8.0m spend, NPS -54.55        │ Source 6 (segmentation) + Source 1       │        
-
- ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
-
- │ Revenue $3.687m actual H1, $90k dev target   │ Source 3 (PPTX sales slides)          │        
-
- ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
-
- │ 75+ Provation articles, ICs 3→8         │ Source 3 (PPTX) + Source 4 (initiative detail) │        
-
- ├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤        
-
- │ Keep/Toss/Pivot decisions            │ Derived from Sources 1-6 combined       │        
-
- └─────────────────────────────────────────────────┴────────────────────────────────────────────────┘        
+| Data Point | Source |
+|------------|--------|
+| NPS -18.60, 43 responses, 142 sent | Source 1 (survey data) |
+| Theme percentages (Product Quality 39.5%, etc.) | Source 2 (NPS doc Section 2.1) |
+| MTTR 56hrs, baseline 49hrs, target <45hrs | Source 3 (PPTX) + Source 5 (Excel Row 7) |
+| Test coverage 72%, defects/client 37 | Source 5 (Excel Row 9) + Source 3 (PPTX) |
+| FDR/3DR/5DR baselines (27%/44%/50% vs US) | Source 5 (Excel Row 14) |
+| PAI scores (8,8,8,5,8 — avg 7.4) | Source 3 (PPTX monthly slides) |
+| Mid-project check-ins (8,6,7 — avg 7.0) | Source 3 (PPTX) + Source 2 (Section 3.2) |
+| SA Health $8.0m spend, NPS -54.55 | Source 6 (segmentation) + Source 1 |
+| Revenue $3.687m actual H1, $90k dev target | Source 3 (PPTX sales slides) |
+| 75+ Provation articles, ICs 3→8 | Source 3 (PPTX) + Source 4 (initiative detail) |
+| Keep/Toss/Pivot decisions | Derived from Sources 1-6 combined |        
 
  **What is derived (not raw data):**                                           
 
