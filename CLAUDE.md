@@ -52,3 +52,10 @@ When reviewing CSI model validation results, check for these caveats:
 - Perfect AUC (1.000): Suggests overfitting or methodological circularity — validate on held-out data
 - Sensitivity vs specificity trade-off: 66.7% sensitivity = 1 in 3 at-risk clients missed
 - Exploratory thresholds: Optimal cutoffs derived from same data as validation are provisional
+
+## PDF Export
+
+- Preferred method: Open in Typora, then File → Export → PDF
+- Open in Typora: `open -a Typora <file.md>`
+- Trigger export via AppleScript: `osascript -e 'tell application "Typora" to activate' -e 'delay 0.5' -e 'tell application "System Events" to keystroke "e" using {command down, shift down}'`
+- No pdflatex installed — avoid pandoc `--pdf-engine=pdflatex`
