@@ -21,6 +21,8 @@ This document proposes a redesigned 14-factor model validated against **199 NPS 
 
 The redesigned model achieves **100% accuracy on Q4 2025 data** (10/10 clients correctly classified) and **86% accuracy across three NPS periods** (25/29 client-period observations). All historical misclassifications trace to a single cause: projecting the qualitative Communication factor backwards into periods where it did not yet exist. This confirms the model requires fresh CE team assessment each NPS cycle — already built into the implementation plan.
 
+> **⚠️ Statistical Caveats (see Section 10.7):** These results should be interpreted with caution. The perfect ROC-AUC (1.000) may indicate methodological circularity — validate on Q1 2026 data before accepting. Power analysis shows only large effects (d ≥ 1.15) are detectable with n=13. Support metric correlations use n=4 (Supabase subset), so conclusions remain provisional. The model's 66.7% sensitivity means 1 in 3 at-risk clients are missed — monitor for churn among false negatives.
+
 **Recommended next steps:** Update the Excel segmentation model with the 14 revised factors (Phase 1), populate new factor values with CE team input within 30 days (Phase 2), and validate against Q2 2026 NPS results (Phase 3).
 
 ---
@@ -731,6 +733,8 @@ With n=13 clients at α=0.05 and power=0.80, the minimum detectable effect size 
 | Total Engagement | -0.011 | [-0.01, 0.39] | 0.971 | 13 | ✗ |
 
 > **Data source note:** Support metrics (Avg Resolution Time, Open Cases, Total Cases) show n=4 because only 4 clients have both Q4 2025 NPS data *and* `resolution_duration_seconds` populated in Supabase `support_case_details`. Section 3.7 reports ρ = -0.582 (n=11) using the original APAC Case Stats Excel import, which had broader coverage. Both analyses confirm the strong negative direction; the Supabase subset shows a stronger effect (ρ = -0.74) but with wider confidence intervals due to smaller n. The CLC Attendances correlation (ρ = -0.344, n=13) differs from Section 3.10 (ρ = -0.142, n=12) because the automated pipeline includes one additional client and uses slightly different matching logic — both confirm the weak/negligible relationship.
+>
+> **⚠️ Sample size caveat:** The n=4 support metric correlations have 95% CIs that cross zero (e.g., [-0.62, 0.83] for resolution time). This means we cannot statistically rule out no relationship. The direction is credible; the magnitude is uncertain. See Section 10.7 for full caveats.
 
 > **Note:** With 7 comparisons, Bonferroni-adjusted α = 0.0071. Zero correlations reach significance after correction. This is expected given power analysis — sample size is insufficient for detecting moderate effects. The strong negative correlation for support metrics (ρ = -0.74) would require n ≈ 15-20 to reach significance at this effect size.
 
@@ -754,7 +758,9 @@ The wide confidence interval reflects sample size uncertainty, but the point est
 | CSI v1 | 0.857 | [0.625, 1.000] | Good |
 | CSI v2 | **1.000** | [1.000, 1.000] | **Excellent** |
 
-The v2 model achieves perfect discrimination (AUC = 1.00) on the Q4 2025 data — every at-risk client is ranked higher than every healthy client by ARM score. This validates the factor weight redesign.
+The v2 model achieves perfect discrimination (AUC = 1.00) on the Q4 2025 data — every at-risk client is ranked higher than every healthy client by ARM score.
+
+> **⚠️ Caveat: Perfect AUC Requires Validation.** An AUC of 1.000 with a collapsed confidence interval [1.000, 1.000] is statistically unusual and warrants scrutiny. Perfect classification on n=13 clients may indicate: (1) the CSI v2 thresholds were derived from the same Q4 2025 data used for testing (methodological circularity), or (2) the model genuinely captures the small set of factors that distinguish this particular cohort. **Recommendation:** Validate on Q1 2026 NPS data before accepting the perfect AUC as generalisable. If AUC drops below 0.80 on held-out data, revisit factor weights.
 
 #### McNemar's Test (Model Comparison)
 
@@ -781,6 +787,8 @@ The p-value of 1.0 indicates no statistically significant difference between mod
 | **Specificity** | **100%** | **Zero false alarms** |
 | Precision | 100% | Every flagged client is truly at-risk |
 | F1 Score | 0.800 | Strong overall performance |
+
+> **⚠️ Sensitivity caveat:** The 66.7% sensitivity means 1 in 3 at-risk clients are classified as healthy (2 false negatives). In client success, missing an at-risk client may result in churn before intervention. The 100% specificity avoids investigation costs but the asymmetric cost of false negatives should be considered. See Section 10.7 for business impact analysis.
 
 > **Note:** The confusion matrix uses n=13 clients (6 at-risk + 7 healthy) from the automated pipeline, which includes all clients with NPS data across periods. Section 4.4's retroactive test uses n=10 (Q4 2025 only). The 2 false negatives represent clients the model classifies as healthy who are actually at-risk — these are the same misclassification pattern identified in Section 4.4's multi-period analysis (qualitative factors not assessed for earlier periods).
 
@@ -842,6 +850,60 @@ python scripts/csi_statistical_analysis.py --output-dir ./reports
 - `plots/` — Correlation heatmap, ROC curves, threshold sensitivity
 
 **Source:** `apac-intelligence-v2/scripts/csi_statistical_analysis.py`
+
+### 10.7 Statistical Caveats and Limitations
+
+The statistical validation in this document should be interpreted with the following caveats:
+
+#### 1. Power Limitations — Moderate Effects Are Undetectable
+
+With n=13 clients at α=0.05 and power=0.80, the minimum detectable effect size is Cohen's d ≥ 1.15. This means:
+
+- **Only very large effects can be detected** — moderate effects (d = 0.5-0.8) would be missed entirely
+- **Non-significant correlations may be Type II errors**, not true nulls
+- The engagement metrics showing ρ ≈ 0 could mask genuine moderate relationships that require n ≈ 30+ to detect
+
+**Recommendation:** Do not interpret non-significance as evidence of no effect. Focus on effect sizes and confidence intervals rather than p-values alone.
+
+#### 2. Support Metrics Sample Size (n=4) — Conclusions Are Provisional
+
+The ρ = -0.738 correlation for resolution time uses only 4 clients (those with both Q4 2025 NPS *and* `resolution_duration_seconds` in Supabase). The 95% bootstrap CI [-0.62, 0.83] **crosses zero**, meaning:
+
+- We cannot statistically rule out no relationship
+- The point estimate (-0.74) is directionally informative but not actionable as a standalone finding
+- Section 3.7's ρ = -0.582 (n=11) from the Excel import provides stronger evidence but uses a different data source
+
+**Recommendation:** Defer support-based CSI factor conclusions until Supabase `support_case_details` has resolution data for ≥10 clients with matched NPS responses. The direction is credible; the magnitude is uncertain.
+
+#### 3. ROC-AUC = 1.000 — Overfitting Risk
+
+A perfect AUC with a collapsed confidence interval [1.000, 1.000] is unusual in real-world models. This may indicate:
+
+- **Methodological circularity:** CSI v2 thresholds (e.g., 700h resolution time) may have been calibrated to the same Q4 2025 data used for testing
+- **Small sample size:** With only 13 clients, 6 at-risk and 7 healthy, perfect separation is more achievable than with larger samples
+- **Genuine discrimination:** The model may correctly capture the key distinguishing factors for this cohort
+
+**Recommendation:** Treat AUC = 1.00 as provisional until validated on Q1 2026 NPS results. If AUC drops below 0.80 on held-out data, reassess factor weights.
+
+#### 4. Sensitivity = 66.7% — False Negative Risk
+
+The confusion matrix shows 2 false negatives (at-risk clients classified as healthy). This means **1 in 3 at-risk clients are missed**. In a client success context:
+
+- A missed at-risk client may churn before intervention
+- The 100% specificity (zero false alarms) is operationally convenient but masks the sensitivity gap
+- F1 = 0.80 obscures the asymmetric cost of false negatives vs false positives
+
+**Recommendation:** Consider the business cost of missing at-risk clients. If missing a churning client costs 10x more than investigating a healthy one, the current threshold may be too conservative. Monitor whether false negatives in Q1 2026 correspond to churn events.
+
+#### 5. Threshold 700h vs 773h — Exploratory, Not Confirmatory
+
+The threshold sensitivity analysis identified 773h as the optimal cutoff (maximum NPS delta). The model uses 700h as a round-number approximation. However:
+
+- This is exploratory analysis — the optimal threshold was derived from the same data used for validation
+- Confirmatory analysis requires testing the 700h threshold on new data (Q1 2026)
+- The 700-900h range shows stable effect sizes, so the exact cutoff is less critical than the magnitude
+
+**Recommendation:** Document 700h as a preliminary threshold. Validate on Q1 2026 data before codifying in the Excel model.
 
 ---
 
