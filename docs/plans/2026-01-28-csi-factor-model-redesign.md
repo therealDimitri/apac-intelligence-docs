@@ -41,7 +41,7 @@ The root cause is that the model measures **business risk** (C-Suite turnover, M
 > 7. **Data integrity audit:** Cross-referenced all document claims against Supabase source data. Corrected: SA Health Q4 NPS (-25 → -55, verified from 11 individual scores), v1 accuracy table (3 classification errors: Dept Vic, SLMC, GRMC — accuracy 50% → 40%), SLMC Backlog>10 (TRUE → FALSE, only 3 open cases), Factor #2 threshold definition (clarified as NPS < 0, not individual score ≤ 6). Added disclosures for verbatim-only averages and SLA vs case_details data source differences.
 > 8. **Financial data cross-reference:** Cross-referenced Factor #8 (M&A/Attrition) against 2026 APAC Performance workbook Attrition sheet. Updated: GHA M&A=TRUE (confirmed partial attrition Jul 2026, $215K + expired maintenance contract), NCS/MoD Singapore M&A=TRUE (confirmed full attrition Mar 2028, $272K), Factor #8 evidence expanded with full attrition schedule ($2.722M total), Section 3.9 contract renewal dates corrected with 4 expired contracts identified.
 > 9. **CLC event attendance analysis:** Analysed 235 client attendees across 8 Customer Leadership Council events (2022–2025) from Supabase `clc_events` and `clc_event_attendees`. Confirmed event attendance has **weak negative** NPS correlation (rho = -0.142, p = 0.66) — same finding as segmentation events. Clients with ≥10 attendances have avg NPS -20.7 vs -5.0 for <10 attendances (reversed direction). Feedback submission correlates strongly negative (rho = -0.635, p = 0.03) — clients who submit feedback have issues to report. CLC data enhances Factor #12 automation but does NOT justify a new factor. Learning interests from CLC feedback provide qualitative intelligence for Factor #4 (Technical Knowledge Gap) assessment.
-> 10. **Automated statistical validation:** Built reproducible Python pipeline using Pandas, NumPy, SciPy, Statsmodels, Scikit-learn, and Seaborn. Implemented: Spearman correlation with **bootstrap confidence intervals** (10,000 resamples), **Cohen's d effect sizes** for threshold analysis, **power analysis** (n=13 can detect d ≥ 1.15), **Leave-One-Out Cross-Validation** (84.6% accuracy, 95% CI [57.8%, 95.7%]), **ROC-AUC with bootstrap CI** (v2 AUC = 1.000 vs v1 AUC = 0.857), **McNemar's test** for model comparison (p = 1.0), **confusion matrix** (100% specificity, 66.7% sensitivity), and **threshold sensitivity analysis** (optimal resolution threshold = 773h, Cohen's d = -3.40). All visualisations generated automatically. Pipeline source: `apac-intelligence-v2/scripts/csi_statistical_analysis.py`.
+> 10. **Automated statistical validation:** Built reproducible Python pipeline using Pandas, NumPy, SciPy, Statsmodels, Scikit-learn, and Seaborn. Implemented: Spearman correlation with **bootstrap confidence intervals** (10,000 resamples), **Cohen's d effect sizes** for threshold analysis, **power analysis** (n=13 can detect d ≥ 1.15), **Leave-One-Out Cross-Validation** (84.6% accuracy, 95% CI [57.8%, 95.7%]), **ROC-AUC with bootstrap CI** (v2 AUC = 1.000 vs v1 AUC = 0.857), **McNemar's test** for model comparison (p = 1.0), **confusion matrix** (100% specificity, 66.7% sensitivity), and **threshold sensitivity analysis** (optimal resolution threshold = 773h, model uses 700h for simplicity, Cohen's d = -3.40). Note: Support metric correlations use n=4 (Supabase subset with resolution data) vs Section 3.7's n=11 (Excel import) — both confirm strong negative relationship. All visualisations generated automatically. Pipeline source: `apac-intelligence-v2/scripts/csi_statistical_analysis.py`.
 
 ---
 
@@ -730,6 +730,8 @@ With n=13 clients at α=0.05 and power=0.80, the minimum detectable effect size 
 | Meetings | -0.358 | [-0.16, 0.38] | 0.229 | 13 | ✗ |
 | Total Engagement | -0.011 | [-0.01, 0.39] | 0.971 | 13 | ✗ |
 
+> **Data source note:** Support metrics (Avg Resolution Time, Open Cases, Total Cases) show n=4 because only 4 clients have both Q4 2025 NPS data *and* `resolution_duration_seconds` populated in Supabase `support_case_details`. Section 3.7 reports ρ = -0.582 (n=11) using the original APAC Case Stats Excel import, which had broader coverage. Both analyses confirm the strong negative direction; the Supabase subset shows a stronger effect (ρ = -0.74) but with wider confidence intervals due to smaller n. The CLC Attendances correlation (ρ = -0.344, n=13) differs from Section 3.10 (ρ = -0.142, n=12) because the automated pipeline includes one additional client and uses slightly different matching logic — both confirm the weak/negligible relationship.
+
 > **Note:** With 7 comparisons, Bonferroni-adjusted α = 0.0071. Zero correlations reach significance after correction. This is expected given power analysis — sample size is insufficient for detecting moderate effects. The strong negative correlation for support metrics (ρ = -0.74) would require n ≈ 15-20 to reach significance at this effect size.
 
 ### 10.3 Model Validation Metrics
@@ -740,6 +742,8 @@ LOOCV is the gold standard for small-sample validation — each client is held o
 
 - **Accuracy:** 84.6% (11/13 correct classifications)
 - **95% Wilson CI:** [57.8%, 95.7%]
+
+> **Sample size note:** The automated pipeline tests n=13 clients (all clients with NPS data in `nps_responses`), compared to n=10 in Section 4.4's retroactive test (Q4 2025 only). The additional 3 clients have NPS data from earlier periods without Q4 2025 responses. LOOCV validates generalisation across the full client population; Section 4.4's 100% accuracy validates contemporaneous Q4 2025 classification specifically.
 
 The wide confidence interval reflects sample size uncertainty, but the point estimate (84.6%) substantially exceeds chance (50%).
 
@@ -778,11 +782,13 @@ The p-value of 1.0 indicates no statistically significant difference between mod
 | Precision | 100% | Every flagged client is truly at-risk |
 | F1 Score | 0.800 | Strong overall performance |
 
+> **Note:** The confusion matrix uses n=13 clients (6 at-risk + 7 healthy) from the automated pipeline, which includes all clients with NPS data across periods. Section 4.4's retroactive test uses n=10 (Q4 2025 only). The 2 false negatives represent clients the model classifies as healthy who are actually at-risk — these are the same misclassification pattern identified in Section 4.4's multi-period analysis (qualitative factors not assessed for earlier periods).
+
 The model's 100% specificity is operationally important — it never incorrectly flags a healthy client as at-risk, avoiding unnecessary intervention costs.
 
 ### 10.4 Threshold Sensitivity Analysis
 
-The resolution time threshold (Factor #3) was validated across multiple cutoff values:
+The resolution time threshold (Factor #3) was validated across multiple cutoff values. Support Backlog (Factor #1) threshold analysis was not included because `support_sla_latest` contains point-in-time snapshots for only 9 clients, and the >10 threshold was already validated in Section 3.6 with -84 NPS delta.
 
 | Threshold | n Above | n Below | NPS Delta | Cohen's d | Effect Magnitude |
 |-----------|:-------:|:-------:|:---------:|:---------:|------------------|
@@ -793,7 +799,7 @@ The resolution time threshold (Factor #3) was validated across multiple cutoff v
 | 800h | 2 | 2 | -77.3 | -3.40 | Large |
 | 900h | 1 | 3 | -77.3 | -3.40 | Large |
 
-The **optimal threshold is 773 hours** (approximately 32 days), validating the model's 700h cutoff. The NPS delta of -77.3 and Cohen's d of -3.40 indicate a massive effect size — clients above threshold have drastically worse NPS.
+The **optimal threshold is 773 hours** (approximately 32 days). The model uses **700 hours** (~29 days) as a round-number approximation that falls within the robust 700-900h range where the effect remains stable (Cohen's d = -3.40 across this range). The NPS delta of -77.3 and Cohen's d of -3.40 indicate a massive effect size — clients above threshold have drastically worse NPS.
 
 ### 10.5 Visualisations
 
