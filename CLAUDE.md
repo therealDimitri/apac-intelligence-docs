@@ -33,3 +33,12 @@ The autonomous workflow for this repo is: Edit → Commit → Push → Document.
 - One value change can cascade to 7+ locations and require recalculating derived metrics
 - Always use `replace_all` cautiously — verify the string won't match unintended locations
 - After fixing NPS values, recalculate: NPS deltas, threshold averages, Spearman notes, accuracy counts
+- When adding automated analysis sections, reconcile figures with earlier manual sections (sample sizes, correlations may differ due to data source coverage)
+
+## CSI Statistical Analysis Pipeline
+
+- Location: `apac-intelligence-v2/scripts/csi_statistical_analysis.py`
+- Dependencies: `scripts/requirements-stats.txt` (pandas, numpy, scipy, statsmodels, scikit-learn, seaborn, matplotlib, supabase)
+- Run: `python scripts/csi_statistical_analysis.py --period "Q4 25" --output-dir ./docs/plans/csi_statistics`
+- Outputs: JSON (machine-readable), Markdown (human-readable), plots/ (correlation heatmap, ROC curves, threshold sensitivity)
+- Note: Supabase `support_case_details` has fewer clients with `resolution_duration_seconds` than Excel imports — expect n=4 vs n=11 for support metrics
