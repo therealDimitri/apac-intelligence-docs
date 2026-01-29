@@ -108,8 +108,32 @@ Currently uses deterministic mock data for demonstration. In production, this sh
 
 **Commit:** `210d3997` - fix(operating-rhythm): change segment activity from hover to click-based selection
 
+## Feature: Client Mini-Orbit (29 Jan 2026)
+
+Added drill-down capability to see individual client completion status for each activity type.
+
+**Flow:**
+1. Click month bubble → Shows segment activity card with activity list
+2. Click activity type (EVP, On-Site, Insight, SLA Review) → Shows client mini-orbit
+
+**Client Mini-Orbit Features:**
+- Radial layout showing all clients assigned to that activity
+- Green bubbles = completed (with checkmark badge)
+- Amber bubbles = outstanding
+- Client initials displayed on each bubble
+- Hover tooltip shows: client name, completion date (if completed), segment tier
+- Back button returns to activity list
+- Legend showing Completed/Outstanding indicators
+
+**Mock Data:**
+Currently uses `MOCK_CLIENTS` array with 18 clients across all segment tiers. In production, this should be replaced with data from `nps_clients` table.
+
+**Commits:**
+- `3d928984` - feat(operating-rhythm): add client mini-orbit for activity completion tracking
+
 ## Future Considerations
 
 - Create database table for tracking actual activity completions
+- Replace mock client data with live data from `nps_clients` table
 - Add ability for users to mark activities as completed
-- Consider adding drill-down to see which specific clients have completed/outstanding activities
+- Add click-through from client bubble to client profile page
