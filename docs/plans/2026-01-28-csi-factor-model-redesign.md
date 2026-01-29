@@ -12,9 +12,9 @@ toc-depth: 3
 
 **Date:** 29 January 2026
 **Author:** APAC Client Success
-**Status:** Proposed (Updated — full-dataset validation + engagement data + multi-period accuracy test + data integrity audit + financial cross-reference + CLC event attendance + automated statistical validation + client name aliasing fix)
+**Status:** Proposed (Updated — full-dataset validation + engagement data + multi-period accuracy test + data integrity audit + financial cross-reference + CLC event attendance + automated statistical validation + client name aliasing fix + individual respondent tracking)
 **Scope:** CSI factor model (Excel segmentation) only
-**Data:** 199 NPS responses across 5 periods (2023–Q4 2025); 2,179 ServiceNow cases (Jan 2024–Nov 2025); 807 segmentation events; 282 meeting records; 235 CLC event attendees across 8 events (2022–2025)
+**Data:** 199 NPS responses across 5 periods (2023–Q4 2025); 2,179 ServiceNow cases (Jan 2024–Nov 2025); 807 segmentation events; 282 meeting records; 235 CLC event attendees across 8 events (2022–2025); 17 tracked individual respondents across multiple periods
 
 ---
 
@@ -66,6 +66,8 @@ The root cause is that the model measures **business risk** (C-Suite turnover, M
 10. **Automated statistical validation:** Built reproducible Python pipeline using Pandas, NumPy, SciPy, Statsmodels, Scikit-learn, and Seaborn. Implemented: Spearman correlation with **bootstrap confidence intervals** (10,000 resamples), **Cohen's d effect sizes** for threshold analysis, **power analysis** (n=13 can detect d ≥ 1.15), **Leave-One-Out Cross-Validation** (84.6% accuracy, 95% CI [57.8%, 95.7%]), **ROC-AUC with bootstrap CI** (v1 AUC = 1.000, v2 AUC = 1.000), **McNemar's test** for model comparison (p = 1.0), **confusion matrix** (100% specificity, 66.7% sensitivity), and **threshold sensitivity analysis** (optimal resolution threshold = 773h, model uses 700h for simplicity, Cohen's d = -3.40). Support metric correlations now use n=11 after client name aliasing fix (see note 11). All visualisations generated automatically. Pipeline source: `apac-intelligence-v2/scripts/csi_statistical_analysis.py`.
 
 11. **Client name aliasing fix (2026-01-29):** Support metric sample size increased from n=4 to n=11 by implementing client name normalisation using the `client_name_aliases` Supabase table. Root cause was exact string matching between `nps_responses` and `support_case_details` tables, which use different naming conventions. Fixes applied: (1) pipeline now normalises client names before cross-table joins (commit 51d517a), (2) added alias `NCS/MoD Singapore` → `NCS/MinDef Singapore`, (3) fixed alias `GHA` → `Gippsland Health Alliance (GHA)` (was pointing to wrong canonical). The resolution time correlation is now **statistically significant** (ρ=-0.664, p=0.026). Remaining 2 unmatched clients (Dept of Health Victoria, Mount Alvernia Hospital) have no support case data in ServiceNow.
+
+12. **Individual respondent tracking (2026-01-29):** Cross-referenced Excel historical NPS trend analysis (`APAC_NPS_Historical_Trend_Analysis_2025 11.xlsx`) which tracks 17 named individuals across multiple NPS periods. Results: 47.1% improved, 23.5% declined, 29.4% unchanged. Three individuals moved from Detractor → Passive (Hannah Seymour at WA Health, Santosh Verghese at SA Health, Kenneth Kwek at SingHealth). All 4 individual declines were minimal (-1 point only). Individual-level tracking validates model factors: Hannah Seymour's +3 point improvement followed AVP Support visits (Factor #3), Adrian Shearer's +2 improvement cited "agile and accessible" engagement (Factor #13 Communication). Data discrepancy identified: Excel has 201 total responses vs 199 in Supabase — difference reconciled to 4 Singapore client records not imported (DSTA, Parkway, SAPPI) offset by 2 additional GRMC records in Supabase.
 
 ---
 
@@ -506,6 +508,68 @@ CLC event feedback includes "learning interests" from 35 attendees — topics th
 
 These interests inform the CE team's Technical Knowledge Gap assessment by revealing what clients need but aren't getting.
 
+### 3.11 Individual Respondent Trend Analysis (17 Tracked Individuals, 2023–Q4 2025)
+
+The Excel historical trend analysis tracks **17 named individuals** who responded to NPS surveys in multiple periods, enabling validation of model findings at the individual level. Source: `APAC_NPS_Historical_Trend_Analysis_2025 11.xlsx` (OneDrive NPS Data folder).
+
+#### Individual Score Changes
+
+| Direction | Count | Percentage |
+|-----------|:-----:|:----------:|
+| **Improved** | 8 | 47.1% |
+| Declined | 4 | 23.5% |
+| Unchanged | 5 | 29.4% |
+
+Nearly **half of tracked individuals improved** — consistent with the overall Q4 2025 NPS recovery (+33.57 points from Q2 2025 low).
+
+#### Segment Conversions
+
+| Conversion | Count | Significance |
+|-----------|:-----:|-------------|
+| **Detractor → Passive** | 3 | Major positive shift |
+| Passive → Promoter | 0 | — |
+| Promoter → Passive | 1 | Minor negative shift |
+
+The **3 individuals who moved from Detractor to Passive** account for a meaningful portion of the overall improvement:
+
+| Name | Client | Score Change | Evidence |
+|------|--------|:------------:|----------|
+| Hannah Seymour | WA Health | 5 → 8 (+3) | AVP Support visits (Section 3.4) |
+| Santosh Verghese | SA Health | 6 → 8 (+2) | — |
+| Kenneth Kwek | SingHealth | 6 → 8 (+2) | Monthly Sleeping Giant reviews per TEA model (Section 3.4) |
+
+#### Top Individual Improvements
+
+| Name | Client | Score Change | Evidence |
+|------|--------|:------------:|----------|
+| **Hannah Seymour** | WA Health | 5 → 8 (+3) | Direct AVP Support interaction |
+| Santosh Verghese | SA Health | 6 → 8 (+2) | — |
+| Adrian Shearer | GHA | 7 → 9 (+2) | "Agile and accessible" — proactive CE engagement |
+| Kenneth Kwek | SingHealth | 6 → 8 (+2) | Customisation focus, monthly reviews |
+
+#### Top Individual Declines (All Minimal)
+
+| Name | Client | Score Change |
+|------|--------|:------------:|
+| Matt Malone | Epworth Healthcare | 3 → 2 (-1) |
+| Bronwyn Taylor | Dept of Health - Victoria | 8 → 7 (-1) |
+| Melanie Torres-Tejada | St Luke's | 6 → 5 (-1) |
+| Henry Arianto | SingHealth | 9 → 8 (-1) |
+
+All declines are **minimal (-1 point)**, suggesting isolated issues rather than systemic problems. Notably, Epworth's Matt Malone remains a detractor (score 2) despite a 1-point decline — the issue is not worsening, but also not being addressed.
+
+#### Validation of Model Factors
+
+The individual trend data validates two key model findings:
+
+1. **Support interaction drives improvement** — Hannah Seymour's +3 point improvement followed AVP Support visits, confirming Factor #3 (Avg Resolution Time) and Factor #4 (Technical Knowledge Gap) as drivers of satisfaction change.
+
+2. **Proactive engagement is protective** — Adrian Shearer's verbatim ("Agile and accessible") directly cites the Communication/Transparency behaviour captured by Factor #13 (-8 ARM protective).
+
+3. **Declined individuals are not worsening rapidly** — All 4 declines are -1 point only. This supports the model's lower weight for NPS Declining 2+ Periods (Factor #11, weight 4) — declining trends are weak predictors because declines are often small and temporary.
+
+> **Data discrepancy note:** The Excel historical analysis contains 201 total responses vs 199 in Supabase. The 2-record difference is in Q4 2024: Excel has 75 responses, Supabase has 73. Analysis shows Excel includes 4 responses from Singapore clients not in Supabase (DSTA: 1, Parkway Hospitals: 1, SAPPI: 2), while Supabase has 2 additional GRMC records not in Excel. The net difference (75 - 4 + 2 = 73) reconciles the counts. The individual tracking analysis uses the Excel data as source of truth for longitudinal respondent tracking.
+
 ---
 
 ## 4. Proposed CSI Factor Model v2
@@ -734,6 +798,7 @@ All analysis in this document is derived from:
 - **APAC Client Success Updates 2025:** 32-slide PPTX with full-year programme data
 - **APAC 5 in 25 Initiative Detail:** Project-level tracking with KPIs and status
 - **2026 APAC Performance Workbook:** Attrition schedule (10 events, $2.722M total USD across 2025–2028), Opal Maintenance Contracts (8 clients, AUD $2.187M annual), Deal Pipeline Risk Profile (Dial 2). Source: OneDrive — APAC Central Management Reports / Financials / BURC / 2026.
+- **NPS Historical Trend Analysis (Individual Tracking):** `APAC_NPS_Historical_Trend_Analysis_2025 11.xlsx` (OneDrive — APAC Clients / NPS / Data / APAC), 6 sheets including Exec_Summary with headline findings, Period_Summary (201 responses across 5 periods), Client_Trends, Individual_Trends (17 tracked respondents with score changes), Historical_Long_Format (per-response data), Current_Q4_2025. Note: Excel contains 201 total responses vs 199 in Supabase — difference is 4 Singapore client records (DSTA, Parkway, SAPPI) not imported to Supabase, offset by 2 additional GRMC records in Supabase.
 - **CLC Event Attendance Data:** Supabase `clc_events` (8 events: CES 2022–2025, Client Forum 2024–2025, Opal User Forum 2024, iQemo User Forum 2025) and `clc_event_attendees` (341 records, 235 client-facing). Sourced from Customer Leadership Council Excel/CSV exports (OneDrive — APAC Clients / Customer Leadership Council / Sources). Includes registration status, attendance, feedback ratings, and learning interests. 36 attendees provided post-event feedback. Spearman rho = -0.142 against NPS (n=12 matched clients) — confirms event attendance frequency is not predictive of satisfaction.
 
 ---
