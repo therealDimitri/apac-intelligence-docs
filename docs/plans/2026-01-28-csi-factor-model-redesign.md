@@ -53,7 +53,7 @@ The root cause is that the model measures **business risk** (C-Suite turnover, M
 > 7. **Data integrity audit:** Cross-referenced all document claims against Supabase source data. Corrected: SA Health Q4 NPS (-25 → -55, verified from 11 individual scores), v1 accuracy table (3 classification errors: Dept Vic, SLMC, GRMC — accuracy 50% → 40%), SLMC Backlog>10 (TRUE → FALSE, only 3 open cases), Factor #2 threshold definition (clarified as NPS < 0, not individual score ≤ 6). Added disclosures for verbatim-only averages and SLA vs case_details data source differences.
 > 8. **Financial data cross-reference:** Cross-referenced Factor #8 (M&A/Attrition) against 2026 APAC Performance workbook Attrition sheet. Updated: GHA M&A=TRUE (confirmed partial attrition Jul 2026, $215K + expired maintenance contract), NCS/MoD Singapore M&A=TRUE (confirmed full attrition Mar 2028, $272K), Factor #8 evidence expanded with full attrition schedule ($2.722M total), Section 3.9 contract renewal dates corrected with 4 expired contracts identified.
 > 9. **CLC event attendance analysis:** Analysed 235 client attendees across 8 Customer Leadership Council events (2022–2025) from Supabase `clc_events` and `clc_event_attendees`. Confirmed event attendance has **weak negative** NPS correlation (rho = -0.142, p = 0.66) — same finding as segmentation events. Clients with ≥10 attendances have avg NPS -20.7 vs -5.0 for <10 attendances (reversed direction). Feedback submission correlates strongly negative (rho = -0.635, p = 0.03) — clients who submit feedback have issues to report. CLC data enhances Factor #12 automation but does NOT justify a new factor. Learning interests from CLC feedback provide qualitative intelligence for Factor #4 (Technical Knowledge Gap) assessment.
-> 10. **Automated statistical validation:** Built reproducible Python pipeline using Pandas, NumPy, SciPy, Statsmodels, Scikit-learn, and Seaborn. Implemented: Spearman correlation with **bootstrap confidence intervals** (10,000 resamples), **Cohen's d effect sizes** for threshold analysis, **power analysis** (n=13 can detect d ≥ 1.15), **Leave-One-Out Cross-Validation** (84.6% accuracy, 95% CI [57.8%, 95.7%]), **ROC-AUC with bootstrap CI** (v2 AUC = 1.000 vs v1 AUC = 0.857), **McNemar's test** for model comparison (p = 1.0), **confusion matrix** (100% specificity, 66.7% sensitivity), and **threshold sensitivity analysis** (optimal resolution threshold = 773h, model uses 700h for simplicity, Cohen's d = -3.40). Support metric correlations now use n=11 after client name aliasing fix (see note 11). All visualisations generated automatically. Pipeline source: `apac-intelligence-v2/scripts/csi_statistical_analysis.py`.
+> 10. **Automated statistical validation:** Built reproducible Python pipeline using Pandas, NumPy, SciPy, Statsmodels, Scikit-learn, and Seaborn. Implemented: Spearman correlation with **bootstrap confidence intervals** (10,000 resamples), **Cohen's d effect sizes** for threshold analysis, **power analysis** (n=13 can detect d ≥ 1.15), **Leave-One-Out Cross-Validation** (84.6% accuracy, 95% CI [57.8%, 95.7%]), **ROC-AUC with bootstrap CI** (v1 AUC = 1.000, v2 AUC = 1.000), **McNemar's test** for model comparison (p = 1.0), **confusion matrix** (100% specificity, 66.7% sensitivity), and **threshold sensitivity analysis** (optimal resolution threshold = 773h, model uses 700h for simplicity, Cohen's d = -3.40). Support metric correlations now use n=11 after client name aliasing fix (see note 11). All visualisations generated automatically. Pipeline source: `apac-intelligence-v2/scripts/csi_statistical_analysis.py`.
 > 11. **Client name aliasing fix (2026-01-29):** Support metric sample size increased from n=4 to n=11 by implementing client name normalisation using the `client_name_aliases` Supabase table. Root cause was exact string matching between `nps_responses` and `support_case_details` tables, which use different naming conventions. Fixes applied: (1) pipeline now normalises client names before cross-table joins (commit 51d517a), (2) added alias `NCS/MoD Singapore` → `NCS/MinDef Singapore`, (3) fixed alias `GHA` → `Gippsland Health Alliance (GHA)` (was pointing to wrong canonical). The resolution time correlation is now **statistically significant** (ρ=-0.664, p=0.026). Remaining 2 unmatched clients (Dept of Health Victoria, Mount Alvernia Hospital) have no support case data in ServiceNow.
 
 ---
@@ -747,7 +747,7 @@ With n=13 clients at α=0.05 and power=0.80, the minimum detectable effect size 
 >
 > **Note:** With n=11, the **resolution time correlation is now statistically significant** (p=0.026). This is the first support metric to achieve significance in the automated pipeline, providing stronger statistical support for Factor #3 (Avg Resolution >700h, weight 10).
 
-> **Note:** With 7 comparisons, Bonferroni-adjusted α = 0.0071. Zero correlations reach significance after correction. This is expected given power analysis — sample size is insufficient for detecting moderate effects. The strong negative correlation for support metrics (ρ = -0.74) would require n ≈ 15-20 to reach significance at this effect size.
+> **Note:** With 7 comparisons, Bonferroni-adjusted α = 0.0071. Zero correlations reach significance after correction. This is expected given power analysis — sample size is insufficient for detecting moderate effects. The resolution time correlation (ρ = -0.664, p = 0.026) is significant at α = 0.05 but not after Bonferroni correction.
 
 ### 10.3 Model Validation Metrics
 
@@ -826,13 +826,13 @@ The **optimal threshold is 773 hours** (approximately 32 days). The model uses *
 
 ![Spearman Correlation Matrix](csi_statistics/plots/correlation_heatmap.png)
 
-*Figure 1: Spearman correlation matrix showing relationships between all metrics and NPS. Support metrics (avg_resolution_hours, open_cases, total_cases) show strong negative correlation with NPS (ρ = -0.74). Engagement metrics show near-zero correlation, confirming that frequency is not predictive.*
+*Figure 1: Spearman correlation matrix showing relationships between all metrics and NPS. Support metrics show strong negative correlation with NPS (resolution time ρ = -0.66, p = 0.026). Engagement metrics show near-zero correlation, confirming that frequency is not predictive.*
 
 #### ROC Curves
 
 ![ROC Curves: CSI v1 vs v2](csi_statistics/plots/roc_curves.png)
 
-*Figure 2: ROC curves comparing CSI v1 (blue, AUC = 0.86) and v2 (red, AUC = 1.00). The v2 curve hugs the top-left corner, indicating perfect discrimination. Both models substantially outperform random chance (diagonal).*
+*Figure 2: ROC curves comparing CSI v1 (blue, AUC = 1.00) and v2 (red, AUC = 1.00). Both curves hug the top-left corner, indicating perfect discrimination. Note: Perfect AUC for both models warrants validation on Q1 2026 data (see Section 10.7.3).*
 
 #### Threshold Sensitivity
 
@@ -880,11 +880,11 @@ With n=13 clients at α=0.05 and power=0.80, the minimum detectable effect size 
 
 **[RESOLVED 2026-01-29]** The support metric sample size has been increased from n=4 to n=11 by implementing client name normalisation using the `client_name_aliases` table. The original n=4 limitation was caused by exact string matching between tables with different naming conventions (e.g., "Barwon Health Australia" vs "Barwon Health", "GHA" vs "Gippsland Health Alliance (GHA)").
 
-The updated correlations:
-- **Resolution time:** ρ = -0.582, 95% CI [-0.85, -0.15] (CI no longer crosses zero)
-- **Open cases:** ρ = -0.509, 95% CI [-0.82, -0.02]
+The updated correlations (from automated pipeline):
+- **Resolution time:** ρ = -0.664, p = 0.026 (**statistically significant**)
+- **Open cases:** ρ = -0.340, p = 0.306
 
-With n=11, the confidence intervals are narrower and the resolution time CI excludes zero, providing stronger statistical support for the negative relationship between support metrics and NPS. This validates the support-based CSI factor weights (Backlog >10: 15pts, Avg Resolution >700h: 10pts).
+With n=11, the resolution time correlation achieves statistical significance (p = 0.026 < 0.05). This is the first support metric to achieve significance in the automated pipeline, providing stronger statistical support for Factor #3 (Avg Resolution >700h, weight 10).
 
 #### 3. ROC-AUC = 1.000 — Overfitting Risk
 
