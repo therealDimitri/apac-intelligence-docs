@@ -2,43 +2,51 @@
 
 **Date:** 2026-01-30
 **Status:** Fixed
-**Commit:** 6983e780
+**Commits:** 6983e780, d5ba5d25
 
 ## Issue
 
-The space between the Client Activities ring and milestone events in the Annual Orbit View was too tight, causing visual clutter and overlap concerns.
+The space between the Client Activities ring and milestone events in both the Annual Orbit View (By Month) and CSE Orbit View (By CSE) was too tight, causing visual clutter and overlap concerns.
 
 ## Root Cause
 
-- The center card was sized with `p-8` padding and `text-4xl` year text, taking up significant space
-- The activity ring radius was set to `100`, positioning it close to the milestone orbit
+- The center cards were sized too large, taking up significant space
+- Activity/client ring radii were positioned too close to the milestone orbit
 
 ## Solution
 
-Reduced the center card size and adjusted the activity ring radius to create more breathing room:
+Reduced the center card sizes and adjusted ring radii to create more breathing room in both views.
 
-### Center Card Changes
+### Annual Orbit View (AnnualOrbitView.tsx)
+
 | Element | Before | After |
 |---------|--------|-------|
 | Padding | `p-8` | `p-5` |
 | Year text | `text-4xl` | `text-3xl` |
 | Subtitle | `text-sm` | `text-xs` |
 | Event count | `text-xs` | `text-[10px]` |
+| Activity radius | `100` | `85` |
 
-### Activity Ring Changes
+### CSE Orbit View (CSEOrbitView.tsx)
+
 | Element | Before | After |
 |---------|--------|-------|
-| Activity radius | `100` | `85` |
+| Center card | `w-[140px] h-[140px]` | `w-[110px] h-[110px]` |
+| CSE photo | `w-14 h-14` | `w-10 h-10` |
+| Name text | `text-sm` | `text-xs` |
+| Client/touches text | `text-xs` | `text-[10px]` |
+| Client ring radius | `130` | `115` |
 
 ## Files Modified
 
 - `src/components/operating-rhythm/AnnualOrbitView.tsx`
+- `src/components/operating-rhythm/CSEOrbitView.tsx`
 
 ## Testing
 
 - Build passes with zero TypeScript errors
-- Netlify deployment successful
-- Visual spacing between Client Activities and milestones improved
+- Netlify deployments successful
+- Visual spacing between inner elements and milestones improved in both views
 
 ## Related
 
