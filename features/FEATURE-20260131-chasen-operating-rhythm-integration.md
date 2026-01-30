@@ -114,8 +114,61 @@ This is by design - the Operating Rhythm is a static annual schedule that change
 >
 > [View CS Operating Rhythm](/operating-rhythm)
 
+---
+
+## Update: Account Planning AI Insights Integration
+
+**Date:** 2026-01-31 (same day)
+**Commit:** `449b826d`
+
+### Summary
+
+Added `account_plan_ai_insights` table to ChaSen's dashboard context, enabling ChaSen to surface AI-generated account planning recommendations when available.
+
+### Technical Implementation
+
+Added query #13 in `getLiveDashboardContext()` (stream route):
+- Fetches latest 20 insights ordered by creation date
+- Groups insights by client for organised presentation
+- Shows priority (🔴 critical, 🟠 high, 🟡 medium, 🟢 low)
+- Displays insight type, confidence score, and implementation status
+- Links to Account Planning Coach (`/planning`)
+
+### Current State
+
+The `account_plan_ai_insights` table is **currently empty** (0 rows). This table is designed to store AI-generated recommendations from the Account Planning Coach feature, but these insights haven't been generated yet.
+
+ChaSen compensates by using other relevant data sources to provide account planning guidance:
+- Client Health scores and trends
+- NPS responses and topic sentiment analysis
+- Working Capital/Aged Accounts data
+- Overdue Actions
+
+### What ChaSen Can Now Answer (when data is populated)
+
+- "What AI insights do you have for account planning?"
+- "Which clients have critical priority recommendations?"
+- "Show me the account plan insights for Western Health"
+
+### Example Response (with current data)
+
+Even without dedicated AI insights, ChaSen provides useful guidance:
+> **Priority Focus Clients:**
+> - SA Health: Health score 31%, NPS -60 points
+> - Western Health: Health score 66%, NPS -100 points
+> - Barwon Health Australia: NPS -75 points
+>
+> **Recommendations:**
+> 1. Schedule Strategic Reviews for Priority Accounts
+> 2. Share Product Sentiment with Leadership
+> 3. Align on Commercial and Operational Follow-ups
+
+---
+
 ## Related
 
 - Operating Rhythm Page: `src/app/(dashboard)/operating-rhythm/page.tsx`
 - Orbit View Components: `src/components/operating-rhythm/`
 - ChaSen BURC Context (similar pattern): `src/lib/chasen-burc-context.ts`
+- Account Planning Coach: `src/app/(dashboard)/planning/page.tsx`
+- Account Plan AI Insights Table: `account_plan_ai_insights` (currently empty)
