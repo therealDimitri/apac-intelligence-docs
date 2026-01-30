@@ -2,7 +2,7 @@
 
 **Date:** 2026-01-30
 **Status:** Fixed
-**Commits:** 6983e780, d5ba5d25, 7f4866bf
+**Commits:** 6983e780, d5ba5d25, 7f4866bf, 870432d8
 
 ## Issue
 
@@ -44,6 +44,15 @@ Reduced the center card sizes and adjusted ring radii to create more breathing r
 | Client logos | Inner (radius 115) | Middle (radius 140) |
 | Milestones | Middle (radius 145/175) | Outer (radius 195/215) |
 | Quarter arcs | radius 160 | radius 112 |
+
+### Event Z-Index on Hover/Selection
+
+When events overlap, the hovered or selected event now comes to the front:
+
+| State | z-index |
+|-------|---------|
+| Default | 1 |
+| Hovered/Selected | 50 |
 
 ## Files Modified
 
