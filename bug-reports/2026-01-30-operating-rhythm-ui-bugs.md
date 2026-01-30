@@ -3,11 +3,11 @@
 **Date:** 30 January 2026
 **Reported By:** User
 **Fixed By:** Claude Opus 4.5
-**Commits:** 7123e75d, 2b90b67b, dfc5be13, 26d590a6
+**Commits:** 7123e75d, 2b90b67b, dfc5be13, 26d590a6, 85ed453b
 
 ## Summary
 
-16 UI bugs were reported and fixed across the Operating Rhythm page affecting responsiveness, styling, data display, and interactivity.
+17 UI bugs were reported and fixed across the Operating Rhythm page affecting responsiveness, styling, data display, and interactivity.
 
 ---
 
@@ -351,6 +351,31 @@ className="w-[140px] h-[140px] flex flex-col items-center justify-center ..."
 
 ---
 
+## Bug 17: Modal Opens Unnecessarily in Orbit View
+
+**Issue:** Clicking an event in Orbit view opened a modal displaying event details, even though the same information was already visible in the right-side panel.
+
+**Root Cause:** The `AnimatePresence` block that renders `EventDetailModal` checked only `selectedEvent` without considering the current view mode.
+
+**Fix:** Added `viewMode !== 'orbit'` condition to only show modal in Timeline and List views.
+
+```tsx
+// BEFORE (modal shows in all views):
+{selectedEvent && (
+  <EventDetailModal ... />
+)}
+
+// AFTER (modal only in Timeline/List views):
+{selectedEvent && viewMode !== 'orbit' && (
+  <EventDetailModal ... />
+)}
+```
+
+**Files Modified:**
+- `src/app/(dashboard)/operating-rhythm/page.tsx`
+
+---
+
 ## Testing Performed
 
 1. ✅ Build passes with `npm run build`
@@ -368,8 +393,11 @@ className="w-[140px] h-[140px] flex flex-col items-center justify-center ..."
 13. ✅ Client logos properly clipped within circular containers (no overflow)
 14. ✅ Centre CSE card is geometrically centred (140×140px fixed square)
 15. ✅ Current month indicator dot renders above activity badges (proper z-order)
+16. ✅ Event clicks in Orbit view do NOT open modal (details in side panel)
+17. ✅ Event clicks in Timeline view open modal correctly
+18. ✅ Event clicks in List view open modal correctly
 
 ## Deployment
 
-- **Status:** Deployed to production (commit 26d590a6)
+- **Status:** Deployed to production (commit 85ed453b)
 - **URL:** https://apac-cs-dashboards.com/operating-rhythm
