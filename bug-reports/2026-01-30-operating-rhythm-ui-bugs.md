@@ -3,11 +3,11 @@
 **Date:** 30 January 2026
 **Reported By:** User
 **Fixed By:** Claude Opus 4.5
-**Commits:** 7123e75d, 2b90b67b, dfc5be13
+**Commits:** 7123e75d, 2b90b67b, dfc5be13, 26d590a6
 
 ## Summary
 
-13 UI bugs were reported and fixed across the Operating Rhythm page affecting responsiveness, styling, data display, and interactivity.
+16 UI bugs were reported and fixed across the Operating Rhythm page affecting responsiveness, styling, data display, and interactivity.
 
 ---
 
@@ -262,6 +262,95 @@ preserveAspectRatio="xMidYMid meet"
 
 ---
 
+## Bug 14: Client Logos Overflowing Circle Containers
+
+**Issue:** After removing clipPath in Bug 13 fix, client logos (WA Health, Barwon Health) overflowed beyond their circular container boundaries, appearing unprofessional.
+
+**Root Cause:** SVG `<image>` element with `preserveAspectRatio="xMidYMid meet"` fits the image within its viewport but does NOT clip overflow - the image can extend beyond specified dimensions.
+
+**Fix:**
+- Re-added `<defs>` block with circular clipPath definitions for each client logo
+- Wrapped `<image>` elements in `<g clipPath="url(#client-clip-N)">` groups
+- ClipPath radius set to 18px to properly constrain logos within the 24px bubble
+
+```tsx
+// Added clipPath definitions:
+<defs>
+  {clientPositions.map(({ client }, idx) => (
+    <clipPath key={`clip-${idx}`} id={`client-clip-${idx}`}>
+      <circle cx={0} cy={0} r={18} />
+    </clipPath>
+  ))}
+</defs>
+
+// Applied to images:
+<g clipPath={`url(#client-clip-${idx})`}>
+  <image ... />
+</g>
+```
+
+**Files Modified:**
+- `src/components/operating-rhythm/CSEOrbitView.tsx`
+
+---
+
+## Bug 15: Centre CSE Card Not Geometrically Centred
+
+**Issue:** The centre CSE profile card appeared positioned too high in the orbit, not at the geometric centre.
+
+**Root Cause:** The card used `rounded-full` with `p-6` padding, which creates a non-square element because content height > width. CSS `rounded-full` on a non-square element creates an oval, and the content-based height caused visual misalignment.
+
+**Fix:**
+- Changed from content-based sizing to fixed dimensions: `w-[140px] h-[140px]`
+- Added `flex flex-col items-center justify-center` for true centring
+- Reduced internal spacing (`mb-2` → `mb-1`, removed `mt-0.5`)
+- Reduced photo/avatar size (`w-16 h-16` → `w-14 h-14`)
+
+```tsx
+// BEFORE (oval, not centred):
+className="text-center z-10 bg-white rounded-full p-6 ..."
+
+// AFTER (square, truly centred):
+className="w-[140px] h-[140px] flex flex-col items-center justify-center ..."
+```
+
+**Files Modified:**
+- `src/components/operating-rhythm/CSEOrbitView.tsx`
+
+---
+
+## Bug 16: Current Month Indicator Overlapped by Activity Badge
+
+**Issue:** The current month blue indicator dot was being overlapped/hidden by the activity bubble (badge showing activity count).
+
+**Root Cause:**
+1. No separate indicator dot existed - only the blue text colour on month label
+2. Activity bubbles rendered at radius 180, near month labels at radius 210, causing visual collision
+
+**Fix:**
+- Added new current month indicator dot at radius 230 (outside month labels)
+- Renders LAST in the SVG for proper z-order (appears on top)
+- Includes outer glow (radius 8, 20% opacity) and inner dot (radius 5 with white stroke)
+
+```tsx
+{/* Current month indicator - rendered last for z-order */}
+{Object.entries(MONTH_POSITIONS).map(([month, { angle }]) => {
+  if (parseInt(month) !== currentMonth) return null
+  const pos = getOrbitPosition(angle, 230)
+  return (
+    <g key={`current-indicator-${month}`}>
+      <circle cx={pos.x} cy={pos.y} r={8} fill="#3b82f6" opacity={0.2} />
+      <circle cx={pos.x} cy={pos.y} r={5} fill="#3b82f6" stroke="white" strokeWidth="2" />
+    </g>
+  )
+})}
+```
+
+**Files Modified:**
+- `src/components/operating-rhythm/CSEOrbitView.tsx`
+
+---
+
 ## Testing Performed
 
 1. ✅ Build passes with `npm run build`
@@ -276,8 +365,11 @@ preserveAspectRatio="xMidYMid meet"
 10. ✅ Activity names show full names in Annual Activities panel
 11. ✅ Client Requirements panel logos display fully without cropping
 12. ✅ Orbit client logos show complete with tier-coloured borders
+13. ✅ Client logos properly clipped within circular containers (no overflow)
+14. ✅ Centre CSE card is geometrically centred (140×140px fixed square)
+15. ✅ Current month indicator dot renders above activity badges (proper z-order)
 
 ## Deployment
 
-- **Status:** Deployed to production (commit dfc5be13)
+- **Status:** Deployed to production (commit 26d590a6)
 - **URL:** https://apac-cs-dashboards.com/operating-rhythm
