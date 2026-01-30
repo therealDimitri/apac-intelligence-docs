@@ -3,11 +3,11 @@
 **Date:** 30 January 2026
 **Reported By:** User
 **Fixed By:** Claude Opus 4.5
-**Commits:** 7123e75d, 2b90b67b, dfc5be13, 26d590a6, 85ed453b
+**Commits:** 7123e75d, 2b90b67b, dfc5be13, 26d590a6, 85ed453b, 21f30226
 
 ## Summary
 
-17 UI bugs were reported and fixed across the Operating Rhythm page affecting responsiveness, styling, data display, and interactivity.
+18 UI bugs were reported and fixed across the Operating Rhythm page affecting responsiveness, styling, data display, and interactivity.
 
 ---
 
@@ -348,6 +348,34 @@ className="w-[140px] h-[140px] flex flex-col items-center justify-center ..."
 
 **Files Modified:**
 - `src/components/operating-rhythm/CSEOrbitView.tsx`
+
+---
+
+## Bug 18: Missing Events on Orbit View
+
+**Issue:** 9 events were not appearing on the orbit visualisation, including:
+- CS & MarCom Audit Q4 (Jan 19-23)
+- Q1 Account Plan Update (Mar 2-6)
+- CS & MarCom Audit Q1 (Apr 13-17)
+- NPS Q2 Analysis Workshop (Apr 27 - May 30)
+- Segmentation Model Review (May 18 - Jun 12)
+- CS & MarCom Audit Q2 (Jul 13-17)
+- Q4 Account Plan Update (Oct 8)
+- NPS Q4 Analysis Workshop (Oct 26-30)
+- NPS Q4 Client Letters (Nov 23-25)
+
+**Root Cause:** The orbit view only renders events with `isMilestone: true` flag. These 9 events were in the data file but missing the milestone flag.
+
+```typescript
+// AnnualOrbitView.tsx line 506:
+{milestones.map((event, idx) => {
+  // Only renders getMilestoneEvents() - events with isMilestone: true
+```
+
+**Fix:** Added `isMilestone: true` to all 9 missing events in `data.ts`.
+
+**Files Modified:**
+- `src/components/operating-rhythm/data.ts`
 
 ---
 
