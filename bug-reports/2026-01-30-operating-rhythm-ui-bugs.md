@@ -3,11 +3,11 @@
 **Date:** 30 January 2026
 **Reported By:** User
 **Fixed By:** Claude Opus 4.5
-**Commits:** 7123e75d, 2b90b67b
+**Commits:** 7123e75d, 2b90b67b, dfc5be13
 
 ## Summary
 
-10 UI bugs were reported and fixed across the Operating Rhythm page affecting responsiveness, styling, data display, and interactivity.
+13 UI bugs were reported and fixed across the Operating Rhythm page affecting responsiveness, styling, data display, and interactivity.
 
 ---
 
@@ -203,6 +203,65 @@ preserveAspectRatio="xMidYMid meet"
 
 ---
 
+## Bug 11: Activity Names Truncated in Panel
+
+**Issue:** Activity names in "Annual Activities" panel showing abbreviated names ("EVP", "On-Site", "Insight", "SLA Review") instead of full names.
+
+**Root Cause:** The panel was using `activity.shortName` instead of `activity.name`.
+
+**Fix:** Changed to use `activity.name` with truncation and title tooltip for overflow:
+- Annual Activities grid: "EVP" → "EVP Engagement"
+- Activities Due section: "On-Site" → "On-Site Attendance"
+
+**Files Modified:**
+- `src/components/operating-rhythm/CSEWorkloadPanel.tsx`
+
+---
+
+## Bug 12: Client Requirements Panel Logo Cropping
+
+**Issue:** Client logos in the "Client Requirements" (By Client) panel being cropped, especially Barwon Health and RVEEH which have text below icons.
+
+**Root Cause:** Using `object-cover rounded-full` which crops rectangular logos to fill a circle.
+
+**Fix:**
+- Changed from `<img className="object-cover rounded-full">` to a container div with padding
+- Increased container size from `w-10 h-10` to `w-12 h-12`
+- Added padding (`p-1.5`) and white background
+- Changed image to `object-contain` to fit entire logo
+
+```tsx
+// BEFORE (cropping):
+<img className="w-10 h-10 rounded-full object-cover" />
+
+// AFTER (full logo):
+<div className="w-12 h-12 rounded-full border bg-white flex items-center justify-center p-1.5">
+  <img className="w-full h-full object-contain" />
+</div>
+```
+
+**Files Modified:**
+- `src/components/operating-rhythm/CSEWorkloadPanel.tsx`
+
+---
+
+## Bug 13: Orbit Client Logos Still Clipped (Follow-up)
+
+**Issue:** Despite earlier fix, Barwon Health logo in orbit view was still showing text cutoff due to circular clipPath.
+
+**Root Cause:** The SVG `<clipPath>` element was clipping logos to a circle shape, cutting off rectangular logos with text components.
+
+**Fix:**
+- Removed the `<defs>` block containing circular clipPaths entirely
+- Changed logo container from clipped image to white background circle with coloured tier border
+- Increased logo image area from 32×32 to 36×36
+- Logos now render with `preserveAspectRatio="xMidYMid meet"` without clipping
+
+**Files Modified:**
+- `src/components/operating-rhythm/CSEOrbitView.tsx`
+
+---
+
 ## Testing Performed
 
 1. ✅ Build passes with `npm run build`
@@ -214,8 +273,11 @@ preserveAspectRatio="xMidYMid meet"
 7. ✅ Netlify deployment successful
 8. ✅ CSE view client logos display fully (Barwon Health, RVEEH, Epworth, Western Health, WA Health)
 9. ✅ January blue indicator dot visible at top of CSE orbit view
+10. ✅ Activity names show full names in Annual Activities panel
+11. ✅ Client Requirements panel logos display fully without cropping
+12. ✅ Orbit client logos show complete with tier-coloured borders
 
 ## Deployment
 
-- **Status:** Deployed to production (commit 2b90b67b)
+- **Status:** Deployed to production (commit dfc5be13)
 - **URL:** https://apac-cs-dashboards.com/operating-rhythm
