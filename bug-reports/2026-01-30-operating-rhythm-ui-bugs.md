@@ -3,11 +3,11 @@
 **Date:** 30 January 2026
 **Reported By:** User
 **Fixed By:** Claude Opus 4.5
-**Commit:** 7123e75d
+**Commits:** 7123e75d, 2b90b67b
 
 ## Summary
 
-8 UI bugs were reported across the Operating Rhythm page affecting responsiveness, styling, data display, and interactivity.
+10 UI bugs were reported and fixed across the Operating Rhythm page affecting responsiveness, styling, data display, and interactivity.
 
 ---
 
@@ -153,6 +153,56 @@ This ensures consistent rendering between server and client (hydration safe).
 
 ---
 
+## Bug 9: CSE View Client Logo Cropping
+
+**Issue:** Client logos (particularly RVEEH and Barwon Health) were being cropped/cut off in the By CSE orbit view.
+
+**Root Cause:** The SVG `preserveAspectRatio` attribute was set to `"xMidYMid slice"` which crops rectangular images to fill the circular clip area, cutting off parts of the logo.
+
+**Fix:**
+- Changed `preserveAspectRatio` from `"xMidYMid slice"` to `"xMidYMid meet"` - this fits the entire logo within the circular boundary without cropping
+- Reduced clip path radius from 20 to 16
+- Reduced image dimensions from 38×38 to 32×32
+- Reduced white background circle from r=20 to r=18
+
+```typescript
+// BEFORE (cropping):
+preserveAspectRatio="xMidYMid slice"
+
+// AFTER (fit entire logo):
+preserveAspectRatio="xMidYMid meet"
+```
+
+**Files Modified:**
+- `src/components/operating-rhythm/CSEOrbitView.tsx`
+
+---
+
+## Bug 10: CSE View January Blue Dot Clipped
+
+**Issue:** The current month blue indicator dot (January) was being clipped/cut off at the top of the By CSE orbit view.
+
+**Root Cause:** The container `<div>` with `aspect-square` class has implicit `overflow: hidden`, and the SVG element also defaults to hidden overflow, causing elements at the edge of the viewBox to be clipped.
+
+**Fix:**
+- Added `overflow-visible` class to the aspect-square container div
+- Added `overflow-visible` class to the SVG element
+
+```tsx
+// BEFORE:
+<div className="aspect-square">
+  <svg className="w-full h-full" viewBox="-250 -250 500 500">
+
+// AFTER:
+<div className="aspect-square overflow-visible">
+  <svg className="w-full h-full overflow-visible" viewBox="-250 -250 500 500">
+```
+
+**Files Modified:**
+- `src/components/operating-rhythm/CSEOrbitView.tsx`
+
+---
+
 ## Testing Performed
 
 1. ✅ Build passes with `npm run build`
@@ -162,8 +212,10 @@ This ensures consistent rendering between server and client (hydration safe).
 5. ✅ Modal close button works
 6. ✅ Click outside modal closes it
 7. ✅ Netlify deployment successful
+8. ✅ CSE view client logos display fully (Barwon Health, RVEEH, Epworth, Western Health, WA Health)
+9. ✅ January blue indicator dot visible at top of CSE orbit view
 
 ## Deployment
 
-- **Status:** Deployed to production
+- **Status:** Deployed to production (commit 2b90b67b)
 - **URL:** https://apac-cs-dashboards.com/operating-rhythm
