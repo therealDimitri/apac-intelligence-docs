@@ -2,7 +2,7 @@
 
 **Date:** 2026-01-30
 **Status:** Fixed
-**Commits:** 6983e780, d5ba5d25
+**Commits:** 6983e780, d5ba5d25, 7f4866bf
 
 ## Issue
 
@@ -29,13 +29,21 @@ Reduced the center card sizes and adjusted ring radii to create more breathing r
 
 ### CSE Orbit View (CSEOrbitView.tsx)
 
+**Center Card Changes:**
 | Element | Before | After |
 |---------|--------|-------|
 | Center card | `w-[140px] h-[140px]` | `w-[110px] h-[110px]` |
 | CSE photo | `w-14 h-14` | `w-10 h-10` |
 | Name text | `text-sm` | `text-xs` |
 | Client/touches text | `text-xs` | `text-[10px]` |
-| Client ring radius | `130` | `115` |
+
+**Layer Order Restructure (to mirror By Month view):**
+| Layer | Before | After |
+|-------|--------|-------|
+| Activity bubbles | Outer (radius 180) | Inner (radius 85) |
+| Client logos | Inner (radius 115) | Middle (radius 140) |
+| Milestones | Middle (radius 145/175) | Outer (radius 195/215) |
+| Quarter arcs | radius 160 | radius 112 |
 
 ## Files Modified
 
