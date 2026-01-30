@@ -3,11 +3,11 @@
 **Date:** 30 January 2026
 **Reported By:** User
 **Fixed By:** Claude Opus 4.5
-**Commits:** 7123e75d, 2b90b67b, dfc5be13, 26d590a6, 85ed453b, 21f30226
+**Commits:** 7123e75d, 2b90b67b, dfc5be13, 26d590a6, 85ed453b, 21f30226, c626fca2, 1c21c250, e566af75
 
 ## Summary
 
-18 UI bugs were reported and fixed across the Operating Rhythm page affecting responsiveness, styling, data display, and interactivity.
+24 bugs were reported and fixed across the Operating Rhythm page affecting responsiveness, styling, data display, interactivity, missing events, and CSE orbit enhancements.
 
 ---
 
@@ -404,6 +404,90 @@ className="w-[140px] h-[140px] flex flex-col items-center justify-center ..."
 
 ---
 
+## Bug 19: Missing Q3 CS & MarCom Audit Event
+
+**Issue:** The Q3 CS & MarCom Audit & Review event for October was missing from the Operating Rhythm calendar.
+
+**Root Cause:** Event was never added to the data.ts file.
+
+**Fix:**
+- Added new event `cs-marcom-audit-q3` for October 5-9
+- Updated all audit shortTitles from "CS Audit" to "CS & MarCom" for consistency
+
+**Event Details:**
+- **Dates:** October 5-9, 2026
+- **Participants:** EVP, VPs, AVPs, CSEs, CAMs, Marketing Lead, SVP CS + Marketing (Global), VP CS (Global), VP Marketing (Global)
+- **Objective:** Prepare and review Q3 CS & Marketing learnings and progress
+- **Deliverables:** Q3 CS performance summary, Marketing campaign effectiveness analysis, YTD vs plan variance analysis, Q4 priorities and year-end preparation
+
+**Files Modified:**
+- `src/components/operating-rhythm/data.ts`
+
+---
+
+## Bug 20: Client Letters Cluttering Orbit
+
+**Issue:** "Client Letters" event was cluttering the orbit and not essential for the overview.
+
+**Fix:** Set `isMilestone: false` for the `nps-q4-client-letters` event to remove it from the orbit display while keeping it in Timeline/List views.
+
+**Files Modified:**
+- `src/components/operating-rhythm/data.ts`
+
+---
+
+## Bug 21: Segmentation Review Label Overflow
+
+**Issue:** "Segmentation Review" label was bleeding outside its container boundary on the orbit.
+
+**Fix:** Renamed shortTitle from "Segmentation Review" to "Segment Review" to fit within container.
+
+**Files Modified:**
+- `src/components/operating-rhythm/data.ts`
+
+---
+
+## Bug 22: Event Labels Overlapping
+
+**Issue:** Events in the same month were overlapping due to insufficient spread angle.
+
+**Fix:** Increased spread angle from 15 to 18 degrees in `getOrbitPosition` function.
+
+**Files Modified:**
+- `src/components/operating-rhythm/AnnualOrbitView.tsx`
+
+---
+
+## Bug 23: Legend Shows "Planning" Instead of "Account Planning"
+
+**Issue:** The category legend showed "Planning" which was not specific enough.
+
+**Fix:** Changed label from "Planning" to "Account Planning" in `CATEGORY_CONFIG`.
+
+**Files Modified:**
+- `src/components/operating-rhythm/types.ts`
+
+---
+
+## Bug 24: CSE Orbits Missing Key OR Events
+
+**Issue:** CSE orbit views did not show key Operating Rhythm milestones that CSEs need to be aware of.
+
+**Fix:** Added 6 key OR events to all CSE orbits:
+- Q1 Plan Update (March)
+- NPS Q2 Survey (April)
+- 2H Plan Review (June)
+- NPS Q4 Survey (October)
+- Q4 Plan Update (October)
+- Year-End Review (December)
+
+Milestones appear as small category-colored dots with labels on the inner ring.
+
+**Files Modified:**
+- `src/components/operating-rhythm/CSEOrbitView.tsx`
+
+---
+
 ## Testing Performed
 
 1. ✅ Build passes with `npm run build`
@@ -424,8 +508,15 @@ className="w-[140px] h-[140px] flex flex-col items-center justify-center ..."
 16. ✅ Event clicks in Orbit view do NOT open modal (details in side panel)
 17. ✅ Event clicks in Timeline view open modal correctly
 18. ✅ Event clicks in List view open modal correctly
+19. ✅ Q3 CS & MarCom Audit event appears in October (Oct 5-9)
+20. ✅ Total events now 22 (was 21)
+21. ✅ Client Letters removed from orbit (still in Timeline/List)
+22. ✅ "Segment Review" fits within container boundary
+23. ✅ Event labels no longer overlap (18° spread)
+24. ✅ Legend shows "Account Planning" instead of "Planning"
+25. ✅ CSE orbits show 6 key OR milestones with category-coloured dots
 
 ## Deployment
 
-- **Status:** Deployed to production (commit 85ed453b)
+- **Status:** Deployed to production (commit e566af75)
 - **URL:** https://apac-cs-dashboards.com/operating-rhythm
