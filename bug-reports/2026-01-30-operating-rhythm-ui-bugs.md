@@ -3,11 +3,11 @@
 **Date:** 30 January 2026
 **Reported By:** User
 **Fixed By:** Claude Opus 4.5
-**Commits:** 7123e75d, 2b90b67b, dfc5be13, 26d590a6, 85ed453b, 21f30226, c626fca2, 1c21c250, e566af75
+**Commits:** 7123e75d, 2b90b67b, dfc5be13, 26d590a6, 85ed453b, 21f30226, c626fca2, 1c21c250, e566af75, 6df14ba4, e4ad101a
 
 ## Summary
 
-24 bugs were reported and fixed across the Operating Rhythm page affecting responsiveness, styling, data display, interactivity, missing events, and CSE orbit enhancements.
+26 bugs were reported and fixed across the Operating Rhythm page affecting responsiveness, styling, data display, interactivity, missing events, CSE orbit enhancements, and milestone positioning.
 
 ---
 
@@ -488,6 +488,60 @@ Milestones appear as small category-colored dots with labels on the inner ring.
 
 ---
 
+## Bug 25: Milestone Overlapping in Crowded Months
+
+**Issue:** Multiple milestones in the same month (January: 4, April: 4, October: 5) were severely overlapping, making them unreadable. Additionally, By CSE orbit milestones used different styling (SVG dots with labels) than By Month view (circular buttons).
+
+**Root Cause:**
+1. All milestones rendered at the same radius, causing overlap in crowded months
+2. CSE view used SVG-based dot+label rendering while By Month used HTML-based circular buttons
+
+**Fix (Option B+A - Multi-ring stagger with smaller buttons):**
+
+For By Month view:
+- Reduced button size from 56px (`w-14`) to 44px (`w-11`)
+- Implemented two-ring stagger: inner ring (165px) for even indices, outer ring (195px) for odd indices
+- Reduced angular spread from 18° to 12° since radial stagger provides additional separation
+
+For By CSE view:
+- Replaced SVG-based dot+label rendering with HTML-based motion.div buttons
+- Used same two-ring stagger approach (145px inner, 175px outer)
+- Styling now matches By Month view: circular buttons with white border, category background colour
+
+```typescript
+// Multi-ring stagger calculation
+const innerRadius = 165
+const outerRadius = 195
+const radius = index % 2 === 0 ? innerRadius : outerRadius
+```
+
+**Files Modified:**
+- `src/components/operating-rhythm/AnnualOrbitView.tsx`
+- `src/components/operating-rhythm/CSEOrbitView.tsx`
+
+---
+
+## Bug 26: CSE Orbit Milestones Positioned Outside Container
+
+**Issue:** The 2H Plan Review milestone was rendering at the bottom of the page, completely outside the orbit container.
+
+**Root Cause:** The milestone buttons used CSS absolute positioning, but the parent container (`<div className="aspect-square overflow-visible">`) was missing `position: relative`. This caused milestones to position relative to a more distant positioned ancestor.
+
+**Fix:** Added `relative` class to the orbit container div.
+
+```tsx
+// BEFORE (milestones position incorrectly):
+<div className="aspect-square overflow-visible">
+
+// AFTER (milestones anchor to orbit container):
+<div className="aspect-square overflow-visible relative">
+```
+
+**Files Modified:**
+- `src/components/operating-rhythm/CSEOrbitView.tsx`
+
+---
+
 ## Testing Performed
 
 1. ✅ Build passes with `npm run build`
@@ -515,8 +569,12 @@ Milestones appear as small category-colored dots with labels on the inner ring.
 23. ✅ Event labels no longer overlap (18° spread)
 24. ✅ Legend shows "Account Planning" instead of "Planning"
 25. ✅ CSE orbits show 6 key OR milestones with category-coloured dots
+26. ✅ By Month milestones use multi-ring stagger (165px/195px radii)
+27. ✅ By CSE milestones use consistent circular button styling
+28. ✅ CSE milestones positioned correctly within orbit container
+29. ✅ All 6 CSE milestones visible and properly spaced
 
 ## Deployment
 
-- **Status:** Deployed to production (commit e566af75)
+- **Status:** Deployed to production (commit e4ad101a)
 - **URL:** https://apac-cs-dashboards.com/operating-rhythm
