@@ -27,6 +27,14 @@ The autonomous workflow for this repo is: Edit → Commit → Push → Document.
 - Resolution time: `resolution_duration_seconds` (BIGINT, in seconds — divide by 3600 for hours)
 - Open cases filter: `state=not.in.(Closed,Canceled,Resolved)`
 
+## Supabase Column Reference (support_sla_metrics)
+
+- Open cases: `backlog` (not `open_cases`)
+- SLA compliance: `resolution_sla_percent` (not `sla_compliance_percent`)
+- CSAT score: `satisfaction_score` (scale 0-5, not `csat_score`)
+- Aging buckets: `aging_0_7d`, `aging_8_30d`, `aging_31_60d`, `aging_61_90d`, `aging_90d_plus`
+- Support health score: **calculated**, not stored - use formula: `(SLA% × 0.4) + (CSAT% × 0.3) + (backlog_factor × 0.3)`
+
 ## Data Integrity Audits
 
 - When changing any number in a document, grep for ALL references before editing
