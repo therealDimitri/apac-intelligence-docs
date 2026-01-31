@@ -165,6 +165,73 @@ Even without dedicated AI insights, ChaSen provides useful guidance:
 
 ---
 
+## Update: Support Health Integration
+
+**Date:** 2026-01-31 (same day)
+**Commit:** `c478d3e8`
+
+### Summary
+
+Added `support_sla_metrics` table to ChaSen's dashboard context, enabling natural language queries about support health, open cases, SLA compliance, and CSAT scores.
+
+### Bug Fix
+
+Initial implementation used incorrect column names that caused silent query failure:
+
+| Incorrect Column | Correct Column |
+|------------------|----------------|
+| `support_health_score` | Calculated from SLA, CSAT, backlog |
+| `open_cases` | `backlog` |
+| `sla_compliance_percent` | `resolution_sla_percent` |
+| `csat_score` | `satisfaction_score` |
+| `aging_30d_plus` | `aging_31_60d + aging_61_90d + aging_90d_plus` |
+| `last_updated` | `updated_at` |
+
+### Technical Implementation
+
+Added query #14 in `getLiveDashboardContext()` (stream route):
+- Fetches support metrics for up to 15 clients
+- Calculates support health score: `(SLA% × 0.4) + (CSAT% × 0.3) + (backlog_factor × 0.3)`
+- Identifies at-risk clients (health < 70%)
+- Shows portfolio summary: total open, critical, aging 30d+
+- Links to Support Health Dashboard (`/support`)
+
+### Health Score Calculation
+
+```typescript
+const slaScore = m.resolution_sla_percent || 0
+const csatScore = m.satisfaction_score ? (m.satisfaction_score / 5) * 100 : 80
+const backlogFactor = openCases > 20 ? 50 : openCases > 10 ? 70 : openCases > 5 ? 85 : 100
+const healthScore = Math.round(slaScore * 0.4 + csatScore * 0.3 + backlogFactor * 0.3)
+```
+
+### What ChaSen Can Now Answer
+
+- "Which client has the lowest support health score?"
+- "How many open support cases are there?"
+- "Which clients have critical support cases?"
+- "What's the support health overview?"
+
+### Example Response
+
+**User:** "Which client has the lowest support health score?"
+
+**ChaSen:**
+> Based on the latest data, the client with the lowest support health score is **Epworth Healthcare** at **57%**.
+>
+> | Metric | Value |
+> |--------|-------|
+> | Support Health Score | 57% |
+> | CSAT | 4.5/5 |
+> | Status | At-Risk Support |
+>
+> **Recommendations:**
+> 1. Engage with the CSE (John Salisbury)
+> 2. Review Support History
+> 3. Schedule a Check-in
+
+---
+
 ## Related
 
 - Operating Rhythm Page: `src/app/(dashboard)/operating-rhythm/page.tsx`
@@ -172,3 +239,5 @@ Even without dedicated AI insights, ChaSen provides useful guidance:
 - ChaSen BURC Context (similar pattern): `src/lib/chasen-burc-context.ts`
 - Account Planning Coach: `src/app/(dashboard)/planning/page.tsx`
 - Account Plan AI Insights Table: `account_plan_ai_insights` (currently empty)
+- Support Health Page: `src/app/(dashboard)/support/page.tsx`
+- Support SLA Metrics Table: `support_sla_metrics` (11 clients)
