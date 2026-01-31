@@ -136,13 +136,11 @@ Added query #13 in `getLiveDashboardContext()` (stream route):
 
 ### Current State
 
-The `account_plan_ai_insights` table is **currently empty** (0 rows). This table is designed to store AI-generated recommendations from the Account Planning Coach feature, but these insights haven't been generated yet.
-
-ChaSen compensates by using other relevant data sources to provide account planning guidance:
-- Client Health scores and trends
-- NPS responses and topic sentiment analysis
-- Working Capital/Aged Accounts data
-- Overdue Actions
+The `account_plan_ai_insights` table now contains **24 insights** across 6 clients (SA Health, Western Health, Barwon Health Australia, Epworth Healthcare, WA Health, SingHealth). Insights were generated via MatchaAI and cover:
+- Engagement Strategy recommendations
+- Risk Mitigation plans
+- Growth Opportunity identification
+- Relationship Management guidance
 
 ### What ChaSen Can Now Answer (when data is populated)
 
@@ -229,6 +227,61 @@ const healthScore = Math.round(slaScore * 0.4 + csatScore * 0.3 + backlogFactor 
 > 1. Engage with the CSE (John Salisbury)
 > 2. Review Support History
 > 3. Schedule a Check-in
+
+---
+
+## Update: Expanded Data Sources
+
+**Date:** 2026-01-31 (same day)
+**Commit:** `d0415ae4`
+
+### Summary
+
+Added 7 additional data sources to ChaSen's dashboard context, significantly expanding what ChaSen can answer questions about.
+
+### New Data Sources
+
+| # | Table | Description |
+|---|-------|-------------|
+| 15 | `pipeline_opportunities` | Sales pipeline - ACV, stages, forecast categories, BURC status |
+| 16 | `support_case_details` | Granular support tickets - open cases with priority, state, assignee |
+| 17 | `cse_client_assignments` | CSE-to-client mappings - who owns which accounts |
+| 18 | `action_activity_log` | Recent activity - completed actions in last 7 days |
+| 19 | `chasen_knowledge` | Knowledge base articles - curated information for AI responses |
+| 20 | `alerts` | System alerts - new and acknowledged alerts by severity |
+| 21 | `apac_planning_goals` | Planning goals - ARR targets, retention goals, NPS targets for FY |
+
+### What ChaSen Can Now Answer
+
+**Pipeline & Sales:**
+- "What's in the sales pipeline?"
+- "Which opportunities are in forecast?"
+- "What's the total ACV across all deals?"
+
+**Support Cases:**
+- "What open support cases need attention?"
+- "Which clients have high-priority tickets?"
+- "Who is assigned to the SA Health cases?"
+
+**Team & Assignments:**
+- "Which clients does John manage?"
+- "Who is the CSE for Western Health?"
+
+**Activity & Alerts:**
+- "What actions were completed this week?"
+- "Are there any system alerts?"
+- "What critical alerts need attention?"
+
+**Planning & Goals:**
+- "What are the ARR targets for this year?"
+- "What's the NPS target for FY26?"
+
+### Technical Implementation
+
+All queries follow the same pattern as existing data sources:
+- Wrapped in try/catch to prevent silent failures from blocking other queries
+- Limited result sets (15-20 rows) to manage context size
+- Formatted as markdown sections in the system prompt
 
 ---
 
