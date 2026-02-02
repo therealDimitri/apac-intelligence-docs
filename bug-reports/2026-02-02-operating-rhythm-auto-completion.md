@@ -38,6 +38,8 @@ for (const event of eventCompliance.events || []) {
 
 ## Fix Applied
 
+### Phase 1: Completion Status Check
+
 Added defensive check to only count events where `completed === true`:
 
 ```typescript
@@ -59,20 +61,49 @@ for (const event of eventCompliance.events || []) {
 
 Also updated the `SegmentationEvent` interface in `src/hooks/useEventCompliance.ts` to explicitly include `completed` and `completed_date` fields for type safety.
 
+### Phase 2: Future Date Validation
+
+After the initial fix, a second issue was discovered: May 2026 was showing 19/5 (380% complete) despite being a future month. Investigation revealed 19 events for "SA Health (Sunrise)" with `event_date = 2026-05-15` incorrectly marked as `completed = true`.
+
+**Data Fix Applied:**
+```sql
+UPDATE segmentation_events
+SET completed = false, completed_date = null
+WHERE event_date > '2026-02-02' AND completed = true;
+-- Fixed 19 events
+```
+
+**Defensive Code Added:**
+```typescript
+// Cannot count future events as completed
+// This prevents bad data from showing impossible completion percentages
+const now = new Date()
+if (eventDate > now) continue
+```
+
 ## Files Changed
 
-- `src/hooks/useOperatingRhythmData.ts` - Added completion status check
+- `src/hooks/useOperatingRhythmData.ts` - Added completion status check AND future date validation
 - `src/hooks/useEventCompliance.ts` - Added `completed` and `completed_date` to SegmentationEvent interface
+
+## Data Cleanup
+
+- 19 events in `segmentation_events` table were incorrectly marked as completed before their scheduled date
+- All 19 events were for "SA Health (Sunrise)" with `event_date = 2026-05-15`
+- Events were created between 2025-11-14 and 2026-01-10 (likely test/seed data)
+- Fixed by setting `completed = false` and `completed_date = null`
 
 ## Verification
 
 1. Build passes with zero TypeScript errors
 2. All 118 tests pass
 3. Operating Rhythm orbit now correctly reflects completion status from Segmentation Progress page
+4. May 2026 now shows 0% complete (as expected for a future month)
 
 ## Related Context
 
-The materialized view `event_compliance_summary` already filters to `completed = true` events in its SQL definition. The defensive check in the frontend ensures correctness even if:
+The materialized view `event_compliance_summary` already filters to `completed = true` events in its SQL definition. The defensive checks in the frontend ensure correctness even if:
 - The materialized view has stale data (refreshes every 5 minutes via cron)
 - The JSON structure includes unexpected data
 - Future changes modify the view behaviour
+- Data integrity issues exist (events incorrectly marked as completed before their date)
