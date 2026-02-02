@@ -68,3 +68,21 @@ Cleaned up 13 malformed entries in `client_name_aliases` table:
 
 **Before:** 88 aliases, 19 malformed
 **After:** 77 aliases, 6 with legitimate commas (company names like "Dept of Health, Victoria")
+
+## Final Verification
+
+Tested via Playwright on localhost:3001 after data cleanup:
+
+1. Selected Laura Messing as CSE → "4 clients loaded"
+2. Navigated to Step 5 (Risk & Recovery)
+3. Clicked "Add Risk" button
+4. Client dropdown showed all 4 SA Health variants
+5. Selected "SA Health ⚠️"
+6. **Pipeline Opportunity dropdown populated with 19 opportunities:**
+   - SA Health - Renal ($1500K)
+   - SA Health - Sunrise renewal + Wdx 2026 ($945K)
+   - SA Health - WCHN Sunrise Surgery License ($344K)
+   - SA Health - 25.1 SCM and Pt Flow upgrade ($974K)
+   - ...and 15 more
+
+**Result:** Fix confirmed working end-to-end.
