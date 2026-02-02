@@ -1,4 +1,4 @@
-# Bug Report: BURC OPEX YoY Comparison Showing Incorrect Values
+# Bug Report: BURC YoY Comparison Showing Incorrect Values (OPEX + Revenue)
 
 **Date:** 2 February 2026
 **Status:** Fixed
@@ -7,7 +7,7 @@
 
 ## Summary
 
-The OPEX YoY comparison in the Year-over-Year Comparison panel was showing drastically incorrect values due to the API summing all category types from `burc_monthly_opex` instead of using authoritative OPEX values.
+The OPEX and Revenue YoY comparisons in the Year-over-Year Comparison panel were showing incorrect values. Both issues stemmed from the API summing detailed breakdown tables instead of using authoritative values from `burc_annual_financials`.
 
 ## Incorrect Values (Before Fix)
 
@@ -91,6 +91,42 @@ Dashboard YoY Comparison now displays:
 - `scripts/sync-burc-data-supabase.mjs` - BURC data sync script
 - Database table: `burc_annual_financials` (added `total_opex` column)
 - Database table: `burc_monthly_opex` (contains category-level data)
+
+## Revenue YoY Comparison Fix
+
+### Incorrect Values (Before Fix)
+
+| Metric | Displayed | Actual (Excel) | Variance |
+|--------|-----------|----------------|----------|
+| FY26 Revenue | $39.5M | $31.6M | +$7.9M (25% error) |
+| FY25 Revenue | $25.4M | $26.6M | -$1.2M (5% error) |
+| Revenue Change | +$14.1M (+55.7%) | +$5.0M (+18.7%) | Overstated by $9M |
+
+### Root Cause
+
+The `revenueStreamsComparison` was summing `burc_revenue_detail` by stream type (Maint, PS, SW, HW) which produced different totals than the authoritative `gross_revenue` in `burc_annual_financials`.
+
+### Resolution
+
+Updated API to use `burc_annual_financials.gross_revenue` for the total variance calculation:
+
+```javascript
+const { data: currentRevenueFinancials } = await supabase
+  .from('burc_annual_financials')
+  .select('gross_revenue')
+  .eq('fiscal_year', fiscalYear)
+  .single()
+
+const authoritativeCurrentRevenue = currentRevenueFinancials?.gross_revenue || summedCurrentTotal
+```
+
+### Correct Excel Data Sources
+
+| Metric | Sheet | Cell | Value |
+|--------|-------|------|-------|
+| FY2025 Gross Revenue | 26 vs 25 Q Comparison | P14 | $26,631,098.22 |
+| FY2026 Gross Revenue (Forecast) | 26 vs 25 Q Comparison | I14 | $31,597,838.41 |
+| FY2026 Gross Revenue Target | APAC BURC | W36 | $30,906,xxx |
 
 ## Related Bug Reports
 
