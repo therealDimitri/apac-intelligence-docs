@@ -78,3 +78,60 @@ ON CONFLICT (article_id, client_id) DO NOTHING;
 ## Prevention
 
 The fix ensures consistency by deriving the junction table entries from the same AI-scored results stored on the article, eliminating the dual-matching code path that caused the mismatch.
+
+---
+
+## Follow-up Fix: Word Boundary Matching (2026-02-02)
+
+### Issue
+
+After the junction table fix, clients were still showing irrelevant articles. Investigation revealed that short aliases like "SAPP" (4 characters) were matching inside common English words:
+
+- "SAPP" → matched "dis**app**ointed" in Budget articles
+- Result: Guam Regional Medical City (GRMC) showed articles about Australian students, Indian budget, and Schneider logistics
+
+### Root Cause
+
+The `matchClients()` function used simple `includes()` substring matching:
+
+```typescript
+// Before: substring match caused false positives
+if (textLower.includes(alias.toLowerCase())) { ... }
+```
+
+### Solution
+
+Added `isWordBoundaryMatch()` helper function using regex word boundaries:
+
+```typescript
+function isWordBoundaryMatch(text: string, term: string): boolean {
+  const termLower = term.toLowerCase()
+
+  // For very specific terms (15+ chars), substring match is fine
+  if (termLower.length >= 15) {
+    return text.toLowerCase().includes(termLower)
+  }
+
+  // For shorter terms, use word boundary regex
+  const escaped = termLower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const regex = new RegExp(`\\b${escaped}\\b`, 'i')
+  return regex.test(text)
+}
+```
+
+### Data Cleanup
+
+Re-populated junction table with strict matching:
+- Truncated `news_article_clients` table
+- Re-ran matching with word boundary logic
+- Result: Only articles that genuinely mention client names are now linked
+
+### Files Changed
+
+- `src/lib/news-intelligence/chasen-scorer.ts` (added `isWordBoundaryMatch()`, updated `matchClients()`)
+
+### Verification
+
+1. Build passes with zero TypeScript errors
+2. Netlify deployment successful (commit abbbbc1c)
+3. GRMC no longer shows irrelevant articles about "disappointed" budgets
