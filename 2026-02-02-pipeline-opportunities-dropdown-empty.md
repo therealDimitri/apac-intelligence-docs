@@ -56,6 +56,15 @@ After fix:
 - 19 pipeline opportunities displayed in dropdown for SA Health
 - No console errors
 
-## Data Quality Note
+## Data Cleanup Performed
 
-The `client_name_aliases` table should be cleaned to remove entries where `display_name` contains commas. These represent incorrectly concatenated alias mappings.
+Cleaned up 13 malformed entries in `client_name_aliases` table:
+
+| Action | Count | Details |
+|--------|-------|---------|
+| Deleted garbage | 11 | Meeting prefixes ("CONFIRMED,", "Re,", "PLACEHOLDER,") concatenated with client names |
+| Deleted redundant | 2 | Concatenated aliases where individual entries already existed |
+| Added splits | 2 | "Gippsland Health Alliance (GHA)" and "SA Health (Sunrise)" |
+
+**Before:** 88 aliases, 19 malformed
+**After:** 77 aliases, 6 with legitimate commas (company names like "Dept of Health, Victoria")
