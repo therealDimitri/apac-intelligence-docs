@@ -1,5 +1,7 @@
 # Bug Report: AI Suggestions API Missing 'action' Step Support
 
+**Status:** Fixed
+
 ## Date
 2026-01-19
 

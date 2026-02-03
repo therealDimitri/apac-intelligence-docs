@@ -1,6 +1,7 @@
 # Feature: Org-Aware ChaSen AI
 
 **Date:** 27 December 2025
+**Status:** Implemented
 **Commit:** `ebc2113`
 
 ## Overview

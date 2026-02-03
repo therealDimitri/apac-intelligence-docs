@@ -1,6 +1,7 @@
 # Feature: Job Descriptions for ChaSen Context
 
 **Date:** 27 December 2025
+**Status:** Implemented
 **Commits:** `1b22f74`, `ff43380`
 
 ## Overview

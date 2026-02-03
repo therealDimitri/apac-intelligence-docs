@@ -1,5 +1,7 @@
 # Bug Report: Duplicate CSE Targets Causing Inflated Totals
 
+**Status:** Fixed
+
 ## Date
 2026-01-19
 

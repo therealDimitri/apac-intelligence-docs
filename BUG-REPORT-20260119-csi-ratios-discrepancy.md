@@ -1,5 +1,7 @@
 # Bug Report: CSI Ratios Not Matching 2026 Performance Excel
 
+**Status:** Fixed
+
 ## Date
 2026-01-19
 

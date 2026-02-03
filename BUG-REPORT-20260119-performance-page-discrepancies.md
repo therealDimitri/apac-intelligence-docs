@@ -1,5 +1,7 @@
 # Bug Report: Performance Page Data Discrepancies
 
+**Status:** Partially Fixed (Open Role target added; Pipeline Coverage display enhancement pending)
+
 ## Date
 2026-01-19
 

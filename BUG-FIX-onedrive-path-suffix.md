@@ -1,5 +1,7 @@
 # Bug Fix: OneDrive Path Suffix Error
 
+**Status:** Fixed
+
 ## Date
 10 January 2026
 

@@ -1,5 +1,7 @@
 # Bug Report: Open Role Missing from CSE Performance Charts
 
+**Status:** Fixed
+
 ## Date
 14 January 2026
 

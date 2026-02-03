@@ -1,5 +1,7 @@
 # Bug Report: Duplicate Clients in Risk & Recovery Dropdown
 
+**Status:** Fixed
+
 ## Date
 2026-01-19
 
