@@ -19,6 +19,7 @@ The autonomous workflow for this repo is: Edit → Commit → Push → Document.
 - Feedback column: `feedback` (verbatim text, nullable)
 - Client column: `client_name`
 - NPS calculation: (promoters - detractors) / total × 100. Promoters = 9-10, Detractors = 0-6.
+- **NPS display format**: Always show as score between -100 and +100 (e.g., "NPS: +45" or "NPS: -12"), NEVER as individual response score (0-10). Individual scores are just "score" not "NPS".
 
 ## Supabase Column Reference (support_case_details)
 
