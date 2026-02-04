@@ -20,6 +20,12 @@ The autonomous workflow for this repo is: Edit → Commit → Push → Document.
 - Client column: `client_name`
 - NPS calculation: (promoters - detractors) / total × 100. Promoters = 9-10, Detractors = 0-6.
 - **NPS display format**: Always show as score between -100 and +100 (e.g., "NPS: +45" or "NPS: -12"), NEVER as individual response score (0-10). Individual scores are just "score" not "NPS".
+- **Always verify NPS with SQL** — don't calculate manually from score lists (error-prone). Use:
+  ```sql
+  SELECT period, ROUND(((COUNT(*) FILTER (WHERE score >= 9))::numeric -
+    (COUNT(*) FILTER (WHERE score <= 6))::numeric) / COUNT(*)::numeric * 100) as nps
+  FROM nps_responses WHERE client_name ILIKE '%Client%' GROUP BY period
+  ```
 
 ## Supabase Column Reference (support_case_details)
 
@@ -68,3 +74,8 @@ When reviewing CSI model validation results, check for these caveats:
 - Open in Typora: `open -a Typora <file.md>`
 - Trigger export via AppleScript: `osascript -e 'tell application "Typora" to activate' -e 'delay 0.5' -e 'tell application "System Events" to keystroke "e" using {command down, shift down}'`
 - No pdflatex installed — avoid pandoc `--pdf-engine=pdflatex`
+
+## Git Workflow with Remote Changes
+
+- When push fails due to remote changes: `git stash && git pull --rebase && git push && git stash pop`
+- Ignore .DS_Store files in commits - they're local macOS metadata
