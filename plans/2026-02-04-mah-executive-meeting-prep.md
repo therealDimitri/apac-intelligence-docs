@@ -1,4 +1,4 @@
-# Mount Alvernia Hospital Executive Meeting — Preparation Brief
+# Mount Alvernia Hospital Executive Meeting — Suggested Preparation Brief
 
 **Meeting Date:** Thursday 13 February 2026
 **Client:** Mount Alvernia Hospital, Singapore
@@ -21,7 +21,7 @@ Mount Alvernia Hospital has called this meeting because they're concerned Altera
 |------|------|-------------------|
 | Marcus Perez | President | Deliver commitment statement; prepared to provide written commitment |
 | Todd Haebich | EVP APAC | Regional strategy context; handle questions about other clients |
-| Kenny Gan | Country Manager Singapore | His presence IS proof of local investment |
+| Kenny Gan | Country Manager Singapore | His presence is proof of local investment |
 | Nikki Wei | Client Executive | Facilitate discussion; capture agreed actions; relationship continuity |
 
 ### MAH (Expected)
@@ -43,13 +43,16 @@ Mount Alvernia Hospital has called this meeting because they're concerned Altera
 - If approved → positive momentum into Thursday's meeting
 - If delayed/rejected → may need to address concerns that blocked it
 
-### NPS Trend (Positive Story)
-| Period | NPS | Change |
-|--------|-----|--------|
-| Q2 24 | -100 | Baseline |
-| Q4 24 | -20 | +80 points |
-| Q2 25 | -33 | -13 points |
-| Q4 25 | **0** | **+100 points from baseline** |
+### NPS Trend (Improving but Still Negative)
+
+| Period | Scores | NPS | Change |
+|--------|--------|-----|--------|
+| Q2 24 | 2, 3 | -100 | Baseline |
+| Q4 24 | 4, 5, 6, 7, 8 | -60 | +40 points |
+| Q2 25 | 5, 6, 7 | -67 | -7 points (dip) |
+| Q4 25 | 5, 6, 7, 7, 8 | **-40** | **+60 points from baseline** |
+
+**Note:** No promoters (9-10 scores) in any period. All improvement is from fewer detractors, not gaining advocates. Use carefully — don't oversell as a success story.
 
 ### Key Stakeholder Feedback to Acknowledge
 
@@ -87,7 +90,7 @@ Mount Alvernia Hospital has called this meeting because they're concerned Altera
 | Investment | What It Means for MAH |
 |------------|----------------------|
 | **First Sunrise 25.1 Customer in APAC** | MAH's clinical team will shape this product for the region. You lead, others follow. |
-| **Dedicated Singapore-Based CSE** | Currently recruiting. A strategic partner based locally, focused on MAH's success. |
+| **Continued Singapore-Based CSE** **& CAM** | Currently recruiting. A strategic partner based locally, focused on MAH's success. |
 | **Executive Sponsorship** | Direct access to Marcus and Todd. No layers. |
 
 ---
@@ -98,7 +101,7 @@ Marcus or Todd opens:
 
 > "Before we begin, let me acknowledge what you may be thinking.
 >
-> You're probably wondering if Altera is going to scale back in Singapore. You might be thinking that with larger clients moving on, a 300-bed hospital isn't worth our investment. You may even be questioning whether this meeting is genuine or just reassurance theatre.
+> You're probably wondering if Altera is going to scale back in Singapore. You might be thinking that with larger clients moving on, a 300+ bed hospital isn't worth our investment. You may even be questioning whether this meeting is genuine or just reassurance theatre.
 >
 > Those would be reasonable concerns. We're here to address them — but more importantly, to listen to what you need from this partnership."
 
@@ -119,7 +122,7 @@ Use these to drive discussion (Gap Selling + MEDDPICC):
 - "What would make you confident we're the right long-term partner?"
 
 ### MEDDPICC Alignment
-- "Who on your side will help us drive this partnership forward?" (Champion)
+- "Who on your team will help us drive this partnership forward?" (Champion)
 - "What would you need to see from us over the next 12 months to feel confident?" (Decision Criteria)
 - "How should we measure success together?" (Metrics)
 
@@ -146,7 +149,7 @@ Use these to drive discussion (Gap Selling + MEDDPICC):
 | Question | Response |
 |----------|----------|
 | "Why did SingHealth/MinDef leave?" | "Those were complex decisions with factors beyond our control. What we can control is our investment in partners like MAH where we can deliver real value." |
-| "Will you reduce support resources in Singapore?" | "The opposite — we're hiring a dedicated Singapore-based CSE specifically for MAH." |
+| "Will you reduce support resources in Singapore?" | "The opposite — we're continuing to hire a dedicated Singapore-based CSE specifically to support MAH." |
 | "What if Altera is acquired or exits APAC?" | Marcus: "I can't predict M&A, but our strategy is growth in APAC, not contraction. MAH is central to that." |
 | "Why should we believe you?" | "Fair question. That's why we're here with the President, why you're first for Sunrise 25.1, and why we're hiring locally. Actions, not words." |
 
@@ -163,7 +166,10 @@ Reference MAH's own initiatives to demonstrate understanding:
 | $25M cancer centre investment | "Are there clinical IT implications we should be planning for together?" |
 | AI/digital transformation focus | Addresses Kendrick's feedback directly |
 
+Links to article in appendix.
+
 **Bruce Leong quote to mirror back:**
+
 > "In healthcare, being agile is key to tackling the rapidly evolving environment."
 
 Use this: *"Bruce, you've spoken about agility in healthcare IT. That's exactly why we want MAH leading Sunrise 25.1 — your team can help us be more agile for the whole region."*
@@ -207,7 +213,7 @@ Specifically, I am pleased to confirm:
 
 1. **First Sunrise 25.1 Customer in APAC** — Mount Alvernia Hospital will be the first site in the region to implement Sunrise 25.1, reflecting our confidence in your clinical and technical leadership.
 
-2. **Dedicated Singapore-Based Client Success Engineer** — We are actively recruiting a Singapore-based CSE who will serve as MAH's strategic partner, ensuring responsive, localised support.
+2. **Dedicated Singapore-Based Client Success Executive** — We are actively recruiting a Singapore-based CSE who will serve as MAH's strategic partner, ensuring responsive, localised support.
 
 3. **Executive Sponsorship** — Todd Haebich (EVP APAC) and I remain directly accessible to you and your leadership team. You have my personal commitment to this partnership.
 
@@ -248,7 +254,3 @@ cc: Todd Haebich, Executive Vice President APAC
 - [Altera Case Study: Mount Alvernia Hospital](https://www.alterahealth.com/clients/mount-alvernia-hospital/)
 - CS Intelligence Dashboard — NPS data, meeting history, client segmentation
 
----
-
-*Prepared by: Client Success Intelligence Hub*
-*Date: 4 February 2026*
