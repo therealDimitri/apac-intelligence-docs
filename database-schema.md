@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2026-01-14T17:32:47.702Z
+**Generated**: 2026-02-05T05:34:26.708Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -11,7 +11,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `actions`
 
-**Row Count**: 160
+**Row Count**: 95
 
 ### Columns
 
@@ -40,12 +40,12 @@ This document provides the authoritative schema definition for all tables in the
 | `edit_history` | array | ✗ | - | *(inferred)* |
 | `client` | text | ✗ | - | *(inferred)* |
 | `Category` | text | ✗ | - | *(inferred)* |
-| `department_code` | unknown | ✗ | - | *(inferred)* |
-| `activity_type_code` | unknown | ✗ | - | *(inferred)* |
+| `department_code` | text | ✗ | - | *(inferred)* |
+| `activity_type_code` | text | ✗ | - | *(inferred)* |
 | `is_internal` | boolean | ✗ | - | *(inferred)* |
 | `cross_functional` | boolean | ✗ | - | *(inferred)* |
 | `linked_initiative_id` | unknown | ✗ | - | *(inferred)* |
-| `client_id` | unknown | ✗ | - | *(inferred)* |
+| `client_id` | integer | ✗ | - | *(inferred)* |
 | `ai_context` | unknown | ✗ | - | *(inferred)* |
 | `ai_context_key_points` | array | ✗ | - | *(inferred)* |
 | `ai_context_urgency_indicators` | array | ✗ | - | *(inferred)* |
@@ -53,7 +53,7 @@ This document provides the authoritative schema definition for all tables in the
 | `ai_context_confidence` | unknown | ✗ | - | *(inferred)* |
 | `ai_context_generated_at` | unknown | ✗ | - | *(inferred)* |
 | `ai_context_meeting_title` | unknown | ✗ | - | *(inferred)* |
-| `client_uuid` | unknown | ✗ | - | *(inferred)* |
+| `client_uuid` | text | ✗ | - | *(inferred)* |
 | `source` | text | ✗ | - | *(inferred)* |
 | `source_metadata` | jsonb | ✗ | - | *(inferred)* |
 | `created_by` | unknown | ✗ | - | *(inferred)* |
@@ -65,7 +65,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `unified_meetings`
 
-**Row Count**: 210
+**Row Count**: 309
 
 ### Columns
 
@@ -157,7 +157,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `client_segmentation`
 
-**Row Count**: 36
+**Row Count**: 54
 
 ### Columns
 
@@ -200,7 +200,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `aging_accounts`
 
-**Row Count**: 11
+**Row Count**: 18
 
 ### Columns
 
@@ -235,7 +235,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `notifications`
 
-**Row Count**: 15
+**Row Count**: 16
 
 ### Columns
 
@@ -285,7 +285,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `nps_topic_classifications`
 
-**Row Count**: 201
+**Row Count**: 204
 
 ### Columns
 
@@ -330,7 +330,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `chasen_knowledge`
 
-**Row Count**: 20
+**Row Count**: 124
 
 ### Columns
 
@@ -354,7 +354,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `chasen_feedback`
 
-**Row Count**: 23
+**Row Count**: 24
 
 ### Columns
 
@@ -386,7 +386,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `chasen_knowledge_suggestions`
 
-**Row Count**: 13
+**Row Count**: 14
 
 ### Columns
 
@@ -422,7 +422,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `chasen_conversations`
 
-**Row Count**: 130
+**Row Count**: 174
 
 ### Columns
 
@@ -434,7 +434,7 @@ This document provides the authoritative schema definition for all tables in the
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `updated_at` | text | ✗ | - | *(inferred)* |
 | `message_count` | integer | ✗ | - | *(inferred)* |
-| `last_message_preview` | text | ✗ | - | *(inferred)* |
+| `last_message_preview` | unknown | ✗ | - | *(inferred)* |
 | `context` | text | ✗ | - | *(inferred)* |
 | `client_name` | unknown | ✗ | - | *(inferred)* |
 | `model_id` | unknown | ✗ | - | *(inferred)* |
@@ -465,7 +465,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `client_health_history`
 
-**Row Count**: 594
+**Row Count**: 671
 
 ### Columns
 

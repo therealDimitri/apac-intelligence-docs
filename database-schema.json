@@ -141,13 +141,13 @@
       },
       {
         "column_name": "department_code",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "activity_type_code",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -171,7 +171,7 @@
       },
       {
         "column_name": "client_id",
-        "data_type": "unknown",
+        "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -219,7 +219,7 @@
       },
       {
         "column_name": "client_uuid",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -260,7 +260,7 @@
         "inferred": true
       }
     ],
-    "row_count": 160
+    "row_count": 95
   },
   "unified_meetings": {
     "columns": [
@@ -589,7 +589,7 @@
         "inferred": true
       }
     ],
-    "row_count": 210
+    "row_count": 309
   },
   "nps_responses": {
     "columns": [
@@ -773,7 +773,7 @@
         "inferred": true
       }
     ],
-    "row_count": 36
+    "row_count": 54
   },
   "topics": {
     "columns": [
@@ -975,7 +975,7 @@
         "inferred": true
       }
     ],
-    "row_count": 11
+    "row_count": 18
   },
   "notifications": {
     "columns": [
@@ -1070,7 +1070,7 @@
         "inferred": true
       }
     ],
-    "row_count": 15
+    "row_count": 16
   },
   "portfolio_initiatives": {
     "columns": [
@@ -1218,7 +1218,7 @@
         "inferred": true
       }
     ],
-    "row_count": 201
+    "row_count": 204
   },
   "nps_period_config": {
     "columns": [
@@ -1384,7 +1384,7 @@
         "inferred": true
       }
     ],
-    "row_count": 20
+    "row_count": 124
   },
   "chasen_feedback": {
     "columns": [
@@ -1515,7 +1515,7 @@
         "inferred": true
       }
     ],
-    "row_count": 23
+    "row_count": 24
   },
   "chasen_knowledge_suggestions": {
     "columns": [
@@ -1622,7 +1622,7 @@
         "inferred": true
       }
     ],
-    "row_count": 13
+    "row_count": 14
   },
   "chasen_learning_patterns": {
     "columns": [],
@@ -1669,7 +1669,7 @@
       },
       {
         "column_name": "last_message_preview",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -1704,7 +1704,7 @@
         "inferred": true
       }
     ],
-    "row_count": 130
+    "row_count": 174
   },
   "chasen_folders": {
     "columns": [
@@ -1912,7 +1912,7 @@
         "inferred": true
       }
     ],
-    "row_count": 594
+    "row_count": 671
   },
   "health_status_alerts": {
     "columns": [
