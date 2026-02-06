@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2026-02-05T05:34:26.708Z
+**Generated**: 2026-02-06T00:39:44.007Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -65,7 +65,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `unified_meetings`
 
-**Row Count**: 309
+**Row Count**: 276
 
 ### Columns
 
@@ -98,18 +98,18 @@ This document provides the authoritative schema definition for all tables in the
 | `effectiveness_outcomes` | unknown | ✗ | - | *(inferred)* |
 | `effectiveness_follow_up` | unknown | ✗ | - | *(inferred)* |
 | `effectiveness_time_management` | unknown | ✗ | - | *(inferred)* |
-| `topics` | array | ✗ | - | *(inferred)* |
-| `risks` | array | ✗ | - | *(inferred)* |
+| `topics` | unknown | ✗ | - | *(inferred)* |
+| `risks` | unknown | ✗ | - | *(inferred)* |
 | `highlights` | unknown | ✗ | - | *(inferred)* |
-| `next_steps` | array | ✗ | - | *(inferred)* |
-| `outlook_event_id` | unknown | ✗ | - | *(inferred)* |
+| `next_steps` | unknown | ✗ | - | *(inferred)* |
+| `outlook_event_id` | text | ✗ | - | *(inferred)* |
 | `teams_meeting_id` | unknown | ✗ | - | *(inferred)* |
 | `synced_to_outlook` | boolean | ✗ | - | *(inferred)* |
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `updated_at` | text | ✗ | - | *(inferred)* |
 | `analyzed_at` | unknown | ✗ | - | *(inferred)* |
-| `transcript_file_url` | text | ✗ | - | *(inferred)* |
-| `recording_file_url` | text | ✗ | - | *(inferred)* |
+| `transcript_file_url` | unknown | ✗ | - | *(inferred)* |
+| `recording_file_url` | unknown | ✗ | - | *(inferred)* |
 | `attendees` | text | ✗ | - | *(inferred)* |
 | `meeting_dept` | text | ✗ | - | *(inferred)* |
 | `status` | text | ✗ | - | *(inferred)* |
@@ -118,7 +118,7 @@ This document provides the authoritative schema definition for all tables in the
 | `organizer` | text | ✗ | - | *(inferred)* |
 | `title` | text | ✗ | - | *(inferred)* |
 | `deleted` | boolean | ✗ | - | *(inferred)* |
-| `department_code` | unknown | ✗ | - | *(inferred)* |
+| `department_code` | text | ✗ | - | *(inferred)* |
 | `activity_type_code` | unknown | ✗ | - | *(inferred)* |
 | `is_internal` | boolean | ✗ | - | *(inferred)* |
 | `cross_functional` | boolean | ✗ | - | *(inferred)* |
@@ -295,7 +295,7 @@ This document provides the authoritative schema definition for all tables in the
 | `response_id` | text | ✗ | - | *(inferred)* |
 | `topic_name` | text | ✗ | - | *(inferred)* |
 | `sentiment` | text | ✗ | - | *(inferred)* |
-| `confidence_score` | numeric | ✗ | - | *(inferred)* |
+| `confidence_score` | integer | ✗ | - | *(inferred)* |
 | `insight` | text | ✗ | - | *(inferred)* |
 | `model_version` | text | ✗ | - | *(inferred)* |
 | `classified_at` | text | ✗ | - | *(inferred)* |
@@ -520,6 +520,116 @@ This document provides the authoritative schema definition for all tables in the
 | `cse_name` | text | ✗ | - | *(inferred)* |
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `client_id` | text | ✗ | - | *(inferred)* |
+
+---
+
+## Table: `company_goals`
+
+**Row Count**: 0
+
+**Note**: Empty table or RLS blocking access
+
+---
+
+## Table: `team_goals`
+
+**Row Count**: 0
+
+**Note**: Empty table or RLS blocking access
+
+---
+
+## Table: `goal_templates`
+
+**Row Count**: 5
+
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | text | ✗ | - | *(inferred)* |
+| `name` | text | ✗ | - | *(inferred)* |
+| `tier` | text | ✗ | - | *(inferred)* |
+| `title_template` | text | ✗ | - | *(inferred)* |
+| `description_template` | text | ✗ | - | *(inferred)* |
+| `suggested_metrics` | jsonb | ✗ | - | *(inferred)* |
+| `industry` | unknown | ✗ | - | *(inferred)* |
+| `use_count` | integer | ✗ | - | *(inferred)* |
+| `created_at` | text | ✗ | - | *(inferred)* |
+
+---
+
+## Table: `goal_check_ins`
+
+**Row Count**: 0
+
+**Note**: Empty table or RLS blocking access
+
+---
+
+## Table: `goal_dependencies`
+
+**Row Count**: 0
+
+**Note**: Empty table or RLS blocking access
+
+---
+
+## Table: `goal_approvals`
+
+**Row Count**: 0
+
+**Note**: Empty table or RLS blocking access
+
+---
+
+## Table: `goal_audit_log`
+
+**Row Count**: 0
+
+**Note**: Empty table or RLS blocking access
+
+---
+
+## Table: `custom_roles`
+
+**Row Count**: 5
+
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | text | ✗ | - | *(inferred)* |
+| `name` | text | ✗ | - | *(inferred)* |
+| `description` | text | ✗ | - | *(inferred)* |
+| `permissions` | jsonb | ✗ | - | *(inferred)* |
+| `is_system_role` | boolean | ✗ | - | *(inferred)* |
+| `created_at` | text | ✗ | - | *(inferred)* |
+| `updated_at` | text | ✗ | - | *(inferred)* |
+
+---
+
+## Table: `user_role_assignments`
+
+**Row Count**: 0
+
+**Note**: Empty table or RLS blocking access
+
+---
+
+## Table: `role_mapping_rules`
+
+**Row Count**: 0
+
+**Note**: Empty table or RLS blocking access
+
+---
+
+## Table: `ms_graph_sync_log`
+
+**Row Count**: 0
+
+**Note**: Empty table or RLS blocking access
 
 ---
 

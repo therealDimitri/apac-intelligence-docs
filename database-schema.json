@@ -428,13 +428,13 @@
       },
       {
         "column_name": "topics",
-        "data_type": "array",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "risks",
-        "data_type": "array",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -446,13 +446,13 @@
       },
       {
         "column_name": "next_steps",
-        "data_type": "array",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "outlook_event_id",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -488,13 +488,13 @@
       },
       {
         "column_name": "transcript_file_url",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "recording_file_url",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -548,7 +548,7 @@
       },
       {
         "column_name": "department_code",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -589,7 +589,7 @@
         "inferred": true
       }
     ],
-    "row_count": 309
+    "row_count": 276
   },
   "nps_responses": {
     "columns": [
@@ -1183,7 +1183,7 @@
       },
       {
         "column_name": "confidence_score",
-        "data_type": "numeric",
+        "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -2002,5 +2002,156 @@
       }
     ],
     "row_count": 1
+  },
+  "company_goals": {
+    "columns": [],
+    "row_count": 0,
+    "note": "Empty table or RLS blocking access"
+  },
+  "team_goals": {
+    "columns": [],
+    "row_count": 0,
+    "note": "Empty table or RLS blocking access"
+  },
+  "goal_templates": {
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "tier",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "title_template",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "description_template",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "suggested_metrics",
+        "data_type": "jsonb",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "industry",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "use_count",
+        "data_type": "integer",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      }
+    ],
+    "row_count": 5
+  },
+  "goal_check_ins": {
+    "columns": [],
+    "row_count": 0,
+    "note": "Empty table or RLS blocking access"
+  },
+  "goal_dependencies": {
+    "columns": [],
+    "row_count": 0,
+    "note": "Empty table or RLS blocking access"
+  },
+  "goal_approvals": {
+    "columns": [],
+    "row_count": 0,
+    "note": "Empty table or RLS blocking access"
+  },
+  "goal_audit_log": {
+    "columns": [],
+    "row_count": 0,
+    "note": "Empty table or RLS blocking access"
+  },
+  "custom_roles": {
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "permissions",
+        "data_type": "jsonb",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "is_system_role",
+        "data_type": "boolean",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      }
+    ],
+    "row_count": 5
+  },
+  "user_role_assignments": {
+    "columns": [],
+    "row_count": 0,
+    "note": "Empty table or RLS blocking access"
+  },
+  "role_mapping_rules": {
+    "columns": [],
+    "row_count": 0,
+    "note": "Empty table or RLS blocking access"
+  },
+  "ms_graph_sync_log": {
+    "columns": [],
+    "row_count": 0,
+    "note": "Empty table or RLS blocking access"
   }
 }
