@@ -164,12 +164,6 @@
         "inferred": true
       },
       {
-        "column_name": "linked_initiative_id",
-        "data_type": "unknown",
-        "is_nullable": "UNKNOWN",
-        "inferred": true
-      },
-      {
         "column_name": "client_id",
         "data_type": "integer",
         "is_nullable": "UNKNOWN",
@@ -256,6 +250,12 @@
       {
         "column_name": "tags",
         "data_type": "array",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "linked_initiative_id",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       }
@@ -1151,6 +1151,84 @@
         "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
+      },
+      {
+        "column_name": "team_goal_id",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "progress_method",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "progress_percentage",
+        "data_type": "integer",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "target_value",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "current_value",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "is_achieved",
+        "data_type": "boolean",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "goal_status",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "owner_department",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "involved_departments",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "priority",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "actual_completion_date",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "impacts_clients",
+        "data_type": "boolean",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "client_impact_description",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
       }
     ],
     "row_count": 6
@@ -1704,7 +1782,7 @@
         "inferred": true
       }
     ],
-    "row_count": 174
+    "row_count": 183
   },
   "chasen_folders": {
     "columns": [

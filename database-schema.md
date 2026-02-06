@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2026-02-06T00:39:44.007Z
+**Generated**: 2026-02-06T06:35:05.284Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -44,7 +44,6 @@ This document provides the authoritative schema definition for all tables in the
 | `activity_type_code` | text | ✗ | - | *(inferred)* |
 | `is_internal` | boolean | ✗ | - | *(inferred)* |
 | `cross_functional` | boolean | ✗ | - | *(inferred)* |
-| `linked_initiative_id` | unknown | ✗ | - | *(inferred)* |
 | `client_id` | integer | ✗ | - | *(inferred)* |
 | `ai_context` | unknown | ✗ | - | *(inferred)* |
 | `ai_context_key_points` | array | ✗ | - | *(inferred)* |
@@ -60,6 +59,7 @@ This document provides the authoritative schema definition for all tables in the
 | `source_alert_text_id` | unknown | ✗ | - | *(inferred)* |
 | `source_alert_id` | unknown | ✗ | - | *(inferred)* |
 | `tags` | array | ✗ | - | *(inferred)* |
+| `linked_initiative_id` | unknown | ✗ | - | *(inferred)* |
 
 ---
 
@@ -280,6 +280,19 @@ This document provides the authoritative schema definition for all tables in the
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `updated_at` | text | ✗ | - | *(inferred)* |
 | `client_id` | text | ✗ | - | *(inferred)* |
+| `team_goal_id` | unknown | ✗ | - | *(inferred)* |
+| `progress_method` | text | ✗ | - | *(inferred)* |
+| `progress_percentage` | integer | ✗ | - | *(inferred)* |
+| `target_value` | unknown | ✗ | - | *(inferred)* |
+| `current_value` | unknown | ✗ | - | *(inferred)* |
+| `is_achieved` | boolean | ✗ | - | *(inferred)* |
+| `goal_status` | text | ✗ | - | *(inferred)* |
+| `owner_department` | unknown | ✗ | - | *(inferred)* |
+| `involved_departments` | unknown | ✗ | - | *(inferred)* |
+| `priority` | unknown | ✗ | - | *(inferred)* |
+| `actual_completion_date` | unknown | ✗ | - | *(inferred)* |
+| `impacts_clients` | boolean | ✗ | - | *(inferred)* |
+| `client_impact_description` | unknown | ✗ | - | *(inferred)* |
 
 ---
 
@@ -422,7 +435,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `chasen_conversations`
 
-**Row Count**: 174
+**Row Count**: 183
 
 ### Columns
 
