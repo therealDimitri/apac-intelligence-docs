@@ -78,6 +78,56 @@ const result = await callWithStructuredOutput<T>(messages, toolSchema, options)
 
 **Schemas**: meetingSummarySchema, extractActionsSchema, sentimentSchema, parsedCommandSchema, briefingSectionSchema, digestSummarySchema
 
+## Context Domains
+
+ChaSen loads context based on detected intent:
+
+- `dashboard` - Portfolio health, NPS, meetings, actions (always loaded)
+- `goals` - Company/team goals, initiatives, check-ins, approvals, audit trail
+- `sentiment` - Client sentiment snapshots, alerts, topic analysis
+- `automation` - Autopilot rules, touchpoints, recognition, communication drafts
+
+Detection keywords in `src/lib/chasen/context/detect-context-domains.ts`.
+
+**Context Modules:**
+- `src/lib/chasen/context/goals-context.ts` - Goal hierarchy with progress rollup
+- `src/lib/chasen/context/sentiment-context.ts` - Sentiment snapshots and alerts
+- `src/lib/chasen/context/automation-context.ts` - Autopilot and recognition data
+- `src/lib/chasen/context/full-context.ts` - Combined loader for detected domains
+
+## Client Name Resolution
+
+Use `resolve_client_name()` RPC for fuzzy client matching:
+
+| Confidence | Match Type |
+|-----------|------------|
+| 1.0 | Exact match |
+| 0.9 | Contains match |
+| 0.8 | Reverse contains |
+| 0.4+ | Similarity match |
+
+TypeScript utility: `src/lib/client-resolver.ts`
+
+**Supporting Database Objects:**
+- `client_name_aliases` - Display name to canonical name mappings
+- `client_canonical_lookup` - Materialised view with 116+ lookup entries
+- `scan_client_name_mismatches()` - RPC to detect unresolved names
+
+**Data Quality APIs:**
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/admin/data-quality/reconciliation` | GET | List unresolved mismatches |
+| `/api/admin/data-quality/reconciliation` | POST | Run reconciliation scan |
+| `/api/admin/data-quality/reconciliation` | PUT | Bulk confirm/reject |
+| `/api/chasen/context/[domain]` | GET | Get specific context domain |
+
+**Last verified 2026-02-07:**
+- `resolve_client_name('Barwon Health')` -> Barwon Health Australia (1.0)
+- `resolve_client_name('GHA')` -> Gippsland Health Alliance (1.0)
+- `resolve_client_name('CONFIRMED, SA Health')` strips prefix, matches SA Health variants
+- `scan_client_name_mismatches()` returns 12 unresolved entries
+
 ## Constraint: Netlify Function Timeout
 
 Netlify Functions have a 25-second timeout for streaming responses. `maxSteps: 5` caps tool-call depth to stay within this window. Each tool call must be a fast DB query (< 1s).
