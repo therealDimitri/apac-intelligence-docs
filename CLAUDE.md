@@ -4,6 +4,17 @@ This is a documentation-only repository. No npm, no build, no tests, no deployme
 Skip all quality standards related to `npm test`, `npm run build`, and Netlify verification.
 The autonomous workflow for this repo is: Edit → Commit → Push → Document.
 
+## Knowledge Base
+
+`knowledge-base/` contains the master plan for the APAC Intelligence platform — 8 sections, 21 files. This is the primary context source for Claude Code sessions.
+
+- **Master index**: `knowledge-base/README.md` — section overview, architecture diagram, tech stack
+- **Maintaining**: When features are added/changed in v2, update the relevant knowledge base section
+- **Adding files**: Follow existing naming conventions (`kebab-case.md`), update the section table in README.md
+- **Feature status**: `05-feature-inventory/phase-audit.md` tracks LIVE/WIRED/scaffolded counts — update after shipping features
+- **Database changes**: After migrations, update `06-database/tables.md` and `06-database/migrations.md`
+- **Quick wins**: Cross off completed items in `08-roadmap/quick-wins.md`
+
 ## Docs Folder Conventions
 
 - Naming: `TYPE-YYYYMMDD-description.md` (e.g. `DATA-IMPORT-20260128-servicenow-case-stats.md`)
