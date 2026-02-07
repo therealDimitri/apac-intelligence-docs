@@ -1,0 +1,98 @@
+# BURC Sync Pipeline
+
+## Source File
+
+`/OneDrive/APAC Leadership Team - General/Performance/Financials/BURC/2026/2026 APAC Performance.xlsx`
+
+Accessed via: `BURC_MASTER_FILE` from `scripts/lib/onedrive-paths.mjs`
+
+## Data Flow
+
+```
+Excel (2026 APAC Performance.xlsx)
+    | [XLSX library reads]
+Parse Worksheets: "APAC BURC", "26 vs 25 Q", etc.
+    | [sync-burc-data-supabase.mjs]
+Extract cells (direct references: U36, U60, U101, W36, W60, W101)
+    |
+Supabase INSERT/UPSERT
+    | [12 tables populated]
+    |-- burc_annual_financials (FY totals - AUTHORITATIVE)
+    |-- burc_csi_ratios
+    |-- burc_ebita_monthly
+    |-- burc_opex_data
+    |-- burc_cogs_data
+    |-- burc_net_revenue_data
+    |-- burc_gross_revenue_monthly
+    |-- burc_quarterly_comparison
+    |-- burc_waterfall_data
+    |-- burc_client_maintenance
+    |-- burc_ps_pipeline
+    |-- burc_revenue_streams
+    |
+burc_sync_log (audit trail)
+```
+
+## Critical Rule
+
+**Always use `burc_annual_financials` for totals. Never sum detail tables.**
+
+Detail tables (`burc_waterfall_data`, `burc_revenue_streams`, etc.) contain breakdowns that don't cleanly sum to totals due to double-counting and category overlaps.
+
+## Tables Populated
+
+| Table | Source Sheet | Key Columns |
+|-------|-------------|-------------|
+| `burc_annual_financials` | "APAC BURC" + "26 vs 25 Q" | fiscal_year, gross_revenue, maintenance_arr, ebita, target_revenue |
+| `burc_ebita_monthly` | "APAC BURC" Rows 100-101 | client_name, month, ebita_amount |
+| `burc_opex_data` | "APAC BURC" Rows 71-98 | department, monthly values (Jan-Dec) |
+| `burc_cogs_data` | "APAC BURC" Rows 38-56 | line_item, monthly values |
+| `burc_net_revenue_data` | "APAC BURC" Rows 58-66 | revenue_type, monthly values |
+| `burc_gross_revenue_monthly` | "APAC BURC" detail rows | month, gross_revenue |
+| `burc_client_maintenance` | "APAC BURC" maint section | client_name, arr_usd, forecast_usd |
+| `burc_ps_pipeline` | "APAC BURC" pipeline section | opportunity_id, deal_name, forecast |
+| `burc_csi_ratios` | "APAC BURC" KPI section | csi_gross, csi_renewal, csi_maintenance |
+
+## Validation
+
+### Pre-Sync Validation
+**Script**: `scripts/burc-validate-sync.mjs`
+- Revenue bounds: 0-50M per line item
+- Spike detection: >2x previous month = warning
+- Headcount anomalies: >500 per dept
+- Fiscal year validation: 2020-2030 range
+- Exit codes: 0 (pass), 1 (fail), 2 (warnings)
+
+### Reconciliation Scripts
+- `scripts/reconcile-financials.mjs` — Verify Excel totals match DB
+- `scripts/reconcile-burc-source.mjs` — Check cell references against source
+- `scripts/detailed-reconcile.mjs` — Deep audit of all line items
+
+### Data Quality API
+`GET /api/admin/data-quality/` monitors:
+- Orphaned records (no client_uuid)
+- Stale data warnings (BURC: 7d warning, 30d critical)
+- Name mismatches (unresolved client names)
+
+## Known Fragility Points
+
+| Risk | Impact | Status |
+|------|--------|--------|
+| Excel cell references hardcoded (U36, U60, U101) | Sheet restructure silently fails | Active risk |
+| Hard-coded fiscal year 2026 | Future years require code updates | Active risk |
+| launchd only on macOS | Other OS dev machines won't auto-sync | By design |
+| No duplicate detection in some tables | Re-running can insert duplicates | Partial (UPSERT on most) |
+| OneDrive path changes | Resolved via `onedrive-paths.mjs` | Fixed |
+
+## Orchestration
+
+**Script**: `scripts/burc-sync-orchestrator.mjs`
+- Coordinates multi-sheet BURC sync
+- Called by launchd plist
+- Delegates to `sync-burc-data-supabase.mjs` for actual data extraction
+
+## Manual Sync API
+
+**Route**: `POST /api/analytics/burc/sync`
+- **Production (Netlify)**: Returns last sync info from DB only
+- **Local dev**: Spawns child process (timeout: 55s)
