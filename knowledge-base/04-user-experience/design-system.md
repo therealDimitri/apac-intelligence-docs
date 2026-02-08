@@ -94,26 +94,71 @@ No formal type scale — uses inline Tailwind classes:
 | Caption | `text-xs text-gray-500` |
 | Sidebar labels | `text-sm font-medium text-white/80` |
 
+## Modal & Dialog Conventions
+
+Use the correct component for each overlay pattern:
+
+| Component | Import | Use For | Example |
+|-----------|--------|---------|---------|
+| `Dialog` | `@/components/ui/Dialog` | Confirmation prompts, forms, settings | "Reassign CSE", "Edit action" |
+| `Sheet` | `@/components/ui/Sheet` | Detail panels, side drawers, filters | Client detail sidebar, filter panel |
+| `AlertDialog` | `@/components/ui/AlertDialog` | Destructive confirmations requiring explicit user action | "Delete action?", "Remove assignment?" |
+| `BottomSheet` | `@/components/ui/BottomSheet` | Mobile-only overlays from bottom | Mobile filters, mobile actions menu |
+
+**Rules:**
+- `Dialog` for create/edit forms and non-destructive confirmations
+- `AlertDialog` for any destructive action (delete, remove, cancel) — forces explicit confirm/cancel
+- `Sheet` for content panels that don't block workflow (client details, sidebar info)
+- `BottomSheet` only on mobile viewports
+- Never nest dialogs — use a multi-step form within a single Dialog instead
+- All overlays must have keyboard dismiss (Escape) and click-outside-to-close
+- New modals follow this convention; existing modals refactored only when touched for other work
+
+## Data Table Conventions
+
+Use the enhanced `DataTable` (`@/components/ui/enhanced/DataTable`) for all data tables:
+
+```tsx
+import { DataTable, type DataTableColumn } from '@/components/ui/enhanced/DataTable'
+
+const columns: DataTableColumn<MyType>[] = [
+  { key: 'name', header: 'Name', width: 200, sortable: true, truncate: true },
+  { key: 'status', header: 'Status', width: 120, cell: (row) => <Badge>{row.status}</Badge> },
+]
+
+<DataTable
+  data={items}
+  columns={columns}
+  getRowKey={(row) => row.id}
+  onRowClick={handleRowClick}
+  sortBy={sortState}
+  onSortChange={handleSort}
+  rowActions={[{ label: 'Edit', onClick: handleEdit }]}
+/>
+```
+
+**Features:** Virtual scrolling, sortable columns, row actions dropdown, tooltips for truncated text, sticky header, striped/hoverable rows.
+
 ## Known Fragmentation Areas
 
 | Area | Score | Issue |
 |------|-------|-------|
-| Layout consistency | 5/10 | 5+ layout patterns across pages, no page shell component |
+| Layout consistency | 7/10 | PageShell component created, adopting incrementally |
 | Component system | 6/10 | shadcn foundation solid, custom components vary |
-| Typography | 4/10 | No scale system, inline Tailwind only |
+| Typography | 6/10 | Design tokens in CSS @theme + design-tokens.ts |
 | Form patterns | 4/10 | Multiple implementations, no unified form library |
-| Data tables | 3/10 | Multiple libraries (TanStack, manual), no abstraction |
-| Modal/Dialog | 5/10 | Mix of shadcn and custom, inconsistent APIs |
+| Data tables | 5/10 | Enhanced DataTable exists, convention documented, migrating incrementally |
+| Modal/Dialog | 7/10 | Convention documented (Dialog/Sheet/AlertDialog/BottomSheet) |
 | Loading states | 4/10 | Suspense, skeletons, spinners — no single pattern |
-| Brand consistency | 7/10 | Purple sidebar consistent, colour varies by page |
+| Brand consistency | 8/10 | Design tokens centralised in CSS @theme and design-tokens.ts |
 | Mobile UX | 8/10 | Responsive well-implemented |
 | Navigation | 8/10 | Well-structured sidebar |
 
 ## Recommendations
 
-1. Create `src/lib/design-tokens.ts` — centralised colour, spacing, typography tokens
-2. Build `<PageShell>` component — consistent page header/layout
-3. Unify data tables — `<DataTable columns data sortable filterable />`
-4. Standardise modals — `<AppDialog title onClose children />`
+1. ~~Create `src/lib/design-tokens.ts`~~ — **DONE** (822 lines, centralised tokens + CSS @theme)
+2. ~~Build `<PageShell>` component~~ — **DONE** (`src/components/layout/PageShell.tsx`)
+3. ~~Unify data tables~~ — **DONE** (Enhanced DataTable + convention documented above)
+4. ~~Standardise modals~~ — **DONE** (Convention documented above: Dialog/Sheet/AlertDialog/BottomSheet)
 5. Create form wrapper — `<FormField label hint error children />`
-6. Hide internal pages (`/test-*`, `/chasen-icons`) from production
+6. ~~Hide internal pages (`/test-*`, `/chasen-icons`) from production~~ — **DONE** (notFound() guard)
