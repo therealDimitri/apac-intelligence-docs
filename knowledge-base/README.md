@@ -23,7 +23,7 @@ APAC Intelligence is an internal platform for Altera Digital Health's APAC team.
 | 05 | [Feature Inventory](05-feature-inventory/) | What's live vs scaffolded | phase-audit.md, feature-matrix.md, phase-7-8-reference.md, phase-9-10-reference.md, domain-features.md |
 | 06 | [Database](06-database/) | Schema, relationships, gotchas | tables.md, gotchas.md, migrations.md |
 | 07 | [Infrastructure](07-infrastructure/) | Deploy, OneDrive, scripts | netlify.md, onedrive.md, scripts-submodule.md |
-| 08 | [Roadmap](08-roadmap/) | What to build next | priorities.md, quick-wins.md |
+| 08 | [Roadmap](08-roadmap/) | What to build next | priorities.md, quick-wins.md, asana-inspired-enhancements.md, asana-implementation-plan.md |
 
 ## How Claude Code Should Use This
 
