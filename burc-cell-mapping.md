@@ -26,6 +26,66 @@ Found by label in column A. Read from columns U (Forecast) and W (Target).
 | EBITA | 100-101 | EBITA value, EBITA % of Net Revenue | `burc_ebita_monthly` | `syncEbitaData` |
 | CSI Ratios | 122-126 | Maintenance, Sales, R&D, PS, G&A | `burc_csi_ratios` | `syncCSIRatios` |
 
+### Detailed Row-to-Column Mapping
+
+**Gross Revenue** — `burc_gross_revenue_monthly`
+
+| Row | Excel Label | DB Column |
+|-----|------------|-----------|
+| 28 | License Revenue | `license_revenue` |
+| 30 | PS Revenue | `ps_revenue` |
+| 33 | Maintenance Revenue | `maintenance_revenue` |
+| 35 | Hardware Revenue | `hardware_revenue` |
+| 36 | Total Gross Revenue | `total_gross_revenue` |
+
+**COGS** — `burc_cogs_monthly`
+
+| Row | Excel Label | DB Column |
+|-----|------------|-----------|
+| 38 | License COGS | `license_cogs` |
+| 40 | PS COGS | `ps_cogs` |
+| 44 | Maintenance COGS | `maintenance_cogs` |
+| 47 | Hardware COGS | `hardware_cogs` |
+| 56 | Total COGS | `total_cogs` |
+
+**Net Revenue** — `burc_net_revenue_monthly`
+
+| Row | Excel Label | DB Column |
+|-----|------------|-----------|
+| 58 | License Net Revenue | `license_net` |
+| 60 | PS Net Revenue | `ps_net` |
+| 63 | Maintenance Net Revenue | `maintenance_net` |
+| 65 | Hardware Net Revenue | `hardware_net` |
+| 66 | Total Net Revenue | `total_net_revenue` |
+
+**OPEX** — `burc_opex_monthly`
+
+| Row | Excel Label | DB Column |
+|-----|------------|-----------|
+| 71 | CS (Customer Service) | `cs_opex` |
+| 76 | R&D | `rd_opex` |
+| 82 | PS (Professional Services) | `ps_opex` |
+| 88 | Sales & Marketing | `sales_opex` |
+| 95 | G&A (General & Administrative) | `ga_opex` |
+| 98 | Total OPEX | `total_opex` |
+
+**EBITA** — `burc_ebita_monthly`
+
+| Row | Excel Label | DB Column |
+|-----|------------|-----------|
+| 100 | EBITA Value | `actual_ebita` |
+| 101 | EBITA % of Net Revenue | `ebita_percent` |
+
+**CSI Ratios** — `burc_csi_ratios`
+
+| Row | Excel Label | Target | DB Column |
+|-----|------------|--------|-----------|
+| 122 | Customer Service | > 4.0 | `maintenance_ratio` |
+| 123 | Sales & Marketing | > 1.0 | `sales_ratio` |
+| 124 | R&D | > 1.0 | `rd_ratio` |
+| 125 | Professional Services | > 2.0 | `ps_ratio` |
+| 126 | Administration | ≤ 20% | `ga_ratio` |
+
 ### Column Mapping (Months)
 
 | Column | Month |
@@ -78,6 +138,47 @@ Used by `check-apac-burc-monthly-ratios.mjs`:
 |-----------|-------------|
 | 121-125 | CSI Ratio rows (monthly) |
 | 128-129 | Quarterly comparison summary |
+
+## Maint Pivot Sheet
+
+Parsed via `sheet_to_json`. Column A = client code or category header.
+Columns B–M (indices 1–12) = Jan–Dec monthly values. → `burc_client_maintenance`
+
+**Category headers**: `Run Rate`, `Best Case`, `Pipeline`, `Business Case`, `Backlog`, `Lost`
+
+Known client codes are defined in `scripts/seed-client-name-aliases.mjs` and
+the `client_name_aliases` DB table. Only parent-level rows (matching known client codes)
+are synced; child detail rows (project names, CPI breakdowns) are skipped.
+
+## PS Pivot Sheet
+
+Parsed via `sheet_to_json`. Hierarchical structure → `burc_ps_pipeline`:
+
+1. **Category header** row (e.g. `Backlog`, `Best Case`, `Pipeline`, `Business Case`, `Reversal`)
+2. **Client code** row (non-project name under a category)
+3. **Project name** row (contains spaces, under a client)
+
+Columns B–M (indices 1–12) = Jan–Dec monthly values.
+
+## Waterfall Data Sheet
+
+Row-indexed from `sheet_to_json` (0-indexed array). Column B (index 1) = amounts. → `burc_waterfall`
+
+| Index | Category Key | Description |
+|-------|-------------|-------------|
+| 1 | `backlog_runrate` | PS Backlog and Maintenance Run Rate Gross Revenue |
+| 4 | `committed_gross_rev` | PS Backlog, Intraco payments and Maint Run Rate |
+| 6 | `best_case_ps` | Best Case Professional Services |
+| 7 | `best_case_maint` | Best Case Maintenance |
+| 8 | `other_rev` | Other Revenue |
+| 9 | `pipeline_sw` | Pipeline Software (not in committed) |
+| 10 | `pipeline_ps` | Pipeline PS (not in committed) |
+| 12 | `forecast_cogs` | Forecast COGS |
+| 13 | `cogs_reduction` | COGS Reduction Target |
+| 15 | `forecast_opex` | Forecast OPEX |
+| 16 | `opex_savings` | OPEX Savings Target |
+| 17 | `fx_headwinds` | FX Headwinds |
+| 19 | `target_ebita` | Target EBITA |
 
 ## Validation Rules
 
