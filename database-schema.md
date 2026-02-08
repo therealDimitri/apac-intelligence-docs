@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2026-02-06T06:35:05.284Z
+**Generated**: 2026-02-08T12:17:00.696Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -11,7 +11,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `actions`
 
-**Row Count**: 95
+**Row Count**: 96
 
 ### Columns
 
@@ -60,6 +60,12 @@ This document provides the authoritative schema definition for all tables in the
 | `source_alert_id` | unknown | ✗ | - | *(inferred)* |
 | `tags` | array | ✗ | - | *(inferred)* |
 | `linked_initiative_id` | unknown | ✗ | - | *(inferred)* |
+| `recurrence_rule` | unknown | ✗ | - | *(inferred)* |
+| `recurrence_end_date` | unknown | ✗ | - | *(inferred)* |
+| `recurrence_count` | unknown | ✗ | - | *(inferred)* |
+| `is_recurring` | boolean | ✗ | - | *(inferred)* |
+| `recurring_parent_id` | unknown | ✗ | - | *(inferred)* |
+| `recurrence_index` | unknown | ✗ | - | *(inferred)* |
 
 ---
 
@@ -261,7 +267,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `portfolio_initiatives`
 
-**Row Count**: 6
+**Row Count**: 5
 
 ### Columns
 
@@ -293,6 +299,9 @@ This document provides the authoritative schema definition for all tables in the
 | `actual_completion_date` | unknown | ✗ | - | *(inferred)* |
 | `impacts_clients` | boolean | ✗ | - | *(inferred)* |
 | `client_impact_description` | unknown | ✗ | - | *(inferred)* |
+| `last_check_in_date` | unknown | ✗ | - | *(inferred)* |
+| `weight` | integer | ✗ | - | *(inferred)* |
+| `check_in_cadence` | text | ✗ | - | *(inferred)* |
 
 ---
 
@@ -308,7 +317,7 @@ This document provides the authoritative schema definition for all tables in the
 | `response_id` | text | ✗ | - | *(inferred)* |
 | `topic_name` | text | ✗ | - | *(inferred)* |
 | `sentiment` | text | ✗ | - | *(inferred)* |
-| `confidence_score` | integer | ✗ | - | *(inferred)* |
+| `confidence_score` | numeric | ✗ | - | *(inferred)* |
 | `insight` | text | ✗ | - | *(inferred)* |
 | `model_version` | text | ✗ | - | *(inferred)* |
 | `classified_at` | text | ✗ | - | *(inferred)* |
@@ -435,7 +444,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `chasen_conversations`
 
-**Row Count**: 183
+**Row Count**: 186
 
 ### Columns
 
@@ -538,9 +547,30 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `company_goals`
 
-**Row Count**: 0
+**Row Count**: 9
 
-**Note**: Empty table or RLS blocking access
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | text | ✗ | - | *(inferred)* |
+| `title` | text | ✗ | - | *(inferred)* |
+| `description` | text | ✗ | - | *(inferred)* |
+| `owner_id` | unknown | ✗ | - | *(inferred)* |
+| `progress_method` | text | ✗ | - | *(inferred)* |
+| `progress_percentage` | integer | ✗ | - | *(inferred)* |
+| `target_value` | unknown | ✗ | - | *(inferred)* |
+| `current_value` | unknown | ✗ | - | *(inferred)* |
+| `is_achieved` | boolean | ✗ | - | *(inferred)* |
+| `start_date` | text | ✗ | - | *(inferred)* |
+| `target_date` | text | ✗ | - | *(inferred)* |
+| `status` | text | ✗ | - | *(inferred)* |
+| `created_at` | text | ✗ | - | *(inferred)* |
+| `updated_at` | text | ✗ | - | *(inferred)* |
+| `last_check_in_date` | unknown | ✗ | - | *(inferred)* |
+| `pillar_id` | text | ✗ | - | *(inferred)* |
+| `weight` | integer | ✗ | - | *(inferred)* |
+| `check_in_cadence` | text | ✗ | - | *(inferred)* |
 
 ---
 
@@ -598,6 +628,25 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `goal_audit_log`
 
+**Row Count**: 727
+
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | text | ✗ | - | *(inferred)* |
+| `goal_type` | text | ✗ | - | *(inferred)* |
+| `goal_id` | text | ✗ | - | *(inferred)* |
+| `action` | text | ✗ | - | *(inferred)* |
+| `actor_id` | unknown | ✗ | - | *(inferred)* |
+| `old_values` | unknown | ✗ | - | *(inferred)* |
+| `new_values` | jsonb | ✗ | - | *(inferred)* |
+| `created_at` | text | ✗ | - | *(inferred)* |
+
+---
+
+## Table: `goal_status_updates`
+
 **Row Count**: 0
 
 **Note**: Empty table or RLS blocking access
@@ -632,9 +681,20 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `role_mapping_rules`
 
-**Row Count**: 0
+**Row Count**: 7
 
-**Note**: Empty table or RLS blocking access
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | text | ✗ | - | *(inferred)* |
+| `source_type` | text | ✗ | - | *(inferred)* |
+| `source_value` | text | ✗ | - | *(inferred)* |
+| `target_role_id` | text | ✗ | - | *(inferred)* |
+| `priority` | integer | ✗ | - | *(inferred)* |
+| `is_active` | boolean | ✗ | - | *(inferred)* |
+| `created_at` | text | ✗ | - | *(inferred)* |
+| `updated_at` | text | ✗ | - | *(inferred)* |
 
 ---
 
