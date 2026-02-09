@@ -66,6 +66,35 @@ User Message
 | `src/lib/structured-output.ts` | Structured output via tool_use |
 | `src/components/FloatingChaSenAI.tsx` | Chat widget UI (1157 lines) |
 
+## Document Upload System
+
+Two separate upload implementations exist — both must be kept in sync:
+
+| Surface | Handler | File |
+|---------|---------|------|
+| Full `/ai` page | `handleFileAttach()` | `src/app/(dashboard)/ai/page.tsx` |
+| Floating widget | `handleFileUpload()` | `src/components/FloatingChaSenAI.tsx` |
+
+**Size-based routing** (shipped 2026-02-09):
+
+- **< 4MB**: Direct FormData POST → `/api/chasen/upload` (1 request, fast)
+- **>= 4MB**: 3-step storage flow bypassing Netlify's ~6MB body limit:
+  1. `POST /api/chasen/upload/init` → creates `chasen_documents` row (status: pending), returns signed URL
+  2. XHR PUT to Supabase Storage signed URL (direct to storage, bypasses Netlify)
+  3. `POST /api/chasen/upload/process` → downloads from storage, runs `parseDocument()`, generates AI summary
+
+**Key files**:
+
+| File | Purpose |
+|------|---------|
+| `src/app/api/chasen/upload/route.ts` | Direct upload (small files) |
+| `src/app/api/chasen/upload/init/route.ts` | Init: validate, create DB row, signed URL |
+| `src/app/api/chasen/upload/process/route.ts` | Process: download from storage, extract text, summarise |
+
+**DB columns** on `chasen_documents`: `storage_path TEXT`, `processing_status TEXT` (pending/processing/completed/failed)
+
+**Storage**: Bucket `chasen-documents`, path `{email}/{docId}/{sanitisedFileName}`
+
 ## Structured Output System (F5)
 
 Replaces regex JSON parsing with Anthropic `tool_use` structured outputs:
