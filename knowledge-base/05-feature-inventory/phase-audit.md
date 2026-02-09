@@ -9,8 +9,8 @@
 | 7 (AI Components) | 9 | 9 | 0 | 0 | 0 |
 | 8 (Experimental) | 9 | 9 | 0 | 0 | 0 |
 | 9 (Moonshot) | 7 | 7 | 0 | 0 | 0 |
-| 10 (ChaSen AI) | 13 | 13 | 0 | 0 | 0 |
-| **TOTAL** | **38** | **38** | **0** | **0** | **0** |
+| 10 (ChaSen AI) | 16 | 16 | 0 | 0 | 0 |
+| **TOTAL** | **41** | **41** | **0** | **0** | **0** |
 
 **Status definitions:**
 - **LIVE**: Fully functional, integrated UI, real data flow
@@ -62,22 +62,26 @@
 
 | Feature | Status | Evidence |
 |---------|--------|----------|
-| Ambient Awareness → ChaSen (F1) | LIVE | useAmbientAwareness integrated into FloatingChaSenAI |
-| ChaSen Tools (F2) | LIVE | 14 tools in Anthropic tool_use format with read/write distinction |
+| Ambient Awareness → ChaSen (F1) | LIVE | useAmbientAwareness integrated into FloatingChaSenAI, 4 context domains (dashboard, goals, sentiment, automation) |
+| ChaSen Tools (F2) | LIVE | 20 tools in Anthropic tool_use format — 13 read (immediate) + 5 write (approval) + 2 workflow |
 | Knowledge Graph RAG (F3) | LIVE | 5 data sources synced, incremental sync, graph_sync_status tracking |
-| Learning Loop (F4) | LIVE | Dismissal patterns feed back into prompt generation |
+| Learning Loop (F4) | LIVE | Dismissal patterns feed back into prompt generation, memory extraction |
 | Structured Output (F5) | LIVE | tool_use structured outputs replacing regex JSON parsing |
+| Email Assist & Content Generation (F6) | LIVE | AI email writing with tone adjustment, subject lines, intros, CTA strengthening, content expansion |
 | Predictive Health Engine (F7) | LIVE | @bsull/augurs MSTL decomposition, daily cron |
 | NL Workflows (F8) | LIVE | ChaSen tools for CRUD, WorkflowManager UI, WorkflowApprovalQueue, tabbed approvals page, workflow-evaluator cron |
-| Cross-Client Patterns (F9) | LIVE | Multi-agent analysis, weekly pattern detection cron |
+| Cross-Client Patterns & Agent Orchestration (F9) | LIVE | Multi-agent orchestration with intent classification, specialist agents, weekly pattern detection cron |
 | Meeting Co-Pilot RAG (F10) | LIVE | DB-backed rate limiting/dedup, LLM-powered suggestion generation, transcription-to-cohost trigger wiring |
 | "Time Machine" What-If (F11) | LIVE | Timeline building, AI scenario modelling |
 | Personalised Digest (F12) | LIVE | Per-user daily briefing with AI coaching insight |
 | "Explain This" (F13) | LIVE | Right-click context menu, floating explanation popover |
+| Document Upload & Processing (F14) | LIVE | Multi-format parsing (PDF/DOCX/XLSX/CSV/TXT), size-based routing (< 4MB direct, >= 4MB Supabase Storage), AI summary |
+| Multi-Model AI Routing (F15) | LIVE | 6 models via MatchaAI proxy (Gemini Flash default, Claude 3.7/4/4.5, GPT-4o/Mini), user-selectable |
+| Operating Rhythm Context (F16) | LIVE | Cadence-aware context loading for autopilot, touchpoints, recognition queries |
 
 ## Quality Highlights
 
 1. **Phase 7**: Full accessibility support (ARIA), dark mode, mobile responsive
 2. **Phase 8**: Parallel Promise.all() data loading, configurable cache TTL
 3. **Phase 9**: Digital twin personality configs (analytical/decisive/collaborative/cautious)
-4. **Phase 10**: Native Anthropic tool_use (no regex), 5-step orchestration with approval gates
+4. **Phase 10**: Native Anthropic tool_use (no regex), 20 tools with read/write distinction, 6-model routing, size-based upload bypass for Netlify limits
