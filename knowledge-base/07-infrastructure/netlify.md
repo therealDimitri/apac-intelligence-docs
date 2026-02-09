@@ -27,7 +27,8 @@ Required in Netlify dashboard:
 - `NEXTAUTH_SECRET`
 - `AZURE_AD_CLIENT_ID` / `AZURE_AD_CLIENT_SECRET` / `AZURE_AD_TENANT_ID`
 - `ANTHROPIC_API_KEY`
-- `OPENAI_API_KEY` (for TTS audio briefings)
+- `ELEVENLABS_API_KEY` (primary TTS for audio briefings — Charlie AU voice)
+- `OPENAI_API_KEY` (final TTS fallback if ElevenLabs quota exceeded and MeloTTS unavailable)
 
 ### Function Timeout
 Netlify Functions have a 25-second timeout for streaming responses. ChaSen AI uses `maxSteps: 5` to cap tool-call depth within this window.

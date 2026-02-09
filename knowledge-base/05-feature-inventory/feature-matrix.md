@@ -35,7 +35,7 @@
 |---------|-----------|-----------|-----------|--------|
 | ChaSen AI Chat | Floating widget | `/api/chasen/stream` | `chasen-tools.ts`, `chasen-agents.ts` | Live |
 | Executive Briefing | `/` (embedded) | `/api/briefings/generate` | `executive-briefing.ts` | Live |
-| Audio Briefing | `/` (embedded) | `/api/briefings/audio` | OpenAI TTS | Live |
+| Audio Briefing | `/` (embedded) | `/api/briefings/audio` | ElevenLabs → MeloTTS → OpenAI TTS | Live |
 | Explain This | Global (right-click) | `/api/chasen/explain` | `useExplainThis.ts` | Live |
 | Predictive Health | Background | `/api/cron/predictive-forecast` | `predictive-health.ts` | Live |
 | Portfolio Patterns | Background | `/api/cron/portfolio-patterns` | `portfolio-patterns.ts` | Live |

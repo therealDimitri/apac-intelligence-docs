@@ -110,7 +110,7 @@
 | `/api/triggers/evaluate` | POST | Event trigger evaluation |
 | `/api/escalations` | GET, POST, PUT | Auto-escalation management |
 | `/api/briefings/generate` | GET | Executive briefing generation |
-| `/api/briefings/audio` | GET | Audio briefing (OpenAI TTS) |
+| `/api/briefings/audio` | GET | Audio briefing (ElevenLabs → MeloTTS → OpenAI fallback) |
 | `/api/timeline` | GET | Timeline replay data |
 | `/api/economic/indicators` | GET, POST | Economic indicators snapshot |
 | `/api/communications/draft` | GET, POST | AI-generated email drafts |
@@ -145,11 +145,35 @@
 - **Client Detail**: TimelineReplay tab in RightColumn
 - **Analytics**: CompetitorInsights + VolatilityIndicator after Key Insights section
 
-### Audio Briefing Requirements
+### Audio Briefing — TTS Provider Chain
 
-- Requires `OPENAI_API_KEY` environment variable
-- Uses OpenAI TTS HD model with voice options: alloy, echo, fable, onyx, nova, shimmer
-- Returns MP3 audio stream or base64 JSON
+Three-tier fallback: **ElevenLabs** (primary) → **MeloTTS** (local) → **OpenAI** (final).
+
+**Environment variables:**
+| Variable | Required | Description |
+|---|---|---|
+| `ELEVENLABS_API_KEY` | Yes (primary) | ElevenLabs API key. Free tier: 10K chars/month (~3 briefings) |
+| `MELOTTS_URL` | No | MeloTTS server URL (default: `http://localhost:5050`) |
+| `OPENAI_API_KEY` | No | OpenAI fallback. Only used if both ElevenLabs and MeloTTS fail |
+
+**Voices (12 total across 3 providers):**
+| Provider | Voices | Default | Notes |
+|---|---|---|---|
+| ElevenLabs | `charlie`, `daniel`, `george` | `charlie` | Charlie = Australian male, natural. Uses `eleven_multilingual_v2` model |
+| MeloTTS | `EN-AU`, `EN-BR`, `EN-US` | `EN-AU` | Local Python server (`prototypes/tts-eval/melotts-server.py`). Returns WAV |
+| OpenAI | `alloy`, `echo`, `fable`, `onyx`, `nova`, `shimmer` | `nova` | Uses `tts-1-hd` model. Returns MP3 |
+
+**Smart routing:** Requesting an OpenAI voice skips straight to OpenAI. Requesting a MeloTTS voice starts from MeloTTS. ElevenLabs voices try the full chain.
+
+**Running MeloTTS locally:**
+```bash
+source prototypes/tts-eval/.venv/bin/activate
+python prototypes/tts-eval/melotts-server.py
+# POST /tts {text, speaker, speed} → audio/wav
+# GET /health → {status: "ok"}
+```
+
+**API response:** Returns MP3 (ElevenLabs/OpenAI) or WAV (MeloTTS). JSON format includes `provider` field. Headers include `X-Provider` and `X-Voice`.
 
 ### Executive Briefing Structure
 
