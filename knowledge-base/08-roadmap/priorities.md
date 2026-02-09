@@ -48,12 +48,14 @@ Maximise the value of existing data through intelligent insights.
 
 ## Priority 4: Production Hardening (Medium)
 
-| Task | Impact | Complexity |
-|------|--------|------------|
-| Add comprehensive sync logging (INSERT/UPDATE/SKIP decisions) | Medium | Low |
-| Implement data staleness alerting | Medium | Medium |
-| Document and test disaster recovery (what if sync breaks?) | Medium | Low |
-| Add health checks for cron routes | Low | Low |
+| Task | Impact | Complexity | Status |
+|------|--------|------------|--------|
+| ~~Add sync-logger helper + adopt in 5 critical cron routes~~ | Medium | Low | ✅ DONE |
+| ~~Add webhook alerting for sync failures~~ | Medium | Low | ✅ DONE |
+| Extend sync logging to remaining cron routes (INSERT/UPDATE/SKIP) | Medium | Low | Open |
+| Implement data staleness alerting | Medium | Medium | Open |
+| Document and test disaster recovery (what if sync breaks?) | Medium | Low | Open |
+| Add health checks for cron routes | Low | Low | Open |
 
 ## What "Done" Looks Like
 
