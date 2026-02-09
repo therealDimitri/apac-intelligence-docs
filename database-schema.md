@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2026-02-09T01:48:51.008Z
+**Generated**: 2026-02-09T08:28:40.987Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -664,7 +664,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `goal_audit_log`
 
-**Row Count**: 731
+**Row Count**: 733
 
 ### Columns
 
@@ -683,7 +683,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `goal_status_updates`
 
-**Row Count**: 1
+**Row Count**: 2
 
 ### Columns
 
