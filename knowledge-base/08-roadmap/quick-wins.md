@@ -1,6 +1,6 @@
 # Quick Wins
 
-Tasks that deliver visible improvement with minimal effort. Each should take < 1 day.
+Tasks that deliver visible improvement with minimal effort. Each should take < 1 day. **12/12 complete.**
 
 ## Data Quality Quick Wins
 
@@ -21,18 +21,11 @@ All three pages already have `if (process.env.NODE_ENV === 'production') notFoun
 - `/test-charts/page.tsx` (line 224)
 - `/chasen-icons/page.tsx` (line 397)
 
-### 5. Create PageShell Component
-Simple wrapper providing consistent page header:
-```tsx
-<PageShell title="NPS Analytics" description="Customer feedback tracking">
-  {children}
-</PageShell>
-```
-**Why**: Eliminates the most visible layout inconsistency across pages.
+### ~~5. Create PageShell Component~~ ✅ DONE
+`src/components/layout/PageShell.tsx` (79 lines). Adopted by settings (9 pages), financials, team-performance, pipeline, NPS, and segmentation.
 
-### 6. Wire useLeadingIndicators
-Pass real `MetricData[]` from portfolio data into the existing hook.
-**Why**: The hook is 100% complete — just needs data wired in dashboard.
+### ~~6. Wire useLeadingIndicators~~ ✅ DONE
+Wired in 3 places: client detail page (`RightColumn.tsx:383`), `LeadingIndicatorsCard.tsx:130`, `LeadingIndicatorAlerts.tsx:316`.
 
 ## Automation Quick Wins
 
