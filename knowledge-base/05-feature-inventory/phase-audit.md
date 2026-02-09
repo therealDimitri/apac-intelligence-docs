@@ -9,8 +9,8 @@
 | 7 (AI Components) | 9 | 9 | 0 | 0 | 0 |
 | 8 (Experimental) | 9 | 9 | 0 | 0 | 0 |
 | 9 (Moonshot) | 7 | 7 | 0 | 0 | 0 |
-| 10 (ChaSen AI) | 16 | 16 | 0 | 0 | 0 |
-| **TOTAL** | **41** | **41** | **0** | **0** | **0** |
+| 10 (ChaSen AI) | 19 | 19 | 0 | 0 | 0 |
+| **TOTAL** | **44** | **44** | **0** | **0** | **0** |
 
 **Status definitions:**
 - **LIVE**: Fully functional, integrated UI, real data flow
@@ -78,6 +78,9 @@
 | Document Upload & Processing (F14) | LIVE | Multi-format parsing (PDF/DOCX/XLSX/CSV/TXT), size-based routing (< 4MB direct, >= 4MB Supabase Storage), AI summary |
 | Multi-Model AI Routing (F15) | LIVE | 6 models via MatchaAI proxy (Gemini Flash default, Claude 3.7/4/4.5, GPT-4o/Mini), user-selectable |
 | Operating Rhythm Context (F16) | LIVE | Cadence-aware context loading for autopilot, touchpoints, recognition queries |
+| Goal Automation Rules (F17) | LIVE | CRUD API, staleness cron, PL/pgSQL auto-complete + progress rollup triggers, admin panel UI |
+| Meeting Brief Generation (F18) | LIVE | ChaSen tool + API + slide-in panel with copy/print, aggregates initiatives/financials/NPS/actions |
+| Smart Goal Fields (F19) | LIVE | ChaSen suggest_goal_metadata tool, debounced client/owner/priority suggestions, duplicate detection |
 
 ## Quality Highlights
 
