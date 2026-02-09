@@ -63,6 +63,9 @@ Detail tables have double-counting and category overlaps. `burc_annual_financial
 - Only count where `completed = true` AND `event_date <= now()`
 - Future events cannot be marked complete
 - If completion % > 100%, check for `completed = true` with future `event_date`
+- **Dedup**: UNIQUE on `(client_name, event_type_id, event_date)`. New insertion paths MUST handle `23505` (unique violation) or use `.upsert({ ignoreDuplicates: true })`
+- **Source column**: NOT NULL, CHECK constraint — valid values: `dashboard`, `excel`, `bulk_import`, `briefing_room`, `api`
+- **`content_hash`**: Auto-computed by trigger — do NOT set manually (it will be overwritten)
 
 ## 10. AI Field Naming Conventions
 

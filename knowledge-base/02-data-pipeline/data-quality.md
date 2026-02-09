@@ -86,8 +86,28 @@ The #1 data quality challenge. Client names vary across sources:
 3. Complete client UUID migration across all API routes
 4. Document all Excel cell references in a mapping spreadsheet
 
-### Medium Priority
-5. Hash-based duplicate detection for activity events
-6. Comprehensive sync logging with INSERT/UPDATE/SKIP decisions
-7. Alerting on data staleness (Slack/Teams notifications)
-8. Automated compliance reconciliation via daily cron
+### Medium Priority — All Complete
+5. ~~Hash-based duplicate detection for activity events~~ ✅ DONE — see [Dedup Architecture](#segmentation-event-dedup-architecture) below
+6. ~~Comprehensive sync logging with INSERT/UPDATE/SKIP decisions~~ ✅ DONE (sync-logger helper, 34/34 crons adopted)
+7. ~~Alerting on data staleness (Slack/Teams notifications)~~ ✅ DONE (staleness-check cron + Teams webhooks)
+8. ~~Automated compliance reconciliation via daily cron~~ ✅ DONE (/api/cron/compliance-reconciliation)
+
+## Segmentation Event Dedup Architecture
+
+Duplicates in `segmentation_events` are prevented at **three layers**:
+
+### DB Layer (authoritative)
+- **UNIQUE constraint**: `(client_name, event_type_id, event_date)` — prevents identical events regardless of insertion path
+- **`content_hash` column**: MD5 of `client_name:event_type_id:event_date:source` — used for fast sync cache lookups
+- **`compute_content_hash()` trigger**: Auto-computes hash on INSERT/UPDATE of key columns
+- **`source` CHECK constraint**: Must be one of `dashboard`, `excel`, `bulk_import`, `briefing_room`, `api`
+
+### RPC Layer
+- **`upsert_segmentation_event()`**: Uses `INSERT ... ON CONFLICT (client_name, event_type_id, event_date) DO UPDATE` — atomic, no race conditions
+- **Source priority**: Dashboard source is preserved when Excel tries to overwrite
+
+### API Route Layer
+- **Dashboard POST** (`/api/segmentation-events`): Returns `409 Conflict` on duplicate with user-friendly message
+- **Bulk import** (`/api/compliance/events/bulk`): Uses `.upsert({ ignoreDuplicates: true })` — silently skips, reports `duplicatesSkipped` count
+- **Briefing room sync** (`/api/compliance/events/sync`): Catches `23505`, links meeting to existing event instead of failing
+- **Excel sync** (`scripts/sync-excel-activities.mjs`): Pre-checks via `content_hash` cache + calls RPC

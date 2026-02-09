@@ -23,6 +23,7 @@
 - Phase 8 Automation: `relationship_autopilot_rules`, `scheduled_touchpoints`, `communication_drafts`, `recognition_occasions`
 - Phase 9 Moonshot: `ai_task_queue`, `client_digital_twins`, `deal_sandboxes`, `meeting_sessions`, `sentiment_analysis`, `health_predictions`
 - Phase 10 ChaSen AI: `graph_sync_status`, `portfolio_insights`, `user_digests`, `chasen_workflows` (extended)
+- Data integrity: `content_hash` column + trigger, source CHECK constraint, RPC rewrite for `segmentation_events`
 
 ## Key Migration Files
 
@@ -36,6 +37,7 @@
 | `20260207_06_meeting_sessions.sql` | meeting_sessions, transcription_segments, cohost_suggestions |
 | `20260207_07_sentiment_analysis.sql` | sentiment_snapshots, sentiment_alerts, thresholds |
 | `20260208_chasen_ai_enhancements.sql` | graph_sync_status, health_predictions, portfolio_insights, user_digests |
+| `20260209_event_hash_dedup.sql` | compute_content_hash() trigger, source CHECK, upsert RPC rewrite |
 
 ## Tables Without Explicit CREATE
 

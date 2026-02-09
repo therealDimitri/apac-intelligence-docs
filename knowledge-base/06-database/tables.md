@@ -119,11 +119,15 @@ Includes: `ai_task_queue`, `ai_task_dependencies`, `ai_task_logs`, `ai_scheduled
 
 | Table | Purpose |
 |-------|---------|
-| `segmentation_events` | Operating Rhythm event tracking |
+| `segmentation_events` | Operating Rhythm event tracking (UNIQUE on `client_name, event_type_id, event_date`) |
 | `segmentation_event_types` | Event type templates |
 | `tier_event_requirements` | Annual targets per tier |
 | `segmentation_compliance_scores` | Historical compliance snapshots |
 | `event_compliance_summary` | Materialised view for completion % |
+
+**`segmentation_events` dedup columns:**
+- `content_hash` (TEXT, NOT NULL) — MD5 of `client_name:event_type_id:event_date:source`, auto-computed by `compute_content_hash()` trigger
+- `source` (TEXT, NOT NULL, default `'dashboard'`) — CHECK constraint: `dashboard`, `excel`, `bulk_import`, `briefing_room`, `api`
 
 ### 13. RBAC & User Management (4 tables)
 
@@ -147,6 +151,8 @@ Includes: `ai_task_queue`, `ai_task_dependencies`, `ai_task_logs`, `ai_scheduled
 1. `resolve_client_name(name)` — Fuzzy client matching (1.0→0.4 confidence)
 2. `scan_client_name_mismatches()` — Find unresolved names
 3. `clean_expired_graph_cache()` — Expire D3 layout cache
+4. `upsert_segmentation_event(...)` — Atomic INSERT ... ON CONFLICT for dedup with source-priority logic
+5. `compute_content_hash()` — BEFORE INSERT/UPDATE trigger on `segmentation_events`
 4. `get_connected_nodes(type, id, depth)` — Graph traversal
 
 ## Primary FK Chains

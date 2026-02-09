@@ -18,7 +18,7 @@ The foundation everything else depends on. Users lose trust if numbers don't mat
 | ~~Centralise client name mappings in `client_name_aliases`~~ | High | Medium | ✅ DONE |
 | ~~Validate Excel cell references before BURC sync~~ | High | Low | ✅ DONE |
 | ~~Document all BURC Excel cell references in mapping spreadsheet~~ | Medium | Low | ✅ DONE |
-| ~~Add hash-based duplicate detection for activity events~~ | Medium | Low | ✅ DONE (content_hash on segmentation_events via activity-sync-service) |
+| ~~Add hash-based duplicate detection for activity events~~ | Medium | Low | ✅ DONE (DB trigger + UNIQUE constraint + ON CONFLICT in all 4 insertion paths) |
 | ~~Parameterise fiscal year in sync scripts (currently hardcoded 2026)~~ | Medium | Medium | ✅ DONE |
 
 ## Priority 2: UI/UX Unification (High)
