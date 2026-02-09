@@ -121,7 +121,23 @@ Recovery procedures for when data syncs break or services become unavailable.
      -H "Authorization: Bearer $CRON_SECRET"
    ```
 
-### 6. Compliance Snapshot (`compliance_snapshot`)
+### 6. Compliance Reconciliation (`compliance_reconciliation`)
+
+**What happens if it breaks**: Compliance actual counts may drift out of sync with real completed events. Percentages on the segmentation page could show stale values.
+
+**Common causes**:
+- Upstream events table empty or inaccessible
+- Client name mapping mismatch (new client not in `CLIENT_NAME_MAPPING`)
+
+**Recovery**:
+1. Re-trigger:
+   ```bash
+   curl -X GET http://localhost:3001/api/cron/compliance-reconciliation \
+     -H "Authorization: Bearer $CRON_SECRET"
+   ```
+2. If client name mismatches, update `CLIENT_NAME_MAPPING` in `src/lib/compliance-sync.ts`
+
+### 7. Compliance Snapshot (`compliance_snapshot`)
 
 **What happens if it breaks**: Compliance trend data stops updating. Daily reconciliation alerts stop.
 
