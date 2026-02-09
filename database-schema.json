@@ -1130,7 +1130,7 @@
       },
       {
         "column_name": "cse_name",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -1154,13 +1154,13 @@
       },
       {
         "column_name": "start_date",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
         "column_name": "completion_date",
-        "data_type": "text",
+        "data_type": "unknown",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -1190,7 +1190,7 @@
       },
       {
         "column_name": "team_goal_id",
-        "data_type": "unknown",
+        "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -1285,7 +1285,7 @@
         "inferred": true
       }
     ],
-    "row_count": 5
+    "row_count": 12
   },
   "nps_topic_classifications": {
     "columns": [
@@ -2249,9 +2249,123 @@
     "row_count": 9
   },
   "team_goals": {
-    "columns": [],
-    "row_count": 0,
-    "note": "Empty table or RLS blocking access"
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "company_goal_id",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "title",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "owner_id",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "team_id",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "progress_method",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "progress_percentage",
+        "data_type": "integer",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "target_value",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "current_value",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "is_achieved",
+        "data_type": "boolean",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "start_date",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "target_date",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "status",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "last_check_in_date",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "weight",
+        "data_type": "integer",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "check_in_cadence",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      }
+    ],
+    "row_count": 9
   },
   "goal_templates": {
     "columns": [
@@ -2313,9 +2427,75 @@
     "row_count": 5
   },
   "goal_check_ins": {
-    "columns": [],
-    "row_count": 0,
-    "note": "Empty table or RLS blocking access"
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "goal_type",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "goal_id",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "author_id",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "status",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "progress_update",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "blockers",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "next_steps",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "check_in_date",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "progress_percentage",
+        "data_type": "integer",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      }
+    ],
+    "row_count": 1
   },
   "goal_dependencies": {
     "columns": [],
@@ -2378,12 +2558,72 @@
         "inferred": true
       }
     ],
-    "row_count": 727
+    "row_count": 731
   },
   "goal_status_updates": {
-    "columns": [],
-    "row_count": 0,
-    "note": "Empty table or RLS blocking access"
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "goal_type",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "goal_id",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "author_id",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "summary",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "ai_generated",
+        "data_type": "boolean",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "child_snapshot",
+        "data_type": "jsonb",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "financial_snapshot",
+        "data_type": "unknown",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "published",
+        "data_type": "boolean",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "text",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      }
+    ],
+    "row_count": 1
   },
   "custom_roles": {
     "columns": [

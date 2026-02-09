@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2026-02-08T12:17:00.696Z
+**Generated**: 2026-02-09T01:48:51.008Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -267,7 +267,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `portfolio_initiatives`
 
-**Row Count**: 5
+**Row Count**: 12
 
 ### Columns
 
@@ -276,17 +276,17 @@ This document provides the authoritative schema definition for all tables in the
 | `id` | text | ✗ | - | *(inferred)* |
 | `name` | text | ✗ | - | *(inferred)* |
 | `client_name` | text | ✗ | - | *(inferred)* |
-| `cse_name` | text | ✗ | - | *(inferred)* |
+| `cse_name` | unknown | ✗ | - | *(inferred)* |
 | `year` | integer | ✗ | - | *(inferred)* |
 | `status` | text | ✗ | - | *(inferred)* |
 | `category` | text | ✗ | - | *(inferred)* |
-| `start_date` | text | ✗ | - | *(inferred)* |
-| `completion_date` | text | ✗ | - | *(inferred)* |
+| `start_date` | unknown | ✗ | - | *(inferred)* |
+| `completion_date` | unknown | ✗ | - | *(inferred)* |
 | `description` | text | ✗ | - | *(inferred)* |
 | `created_at` | text | ✗ | - | *(inferred)* |
 | `updated_at` | text | ✗ | - | *(inferred)* |
 | `client_id` | text | ✗ | - | *(inferred)* |
-| `team_goal_id` | unknown | ✗ | - | *(inferred)* |
+| `team_goal_id` | text | ✗ | - | *(inferred)* |
 | `progress_method` | text | ✗ | - | *(inferred)* |
 | `progress_percentage` | integer | ✗ | - | *(inferred)* |
 | `target_value` | unknown | ✗ | - | *(inferred)* |
@@ -576,9 +576,31 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `team_goals`
 
-**Row Count**: 0
+**Row Count**: 9
 
-**Note**: Empty table or RLS blocking access
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | text | ✗ | - | *(inferred)* |
+| `company_goal_id` | text | ✗ | - | *(inferred)* |
+| `title` | text | ✗ | - | *(inferred)* |
+| `description` | text | ✗ | - | *(inferred)* |
+| `owner_id` | unknown | ✗ | - | *(inferred)* |
+| `team_id` | text | ✗ | - | *(inferred)* |
+| `progress_method` | text | ✗ | - | *(inferred)* |
+| `progress_percentage` | integer | ✗ | - | *(inferred)* |
+| `target_value` | unknown | ✗ | - | *(inferred)* |
+| `current_value` | unknown | ✗ | - | *(inferred)* |
+| `is_achieved` | boolean | ✗ | - | *(inferred)* |
+| `start_date` | text | ✗ | - | *(inferred)* |
+| `target_date` | text | ✗ | - | *(inferred)* |
+| `status` | text | ✗ | - | *(inferred)* |
+| `created_at` | text | ✗ | - | *(inferred)* |
+| `updated_at` | text | ✗ | - | *(inferred)* |
+| `last_check_in_date` | unknown | ✗ | - | *(inferred)* |
+| `weight` | integer | ✗ | - | *(inferred)* |
+| `check_in_cadence` | text | ✗ | - | *(inferred)* |
 
 ---
 
@@ -604,9 +626,23 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `goal_check_ins`
 
-**Row Count**: 0
+**Row Count**: 1
 
-**Note**: Empty table or RLS blocking access
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | text | ✗ | - | *(inferred)* |
+| `goal_type` | text | ✗ | - | *(inferred)* |
+| `goal_id` | text | ✗ | - | *(inferred)* |
+| `author_id` | unknown | ✗ | - | *(inferred)* |
+| `status` | text | ✗ | - | *(inferred)* |
+| `progress_update` | text | ✗ | - | *(inferred)* |
+| `blockers` | text | ✗ | - | *(inferred)* |
+| `next_steps` | text | ✗ | - | *(inferred)* |
+| `check_in_date` | text | ✗ | - | *(inferred)* |
+| `created_at` | text | ✗ | - | *(inferred)* |
+| `progress_percentage` | integer | ✗ | - | *(inferred)* |
 
 ---
 
@@ -628,7 +664,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `goal_audit_log`
 
-**Row Count**: 727
+**Row Count**: 731
 
 ### Columns
 
@@ -647,9 +683,22 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `goal_status_updates`
 
-**Row Count**: 0
+**Row Count**: 1
 
-**Note**: Empty table or RLS blocking access
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | text | ✗ | - | *(inferred)* |
+| `goal_type` | text | ✗ | - | *(inferred)* |
+| `goal_id` | text | ✗ | - | *(inferred)* |
+| `author_id` | unknown | ✗ | - | *(inferred)* |
+| `summary` | text | ✗ | - | *(inferred)* |
+| `ai_generated` | boolean | ✗ | - | *(inferred)* |
+| `child_snapshot` | jsonb | ✗ | - | *(inferred)* |
+| `financial_snapshot` | unknown | ✗ | - | *(inferred)* |
+| `published` | boolean | ✗ | - | *(inferred)* |
+| `created_at` | text | ✗ | - | *(inferred)* |
 
 ---
 

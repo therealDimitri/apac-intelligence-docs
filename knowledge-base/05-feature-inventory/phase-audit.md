@@ -1,16 +1,16 @@
 # Phase Audit
 
-> Last audited: 2026-02-07
+> Last audited: 2026-02-09
 
 ## Summary
 
 | Phase | Total | Live | Wired | Scaffolded | Missing |
 |-------|-------|------|-------|------------|---------|
-| 7 (AI Components) | 9 | 8 | 1 | 0 | 0 |
-| 8 (Experimental) | 9 | 8 | 1 | 0 | 0 |
+| 7 (AI Components) | 9 | 9 | 0 | 0 | 0 |
+| 8 (Experimental) | 9 | 9 | 0 | 0 | 0 |
 | 9 (Moonshot) | 7 | 7 | 0 | 0 | 0 |
-| 10 (ChaSen AI) | 13 | 11 | 2 | 0 | 0 |
-| **TOTAL** | **38** | **34** | **4** | **0** | **0** |
+| 10 (ChaSen AI) | 13 | 13 | 0 | 0 | 0 |
+| **TOTAL** | **38** | **38** | **0** | **0** | **0** |
 
 **Status definitions:**
 - **LIVE**: Fully functional, integrated UI, real data flow
@@ -26,7 +26,7 @@
 | LeadingIndicatorAlerts | LIVE | Urgency levels, confidence bars, trend indicators, expandable actions |
 | AnomalyHighlight | LIVE | IQR outlier detection, severity badges, inline highlights |
 | useAnomalyDetection | LIVE | 400+ lines of statistical logic (IQR, trend break, plateau detection) |
-| useLeadingIndicators | WIRED | Hook logic complete, requires real MetricData[] to be wired in dashboard |
+| useLeadingIndicators | LIVE | Hook logic + portfolio card + per-client integration on detail page |
 | usePredictiveField | LIVE | Debounced API calls, confidence scoring, dismissal learning |
 | /api/ai/field-suggestions | LIVE | Field-specific prompts, Anthropic integration, confidence calculation |
 | /api/ai/analyse-image | LIVE | Claude Vision integration |
@@ -44,7 +44,7 @@
 | Autopilot Suggestions | LIVE | API returns pending touchpoints, `scheduled_touchpoints` table |
 | Recognition Occasions | LIVE | Full CRUD with occasions and suggestions |
 | Communications Draft | LIVE | AI-generated email drafts with CRUD operations |
-| Timeline Replay | WIRED | `/api/timeline` route exists, but dedicated Replay visualisation component missing |
+| Timeline Replay | LIVE | Full scrubber, health/NPS/ARR/actions metric cards, event markers, key moments, play/pause/speed controls |
 
 ## Phase 9: Moonshot Features
 
@@ -68,9 +68,9 @@
 | Learning Loop (F4) | LIVE | Dismissal patterns feed back into prompt generation |
 | Structured Output (F5) | LIVE | tool_use structured outputs replacing regex JSON parsing |
 | Predictive Health Engine (F7) | LIVE | @bsull/augurs MSTL decomposition, daily cron |
-| NL Workflows (F8) | WIRED | Parser and API exist, approval workflow UI not fully wired |
+| NL Workflows (F8) | LIVE | ChaSen tools for CRUD, WorkflowManager UI, WorkflowApprovalQueue, tabbed approvals page, workflow-evaluator cron |
 | Cross-Client Patterns (F9) | LIVE | Multi-agent analysis, weekly pattern detection cron |
-| Meeting Co-Pilot RAG (F10) | WIRED | Knowledge graph query logic added, rate limiting/dedup in-flight |
+| Meeting Co-Pilot RAG (F10) | LIVE | DB-backed rate limiting/dedup, LLM-powered suggestion generation, transcription-to-cohost trigger wiring |
 | "Time Machine" What-If (F11) | LIVE | Timeline building, AI scenario modelling |
 | Personalised Digest (F12) | LIVE | Per-user daily briefing with AI coaching insight |
 | "Explain This" (F13) | LIVE | Right-click context menu, floating explanation popover |
