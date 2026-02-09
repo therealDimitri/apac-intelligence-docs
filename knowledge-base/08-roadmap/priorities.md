@@ -23,15 +23,15 @@ The foundation everything else depends on. Users lose trust if numbers don't mat
 
 ## Priority 2: UI/UX Unification (High)
 
-Design system fragmentation (overall 5.5/10) creates inconsistent user experience.
+Design system coherence (7/10, up from 5.5). Remaining gaps: hex colours in financial-analytics, clients page custom table, react-hook-form migration.
 
 | Task | Impact | Complexity | Status |
 |------|--------|------------|--------|
 | ~~Create `<PageShell>` component for consistent page layouts~~ | High | Medium | ✅ DONE — adopted by 11+ pages |
-| Build centralised design tokens (`design-tokens.ts`) | High | Medium | Open |
-| Unify data table component (TanStack wrapper) | Medium | Medium | Open |
-| Standardise modal/dialog pattern | Medium | Low | Open |
-| Create unified form field wrapper | Medium | Low | Open |
+| ~~Build centralised design tokens (`design-tokens.ts`)~~ | High | Medium | ✅ DONE — LayoutTokens, TypographyClasses, InteractiveTokens + PageShell adoption |
+| ~~Unify data table component (TanStack wrapper)~~ | Medium | Medium | ✅ DONE — 4 pages migrated to useAdvancedTable |
+| ~~Standardise modal/dialog pattern~~ | Medium | Low | ✅ DONE — overlay barrel, BottomSheet deprecated, Drawer migration |
+| ~~Create unified form field wrapper~~ | Medium | Low | ✅ DONE — FormFieldWrapper + 11 fields retrofitted with ARIA |
 | ~~Hide internal pages (`/test-*`, `/chasen-icons`) from production~~ | Low | Low | ✅ DONE |
 
 ## Priority 3: Automation & Intelligence (Medium)
