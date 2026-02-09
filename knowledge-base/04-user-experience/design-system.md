@@ -143,12 +143,12 @@ const columns: DataTableColumn<MyType>[] = [
 
 | Area | Score | Issue |
 |------|-------|-------|
-| Layout consistency | 7/10 | PageShell component created, adopting incrementally |
+| Layout consistency | 9/10 | PageShell adopted on 25+ pages (8 more in P2 sprint), 2 custom pages remain |
 | Component system | 6/10 | shadcn foundation solid, custom components vary |
-| Typography | 6/10 | Design tokens in CSS @theme + design-tokens.ts |
-| Form patterns | 4/10 | Multiple implementations, no unified form library |
+| Typography | 8/10 | TypographyClasses.sectionTitle/.caption adopted in planning steps + goals components |
+| Form patterns | 5/10 | FormRenderer + ModalFormDialog for declarative forms; complex modals still hand-rolled |
 | Data tables | 5/10 | Enhanced DataTable exists, convention documented, migrating incrementally |
-| Modal/Dialog | 7/10 | Convention documented (Dialog/Sheet/AlertDialog/BottomSheet) |
+| Modal/Dialog | 8/10 | ModalFormDialog added, overlays barrel with decision matrix, convention well-documented |
 | Loading states | 4/10 | Suspense, skeletons, spinners — no single pattern |
 | Brand consistency | 8/10 | Design tokens centralised in CSS @theme and design-tokens.ts |
 | Mobile UX | 8/10 | Responsive well-implemented |
@@ -158,7 +158,12 @@ const columns: DataTableColumn<MyType>[] = [
 
 1. ~~Create `src/lib/design-tokens.ts`~~ — **DONE** (822 lines, centralised tokens + CSS @theme)
 2. ~~Build `<PageShell>` component~~ — **DONE** (`src/components/layout/PageShell.tsx`)
-3. ~~Unify data tables~~ — **DONE** (Enhanced DataTable + convention documented above)
-4. ~~Standardise modals~~ — **DONE** (Convention documented above: Dialog/Sheet/AlertDialog/BottomSheet)
-5. Create form wrapper — `<FormField label hint error children />`
-6. ~~Hide internal pages (`/test-*`, `/chasen-icons`) from production~~ — **DONE** (notFound() guard)
+3. ~~Adopt PageShell across dashboard~~ — **DONE** (25+ pages, only planning + client-profiles remain custom)
+4. ~~Adopt TypographyClasses in components~~ — **DONE** (6 planning/goals components, dark mode consistent)
+5. ~~Unify data tables~~ — **DONE** (Enhanced DataTable + convention documented above)
+6. ~~Standardise modals~~ — **DONE** (Convention documented above: Dialog/Sheet/AlertDialog/BottomSheet)
+7. ~~Create ModalFormDialog~~ — **DONE** (Dialog + FormRenderer composition, imperative ref handle)
+8. ~~Create form wrapper~~ — **DONE** (`FormFieldWrapper` + `FormRenderer` with `forwardRef`)
+9. ~~Hide internal pages (`/test-*`, `/chasen-icons`) from production~~ — **DONE** (notFound() guard)
+10. Adopt `LayoutTokens.card` for card patterns — deferred (existing patterns vary too much for mechanical replacement)
+11. Migrate remaining hand-rolled tables to DataTable — dedicated sprint needed (12+ pages)
