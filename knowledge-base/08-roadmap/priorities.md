@@ -21,13 +21,13 @@ All original priorities shipped. See git history for details.
 
 ## Priority 5: Design System Polish (Medium)
 
-Raise UX coherence from 7.5/10 to 9/10. Focus on the three lowest-scoring fragmentation areas.
+Raise UX coherence from 7.5/10 to ~8.5/10. Focus on the three lowest-scoring fragmentation areas.
 
 | Task | Impact | Complexity | Score | Status |
 |------|--------|------------|-------|--------|
-| Unify loading states (Suspense/skeleton/spinner inconsistency) | Medium | Medium | 4/10 | |
-| Migrate hand-rolled tables to enhanced DataTable (12+ pages) | Medium | Medium | 5/10 | |
-| Migrate complex forms to FormRenderer (modals still hand-rolled) | Medium | Medium | 5/10 | |
+| Unify loading states (Suspense/skeleton/spinner inconsistency) | Medium | Medium | 8/10 | Done |
+| Migrate hand-rolled tables to enhanced DataTable (4 pages: knowledge, sales-hub, news-intelligence, operating-rhythm) | Medium | Medium | 7/10 | Done |
+| Migrate simple forms to ModalFormDialog (AddContactModal, MilestoneFormModal) | Medium | Medium | 7/10 | Done |
 | Adopt `LayoutTokens.card` for consistent card patterns | Low | Low | 6/10 | |
 | Consolidate duplicate component patterns (badges, status indicators) | Low | Medium | 6/10 | |
 

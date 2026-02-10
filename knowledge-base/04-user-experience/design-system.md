@@ -139,6 +139,51 @@ const columns: DataTableColumn<MyType>[] = [
 
 **Features:** Virtual scrolling, sortable columns, row actions dropdown, tooltips for truncated text, sticky header, striped/hoverable rows.
 
+## Loading State Conventions
+
+Three-tier loading strategy, from coarsest to finest grain:
+
+### 1. Route-level `loading.tsx` — First paint on navigation
+Every user-facing route has a `loading.tsx` file (24 routes covered). Next.js App Router renders this instantly while the page component streams.
+
+```tsx
+import { PageShellSkeleton, TableSkeleton } from '@/components/ui/skeletons'
+
+export default function MyPageLoading() {
+  return (
+    <PageShellSkeleton>
+      <TableSkeleton />
+    </PageShellSkeleton>
+  )
+}
+```
+
+**Rules:**
+- Always wrap content in `PageShellSkeleton` (mirrors `PageShell` header layout)
+- Compose domain skeletons to match the page's real layout (stats row + table, filter bar + cards, etc.)
+- Keep files concise (10–40 lines) — no `'use client'` directive needed
+- Available primitives: `PageShellSkeleton`, `StatsRowSkeleton`, `FilterBarSkeleton`, `TableSkeleton`, `ListSkeleton`, `ChartCardSkeleton`, `MeetingCardSkeleton`, `ClientCardSkeleton`, `ActionCardSkeleton`, `Shimmer`
+
+### 2. Suspense with skeleton fallback — Lazy-loaded sections
+For components loaded with `React.lazy()` or `next/dynamic` within an already-rendered page:
+
+```tsx
+<Suspense fallback={<ChartCardSkeleton />}>
+  <HeavyChart data={data} />
+</Suspense>
+```
+
+**Rule:** Never use `fallback={null}` for visible content — always show a skeleton.
+
+### 3. Inline `isLoading` — Data refresh within a rendered component
+For in-place data updates (re-fetch, polling, optimistic UI):
+
+```tsx
+{isLoading ? <Spinner /> : <DataDisplay data={data} />}
+```
+
+**Rule:** Only use spinners/disabled states here — skeletons are for initial paint only.
+
 ## Known Fragmentation Areas
 
 | Area | Score | Issue |
@@ -146,10 +191,10 @@ const columns: DataTableColumn<MyType>[] = [
 | Layout consistency | 9/10 | PageShell on 25+ pages, Goals page full-width consistency across all tabs |
 | Component system | 6/10 | shadcn foundation solid, custom components vary |
 | Typography | 8/10 | TypographyClasses.sectionTitle/.caption adopted in planning steps + goals components |
-| Form patterns | 5/10 | FormRenderer + ModalFormDialog for declarative forms; complex modals still hand-rolled |
-| Data tables | 5/10 | Enhanced DataTable exists, convention documented, migrating incrementally |
+| Form patterns | 7/10 | FormRenderer + ModalFormDialog adopted on 3 modals; complex modals (notes, quick-event) still hand-rolled |
+| Data tables | 7/10 | Enhanced DataTable on 7 pages (knowledge, sales-hub, news-intelligence, operating-rhythm + 3 original); 8+ pages still raw |
 | Modal/Dialog | 8/10 | ModalFormDialog added, overlays barrel with decision matrix, convention well-documented |
-| Loading states | 4/10 | Suspense, skeletons, spinners — no single pattern |
+| Loading states | 8/10 | 24 route-level loading.tsx files, three-tier convention documented above |
 | Brand consistency | 8/10 | Design tokens centralised in CSS @theme and design-tokens.ts |
 | Mobile UX | 8/10 | Responsive well-implemented |
 | Navigation | 8/10 | Well-structured sidebar |
@@ -166,4 +211,4 @@ const columns: DataTableColumn<MyType>[] = [
 8. ~~Create form wrapper~~ — **DONE** (`FormFieldWrapper` + `FormRenderer` with `forwardRef`)
 9. ~~Hide internal pages (`/test-*`, `/chasen-icons`) from production~~ — **DONE** (notFound() guard)
 10. Adopt `LayoutTokens.card` for card patterns — deferred (existing patterns vary too much for mechanical replacement)
-11. Migrate remaining hand-rolled tables to DataTable — dedicated sprint needed (12+ pages)
+11. ~~Migrate hand-rolled tables to DataTable (batch 1)~~ — **DONE** (4 pages: knowledge, sales-hub, news-intelligence, operating-rhythm). 8+ pages remain for future sprints.
