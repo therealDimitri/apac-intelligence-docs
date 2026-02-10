@@ -1,5 +1,7 @@
 # Priorities
 
+> Last updated: 10 February 2026
+
 ## Guiding Principles
 
 1. **Data accuracy over features** — A wrong number erodes trust faster than a missing feature
@@ -8,54 +10,69 @@
 4. **Simple workflows** — Every click should feel purposeful, not navigational
 5. **Graceful degradation** — AI features enhance but never block core workflows
 
-## Priority 1: Data Integrity (High)
+## Completed Priorities (Phases 1-4)
 
-The foundation everything else depends on. Users lose trust if numbers don't match.
+All original priorities shipped. See git history for details.
 
-| Task | Impact | Complexity | Status |
-|------|--------|------------|--------|
-| ~~Complete client UUID migration across all API routes~~ | High | Medium | ✅ DONE (Phases A-E shipped) |
-| ~~Centralise client name mappings in `client_name_aliases`~~ | High | Medium | ✅ DONE |
-| ~~Validate Excel cell references before BURC sync~~ | High | Low | ✅ DONE |
-| ~~Document all BURC Excel cell references in mapping spreadsheet~~ | Medium | Low | ✅ DONE |
-| ~~Add hash-based duplicate detection for activity events~~ | Medium | Low | ✅ DONE (DB trigger + UNIQUE constraint + ON CONFLICT in all 4 insertion paths) |
-| ~~Parameterise fiscal year in sync scripts (currently hardcoded 2026)~~ | Medium | Medium | ✅ DONE |
+- **P1: Data Integrity** — Client UUID migration, name aliases, BURC validation, dedup, fiscal year params
+- **P2: UI/UX Unification** — PageShell (25+ pages), design tokens, DataTable, modals, FormRenderer + ARIA
+- **P3: Automation & Intelligence** — Activity sync, 44 features LIVE, staleness alerting, goal hierarchy, compliance cron
+- **P4: Production Hardening** — Sync logging (34/34 routes), webhook alerting, disaster recovery, health checks
 
-## Priority 2: UI/UX Unification (High)
+## Priority 5: Design System Polish (Medium)
 
-Design system coherence (7/10, up from 5.5). Remaining gaps: hex colours in financial-analytics, clients page custom table, react-hook-form migration.
+Raise UX coherence from 7.5/10 to 9/10. Focus on the three lowest-scoring fragmentation areas.
 
-| Task | Impact | Complexity | Status |
-|------|--------|------------|--------|
-| ~~Create `<PageShell>` component for consistent page layouts~~ | High | Medium | ✅ DONE — adopted by 11+ pages |
-| ~~Build centralised design tokens (`design-tokens.ts`)~~ | High | Medium | ✅ DONE — LayoutTokens, TypographyClasses, InteractiveTokens + PageShell adoption |
-| ~~Unify data table component (TanStack wrapper)~~ | Medium | Medium | ✅ DONE — 4 pages migrated to useAdvancedTable |
-| ~~Standardise modal/dialog pattern~~ | Medium | Low | ✅ DONE — overlay barrel, BottomSheet deprecated, Drawer migration |
-| ~~Create unified form field wrapper~~ | Medium | Low | ✅ DONE — FormFieldWrapper + 11 fields retrofitted with ARIA |
-| ~~Hide internal pages (`/test-*`, `/chasen-icons`) from production~~ | Low | Low | ✅ DONE |
+| Task | Impact | Complexity | Score | Status |
+|------|--------|------------|-------|--------|
+| Unify loading states (Suspense/skeleton/spinner inconsistency) | Medium | Medium | 4/10 | |
+| Migrate hand-rolled tables to enhanced DataTable (12+ pages) | Medium | Medium | 5/10 | |
+| Migrate complex forms to FormRenderer (modals still hand-rolled) | Medium | Medium | 5/10 | |
+| Adopt `LayoutTokens.card` for consistent card patterns | Low | Low | 6/10 | |
+| Consolidate duplicate component patterns (badges, status indicators) | Low | Medium | 6/10 | |
 
-## Priority 3: Automation & Intelligence (Medium)
+## Priority 6: Goal Detail Phase 2 — Accordion Layout (Medium)
 
-Maximise the value of existing data through intelligent insights.
+Research from P3 sprint: Baymard Institute found horizontal tabs have 27% content miss rate vs 8% for vertical sections. Linear, Notion, and Asana use collapsible accordion sections for detail views.
 
 | Task | Impact | Complexity | Status |
 |------|--------|------------|--------|
-| ~~Automate Activity Register sync (currently manual CLI only)~~ | High | Low | ✅ DONE |
-| ~~Wire remaining "WIRED" features~~ | Medium | Low-Medium | ✅ DONE (0 WIRED, 41 LIVE) |
-| ~~Add alerting on data staleness (Slack/Teams notifications)~~ | Medium | Medium | ✅ DONE (staleness-check cron + Teams webhooks via alerting.ts) |
-| ~~Seed goal hierarchy tables~~ | Medium | Low | ✅ DONE |
-| ~~Automate compliance reconciliation via daily cron~~ | Medium | Low | ✅ DONE (/api/cron/compliance-reconciliation) |
+| Replace horizontal tabs with vertically stacked collapsible sections | High | Medium | |
+| Sticky metadata sidebar on wide viewports | Medium | Medium | |
+| Single-open accordion mode (each section collapses when another opens) | Medium | Low | |
 
-## Priority 4: Production Hardening (Medium)
+## Priority 7: Performance & Bundle Size (Medium)
+
+939 `'use client'` directives, 1,149 `console.log` statements. Opportunity for cleanup.
 
 | Task | Impact | Complexity | Status |
 |------|--------|------------|--------|
-| ~~Add sync-logger helper + adopt in 5 critical cron routes~~ | Medium | Low | ✅ DONE |
-| ~~Add webhook alerting for sync failures~~ | Medium | Low | ✅ DONE |
-| ~~Extend sync logging to remaining cron routes (INSERT/UPDATE/SKIP)~~ | Medium | Low | ✅ DONE (34/34 routes use startSyncLog/completeSyncLog) |
-| ~~Implement data staleness alerting~~ | Medium | Medium | ✅ DONE (staleness-check cron + STALENESS_THRESHOLDS + dedup) |
-| ~~Document and test disaster recovery (what if sync breaks?)~~ | Medium | Low | ✅ DONE (07-infrastructure/disaster-recovery.md) |
-| ~~Add health checks for cron routes~~ | Low | Low | ✅ DONE (CRON_SCHEDULES covers all 34 routes in /api/health) |
+| Audit and remove stale `console.log` statements from production code | Low | Low | |
+| Identify and lazy-load heavy client components (Three.js, D3, Recharts) | Medium | Medium | |
+| Implement route-level code splitting for AI Lab / Visualisations | Medium | Medium | |
+| Add Next.js `loading.tsx` files for major route groups | Medium | Low | |
+
+## Priority 8: Testing & Quality (Low)
+
+No test suite currently in place. Build incrementally starting with critical paths.
+
+| Task | Impact | Complexity | Status |
+|------|--------|------------|--------|
+| Set up Vitest + React Testing Library infrastructure | Medium | Low | |
+| Add tests for critical API routes (BURC sync, goals CRUD, actions CRUD) | High | Medium | |
+| Add tests for shared hooks (useGanttData, useLeadingIndicators, useAnomalyDetection) | Medium | Medium | |
+| Add Playwright E2E tests for core user workflows (login → dashboard → client detail) | High | High | |
+
+## Priority 9: Accessibility Audit (Low)
+
+FormFieldWrapper has ARIA support; broader audit needed for keyboard navigation, screen readers, and colour contrast.
+
+| Task | Impact | Complexity | Status |
+|------|--------|------------|--------|
+| Audit keyboard navigation across all major pages | Medium | Medium | |
+| Add skip-to-content links and focus management | Medium | Low | |
+| Verify colour contrast ratios meet WCAG 2.1 AA | Medium | Low | |
+| Add `aria-live` regions for dynamic content (alerts, toasts, data updates) | Medium | Medium | |
 
 ## What "Done" Looks Like
 
@@ -65,3 +82,4 @@ The platform succeeds when:
 - Meeting follow-ups happen automatically, not through memory
 - At-risk clients are flagged before they escalate
 - The data on screen matches the source spreadsheets exactly
+- Every page loads fast, looks consistent, and works with keyboard alone

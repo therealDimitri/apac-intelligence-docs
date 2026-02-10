@@ -1,66 +1,43 @@
 # Quick Wins
 
-Tasks that deliver visible improvement with minimal effort. Each should take < 1 day. **12/12 complete.**
+> Last updated: 10 February 2026
 
-## Data Quality Quick Wins
+Tasks that deliver visible improvement with minimal effort. Each should take < 1 day. **Previous batch: 12/12 complete.** New batch below.
 
-### ~~1. Validate BURC Cell References~~ ✅ DONE
-Raw `sheet[col+row]?.v` replaced with `getCellValue()` + `readMonthlyRow()` helpers. Pre-flight `validateCellRefs()` added for CSI ratios.
+## Batch 2: Polish & Performance
 
-### ~~2. Document Excel Cell Mapping~~ ✅ DONE
-`docs/burc-cell-mapping.md` enhanced with per-row detail for all 5 sheets.
+### 1. Add `loading.tsx` to major route groups
+Create `loading.tsx` files for `(dashboard)/`, `goals-initiatives/`, `clients/`, `actions/` with skeleton layouts. Eliminates blank white flash on navigation.
 
-### ~~3. Add Fiscal Year Parameter~~ ✅ DONE
-Hardcoded `2026` replaced with dynamic `FISCAL_YEAR` in 4 scripts + 1 API route. `ACTIVITY_REGISTER_CURRENT`/`PREVIOUS` dynamic constants added.
+### 2. Remove stale `console.log` statements
+~1,149 `console.log` calls across `src/`. Strip all except intentional error logging. Use ESLint `no-console` rule with `warn` level after cleanup.
 
-## UI Quick Wins
+### 3. Lazy-load Three.js (PipelineLandscape)
+`/visualisation/pipeline` imports Three.js + React Three Fiber (~500KB). Wrap in `dynamic(() => import(...), { ssr: false })` — it's already client-only but not code-split.
 
-### ~~4. Hide Dev Pages~~ ✅ DONE
-All three pages already have `if (process.env.NODE_ENV === 'production') notFound()`:
-- `/test-ai/page.tsx` (line 65)
-- `/test-charts/page.tsx` (line 224)
-- `/chasen-icons/page.tsx` (line 397)
+### 4. Lazy-load D3 (NetworkGraph)
+Same pattern as #3. `/visualisation/network` imports D3 force layout. Dynamic import reduces main bundle.
 
-### ~~5. Create PageShell Component~~ ✅ DONE
-`src/components/layout/PageShell.tsx` (79 lines). Adopted by settings (9 pages), financials, team-performance, pipeline, NPS, and segmentation.
+### 5. Add `loading.tsx` skeleton for Goal Detail
+`/goals-initiatives/[type]/[id]/page.tsx` is 900+ lines. A skeleton with compact metadata bar placeholder + tab bar prevents layout shift.
 
-### ~~6. Wire useLeadingIndicators~~ ✅ DONE
-Wired in 3 places: client detail page (`RightColumn.tsx:383`), `LeadingIndicatorsCard.tsx:130`, `LeadingIndicatorAlerts.tsx:316`.
+### 6. Migrate client-profiles table to DataTable
+`/client-profiles` uses a hand-rolled `<table>`. Good candidate for enhanced DataTable — already has sortable columns and row click.
 
-## Automation Quick Wins
+### 7. Migrate NPS table to DataTable
+`/nps` response table is hand-rolled. Enhanced DataTable gives virtual scrolling (useful for large response sets) and consistent styling.
 
-### ~~7. Schedule Activity Register Sync~~ ✅ DONE
-`setup-activity-sync.sh` created for launchd service management. `sync-excel-activities.mjs` updated to use `ACTIVITY_REGISTER_CURRENT`.
-
-### ~~8. Add Staleness Check to Dashboard~~ ✅ DONE
-`StalenessBar.tsx` exists with 2h/25h/25h thresholds. Sync completion toast added via sessionStorage tracking.
-
-### ~~9. Seed Goal Hierarchy~~ ✅ DONE
-`seed-goal-hierarchy.mjs` seeds 9 team goals + 12 projects with real APAC client names. 3 pillars + 9 BU goals already existed.
-
-## Data Integrity Quick Wins
-
-### ~~10. Centralise Remaining Client Name Mappings~~ ✅ DONE
-`lib/client-names.mjs` shared module created. `seed-client-name-aliases.mjs` upserts 32 aliases. Both sync scripts import from shared module.
-
-### ~~11. Add Sync Completion Notification~~ ✅ DONE
-`StalenessBar.tsx` detects recent sync completions from `sync_history` and shows sonner toast.
-
-### ~~12. Fix Empty Admin Routes~~ ✅ DONE
-All 10 admin routes verified fully functional.
+### 8. Standardise loading state for chart components
+Create a `<ChartSkeleton>` variant per chart size (small/medium/large) and adopt across Recharts wrappers. `LazyChart` already exists but isn't used everywhere.
 
 ## Priority Order
 
-Start with the ones that protect data accuracy:
-1. Validate BURC cell references (#1)
-2. Document Excel cell mapping (#2)
-3. Centralise client name mappings (#10)
-4. Hide dev pages (#4)
-5. Create PageShell (#5)
-6. Wire useLeadingIndicators (#6)
-7. Schedule Activity Register sync (#7)
-8. Add staleness banner (#8)
-9. Seed goal hierarchy (#9)
-10. Add fiscal year parameter (#3)
-11. Add sync notification (#11)
-12. Fix admin routes (#12)
+Start with visible UX improvements:
+1. `loading.tsx` route skeletons (#1)
+2. Goal detail skeleton (#5)
+3. Chart loading states (#8)
+4. Lazy-load Three.js (#3)
+5. Lazy-load D3 (#4)
+6. Client-profiles DataTable (#6)
+7. NPS DataTable (#7)
+8. Console.log cleanup (#2)
