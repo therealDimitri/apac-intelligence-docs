@@ -2,42 +2,33 @@
 
 > Last updated: 10 February 2026
 
-Tasks that deliver visible improvement with minimal effort. Each should take < 1 day. **Previous batch: 12/12 complete.** New batch below.
+Tasks that deliver visible improvement with minimal effort. Each should take < 1 day. **Batch 1: 12/12 complete. Batch 2: 7/8 complete (1 deferred).**
 
-## Batch 2: Polish & Performance
+## Batch 2: Polish & Performance — COMPLETE
 
-### 1. Add `loading.tsx` to major route groups
-Create `loading.tsx` files for `(dashboard)/`, `goals-initiatives/`, `clients/`, `actions/` with skeleton layouts. Eliminates blank white flash on navigation.
+### 1. Add `loading.tsx` to major route groups — DONE
+Created 5 initial loading.tsx files (dashboard, goals, clients, actions, goal detail) + 18 more covering all user-facing routes (24 total). Uses `PageShellSkeleton` wrapper with domain-specific skeleton composition.
 
-### 2. Remove stale `console.log` statements
-~1,149 `console.log` calls across `src/`. Strip all except intentional error logging. Use ESLint `no-console` rule with `warn` level after cleanup.
+### 2. Remove stale `console.log` statements — DONE
+Removed 1,149 console.log calls across ~260 files. Added ESLint `no-console` rule (warn level, allows warn/error/info/debug) to prevent regression.
 
-### 3. Lazy-load Three.js (PipelineLandscape)
-`/visualisation/pipeline` imports Three.js + React Three Fiber (~500KB). Wrap in `dynamic(() => import(...), { ssr: false })` — it's already client-only but not code-split.
+### 3. Lazy-load Three.js (PipelineLandscape) — DONE (already)
+Was already using `dynamic(() => import(...), { ssr: false })` with loading skeleton. No change needed.
 
-### 4. Lazy-load D3 (NetworkGraph)
-Same pattern as #3. `/visualisation/network` imports D3 force layout. Dynamic import reduces main bundle.
+### 4. Lazy-load D3 (NetworkGraph) — DONE
+Converted from static import to `next/dynamic` with `ssr: false` and `NetworkGraphSkeleton` fallback. D3 force layout (~50KB) now code-split.
 
-### 5. Add `loading.tsx` skeleton for Goal Detail
-`/goals-initiatives/[type]/[id]/page.tsx` is 900+ lines. A skeleton with compact metadata bar placeholder + tab bar prevents layout shift.
+### 5. Add `loading.tsx` skeleton for Goal Detail — DONE
+3-tier skeleton: breadcrumb + title + badges → sticky tab bar (5 tabs) → metadata bar → 2/3 + 1/3 column layout.
 
-### 6. Migrate client-profiles table to DataTable
-`/client-profiles` uses a hand-rolled `<table>`. Good candidate for enhanced DataTable — already has sortable columns and row click.
+### 6. Migrate client-profiles table to DataTable — DONE
+Replaced TanStack Table grid with enhanced DataTable. 8 columns with custom cell renderers, sort state, segment ordering, virtual scrolling.
 
-### 7. Migrate NPS table to DataTable
-`/nps` response table is hand-rolled. Enhanced DataTable gives virtual scrolling (useful for large response sets) and consistent styling.
+### 7. Migrate NPS table to DataTable — DEFERRED
+NPS page uses rich card layout (sparklines, AI insight panels, context menus), not a simple table. Converting to DataTable would require UX redesign. Deferred to a dedicated sprint.
 
-### 8. Standardise loading state for chart components
-Create a `<ChartSkeleton>` variant per chart size (small/medium/large) and adopt across Recharts wrappers. `LazyChart` already exists but isn't used everywhere.
+### 8. Standardise loading state for chart components — DONE
+Wrapped 4 GoalsDashboard charts with `LazyChart` (IntersectionObserver deferred rendering). Made `ChartCardSkeleton.type` optional (defaults to `'bar'`). Three-tier loading convention documented in design-system.md.
 
-## Priority Order
-
-Start with visible UX improvements:
-1. `loading.tsx` route skeletons (#1)
-2. Goal detail skeleton (#5)
-3. Chart loading states (#8)
-4. Lazy-load Three.js (#3)
-5. Lazy-load D3 (#4)
-6. Client-profiles DataTable (#6)
-7. NPS DataTable (#7)
-8. Console.log cleanup (#2)
+### Bonus: Gotcha checker fix
+Fixed false positives in `.husky/check-commit-gotchas.sh` — checks #3/#4 now scan added diff lines only (not entire file content), preventing false flags on `action_id` FK references in related tables.

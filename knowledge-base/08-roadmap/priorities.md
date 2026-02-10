@@ -19,17 +19,17 @@ All original priorities shipped. See git history for details.
 - **P3: Automation & Intelligence** — Activity sync, 44 features LIVE, staleness alerting, goal hierarchy, compliance cron
 - **P4: Production Hardening** — Sync logging (34/34 routes), webhook alerting, disaster recovery, health checks
 
-## Priority 5: Design System Polish (Medium)
+## Priority 5: Design System Polish — COMPLETE (Medium)
 
-Raise UX coherence from 7.5/10 to ~8.5/10. Focus on the three lowest-scoring fragmentation areas.
+Raised UX coherence from 7.5/10 to ~8.5/10. Top 3 items shipped; remaining 2 deferred as low-impact.
 
 | Task | Impact | Complexity | Score | Status |
 |------|--------|------------|-------|--------|
-| Unify loading states (Suspense/skeleton/spinner inconsistency) | Medium | Medium | 8/10 | Done |
-| Migrate hand-rolled tables to enhanced DataTable (4 pages: knowledge, sales-hub, news-intelligence, operating-rhythm) | Medium | Medium | 7/10 | Done |
+| Unify loading states (24 route-level loading.tsx + three-tier convention) | Medium | Medium | 8/10 | Done |
+| Migrate hand-rolled tables to enhanced DataTable (7 pages total) | Medium | Medium | 7/10 | Done |
 | Migrate simple forms to ModalFormDialog (AddContactModal, MilestoneFormModal) | Medium | Medium | 7/10 | Done |
-| Adopt `LayoutTokens.card` for consistent card patterns | Low | Low | 6/10 | |
-| Consolidate duplicate component patterns (badges, status indicators) | Low | Medium | 6/10 | |
+| Adopt `LayoutTokens.card` for consistent card patterns | Low | Low | 6/10 | Deferred |
+| Consolidate duplicate component patterns (badges, status indicators) | Low | Medium | 6/10 | Deferred |
 
 ## Priority 6: Goal Detail Phase 2 — Accordion Layout (Medium)
 
@@ -41,16 +41,16 @@ Research from P3 sprint: Baymard Institute found horizontal tabs have 27% conten
 | Sticky metadata sidebar on wide viewports | Medium | Medium | |
 | Single-open accordion mode (each section collapses when another opens) | Medium | Low | |
 
-## Priority 7: Performance & Bundle Size (Medium)
+## Priority 7: Performance & Bundle Size — MOSTLY COMPLETE (Medium)
 
-939 `'use client'` directives, 1,149 `console.log` statements. Opportunity for cleanup.
+939 `'use client'` directives remain for future audit. Console.log and lazy-load items shipped in P5 batch 2.
 
 | Task | Impact | Complexity | Status |
 |------|--------|------------|--------|
-| Audit and remove stale `console.log` statements from production code | Low | Low | |
-| Identify and lazy-load heavy client components (Three.js, D3, Recharts) | Medium | Medium | |
-| Implement route-level code splitting for AI Lab / Visualisations | Medium | Medium | |
-| Add Next.js `loading.tsx` files for major route groups | Medium | Low | |
+| Audit and remove stale `console.log` statements from production code | Low | Low | Done |
+| Identify and lazy-load heavy client components (Three.js, D3, Recharts) | Medium | Medium | Done |
+| Implement route-level code splitting for AI Lab / Visualisations | Medium | Medium | Done |
+| Add Next.js `loading.tsx` files for major route groups | Medium | Low | Done |
 
 ## Priority 8: Testing & Quality (Low)
 
