@@ -73,12 +73,12 @@
 /admin/ms-graph-role-mapping   User role sync
 /admin/data-quality            Data reconciliation
 /admin/audit-log               Audit trail
-/admin/integrations            Integration config
+/admin/integrations            Integration status + sync triggers (Aged Accounts via Invoice Tracker)
 /admin/pipeline-reconciliation Pipeline checks
 /admin/form-builder            Form builder
 /admin/users                   User management
 /admin/data-lineage            Data lineage
-/admin/data-sync               Data sync status
+/admin/data-sync               Sync dashboard — summary cards, source rows with Sync Now, history table
 ```
 
 ### Settings Routes
