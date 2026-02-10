@@ -31,15 +31,15 @@ Raised UX coherence from 7.5/10 to ~8.5/10. Top 3 items shipped; remaining 2 def
 | Adopt `LayoutTokens.card` for consistent card patterns | Low | Low | 6/10 | Deferred |
 | Consolidate duplicate component patterns (badges, status indicators) | Low | Medium | 6/10 | Deferred |
 
-## Priority 6: Goal Detail Phase 2 — Accordion Layout (Medium)
+## Priority 6: Goal Detail Phase 2 — Accordion Layout — COMPLETE (Medium)
 
 Research from P3 sprint: Baymard Institute found horizontal tabs have 27% content miss rate vs 8% for vertical sections. Linear, Notion, and Asana use collapsible accordion sections for detail views.
 
 | Task | Impact | Complexity | Status |
 |------|--------|------------|--------|
-| Replace horizontal tabs with vertically stacked collapsible sections | High | Medium | |
-| Sticky metadata sidebar on wide viewports | Medium | Medium | |
-| Single-open accordion mode (each section collapses when another opens) | Medium | Low | |
+| Replace horizontal tabs with vertically stacked collapsible sections | High | Medium | Done |
+| Sticky metadata sidebar on wide viewports | Medium | Medium | Done |
+| Single-open accordion mode (each section collapses when another opens) | Medium | Low | Done |
 
 ## Priority 7: Performance & Bundle Size — MOSTLY COMPLETE (Medium)
 
