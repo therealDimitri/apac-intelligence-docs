@@ -86,7 +86,7 @@
    - Breadcrumbs: Planning > CSE Name > Step > Sub-step
    - 6 steps with sub-step rendering (only active sub-section shown):
      Setup (single view)
-     Discovery: Summary | Gap Discovery | Client Gap Diagnosis
+     Discovery: Summary (per-client confidence bar chart) | Gap Discovery (ClientConfidenceTabs — per-client scoring with tab bar, auto-advance, pre-fill, defer) | Client Gap Diagnosis
      Stakeholders: Overview | Tactical Empathy | Black Swan | "That's Right" | Calibrated Qs | Accusation Audit
      Opportunities: AI Tips | Plan Coverage | Qualification | StoryBrand | Forecast Simulation
      Risks: Risk Overview | Recovery Confidence | Accusation Audit | Recovery Narrative | Mitigation

@@ -24,6 +24,7 @@
 |---------|-----------|-----------|-----------|--------|
 | Account Planning | `/planning` | `/api/plans` | Various | Live |
 | Strategic Plans | `/planning/strategic` | `/api/plans` | Various | Live |
+| Per-Client Gap Confidence | `/planning/strategic/new` (Gap Discovery sub-step) | — | In-memory (plan state) | Live |
 | Goals & Initiatives | `/goals-initiatives` | `/api/goals` | `company_goals`, `team_goals`, `portfolio_initiatives` | Live |
 | Goal Approvals | `/goals-initiatives/approvals` | `/api/goals/[id]` | `goal_approvals`, `goal_audit_log` | Live |
 | Relationship Autopilot | `/planning/autopilot` | `/api/autopilot` | `relationship_autopilot_rules`, `scheduled_touchpoints` | Live |
