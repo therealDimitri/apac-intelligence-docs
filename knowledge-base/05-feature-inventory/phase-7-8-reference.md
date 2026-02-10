@@ -161,7 +161,9 @@ Three-tier fallback: **ElevenLabs** (primary) → **MeloTTS** (local) → **Open
 |---|---|---|---|
 | ElevenLabs | `charlie`, `daniel`, `george` | `charlie` | Charlie = Australian male, natural. Uses `eleven_multilingual_v2` model |
 | MeloTTS | `EN-AU`, `EN-BR`, `EN-US` | `EN-AU` | Local Python server (`prototypes/tts-eval/melotts-server.py`). Returns WAV |
-| OpenAI | `alloy`, `echo`, `fable`, `onyx`, `nova`, `shimmer` | `nova` | Uses `tts-1-hd` model. Returns MP3 |
+| OpenAI | `alloy`, `echo`, `fable`, `onyx`, `nova`, `shimmer` | `echo` | Uses `tts-1-hd` model. Returns MP3 |
+
+**Voice mapping (ElevenLabs → OpenAI fallback):** When ElevenLabs fails and OpenAI is used as fallback, voices are mapped to preserve gender/character: `charlie` → `echo` (warm male), `daniel` → `onyx` (authoritative male), `george` → `fable` (expressive male).
 
 **Smart routing:** Requesting an OpenAI voice skips straight to OpenAI. Requesting a MeloTTS voice starts from MeloTTS. ElevenLabs voices try the full chain.
 
