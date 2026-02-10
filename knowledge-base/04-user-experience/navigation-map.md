@@ -4,8 +4,8 @@
 
 | # | Group | Icon | Pages |
 |---|-------|------|-------|
-| 1 | Command Centre | Home | Dashboard (`/`), CS Operating Rhythm (`/operating-rhythm`) |
-| 2 | Success Plans | Target | Account Planning (`/planning`), Goals & Initiatives (`/goals-initiatives`), Approvals (`/goals-initiatives/approvals`), Autopilot (`/planning/autopilot`), Recognition (`/planning/recognition`) |
+| 1 | Command Centre | Home | Dashboard (`/`), CS Operating Rhythm (`/operating-rhythm`), Daily Digest (`/digest`) |
+| 2 | Success Plans | Target | Account Planning (`/planning`), Goals & Projects (`/goals-initiatives`), Approvals (`/goals-initiatives/approvals`), Autopilot (`/planning/autopilot`), Recognition (`/planning/recognition`) |
 | 3 | Clients | Users | Portfolio Health (`/client-profiles`), Segmentation Progress (`/compliance`) |
 | 4 | Action Hub | Handshake | Meetings (`/meetings`), Actions & Tasks (`/actions`), AI Task Queue (`/tasks`) |
 | 5 | Analytics | LineChart | CS Team Performance (`/team-performance`), NPS (`/nps`), Support Health (`/support`), Working Capital (`/aging-accounts`) |
@@ -29,12 +29,14 @@
 /planning                      Account Planning Coach
 /planning/autopilot            Relationship Autopilot
 /planning/recognition          Recognition Program
-/goals-initiatives             Goals & Initiatives hub
+/digest                        Daily Digest
+/goals-initiatives             Goals & Projects hub (9 tabs: Overview, Dashboard, Strategy Map, Pillar, BU Goals, Team, Projects, Timeline, Workload)
 /goals-initiatives/approvals   Approval workflow
 /client-profiles               Portfolio Health grid
 /compliance                    Segmentation Progress
 /meetings                      Meeting management
-/actions                       Action inbox
+/actions                       Actions & Tasks (Kanban + Inbox views)
+/actions/[id]                  Action detail (context-aware back nav via ?from= params)
 /tasks                         AI Task Queue
 /team-performance              CS Team Performance
 /nps                           NPS Analytics

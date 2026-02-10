@@ -143,7 +143,7 @@ const columns: DataTableColumn<MyType>[] = [
 
 | Area | Score | Issue |
 |------|-------|-------|
-| Layout consistency | 9/10 | PageShell adopted on 25+ pages (8 more in P2 sprint), 2 custom pages remain |
+| Layout consistency | 9/10 | PageShell on 25+ pages, Goals page full-width consistency across all tabs |
 | Component system | 6/10 | shadcn foundation solid, custom components vary |
 | Typography | 8/10 | TypographyClasses.sectionTitle/.caption adopted in planning steps + goals components |
 | Form patterns | 5/10 | FormRenderer + ModalFormDialog for declarative forms; complex modals still hand-rolled |

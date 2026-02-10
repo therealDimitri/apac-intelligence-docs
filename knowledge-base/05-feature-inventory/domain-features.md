@@ -116,6 +116,7 @@ RELEVANCE = CLIENT_MATCH*0.30 + TOPIC*0.25 + ACTION*0.20 + AUTHORITY*0.15 + RECE
 | `/api/goals/initiatives` | GET, POST | Initiative picker + quick-create |
 | `/api/actions/link-progress` | GET | Mapping stats (total/linked/orphaned) |
 | `/api/actions/bulk-link` | POST | Bulk-link actions to initiative |
+| `/api/goals/dashboard/activity` | GET | Recent goal activity (check-ins, status updates) for dashboard timeline |
 | `/api/chasen/suggest-initiative` | POST | AI initiative matching |
 | `/api/ms-graph/sync` | GET, POST | MS Graph sync status/trigger |
 | `/api/ms-graph/mapping-rules` | GET, POST | Mapping rules CRUD |
@@ -129,8 +130,11 @@ RELEVANCE = CLIENT_MATCH*0.30 + TOPIC*0.25 + ACTION*0.20 + AUTHORITY*0.15 + RECE
 - **Progress**: `src/lib/goals/progress.ts` — calculateProgress(), deriveStatus()
 - **Permissions**: `src/lib/goals/permissions.ts` — RBAC resolution
 - **Hierarchy**: `src/lib/goals/hierarchy.ts`
-- **Components**: `src/components/goals/`
+- **Components**: `src/components/goals/` (GanttView, GoalKanbanBoard, StrategyMap, GoalsDashboard, CheckInSuggestButton)
+- **Labels**: `src/lib/goals/labels.ts` — GOAL_TYPE_LABELS, GOAL_TYPE_SHORT_LABELS, GOAL_TYPE_PLURAL_LABELS
+- **Gantt hook**: `src/hooks/useGanttData.ts` — hierarchical DFS sort, default collapsed
 - **Link Tab**: `src/components/unified-actions/LinkToInitiativeTab.tsx`
+- **Action editing**: Reuses `ActionSlideOutEdit` from `src/components/modern-actions/` on goal detail page
 - **Pages**: `src/app/(dashboard)/goals-initiatives/`
 - **MS Graph**: `src/lib/ms-graph/role-sync.ts`, `src/components/ms-graph/`, `src/hooks/useMSGraphSync.ts`
 

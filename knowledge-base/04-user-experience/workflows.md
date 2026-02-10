@@ -5,9 +5,9 @@
 ```
 1. Open dashboard (/) → see personalised greeting + stats
 2. Review Executive Briefing → 12-section operational report
-3. Listen to Audio Briefing (optional) → OpenAI TTS summary
+3. Listen to Audio Briefing (optional) → ElevenLabs TTS (charlie voice, hardcoded)
 4. Check Portfolio Health Stats → health distribution gauge
-5. Review Actionable Intelligence → Key Insights, Alerts, Priority clients
+5. Review Predictive Alerts → grouped by category (Churn Risk, Health Trajectory, etc.), collapsible sections
 6. Filter "My Clients" → focus on assigned portfolio
 7. Check overdue actions → prioritise follow-ups
 8. Review ChaSen AI suggestions → act on proactive nudges
@@ -61,16 +61,17 @@
 ## Action Management
 
 ```
-1. /actions → action inbox view
-2. Group by: status, due date, priority, client
-3. View modes: list or kanban board
+1. /actions → Kanban board (default) or inbox view
+2. View modes: Kanban, List, Status, Calendar, Link to Initiative
+3. Group by: status, due date, priority, client
 4. Bulk operations: select multiple, bulk status update
-5. Quick create via modal or action bar
-6. Link to initiative via LinkToInitiativeTab
-7. /actions/inbox → inbox-specific view
+5. Click action card → ActionSlideOutEdit slide-out editor (full CRUD, comments, history)
+6. /actions/[id] → standalone detail page (DOMPurify HTML rendering for notes)
+7. Context-aware back nav: ?from= and ?title= query params for breadcrumb context
+8. Actions can also be created/edited from goal detail pages (Projects → Child Items tab)
 ```
 
-**Components**: Modern-actions components, KanbanBoard, BulkActionsBar, CreateActionModal
+**Components**: ActionSlideOutEdit (shared across Actions page + Goal detail), KanbanBoard, BulkActionsBar
 
 ## Strategic Planning
 
@@ -111,13 +112,30 @@
 5. Compliance scores derive from event counts vs targets
 ```
 
-## Goals & Initiatives
+## Goals & Projects
 
 ```
-1. /goals-initiatives → landing page with tabs
-2. 3-tier hierarchy: Company Goals → Team Goals → Initiatives
-3. /goals-initiatives/new → create with templates
-4. Link actions to initiatives for progress tracking
-5. Approval workflow for goal changes
-6. MS Graph integration for role-based access
+1. /goals-initiatives → landing page with 9 tabs:
+   Overview, Dashboard, Strategy Map, Pillar, BU Goals, Team, Projects, Timeline, Workload
+2. 3-tier hierarchy: BU Goals → Team Goals → Projects (display labels; DB: company/team/initiative)
+3. Tab features:
+   - Dashboard: Actions reporting widget (status breakdown, overdue count), scope-sensitive insights
+   - Strategy Map: XYFlow with zoom controls (bottom-right), fullscreen support
+   - Timeline/Gantt: Default collapsed, hierarchical DFS sort, "Mon 10" day format,
+     router.push for user drills (browser Back works), router.replace for mount sync only
+   - Kanban: Softened column header borders (border-white/50)
+4. Goal detail (/goals-initiatives/[type]/[id]):
+   - Compact metadata bar (progress% | status | date range | owner)
+   - Auto-sizing description with line-clamp-3 + "Show more"
+   - AI Suggest for check-ins (popover with right-0, max-width for viewport safety)
+   - Projects: Linked Actions section with ActionSlideOutEdit (initiative auto-linked)
+5. Automations panel via Zap icon (top-right) — AutomationRulesPanel
+6. /goals-initiatives/new → create with templates
+7. Approval workflow + MS Graph integration for role-based access
 ```
+
+### Goal Type Display Labels
+- DB `company` → UI "BU Goal"
+- DB `team` → UI "Team"
+- DB `initiative` → UI "Project"
+- Shared labels: `src/lib/goals/labels.ts`

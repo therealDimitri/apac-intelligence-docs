@@ -36,7 +36,7 @@
 
 | Feature | Status | Evidence |
 |---------|--------|----------|
-| Executive Briefing | LIVE | 12 data sections, caching (4h daily/24h weekly), AI summary, audio TTS |
+| Executive Briefing | LIVE | 12 data sections, caching (4h daily/24h weekly), AI summary, audio TTS (ElevenLabs charlie voice, Accept header fix) |
 | /api/briefings/generate | LIVE | Period selection, CSE filtering, cache management, force-refresh |
 | /api/briefings/audio | LIVE | OpenAI TTS integration |
 | Competitors Tracking | LIVE | CRUD APIs, DB migration confirms table existence |
@@ -44,7 +44,7 @@
 | Autopilot Suggestions | LIVE | API returns pending touchpoints, `scheduled_touchpoints` table |
 | Recognition Occasions | LIVE | Full CRUD with occasions and suggestions |
 | Communications Draft | LIVE | AI-generated email drafts with CRUD operations |
-| Timeline Replay | LIVE | Full scrubber, health/NPS/ARR/actions metric cards, event markers, key moments, play/pause/speed controls |
+| Timeline Replay | LIVE | Full scrubber, health/NPS/ARR/actions metric cards, event markers, key moments, play/pause/speed controls. Gantt: hierarchical DFS sort, default collapsed, "Mon 10" day format, push/replace drill navigation |
 
 ## Phase 9: Moonshot Features
 
