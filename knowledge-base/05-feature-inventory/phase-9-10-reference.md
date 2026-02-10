@@ -119,6 +119,8 @@ type DealStage = 'lead' | 'qualified' | 'proposal' | 'negotiation' | 'closed_won
 
 **Hooks:** `useMeetingSession`, `useTranscription`
 
+**Exported helpers:** `getAudioInputDevices()` — enumerate browser audio inputs (requires mic permission grant first)
+
 **Route:** `/meetings/[id]/live`
 
 **Implementation Notes:**
@@ -126,6 +128,10 @@ type DealStage = 'lead' | 'qualified' | 'proposal' | 'negotiation' | 'closed_won
 - `meeting_sessions.meeting_id` references `unified_meetings.id` which is **INTEGER** type
 - 5-second polling interval for real-time updates
 - Sentiment scores: -1.0 (negative) to +1.0 (positive)
+- **Audio device selector**: Settings gear opens panel to choose audio input device. Supports virtual devices (Microsoft Teams Audio Device, BlackHole) for capturing system/meeting audio instead of just the microphone
+- Virtual device detection: when `audioDeviceId` is set, `echoCancellation`, `noiseSuppression`, `autoGainControl` are disabled to preserve the original audio signal
+- Device selection persisted in `localStorage` (`cohost-audio-device` key)
+- Mic permission flow: uses `navigator.permissions.query()` (Chrome/Edge) with `.catch()` fallback for Safari (tries `enumerateDevices()` directly). Shows explicit "Allow Microphone Access" button when permission not yet granted
 
 ### 9.6: Sentiment Analysis
 

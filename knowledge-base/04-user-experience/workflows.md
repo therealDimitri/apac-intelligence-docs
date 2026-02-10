@@ -42,10 +42,11 @@
 ### During Meeting (Phase 9)
 ```
 1. /meetings/[id]/live → Meeting Co-Host
-2. Real-time transcription with speaker identification
-3. Sentiment gauge tracking conversation tone
-4. AI coaching suggestions (talking points, objection responses)
-5. Knowledge graph RAG for contextual data points
+2. Settings gear → select audio input (default mic or virtual device like MS Teams Audio)
+3. Real-time transcription with speaker identification (client-side Whisper via WebGPU)
+4. Sentiment gauge tracking conversation tone
+5. AI coaching suggestions (talking points, objection responses)
+6. Knowledge graph RAG for contextual data points
 ```
 
 ### After Meeting
