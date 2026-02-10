@@ -26,7 +26,7 @@
 ```
 /                              Command Centre dashboard
 /operating-rhythm              CS Operating Rhythm orbit view
-/planning                      Account Planning Coach
+/planning                      Account Planning Coach (My Plans, Planning Coach, Performance tabs)
 /planning/autopilot            Relationship Autopilot
 /planning/recognition          Recognition Program
 /digest                        Daily Digest
@@ -59,8 +59,8 @@
 /meetings/[id]/live            Meeting Co-Host (live)
 /meetings/calendar             Calendar view
 /planning/strategic            Strategic plans
-/planning/strategic/new        Multi-step wizard
-/planning/strategic/[id]       Plan detail
+/planning/strategic/new        Multi-step wizard (sub-step sidebar nav, ChaSen AI Coach)
+/planning/strategic/[id]       Plan detail (approval workflow, rename)
 /goals-initiatives/[type]/[id] Goal detail
 /goals-initiatives/new         Create goal
 /goals-initiatives/dashboard   Goals dashboard

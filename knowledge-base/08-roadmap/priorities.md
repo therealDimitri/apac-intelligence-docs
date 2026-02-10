@@ -41,9 +41,9 @@ Research from P3 sprint: Baymard Institute found horizontal tabs have 27% conten
 | Sticky metadata sidebar on wide viewports | Medium | Medium | Done |
 | Single-open accordion mode (each section collapses when another opens) | Medium | Low | Done |
 
-## Priority 7: Performance & Bundle Size — MOSTLY COMPLETE (Medium)
+## Priority 7: Performance & Bundle Size — COMPLETE
 
-939 `'use client'` directives remain for future audit. Console.log and lazy-load items shipped in P5 batch 2.
+All items shipped. `'use client'` audit removed 17 unnecessary directives (pure presentational components, wrapper pages, utility files). Remaining 902 directives are legitimately needed (hooks, event handlers, client libraries).
 
 | Task | Impact | Complexity | Status |
 |------|--------|------------|--------|
@@ -51,28 +51,52 @@ Research from P3 sprint: Baymard Institute found horizontal tabs have 27% conten
 | Identify and lazy-load heavy client components (Three.js, D3, Recharts) | Medium | Medium | Done |
 | Implement route-level code splitting for AI Lab / Visualisations | Medium | Medium | Done |
 | Add Next.js `loading.tsx` files for major route groups | Medium | Low | Done |
+| Audit `'use client'` directives — remove from server-renderable files | Low | High | Done |
 
-## Priority 8: Testing & Quality (Low)
+## Priority 8: Testing & Quality — COMPLETE (Medium)
 
-No test suite currently in place. Build incrementally starting with critical paths.
-
-| Task | Impact | Complexity | Status |
-|------|--------|------------|--------|
-| Set up Vitest + React Testing Library infrastructure | Medium | Low | |
-| Add tests for critical API routes (BURC sync, goals CRUD, actions CRUD) | High | Medium | |
-| Add tests for shared hooks (useGanttData, useLeadingIndicators, useAnomalyDetection) | Medium | Medium | |
-| Add Playwright E2E tests for core user workflows (login → dashboard → client detail) | High | High | |
-
-## Priority 9: Accessibility Audit (Low)
-
-FormFieldWrapper has ARIA support; broader audit needed for keyboard navigation, screen readers, and colour contrast.
+19 test suites, 471 tests (all passing). CI pipeline enabled. Per-path coverage thresholds on critical API routes. E2E smoke test covering auth → dashboard → clients → goals → actions.
 
 | Task | Impact | Complexity | Status |
 |------|--------|------------|--------|
-| Audit keyboard navigation across all major pages | Medium | Medium | |
-| Add skip-to-content links and focus management | Medium | Low | |
-| Verify colour contrast ratios meet WCAG 2.1 AA | Medium | Low | |
-| Add `aria-live` regions for dynamic content (alerts, toasts, data updates) | Medium | Medium | |
+| Set up Jest + React Testing Library infrastructure | Medium | Low | Done |
+| Set up Playwright E2E infrastructure (config + npm scripts) | Medium | Low | Done |
+| Fix 50 failing tests across 3 suites (network graph, digital twin, deal sandbox) | Medium | Low | Done |
+| Enable CI pipeline (lint + tsc + tests + build) | Medium | Low | Done |
+| Add tests for critical API routes (goals, actions, comments, BURC sync) | High | Medium | Done |
+| Add tests for shared hooks (useGanttData, useLeadingIndicators, useAnomalyDetection) | Medium | Medium | Done |
+| Add Playwright E2E smoke test for core user workflows | High | High | Done |
+
+## Priority 9: Accessibility Audit — COMPLETE (Low)
+
+Skip-to-content, jsx-a11y enforcement, aria-live regions, DataTable keyboard navigation (arrow keys + Enter), colour contrast audit (axe-core), and column sort a11y all shipped. Slide-out panels use Radix Dialog which handles focus trapping natively.
+
+| Task | Impact | Complexity | Status |
+|------|--------|------------|--------|
+| Audit keyboard navigation across all major pages | Medium | Medium | Done |
+| Add skip-to-content links and focus management | Medium | Low | Done |
+| Enable ESLint jsx-a11y at warn level | Medium | Low | Done |
+| Verify colour contrast ratios meet WCAG 2.1 AA | Medium | Low | Done |
+| Add `aria-live` regions for dynamic content (alerts, toasts, data updates) | Medium | Medium | Done |
+
+## Priority 10: Account Planning Coach UX Overhaul — COMPLETE (High)
+
+Redesigned strategic planning wizard with step/sub-step navigation, ChaSen AI coaching specialisation, plan grouping, and approval workflow. 19 files changed across 4 phases.
+
+| Task | Impact | Complexity | Status |
+|------|--------|------------|--------|
+| Fix status value mismatch (draft/in_progress/pending_review/approved/archived) | Medium | Low | Done |
+| Plan rename with auto-generated default names | Medium | Low | Done |
+| Plan grouping by owner/status/territory/client with collapsible sections | Medium | Medium | Done |
+| Wire ApprovalPanel into plan detail + status badges on cards | Medium | Medium | Done |
+| Remove Quick Jump and WizardMinimap (redundant navigation) | Low | Low | Done |
+| Fix Discovery scroll-to-top on step change | Low | Low | Done |
+| Sub-step navigation sidebar with parent/child tree + breadcrumbs | High | High | Done |
+| Step components render only active sub-section | High | Medium | Done |
+| 6 new AI action types + specialised prompt builders (Gap Selling, Voss, MEDDPICC, Wortmann) | High | High | Done |
+| Auto-generate suggestions on sub-step entry with cache | Medium | Medium | Done |
+| AISuggestionCard component with loading shimmer and feedback | Medium | Low | Done |
+| Dynamic quick tips referencing specific client names and data | Medium | Medium | Done |
 
 ## What "Done" Looks Like
 

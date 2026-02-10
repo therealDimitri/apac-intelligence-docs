@@ -76,16 +76,31 @@
 ## Strategic Planning
 
 ```
-1. /planning → Account Planning Coach hub
-2. Guided multi-step workflow:
-   Step 1: Context (PredictiveInput for Plan Purpose)
-   Step 2: Discovery/Diagnosis (LeadingIndicatorAlerts, AnomalyBadge)
-   Step 3: Stakeholder Intelligence (PredictiveInput for Black Swans)
-   Step 4: Opportunity Strategy (StoryBrand, MEDDPICC Coach)
-   Step 5: Risk Recovery (PredictiveInput for Mitigation)
-   Step 6: Action Narrative (PredictiveInput, NextBestActions)
-3. Goal linking and approval workflow
+1. /planning → Account Planning Coach hub → My Plans tab
+   - Plan cards with status badges (Draft/In Progress/Pending Review/Approved/Archived)
+   - Filter by status, Group By: owner/status/territory/client
+   - Collapsible group sections with plan count + avg completion %
+   - Inline plan rename (click title to edit)
+2. Click plan → /planning/strategic/new?id=... → Plan Detail
+   - Left sidebar: parent/child step tree (expand/collapse sub-steps)
+   - Breadcrumbs: Planning > CSE Name > Step > Sub-step
+   - 6 steps with sub-step rendering (only active sub-section shown):
+     Setup (single view)
+     Discovery: Summary | Gap Discovery | Client Gap Diagnosis
+     Stakeholders: Overview | Tactical Empathy | Black Swan | "That's Right" | Calibrated Qs | Accusation Audit
+     Opportunities: AI Tips | Plan Coverage | Qualification | StoryBrand | Forecast Simulation
+     Risks: Risk Overview | Recovery Confidence | Accusation Audit | Recovery Narrative | Mitigation
+     Actions: Plan Summary | Action Readiness | Actions
+   - Scroll-to-top on step/sub-step change
+3. ChaSen AI Coach (right sidebar):
+   - Sub-step aware coaching buttons per methodology
+   - Auto-suggestions on sub-step entry (1.5s debounce, cached)
+   - Dynamic quick tips referencing specific client names, health scores, NPS
+   - Methodologies: Gap Selling (Discovery), Voss (Stakeholders), MEDDPICC (Opportunities), Wortmann (Recovery)
+4. Approval workflow via ApprovalPanel (submit/approve/reject)
 ```
+
+**Components**: AIInsightsPanel, AISuggestionCard, ApprovalPanel, CollapsibleSection
 
 ## Executive Briefing
 

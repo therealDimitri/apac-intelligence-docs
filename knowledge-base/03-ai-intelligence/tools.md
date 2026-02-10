@@ -56,6 +56,7 @@
 | `useNaturalLanguageChart` | NL-to-chart conversion |
 | `useDismissalLearning` | Learn from user feedback |
 | `useAmbientAwareness` | Track cursor, scroll, focus for contextual AI |
+| `usePlanAI` | Planning AI — 6 action types: gap_summary_analysis, gap_client_diagnosis, coverage_analysis, tactical_empathy_coach, accusation_audit_coach, recovery_narrative_coach |
 
 ## AI API Routes
 
@@ -71,3 +72,5 @@
 | `/api/chasen/what-if` | Scenario analysis |
 | `/api/chasen/workflows` | NL workflow CRUD |
 | `/api/chasen/recommend-actions` | AI action recommendations |
+| `/api/planning/strategic/new/ai` | Planning AI coaching (new plans) — Gap Selling, Voss, MEDDPICC, Wortmann prompts |
+| `/api/planning/strategic/[id]/ai` | Planning AI coaching (existing plans) — same prompt builders |

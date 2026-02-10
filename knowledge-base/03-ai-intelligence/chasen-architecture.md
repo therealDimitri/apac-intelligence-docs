@@ -65,6 +65,11 @@ User Message
 | `src/lib/ai-providers.ts` | `callMatchaAI()` and `getAIModel()` |
 | `src/lib/structured-output.ts` | Structured output via tool_use |
 | `src/components/FloatingChaSenAI.tsx` | Chat widget UI (1157 lines) |
+| `src/hooks/usePlanAI.ts` | Planning AI hook — 6 specialised action types |
+| `src/components/planning/unified/AIInsightsPanel.tsx` | Sub-step aware coaching panel with auto-suggestions |
+| `src/components/planning/unified/AISuggestionCard.tsx` | Auto-generated suggestion card with feedback |
+| `src/app/api/planning/strategic/new/ai/route.ts` | Planning AI endpoint — specialised prompt builders |
+| `src/app/api/planning/strategic/[id]/ai/route.ts` | Same for existing plans |
 
 ## Document Upload System
 
