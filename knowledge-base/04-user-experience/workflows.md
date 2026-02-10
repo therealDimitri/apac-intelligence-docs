@@ -92,6 +92,9 @@
      Risks: Risk Overview | Recovery Confidence | Accusation Audit | Recovery Narrative | Mitigation
      Actions: Plan Summary | Action Readiness | Actions
    - Scroll-to-top on step/sub-step change
+   - Sticky summary bars on sub-step navigation (Discovery, Stakeholders, Opportunities, Risks)
+   - Voss methodology context headings on Stakeholder sub-steps
+   - Target vs Quota summary bar in Plan Coverage (always visible even when nav rail hidden)
 3. ChaSen AI Coach (right sidebar):
    - Sub-step aware coaching buttons per methodology
    - Auto-suggestions on sub-step entry (1.5s debounce, cached)

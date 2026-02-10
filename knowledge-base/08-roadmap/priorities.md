@@ -97,6 +97,15 @@ Redesigned strategic planning wizard with step/sub-step navigation, ChaSen AI co
 | Auto-generate suggestions on sub-step entry with cache | Medium | Medium | Done |
 | AISuggestionCard component with loading shimmer and feedback | Medium | Low | Done |
 | Dynamic quick tips referencing specific client names and data | Medium | Medium | Done |
+| **UX Polish Sprint** | | | |
+| Fix bottom cutoff (desktop footer obscuring content) | Low | Low | Done |
+| Target vs Quota summary bar inside Plan Coverage (visible on sub-step nav) | High | Medium | Done |
+| Remove Forecast Simulation min-height white space | Low | Low | Done |
+| Voss methodology context headings on Stakeholder sub-steps | Medium | Low | Done |
+| Sticky Discovery Summary on non-overview sub-steps | Medium | Low | Done |
+| Sticky Stakeholder Intelligence Summary + role counts | Medium | Low | Done |
+| Sticky Opportunities Summary (pipeline metrics) | Medium | Low | Done |
+| Sticky Risk Overview on per-risk sub-steps | Medium | Low | Done |
 
 ## What "Done" Looks Like
 
