@@ -78,11 +78,25 @@ Detail tables (`burc_waterfall_data`, `burc_revenue_streams`, etc.) contain brea
 
 | Risk | Impact | Status |
 |------|--------|--------|
-| Excel cell references hardcoded (U36, U60, U101) | Sheet restructure silently fails | Active risk |
+| Excel cell references hardcoded (see row map below) | Sheet restructure silently fails | Active risk — last updated 2026-02-11 |
 | Hard-coded fiscal year 2026 | Future years require code updates | Active risk |
 | launchd only on macOS | Other OS dev machines won't auto-sync | By design |
 | No duplicate detection in some tables | Re-running can insert duplicates | Partial (UPSERT on most) |
 | OneDrive path changes | Resolved via `onedrive-paths.mjs` | Fixed |
+
+## APAC BURC Sheet Row Map (updated 2026-02-11)
+
+Row numbers in `sync-burc-data-supabase.mjs` must match the live Excel sheet. Finance restructures the sheet periodically (inserting pipeline rows, business case breakdowns, headers). When the sync fails, dump column A to find new row positions.
+
+| Section | Rows | Notes |
+|---------|------|-------|
+| Gross Revenue | 10 (License), 12 (PS), 18 (Maint), 27 (HW), 36 (Total) | Was 28/30/33/35/36 before Feb 2026 |
+| COGS | 38, 40, 44, 47, 56 | Unchanged |
+| Net Revenue | 58 (License), 59 (PS), 60 (Maint), 61 (HW), 66 (Total) | PS/Maint/HW shifted from 60/63/65 |
+| OPEX | 71 (PS), 76 (Maint), 83 (S&M), 89 (R&D), 96 (G&A), 99 (Total) | Last 4 shifted +1 |
+| EBITA | 101 (value), 102 (% margin) | Shifted from 100/101 |
+| CSI Ratios | 123-127 (Maint, S&M, R&D, PS, Admin) | Shifted from 122-126 (header inserted) |
+| Annual financials | Uses `findRows()` regex — more resilient to row shifts | Pattern: `/^Gross Revenue/i` |
 
 ## Orchestration
 
