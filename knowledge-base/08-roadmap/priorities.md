@@ -130,7 +130,7 @@ Merged BU Performance (`/`) and BURC Performance (`/financials`) into a single b
 | Extract 16 components from monolithic financials page (4,178 → 640 lines) | Medium | High | Done |
 | Create `useBurcFinancials` hook for reusable data fetching (3 parallel APIs) | Medium | Medium | Done |
 | Build 5-tab consolidated dashboard (Overview, Actions, Financial, Pipeline, Analytics) | High | High | Done |
-| KPI Hero Row (6 metric cards from `burc_executive_summary`) | High | Medium | Done |
+| KPI Hero Row — 6 expandable bento cards with drill-downs (3 data sources, YoY trends, client breakdown) | High | Medium | Done |
 | Collapsible AI briefing in DashboardHeader | Medium | Low | Done |
 | `singleTab` prop on ActionableIntelligenceDashboard (reuse 1,600 lines of matrix logic) | High | Low | Done |
 | 301 redirect `/financials` → `/` + update 8 files with deep links | Medium | Low | Done |
@@ -145,7 +145,7 @@ Merged BU Performance (`/`) and BURC Performance (`/financials`) into a single b
 
 | Task | Impact | Complexity | Status |
 |------|--------|------------|--------|
-| KPI Hero Row: expand executive summary with prior-period comparison, health indicators, client name mapping | High | Medium | Done |
+| KPI Hero Row: bento card redesign with 6 expandable drill-downs, 3 data sources, YoY trends, client ARR breakdown | High | Medium | Done |
 | Compliance view: auto-refresh materialized view after event mutations (RPC + API integration) | Medium | Low | Done |
 | Compliance dashboard: default to current year (newly logged events immediately visible) | Low | Low | Done |
 | Scheduled events: pass `completed: false` for future events (vs `true` for logged events) | Low | Low | Done |

@@ -71,7 +71,7 @@ Defined in `src/lib/pdf/altera-branding.ts`.
 ### Specialised Components
 | Directory | Purpose |
 |-----------|---------|
-| `src/components/dashboard/` | DashboardHeader, KPIHeroRow, BURCExecutiveWidgets, DataInsightsWidgets, DashboardGrid, WidgetContainer |
+| `src/components/dashboard/` | DashboardHeader, KPIHeroRow (expandable bento cards), BURCExecutiveWidgets, DataInsightsWidgets, DashboardGrid, WidgetContainer |
 | `src/components/dashboard/tabs/` | OverviewTab, ActionsTab, FinancialPerformanceTab, PipelineRenewalsTab, AnalyticsTab |
 | `src/components/financials/` | MetricCard, PipelineSectionView, RenewalsTable, TeamActionCards, EbitaGauge, WaterfallChart, MonthlyEbitaTrend, ClientRevenueBreakdown, PsPipelineSummary, NetRevenueImpactBar |
 | `src/components/ai/` | PredictiveInput, LeadingIndicatorAlerts, AnomalyHighlight, ExplainThisPopover |
@@ -141,6 +141,32 @@ const columns: DataTableColumn<MyType>[] = [
 ```
 
 **Features:** Virtual scrolling, sortable columns, row actions dropdown, tooltips for truncated text, sticky header, striped/hoverable rows.
+
+## KPI Bento Card Pattern
+
+The `KPIHeroRow` (`src/components/dashboard/KPIHeroRow.tsx`) uses expandable bento cards for the 6 headline metrics. This pattern is shared with `BURCExecutiveDashboard`.
+
+**Card anatomy:**
+- Status-coloured container: entire card `bg-*`, `border-*`, `text-*` changes based on metric health (emerald=on-target, amber=at-risk, red=critical)
+- Large metric number + target comparison + variance text
+- Expandable drill-down section (toggle button with `e.stopPropagation()` to prevent card's `onTabChange`)
+- YoY trend indicator with prior period comparison
+- `role="button"` on outer `<div>` to avoid nested `<button>` hydration errors
+
+**Data sources (3 concurrent fetches):**
+- `burc_executive_summary` — primary KPI metrics
+- `burc_annual_financials` — prior year for YoY trends
+- `burc_revenue_detail` — ARR by client breakdown
+
+**Drill-downs per card:**
+| Card | Drill-Down Content |
+|------|-------------------|
+| Gross Revenue | GRR breakdown: Base ARR → Churn → Retained Revenue + formula |
+| Net Revenue | NRR breakdown: Base + Expansion − Churn + formula |
+| Rule of 40 | Growth % + EBITA Margin % progress bars |
+| Total ARR | Client list with friendly names sorted by revenue |
+| Pipeline Value | Total vs Weighted pipeline + coverage ratio |
+| Revenue at Risk | At-risk revenue, % of ARR, affected client count |
 
 ## Loading State Conventions
 
