@@ -129,7 +129,7 @@ Merged BU Performance (`/`) and BURC Performance (`/financials`) into a single b
 |------|--------|------------|--------|
 | Extract 16 components from monolithic financials page (4,178 → 640 lines) | Medium | High | Done |
 | Create `useBurcFinancials` hook for reusable data fetching (3 parallel APIs) | Medium | Medium | Done |
-| Build 5-tab consolidated dashboard (Overview, Actions, Financial, Pipeline, Analytics) | High | High | Done |
+| Build 5-tab consolidated dashboard (Overview, Financial, Pipeline, Leading Indicators, Analytics) | High | High | Done |
 | KPI Hero Row — 6 expandable bento cards with drill-downs (3 data sources, YoY trends, client breakdown) | High | Medium | Done |
 | Collapsible AI briefing in DashboardHeader | Medium | Low | Done |
 | `singleTab` prop on ActionableIntelligenceDashboard (reuse 1,600 lines of matrix logic) | High | Low | Done |
@@ -149,6 +149,25 @@ Merged BU Performance (`/`) and BURC Performance (`/financials`) into a single b
 | Compliance view: auto-refresh materialized view after event mutations (RPC + API integration) | Medium | Low | Done |
 | Compliance dashboard: default to current year (newly logged events immediately visible) | Low | Low | Done |
 | Scheduled events: pass `completed: false` for future events (vs `true` for logged events) | Low | Low | Done |
+
+## P12: Command Centre Dashboard Overhaul — COMPLETE
+
+Comprehensive restructure of the Command Centre dashboard: moved tabs above bento boxes, replaced Actions tab with Leading Indicators, extracted FY/sync controls to page level, removed 3 legacy widgets (CSI Ratios, Pipeline Reconciliation, Requires Attention), consolidated to a 2×2 widget grid with expandable panels, added NPS Themes card, wired Support Health score, renamed widgets to match current terminology.
+
+| Task | Impact | Complexity | Status |
+|------|--------|------------|--------|
+| Move tabs above KPI bento boxes, add Leading Indicators tab, remove Actions tab | Medium | Low | Done |
+| Extract FY26 vs FY25 toggle + sync timestamps + refresh to page-level header | Medium | Medium | Done |
+| Remove CSI Ratios, Pipeline Reconciliation, Requires Attention widgets | Low | Low | Done |
+| Rename "Accounts Receivable" → "Working Capital", "QBRs" → "Plans Complete", "Support Tickets" → "Support Health" | Medium | Low | Done |
+| Wire Support Health score from `/api/support-metrics/trends` (portfolio average) | Medium | Medium | Done |
+| Wire Plans Complete from `strategic_plans` table | Low | Low | Done |
+| New NPSSummaryCard — top 6 themes with sentiment grouping from `/api/planning/nps-themes` | Medium | Medium | Done |
+| Expandable Client Health panel — clients grouped by Critical/At Risk/Healthy with scores | High | Medium | Done |
+| Expandable Working Capital panel — clients by aging bucket (90+, 60-90, 30-60, Current) | High | Medium | Done |
+| Keep tabs mounted with CSS display to prevent re-fetch on tab switch | Medium | Low | Done |
+
+**Key files:** `page.tsx`, `BURCExecutiveDashboard.tsx` (-500/+550 lines), `ExecutiveQuickGlanceWidgets.tsx` (+250 lines), new `NPSSummaryCard.tsx`, new `LeadingIndicatorsTab.tsx`
 
 ## What "Done" Looks Like
 
