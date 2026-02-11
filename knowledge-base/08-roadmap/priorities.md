@@ -1,6 +1,6 @@
 # Priorities
 
-> Last updated: 11 February 2026
+> Last updated: 12 February 2026
 
 ## Guiding Principles
 
@@ -168,6 +168,26 @@ Comprehensive restructure of the Command Centre dashboard: moved tabs above bent
 | Keep tabs mounted with CSS display to prevent re-fetch on tab switch | Medium | Low | Done |
 
 **Key files:** `page.tsx`, `BURCExecutiveDashboard.tsx` (-500/+550 lines), `ExecutiveQuickGlanceWidgets.tsx` (+250 lines), new `NPSSummaryCard.tsx`, new `LeadingIndicatorsTab.tsx`
+
+## Post-P12: Dashboard Data Integrity & Sync Fixes
+
+Data reconciliation pass across all dashboard components. Fixed fabricated EBITA targets, broken Supabase views, stale data logging, and KPI card ordering.
+
+| Task | Impact | Complexity | Status |
+|------|--------|------------|--------|
+| Swap KPI cards: Total ARR → primary row, Rule of 40 → secondary row | Low | Low | Done |
+| Remove duplicate PortfolioHealthStats from OverviewTab | Low | Low | Done |
+| Fix `burc_executive_summary` view — live contract subqueries instead of hardcoded zeros | High | Low | Done |
+| Fix `burc_waterfall` fiscal_year NULL → 2026 for all 13 rows | Medium | Low | Done |
+| EBITA API: use `burc_ebita_monthly` (real BURC plan targets) instead of fabricated 95% targets | High | Medium | Done |
+| NPS themes best-period: select most recent period with ≥3 feedback responses | Low | Low | Done |
+| sync-logger.mjs: fix `'completed'` → `'success'` status (constraint violation) | High | Low | Done |
+| Activity sync: add logger.complete() on 0-activity path, fix triggered_by | Medium | Low | Done |
+| BURC sync: handle "Could not find the table" error for missing tables | Low | Low | Done |
+| Staleness bar: raise outlook_actions threshold from 25h to 72h (user-generated data) | Medium | Low | Done |
+| Clean up 85 orphaned sync_history "running" entries | Medium | Low | Done |
+
+**Key files:** `KPIHeroRow.tsx`, `burc/route.ts` (EBITA rewrite), `sync-logger.mjs`, `StalenessBar.tsx`
 
 ## What "Done" Looks Like
 
