@@ -141,6 +141,15 @@ Merged BU Performance (`/`) and BURC Performance (`/financials`) into a single b
 - `singleTab` prop: Added 3 lines to ActionableIntelligenceDashboard to lock it to Priority Matrix tab, avoiding duplication of complex assignment logic
 - All data connections (BURC sync, API routes, cron jobs) untouched — pure UI consolidation
 
+## P11 Follow-up: KPI Hero + Compliance Fixes — COMPLETE
+
+| Task | Impact | Complexity | Status |
+|------|--------|------------|--------|
+| KPI Hero Row: expand executive summary with prior-period comparison, health indicators, client name mapping | High | Medium | Done |
+| Compliance view: auto-refresh materialized view after event mutations (RPC + API integration) | Medium | Low | Done |
+| Compliance dashboard: default to current year (newly logged events immediately visible) | Low | Low | Done |
+| Scheduled events: pass `completed: false` for future events (vs `true` for logged events) | Low | Low | Done |
+
 ## What "Done" Looks Like
 
 The platform succeeds when:
