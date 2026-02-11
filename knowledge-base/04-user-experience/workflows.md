@@ -3,17 +3,21 @@
 ## CSE Morning Routine
 
 ```
-1. Open dashboard (/) → see personalised greeting + stats
-2. Review Executive Briefing → 12-section operational report
+1. Open Command Centre (/) → personalised greeting + KPI Hero Row (6 metrics)
+2. Expand AI Executive Briefing → 12-section operational report (collapsed by default)
 3. Listen to Audio Briefing (optional) → ElevenLabs TTS (charlie voice, hardcoded)
-4. Check Portfolio Health Stats → health distribution gauge
-5. Review Predictive Alerts → grouped by category (Churn Risk, Health Trajectory, etc.), collapsible sections
-6. Filter "My Clients" → focus on assigned portfolio
-7. Check overdue actions → prioritise follow-ups
-8. Review ChaSen AI suggestions → act on proactive nudges
+4. Overview tab: Portfolio Health Stats, Leading Indicators (9 urgent), BURCExecutiveDashboard
+5. Actions & Priorities tab: Priority Matrix (DO NOW / PLAN / OPPORTUNITIES / INFORM)
+6. Financial Performance tab: CSI Health Score, 5 operating ratios, BURC Tracking
+7. Pipeline & Renewals tab: PipelineSectionView, deal table, RenewalsTable
+8. Analytics tab: Revenue Trends, NRR/GRR, Concentration Risk, Predictive Alerts
+9. Filter "My Clients" (frontline only) → focus on assigned portfolio
+10. Review ChaSen AI suggestions → act on proactive nudges
 ```
 
-**Components**: ActionableIntelligenceDashboard, ExecutiveBriefing, AudioBriefingPlayer, PortfolioHealthStats
+**5 tabs**: Overview | Actions & Priorities | Financial Performance | Pipeline & Renewals | Analytics
+**Lazy loading**: Financial/Pipeline/Analytics tabs only fetch data when opened
+**Components**: DashboardHeader, KPIHeroRow, OverviewTab, ActionsTab, FinancialPerformanceTab, PipelineRenewalsTab, AnalyticsTab
 
 ## Client Deep Dive
 

@@ -71,6 +71,9 @@ Defined in `src/lib/pdf/altera-branding.ts`.
 ### Specialised Components
 | Directory | Purpose |
 |-----------|---------|
+| `src/components/dashboard/` | DashboardHeader, KPIHeroRow, BURCExecutiveWidgets, DataInsightsWidgets, DashboardGrid, WidgetContainer |
+| `src/components/dashboard/tabs/` | OverviewTab, ActionsTab, FinancialPerformanceTab, PipelineRenewalsTab, AnalyticsTab |
+| `src/components/financials/` | MetricCard, PipelineSectionView, RenewalsTable, TeamActionCards, EbitaGauge, WaterfallChart, MonthlyEbitaTrend, ClientRevenueBreakdown, PsPipelineSummary, NetRevenueImpactBar |
 | `src/components/ai/` | PredictiveInput, LeadingIndicatorAlerts, AnomalyHighlight, ExplainThisPopover |
 | `src/components/charts/` | CoverageGauge, ForecastChart, HealthRadar, NarrativeDashboard |
 | `src/components/layout/` | Sidebar, navigation components |

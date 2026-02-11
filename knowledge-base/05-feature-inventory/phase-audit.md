@@ -1,6 +1,6 @@
 # Phase Audit
 
-> Last audited: 2026-02-09
+> Last audited: 2026-02-11
 
 ## Summary
 
@@ -10,7 +10,8 @@
 | 8 (Experimental) | 9 | 9 | 0 | 0 | 0 |
 | 9 (Moonshot) | 7 | 7 | 0 | 0 | 0 |
 | 10 (ChaSen AI) | 19 | 19 | 0 | 0 | 0 |
-| **TOTAL** | **44** | **44** | **0** | **0** | **0** |
+| 11 (Dashboard Consolidation) | 8 | 8 | 0 | 0 | 0 |
+| **TOTAL** | **52** | **52** | **0** | **0** | **0** |
 
 **Status definitions:**
 - **LIVE**: Fully functional, integrated UI, real data flow
@@ -82,9 +83,23 @@
 | Meeting Brief Generation (F18) | LIVE | ChaSen tool + API + slide-in panel with copy/print, aggregates initiatives/financials/NPS/actions |
 | Smart Goal Fields (F19) | LIVE | ChaSen suggest_goal_metadata tool, debounced client/owner/priority suggestions, duplicate detection |
 
+## Phase 11: Dashboard Consolidation
+
+| Feature | Status | Evidence |
+|---------|--------|----------|
+| KPIHeroRow | LIVE | 6 metric cards (Gross Revenue, Net Revenue, Pipeline, Revenue at Risk, NRR/GRR, Rule of 40) self-fetching from `burc_executive_summary` |
+| DashboardHeader | LIVE | Personalised greeting, collapsible AI briefing (indigo->navy gradient), audio player |
+| useBurcFinancials hook | LIVE | 3 parallel API fetches with `autoFetch` lazy-load option |
+| 5-tab consolidated dashboard | LIVE | Overview, Actions & Priorities, Financial Performance, Pipeline & Renewals, Analytics |
+| Financials component extraction | LIVE | 16 standalone components in `src/components/financials/` (from 4,178-line monolith) |
+| `singleTab` prop on ActionableIntelligenceDashboard | LIVE | Locks to Priority Matrix tab without duplicating 1,600 lines |
+| `/financials` 301 redirect | LIVE | Permanent redirect to `/` via `next.config.ts` |
+| `burc-export.ts` standalone PDF utility | LIVE | Extracted from financials page, dynamic jsPDF import |
+
 ## Quality Highlights
 
 1. **Phase 7**: Full accessibility support (ARIA), dark mode, mobile responsive
 2. **Phase 8**: Parallel Promise.all() data loading, configurable cache TTL
 3. **Phase 9**: Digital twin personality configs (analytical/decisive/collaborative/cautious)
 4. **Phase 10**: Native Anthropic tool_use (no regex), 20 tools with read/write distinction, 6-model routing, size-based upload bypass for Netlify limits
+5. **Phase 11**: Lazy-load pattern (`autoFetch: false`) — Financial/Pipeline/Analytics tabs only trigger API calls when opened, keeping initial load fast

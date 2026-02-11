@@ -1,6 +1,6 @@
 # Priorities
 
-> Last updated: 10 February 2026
+> Last updated: 11 February 2026
 
 ## Guiding Principles
 
@@ -120,6 +120,26 @@ Follow-up fixes after re-testing the P10 UX overhaul. 15 files changed.
 | Add stakeholder overview cards to Stakeholder Intelligence step | Medium | Low | Done |
 | Fix "Improve Score" navigation to correct sub-step target | Low | Low | Done |
 | Simplify ClientConfidenceTabs (remove unused grouping code) | Low | Low | Done |
+
+## Priority 11: Combined Command Centre Dashboard — COMPLETE (High)
+
+Merged BU Performance (`/`) and BURC Performance (`/financials`) into a single bento-grid dashboard at `/`. Consolidated 10 views into 5 lazy-loaded tabs, eliminated data duplication, and added a KPI hero row. `/financials` now 301 redirects to `/`.
+
+| Task | Impact | Complexity | Status |
+|------|--------|------------|--------|
+| Extract 16 components from monolithic financials page (4,178 → 640 lines) | Medium | High | Done |
+| Create `useBurcFinancials` hook for reusable data fetching (3 parallel APIs) | Medium | Medium | Done |
+| Build 5-tab consolidated dashboard (Overview, Actions, Financial, Pipeline, Analytics) | High | High | Done |
+| KPI Hero Row (6 metric cards from `burc_executive_summary`) | High | Medium | Done |
+| Collapsible AI briefing in DashboardHeader | Medium | Low | Done |
+| `singleTab` prop on ActionableIntelligenceDashboard (reuse 1,600 lines of matrix logic) | High | Low | Done |
+| 301 redirect `/financials` → `/` + update 8 files with deep links | Medium | Low | Done |
+| Delete financials page + extract `handleExportReport` to `src/lib/burc-export.ts` | Low | Low | Done |
+
+**Key architecture decisions:**
+- Lazy-load: `useBurcFinancials({ autoFetch: false })` — Financial/Pipeline/Analytics tabs only trigger API calls when opened
+- `singleTab` prop: Added 3 lines to ActionableIntelligenceDashboard to lock it to Priority Matrix tab, avoiding duplication of complex assignment logic
+- All data connections (BURC sync, API routes, cron jobs) untouched — pure UI consolidation
 
 ## What "Done" Looks Like
 

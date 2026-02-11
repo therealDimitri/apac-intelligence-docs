@@ -24,7 +24,7 @@
 
 ### Primary Pages (in sidebar)
 ```
-/                              Command Centre dashboard
+/                              Command Centre dashboard (5 tabs: Overview, Actions & Priorities, Financial Performance, Pipeline & Renewals, Analytics)
 /operating-rhythm              CS Operating Rhythm orbit view
 /planning                      Account Planning Coach (My Plans, Planning Coach, Performance tabs)
 /planning/autopilot            Relationship Autopilot
@@ -97,7 +97,7 @@
 - `/apac` — Regional view
 - `/pipeline` — Pipeline management
 - `/burc` — BURC financial dashboard
-- `/financials` — Financial analytics
+- `/financials` — 301 redirect → `/` (consolidated into Command Centre)
 - `/alerts` — Alert centre
 - `/internal-ops` — Internal operations
 - `/benchmarking` — Benchmarking
