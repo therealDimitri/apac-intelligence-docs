@@ -107,6 +107,20 @@ Redesigned strategic planning wizard with step/sub-step navigation, ChaSen AI co
 | Sticky Opportunities Summary (pipeline metrics) | Medium | Low | Done |
 | Sticky Risk Overview on per-risk sub-steps | Medium | Low | Done |
 
+## P10 Round 2: Planning Coach Fixes — COMPLETE
+
+Follow-up fixes after re-testing the P10 UX overhaul. 15 files changed.
+
+| Task | Impact | Complexity | Status |
+|------|--------|------------|--------|
+| Fix sticky summary bar overlap on all step components (`-mt-6` removal) | Low | Low | Done |
+| Add `methodology_guide` AI action type with dedicated prompt builder | Medium | Medium | Done |
+| Persist previous insights to localStorage + re-display on click | Medium | Medium | Done |
+| Expandable ChaSen slide-over panel (portal + z-index fix) | Medium | Medium | Done |
+| Add stakeholder overview cards to Stakeholder Intelligence step | Medium | Low | Done |
+| Fix "Improve Score" navigation to correct sub-step target | Low | Low | Done |
+| Simplify ClientConfidenceTabs (remove unused grouping code) | Low | Low | Done |
+
 ## What "Done" Looks Like
 
 The platform succeeds when:
