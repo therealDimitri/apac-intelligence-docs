@@ -4,8 +4,8 @@
 
 | # | Group | Icon | Pages |
 |---|-------|------|-------|
-| 1 | Command Centre | Home | Dashboard (`/`), CS Operating Rhythm (`/operating-rhythm`), Daily Digest (`/digest`) |
-| 2 | Success Plans | Target | Account Planning (`/planning`), Goals & Projects (`/goals-initiatives`), Approvals (`/goals-initiatives/approvals`), Autopilot (`/planning/autopilot`), Recognition (`/planning/recognition`) |
+| 1 | Command Centre | Home | Dashboard (`/`), Goals & Projects (`/goals-initiatives`), CS Operating Rhythm (`/operating-rhythm`), Daily Digest (`/digest`) |
+| 2 | Success Plans | Target | Account Planning (`/planning`), Approvals (`/goals-initiatives/approvals`), Autopilot (`/planning/autopilot`), Recognition (`/planning/recognition`) |
 | 3 | Clients | Users | Portfolio Health (`/client-profiles`), Segmentation Progress (`/compliance`) |
 | 4 | Action Hub | Handshake | Meetings (`/meetings`), Actions & Tasks (`/actions`), AI Task Queue (`/tasks`) |
 | 5 | Analytics | LineChart | CS Team Performance (`/team-performance`), NPS (`/nps`), Support Health (`/support`), Working Capital (`/aging-accounts`) |
