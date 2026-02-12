@@ -92,6 +92,39 @@ The #1 data quality challenge. Client names vary across sources:
 7. ~~Alerting on data staleness (Slack/Teams notifications)~~ ✅ DONE (staleness-check cron + Teams webhooks)
 8. ~~Automated compliance reconciliation via daily cron~~ ✅ DONE (/api/cron/compliance-reconciliation)
 
+## CSI Ratio Data Quality — Outlier Clamping & Adjustment Detection
+
+The CSI ratios API (`/api/analytics/burc/csi-ratios/route.ts`) applies two data quality safeguards before returning historical data:
+
+### Ratio Clamping
+
+Raw ratios are clamped to meaningful business ranges to prevent chart distortion:
+
+| Ratio | Floor | Ceiling | Typical Range |
+|-------|-------|---------|---------------|
+| PS | 0 | 6 | 0.5–3 |
+| Sales | 0 | 4 | 0–2 |
+| Maintenance | 0 | 15 | 4–10 |
+| R&D | 0 | 3 | 0.2–1 |
+| G&A | 0% | 40% | 10–25% |
+
+Applied via `clampRatios()` — `Math.min(upper, Math.max(0, value))`.
+
+### Accounting Adjustment Detection
+
+Months with negative revenue or opex are flagged as `isAdjustment: true`. Detection criteria (`detectAdjustment()`):
+
+- Negative total revenue (`total_nr < 0`)
+- Negative component revenue exceeding $50K (`ps_nr < -50000` or `maintenance_nr < -50000`)
+- Negative opex (`sm_opex < 0` or `ga_opex < 0`)
+
+**Known adjustment months** (as of Feb 2026):
+- **Jan 2024**: Negative SM & GA opex → PS=12.33 spike
+- **Jan 2025**: Negative total revenue → PS=-4.89, Maint=-0.65
+- **Aug 2025**: Negative SM opex
+
+The chart component (`CSITimelineChart.tsx`) renders adjustment months as **gaps** (null values with `connectNulls={false}`) and shows "Accounting adjustment — excluded" in tooltips.
+
 ## Segmentation Event Dedup Architecture
 
 Duplicates in `segmentation_events` are prevented at **three layers**:
