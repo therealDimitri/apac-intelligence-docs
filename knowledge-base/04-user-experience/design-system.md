@@ -119,7 +119,7 @@ Use the correct component for each overlay pattern:
 
 ## Data Table Conventions
 
-Use the enhanced `DataTable` (`@/components/ui/enhanced/DataTable`) for all data tables:
+Use the enhanced `DataTable` (`@/components/ui/enhanced/DataTable`) for all data tables. Internally powered by TanStack React Table (`@tanstack/react-table`) with draggable column resizing:
 
 ```tsx
 import { DataTable, type DataTableColumn } from '@/components/ui/enhanced/DataTable'
@@ -139,6 +139,8 @@ const columns: DataTableColumn<MyType>[] = [
   rowActions={[{ label: 'Edit', onClick: handleEdit }]}
 />
 ```
+
+**Column resizing**: Users can drag the right edge of any column header to resize. Flex columns (`flex` prop) switch to pixel width on first manual resize. Actions column is fixed at 60px and non-resizable. Sorting remains external — consumers manage `sortBy`/`onSortChange` as before.
 
 **Features:** Virtual scrolling, sortable columns, row actions dropdown, tooltips for truncated text, sticky header, striped/hoverable rows.
 
