@@ -56,7 +56,7 @@ APAC Intelligence is an internal platform for Altera Digital Health's APAC team.
 
 | Layer | Technology | Notes |
 |-------|-----------|-------|
-| Frontend | Next.js 14 (App Router) | TypeScript, Tailwind CSS, shadcn/ui |
+| Frontend | Next.js 16 (App Router) | TypeScript, Tailwind CSS 4, shadcn/ui |
 | Database | Supabase (PostgreSQL) | Project: `usoyxsunetvxdjdglkmn`, ap-south-1 |
 | Auth | NextAuth + Azure AD | SSO via Microsoft Entra ID |
 | AI | Anthropic Claude API | Via `callMatchaAI()` wrapper |
