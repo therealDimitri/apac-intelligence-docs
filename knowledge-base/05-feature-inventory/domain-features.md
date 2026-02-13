@@ -130,13 +130,24 @@ RELEVANCE = CLIENT_MATCH*0.30 + TOPIC*0.25 + ACTION*0.20 + AUTHORITY*0.15 + RECE
 - **Progress**: `src/lib/goals/progress.ts` — calculateProgress(), deriveStatus()
 - **Permissions**: `src/lib/goals/permissions.ts` — RBAC resolution
 - **Hierarchy**: `src/lib/goals/hierarchy.ts`
-- **Components**: `src/components/goals/` (GanttView, GoalKanbanBoard, StrategyMap, GoalsDashboard, CheckInSuggestButton)
+- **Components**: `src/components/goals/` (GanttView, GoalKanbanBoard, StrategyMap, GoalsDashboard, GoalDrillDownDrawer, GoalDrillDownRow, CheckInSuggestButton)
 - **Labels**: `src/lib/goals/labels.ts` — GOAL_TYPE_LABELS, GOAL_TYPE_SHORT_LABELS, GOAL_TYPE_PLURAL_LABELS
 - **Gantt hook**: `src/hooks/useGanttData.ts` — hierarchical DFS sort, default collapsed
 - **Link Tab**: `src/components/unified-actions/LinkToInitiativeTab.tsx`
 - **Action editing**: Reuses `ActionSlideOutEdit` from `src/components/modern-actions/` on goal detail page
 - **Pages**: `src/app/(dashboard)/goals-initiatives/`
 - **MS Graph**: `src/lib/ms-graph/role-sync.ts`, `src/components/ms-graph/`, `src/hooks/useMSGraphSync.ts`
+
+### Dashboard Drill-Down Drawer
+
+- **Components**: `GoalDrillDownDrawer` (shell + data fetch) + `GoalDrillDownRow` (compact goal card)
+- **DrillContext** discriminated union — 3 modes: `list` (filtered goals), `single` (goal detail), `actions` (pre-loaded action items)
+- **Triggers**: Every dashboard widget fires `setDrillContext()` — KPI cards, status pie legend, owner bar chart, overdue rows, freshness cards, linked actions stats, activity entries
+- **Actions mode**: Uses pre-loaded `allActions` from `useActions()` hook — no extra fetch. Action items navigate to `/actions/{numericId}` (NOT `Action_ID`)
+- **Portal rendering**: `createPortal(document.body)` with framer-motion spring animation (damping 30, stiffness 300)
+- **Keyboard**: Escape to close via `useHotkeys`, focus return to trigger element on close
+- **Status changes**: Inline status dropdown in list mode, `handleDrillStatusChange` PATCHes API then increments `refreshKey` to re-fetch dashboard
+- **Design doc**: `docs/plans/2026-02-13-goals-dashboard-drilldown-design.md`
 
 ### RBAC Roles
 
