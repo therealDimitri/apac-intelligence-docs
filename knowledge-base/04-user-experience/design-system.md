@@ -62,11 +62,20 @@ Defined in `src/lib/pdf/altera-branding.ts`.
 
 ## Component Inventory
 
-### Base UI (`src/components/ui/`) — 58 files
+### Base UI (`src/components/ui/`) — 61 files
 | Type | Examples |
 |------|---------|
 | shadcn/ui | Button, Card, Dialog, DropdownMenu, Input, Badge, Checkbox, Collapsible, AlertDialog |
 | Custom | AudioPlayer, AnimatedNumber, ExpandableMetric, LazyChart, ChartSkeleton, LiveDataPulse, glass-panel, BottomSheet, MobileFilterSheet |
+| Shared tokens | StatusBadge, EmptyState, CardContainer |
+
+### Shared Token Components (P13)
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| `StatusBadge` | `src/components/ui/StatusBadge.tsx` | Unified badge for status, priority, health, NPS sentiment. Wraps `BadgeStyles` + colour token functions. Props: `status`, `priority`, `health`, `sentiment`, `label`, `variant` |
+| `EmptyState` | `src/components/ui/EmptyState.tsx` | Standard + compact empty states with icon, title, description, optional CTA. Use `compact` for sidebars/cards |
+| `CardContainer` | `src/components/ui/CardContainer.tsx` | Thin wrapper applying `LayoutTokens.card` + configurable padding (`standard`/`compact`/`none`) + `elevated` option |
 
 ### Specialised Components
 | Directory | Purpose |
@@ -87,15 +96,18 @@ Defined in `src/lib/pdf/altera-branding.ts`.
 
 ## Typography
 
-No formal type scale — uses inline Tailwind classes:
-| Role | Classes |
-|------|---------|
-| Page title | `text-2xl sm:text-3xl font-bold` |
-| Section header | `text-lg font-semibold` |
-| Card title | `text-base font-semibold` |
-| Body text | `text-sm text-gray-600` |
-| Caption | `text-xs text-gray-500` |
-| Sidebar labels | `text-sm font-medium text-white/80` |
+Centralised in `TypographyClasses` from `@/lib/design-tokens`:
+| Token | Classes | Usage |
+|-------|---------|-------|
+| `pageTitle` | `text-2xl font-bold text-gray-900` | `<h1>` page headings |
+| `sectionTitle` | `text-lg font-semibold text-gray-900` | `<h2>`/`<h3>` sections |
+| `cardTitle` | `text-base font-semibold text-gray-900` | Card-level headings |
+| `body` | `text-sm text-gray-600` | Body text |
+| `caption` | `text-xs text-gray-500` | Captions, timestamps |
+| `label` | `text-sm font-medium text-gray-700` | Form labels |
+| Sidebar labels | `text-sm font-medium text-white/80` | Sidebar nav items |
+
+**Rule:** Import `TypographyClasses` for neutral grey headings. Coloured metrics (green/red/amber numbers) keep inline classes.
 
 ## Modal & Dialog Conventions
 
@@ -220,13 +232,13 @@ For in-place data updates (re-fetch, polling, optimistic UI):
 | Area | Score | Issue |
 |------|-------|-------|
 | Layout consistency | 9/10 | PageShell on 25+ pages, Goals page full-width consistency across all tabs |
-| Component system | 6/10 | shadcn foundation solid, custom components vary |
-| Typography | 8/10 | TypographyClasses.sectionTitle/.caption adopted in planning steps + goals components |
-| Form patterns | 7/10 | FormRenderer + ModalFormDialog adopted on 3 modals; complex modals (notes, quick-event) still hand-rolled |
-| Data tables | 7/10 | Enhanced DataTable on 7 pages (knowledge, sales-hub, news-intelligence, operating-rhythm + 3 original); 8+ pages still raw |
+| Component system | 9/10 | StatusBadge, EmptyState, CardContainer shared components; 12 duplicate colour functions removed |
+| Typography | 9/10 | TypographyClasses adopted in 52 files including SheetTitle/AlertDialogTitle primitives |
+| Form patterns | 9/10 | FormRenderer + ModalFormDialog; focus rings unified to `focus-visible:ring-purple-500` (192 files) |
+| Data tables | 7/10 | Enhanced DataTable on 7 pages; 8+ pages still raw |
 | Modal/Dialog | 8/10 | ModalFormDialog added, overlays barrel with decision matrix, convention well-documented |
-| Loading states | 8/10 | 24 route-level loading.tsx files, three-tier convention documented above |
-| Brand consistency | 8/10 | Design tokens centralised in CSS @theme and design-tokens.ts |
+| Loading states | 9/10 | 24 route-level loading.tsx files, three-tier convention documented above |
+| Brand consistency | 9/10 | Design tokens centralised; sidebar colours migrated; all focus rings brand purple |
 | Mobile UX | 8/10 | Responsive well-implemented |
 | Navigation | 8/10 | Well-structured sidebar |
 
@@ -241,5 +253,9 @@ For in-place data updates (re-fetch, polling, optimistic UI):
 7. ~~Create ModalFormDialog~~ — **DONE** (Dialog + FormRenderer composition, imperative ref handle)
 8. ~~Create form wrapper~~ — **DONE** (`FormFieldWrapper` + `FormRenderer` with `forwardRef`)
 9. ~~Hide internal pages (`/test-*`, `/chasen-icons`) from production~~ — **DONE** (notFound() guard)
-10. Adopt `LayoutTokens.card` for card patterns — deferred (existing patterns vary too much for mechanical replacement)
+10. ~~Adopt `LayoutTokens.card` for card patterns~~ — **DONE** (CardContainer component wraps LayoutTokens.card)
+11. ~~Create StatusBadge component~~ — **DONE** (replaces 50+ inline badge patterns)
+12. ~~Create EmptyState component~~ — **DONE** (standard + compact variants, 7 pages migrated)
+13. ~~Unify focus rings~~ — **DONE** (192 files, `focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2`)
+14. ~~Typography token sweep~~ — **DONE** (52 files migrated to TypographyClasses)
 11. ~~Migrate hand-rolled tables to DataTable (batch 1)~~ — **DONE** (4 pages: knowledge, sales-hub, news-intelligence, operating-rhythm). 8+ pages remain for future sprints.

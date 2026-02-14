@@ -1,6 +1,6 @@
 # Priorities
 
-> Last updated: 12 February 2026
+> Last updated: 15 February 2026
 
 ## Guiding Principles
 
@@ -188,6 +188,24 @@ Data reconciliation pass across all dashboard components. Fixed fabricated EBITA
 | Clean up 85 orphaned sync_history "running" entries | Medium | Low | Done |
 
 **Key files:** `KPIHeroRow.tsx`, `burc/route.ts` (EBITA rewrite), `sync-logger.mjs`, `StalenessBar.tsx`
+
+## Priority 13: UX Coherence 10/10 — COMPLETE
+
+Built 3 shared components (StatusBadge, EmptyState, CardContainer) and swept ~250 files to eliminate hardcoded styling patterns. Replaced 12 duplicate colour functions, migrated 15+ inline badges, unified 7 empty states, applied typography tokens to 52 files, and standardised focus rings across 192 files.
+
+| Task | Impact | Complexity | Status |
+|------|--------|------------|--------|
+| StatusBadge component (wraps BadgeStyles + colour tokens) | High | Low | Done |
+| EmptyState component (standard + compact variants) | Medium | Low | Done |
+| CardContainer component (wraps LayoutTokens.card) | Medium | Low | Done |
+| Sidebar colour token migration (3 files) | Low | Low | Done |
+| Duplicate colour function removal (10 files) | Medium | Low | Done |
+| Badge migration sweep (15 files) | Medium | Medium | Done |
+| Empty state migration (7 files) | Medium | Low | Done |
+| Typography token sweep (52 files) | Medium | Medium | Done |
+| Form input focus ring standardisation (192 files) | High | Medium | Done |
+
+**Key files:** `StatusBadge.tsx`, `EmptyState.tsx`, `CardContainer.tsx`, `design-tokens.ts` (unchanged — consumers now use it)
 
 ## What "Done" Looks Like
 
