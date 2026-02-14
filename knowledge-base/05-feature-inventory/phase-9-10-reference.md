@@ -250,10 +250,14 @@ Design doc: `.claude/plans/fizzy-riding-fog.md`
 ### F12: Personalised Daily Digest
 
 - **Generator**: `src/lib/personalised-digest.ts`
+- **Page**: `src/app/(dashboard)/digest/page.tsx` — bento grid dashboard
 - **Cron**: `src/app/api/cron/daily-digest/route.ts`
 - **On-demand**: `src/app/api/digest/route.ts` — GET `?email=`
 - **DB**: `user_digests` — cached per (user_email, digest_date) with UPSERT
 - **Client resolution**: `user_role_assignments` -> `portfolio_clients` -> `cse_profiles` -> fallback all
+- **UI layout**: Bento grid (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`). High-priority cards span 2 cols on lg. All cards collapsed by default (scan-first). Click to expand inline (multi-expand, not accordion). Priority pill bar replaces counter grid.
+- **Design tokens**: Uses `PriorityColors.critical` (high), `.medium`, `.low` from `design-tokens.ts`
+- **State**: `expandedSections: Set<string>` keyed by section title (stable across re-sorts)
 
 ### F13: Explain This — Contextual Education
 
