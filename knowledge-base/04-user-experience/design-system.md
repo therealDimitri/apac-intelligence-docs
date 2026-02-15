@@ -74,8 +74,9 @@ Defined in `src/lib/pdf/altera-branding.ts`.
 | Component | File | Purpose |
 |-----------|------|---------|
 | `StatusBadge` | `src/components/ui/StatusBadge.tsx` | Unified badge for status, priority, health, NPS sentiment. Wraps `BadgeStyles` + colour token functions. Props: `status`, `priority`, `health`, `sentiment`, `label`, `variant` |
+| `TrendBadge` | `src/components/ui/TrendBadge.tsx` | Directional trend indicator (up/down/flat) with colour-coded pill + icon. Props: `direction`, `label?`, `className?` |
 | `EmptyState` | `src/components/ui/EmptyState.tsx` | Standard + compact empty states with icon, title, description, optional CTA. Use `compact` for sidebars/cards |
-| `CardContainer` | `src/components/ui/CardContainer.tsx` | Thin wrapper applying `LayoutTokens.card` + configurable padding (`standard`/`compact`/`none`) + `elevated` option |
+| `CardContainer` | `src/components/ui/CardContainer.tsx` | Thin wrapper applying `LayoutTokens.card` + configurable padding (`standard`/`compact`/`none`) + `elevated` option. Supports `forwardRef` for ref-forwarding (e.g. dropdown overlays) |
 
 ### Specialised Components
 | Directory | Purpose |
@@ -87,6 +88,7 @@ Defined in `src/lib/pdf/altera-branding.ts`.
 | `src/components/charts/` | CoverageGauge, ForecastChart, HealthRadar, NarrativeDashboard |
 | `src/components/layout/` | Sidebar, navigation components |
 | `src/components/meetings/` | TranscriptionPanel, SentimentGauge, CoHostSuggestionCard |
+| `src/components/nps/` | NPSClientDataTable (DataTable wrapper with sparklines, AI insights, row actions) |
 | `src/components/goals/` | GoalCard, ProgressBar, CheckInTimeline |
 | `src/components/twins/` | TwinProfileCard, SimulationChat |
 | `src/components/sandbox/` | DealSandbox, TermsSlider |
@@ -154,7 +156,18 @@ const columns: DataTableColumn<MyType>[] = [
 
 **Column resizing**: Users can drag the right edge of any column header to resize. Flex columns (`flex` prop) switch to pixel width on first manual resize. Actions column is fixed at 60px and non-resizable. Sorting remains external — consumers manage `sortBy`/`onSortChange` as before.
 
-**Features:** Virtual scrolling, sortable columns, row actions dropdown, tooltips for truncated text, sticky header, striped/hoverable rows.
+**Features:** Virtual scrolling, sortable columns, row actions dropdown, tooltips for truncated text, sticky header, striped/hoverable rows, expandable detail rows.
+
+**Expandable rows**: Pass `renderExpandedRow` to show a detail panel below any row on click. The virtualizer dynamically adjusts row height for expanded rows. Expanded state is tracked internally via `expandedKeys` set.
+
+```tsx
+<DataTable
+  data={items}
+  columns={columns}
+  getRowKey={(row) => row.id}
+  renderExpandedRow={(row) => <DetailPanel item={row} />}
+/>
+```
 
 ### Resizable Columns for Raw HTML Tables
 
@@ -258,7 +271,7 @@ For in-place data updates (re-fetch, polling, optimistic UI):
 | Component system | 9/10 | StatusBadge, EmptyState, CardContainer shared components; 12 duplicate colour functions removed |
 | Typography | 9/10 | TypographyClasses adopted in 52 files including SheetTitle/AlertDialogTitle primitives |
 | Form patterns | 9/10 | FormRenderer + ModalFormDialog; focus rings unified to `focus-visible:ring-purple-500` (192 files) |
-| Data tables | 9/10 | Enhanced DataTable on 7 pages; all 40 tables have resizable columns (useResizableColumns hook or TanStack native) |
+| Data tables | 9/10 | Enhanced DataTable on 8 pages (incl. NPS with expandable AI insight rows); all 40 tables have resizable columns (useResizableColumns hook or TanStack native) |
 | Modal/Dialog | 8/10 | ModalFormDialog added, overlays barrel with decision matrix, convention well-documented |
 | Loading states | 9/10 | 24 route-level loading.tsx files, three-tier convention documented above |
 | Brand consistency | 9/10 | Design tokens centralised; sidebar colours migrated; all focus rings brand purple |
