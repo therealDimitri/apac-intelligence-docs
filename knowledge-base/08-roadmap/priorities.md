@@ -21,15 +21,15 @@ All original priorities shipped. See git history for details.
 
 ## Priority 5: Design System Polish — COMPLETE (Medium)
 
-Raised UX coherence from 7.5/10 to ~8.5/10. Top 3 items shipped; remaining 2 deferred as low-impact.
+Raised UX coherence from 7.5/10 to ~8.5/10. All 5 items shipped.
 
 | Task | Impact | Complexity | Score | Status |
 |------|--------|------------|-------|--------|
 | Unify loading states (24 route-level loading.tsx + three-tier convention) | Medium | Medium | 8/10 | Done |
 | Migrate hand-rolled tables to enhanced DataTable (7 pages total) | Medium | Medium | 7/10 | Done |
 | Migrate simple forms to ModalFormDialog (AddContactModal, MilestoneFormModal) | Medium | Medium | 7/10 | Done |
-| Adopt `LayoutTokens.card` for consistent card patterns | Low | Low | 6/10 | Deferred |
-| Consolidate duplicate component patterns (badges, status indicators) | Low | Medium | 6/10 | Deferred |
+| Adopt `LayoutTokens.card` for consistent card patterns | Low | Low | 6/10 | Done |
+| Consolidate duplicate component patterns (badges, status indicators) | Low | Medium | 6/10 | Done |
 
 ## Priority 6: Goal Detail Phase 2 — Accordion Layout — COMPLETE (Medium)
 

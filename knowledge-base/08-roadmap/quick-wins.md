@@ -24,8 +24,8 @@ Converted from static import to `next/dynamic` with `ssr: false` and `NetworkGra
 ### 6. Migrate client-profiles table to DataTable — DONE
 Replaced TanStack Table grid with enhanced DataTable. 8 columns with custom cell renderers, sort state, segment ordering, virtual scrolling.
 
-### 7. Migrate NPS table to DataTable — DEFERRED
-NPS page uses rich card layout (sparklines, AI insight panels, context menus), not a simple table. Converting to DataTable would require UX redesign. Deferred to a dedicated sprint.
+### 7. Migrate NPS table to DataTable — DONE (2026-02-15)
+Client scores migrated from card layout to DataTable with expandable AI insight rows, row action menus (replacing context menu), sparkline columns, and risk level badges.
 
 ### 8. Standardise loading state for chart components — DONE
 Wrapped 4 GoalsDashboard charts with `LazyChart` (IntersectionObserver deferred rendering). Made `ChartCardSkeleton.type` optional (defaults to `'bar'`). Three-tier loading convention documented in design-system.md.
