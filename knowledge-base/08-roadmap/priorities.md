@@ -207,6 +207,22 @@ Built 3 shared components (StatusBadge, EmptyState, CardContainer) and swept ~25
 
 **Key files:** `StatusBadge.tsx`, `EmptyState.tsx`, `CardContainer.tsx`, `design-tokens.ts` (unchanged — consumers now use it)
 
+## Resizable Table Columns — COMPLETE
+
+Added drag-to-resize column widths across all 40 dashboard tables. Created `useResizableColumns` hook (`src/hooks/useResizableColumns.ts`) for raw HTML tables with localStorage persistence. TanStack-based tables use native `enableColumnResizing`.
+
+| Task | Impact | Complexity | Status |
+|------|--------|------------|--------|
+| Create `useResizableColumns` hook (drag handles, localStorage, touch support) | High | Medium | Done |
+| Apply to TanStack tables (GoalTableView, compliance views, email analytics) | Medium | Low | Done |
+| Apply to BURC tables (3 files: lifetime, PS margins, renewal calendar) | Medium | Low | Done |
+| Apply to planning tables (8 files: territory, CSE performance, region) | Medium | Low | Done |
+| Apply to admin/pipeline/compliance tables (8 files) | Medium | Low | Done |
+| Apply to client/misc tables (5 files: revenue, pipeline, events, news, metrics) | Medium | Low | Done |
+| Apply to remaining tables (team performance, invoices, benchmarking, etc.) | Medium | Low | Done |
+
+**Key files:** `src/hooks/useResizableColumns.ts` (new), 39 modified table components
+
 ## What "Done" Looks Like
 
 The platform succeeds when:

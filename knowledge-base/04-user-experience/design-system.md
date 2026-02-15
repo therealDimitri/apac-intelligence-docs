@@ -156,6 +156,29 @@ const columns: DataTableColumn<MyType>[] = [
 
 **Features:** Virtual scrolling, sortable columns, row actions dropdown, tooltips for truncated text, sticky header, striped/hoverable rows.
 
+### Resizable Columns for Raw HTML Tables
+
+For tables not using the enhanced `DataTable` (e.g. inline `<table>` elements), use the `useResizableColumns` hook:
+
+```tsx
+import { useResizableColumns } from '@/hooks/useResizableColumns'
+
+const resize = useResizableColumns({ storageKey: 'my-table' })
+
+<th className="relative" style={resize.getColumnStyle(0)}>
+  Column Name
+  <div {...resize.getHandleProps(0)} />
+</th>
+```
+
+- **`storageKey`**: Unique identifier — widths persist to `localStorage` as `col-resize-{storageKey}`
+- **Handle styling**: Invisible 4px strip on right edge of `<th>`, purple highlight on hover/drag
+- **Each `<th>`** needs `className="relative"`, `style={resize.getColumnStyle(colIndex)}`, and a child `<div {...resize.getHandleProps(colIndex)} />`
+- **Column indices** are 0-based, assigned left-to-right across the header row
+- **`resetWidths()`**: Clears all saved widths back to auto
+- **40 tables** across the dashboard use this pattern (team performance, BURC, planning, compliance, pipeline, admin, client pages)
+- For TanStack-based tables (GoalTableView, compliance views, email analytics), use native `enableColumnResizing: true` + `columnResizeMode: 'onChange'` instead
+
 ## KPI Bento Card Pattern
 
 The `KPIHeroRow` (`src/components/dashboard/KPIHeroRow.tsx`) uses expandable bento cards for the 6 headline metrics. This pattern is shared with `BURCExecutiveDashboard`.
@@ -235,7 +258,7 @@ For in-place data updates (re-fetch, polling, optimistic UI):
 | Component system | 9/10 | StatusBadge, EmptyState, CardContainer shared components; 12 duplicate colour functions removed |
 | Typography | 9/10 | TypographyClasses adopted in 52 files including SheetTitle/AlertDialogTitle primitives |
 | Form patterns | 9/10 | FormRenderer + ModalFormDialog; focus rings unified to `focus-visible:ring-purple-500` (192 files) |
-| Data tables | 7/10 | Enhanced DataTable on 7 pages; 8+ pages still raw |
+| Data tables | 9/10 | Enhanced DataTable on 7 pages; all 40 tables have resizable columns (useResizableColumns hook or TanStack native) |
 | Modal/Dialog | 8/10 | ModalFormDialog added, overlays barrel with decision matrix, convention well-documented |
 | Loading states | 9/10 | 24 route-level loading.tsx files, three-tier convention documented above |
 | Brand consistency | 9/10 | Design tokens centralised; sidebar colours migrated; all focus rings brand purple |
