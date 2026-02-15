@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2026-02-12T12:00:19.798Z
+**Generated**: 2026-02-15T04:01:40.825Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -292,7 +292,7 @@ This document provides the authoritative schema definition for all tables in the
 | `target_value` | unknown | ✗ | - | *(inferred)* |
 | `current_value` | unknown | ✗ | - | *(inferred)* |
 | `is_achieved` | boolean | ✗ | - | *(inferred)* |
-| `goal_status` | text | ✗ | - | *(inferred)* |
+| `goal_status` | unknown | ✗ | - | *(inferred)* |
 | `owner_department` | unknown | ✗ | - | *(inferred)* |
 | `involved_departments` | unknown | ✗ | - | *(inferred)* |
 | `priority` | unknown | ✗ | - | *(inferred)* |
@@ -444,7 +444,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `chasen_conversations`
 
-**Row Count**: 188
+**Row Count**: 197
 
 ### Columns
 
@@ -487,7 +487,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `client_health_history`
 
-**Row Count**: 707
+**Row Count**: 743
 
 ### Columns
 
@@ -626,23 +626,9 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `goal_check_ins`
 
-**Row Count**: 1
+**Row Count**: 0
 
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | text | ✗ | - | *(inferred)* |
-| `goal_type` | text | ✗ | - | *(inferred)* |
-| `goal_id` | text | ✗ | - | *(inferred)* |
-| `author_id` | unknown | ✗ | - | *(inferred)* |
-| `status` | text | ✗ | - | *(inferred)* |
-| `progress_update` | text | ✗ | - | *(inferred)* |
-| `blockers` | text | ✗ | - | *(inferred)* |
-| `next_steps` | text | ✗ | - | *(inferred)* |
-| `check_in_date` | text | ✗ | - | *(inferred)* |
-| `created_at` | text | ✗ | - | *(inferred)* |
-| `progress_percentage` | integer | ✗ | - | *(inferred)* |
+**Note**: Empty table or RLS blocking access
 
 ---
 
@@ -664,42 +650,17 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `goal_audit_log`
 
-**Row Count**: 740
+**Row Count**: 0
 
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | text | ✗ | - | *(inferred)* |
-| `goal_type` | text | ✗ | - | *(inferred)* |
-| `goal_id` | text | ✗ | - | *(inferred)* |
-| `action` | text | ✗ | - | *(inferred)* |
-| `actor_id` | unknown | ✗ | - | *(inferred)* |
-| `old_values` | unknown | ✗ | - | *(inferred)* |
-| `new_values` | jsonb | ✗ | - | *(inferred)* |
-| `created_at` | text | ✗ | - | *(inferred)* |
+**Note**: Empty table or RLS blocking access
 
 ---
 
 ## Table: `goal_status_updates`
 
-**Row Count**: 4
+**Row Count**: 0
 
-### Columns
-
-| Column Name | Data Type | Nullable | Default | Notes |
-|-------------|-----------|----------|---------|-------|
-| `id` | text | ✗ | - | *(inferred)* |
-| `goal_type` | text | ✗ | - | *(inferred)* |
-| `goal_id` | text | ✗ | - | *(inferred)* |
-| `author_id` | unknown | ✗ | - | *(inferred)* |
-| `summary` | text | ✗ | - | *(inferred)* |
-| `ai_generated` | boolean | ✗ | - | *(inferred)* |
-| `child_snapshot` | jsonb | ✗ | - | *(inferred)* |
-| `financial_snapshot` | unknown | ✗ | - | *(inferred)* |
-| `published` | boolean | ✗ | - | *(inferred)* |
-| `created_at` | text | ✗ | - | *(inferred)* |
-| `structured_content` | unknown | ✗ | - | *(inferred)* |
+**Note**: Empty table or RLS blocking access
 
 ---
 
@@ -826,9 +787,28 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `tender_opportunities`
 
-**Row Count**: 0
+**Row Count**: 452
 
-**Note**: Empty table or RLS blocking access
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | integer | ✗ | - | *(inferred)* |
+| `article_id` | unknown | ✗ | - | *(inferred)* |
+| `tender_reference` | text | ✗ | - | *(inferred)* |
+| `issuing_body` | text | ✗ | - | *(inferred)* |
+| `title` | text | ✗ | - | *(inferred)* |
+| `description` | unknown | ✗ | - | *(inferred)* |
+| `region` | text | ✗ | - | *(inferred)* |
+| `close_date` | text | ✗ | - | *(inferred)* |
+| `estimated_value` | unknown | ✗ | - | *(inferred)* |
+| `relevant_products` | unknown | ✗ | - | *(inferred)* |
+| `status` | text | ✗ | - | *(inferred)* |
+| `assigned_to` | unknown | ✗ | - | *(inferred)* |
+| `notes` | unknown | ✗ | - | *(inferred)* |
+| `created_at` | text | ✗ | - | *(inferred)* |
+| `updated_at` | text | ✗ | - | *(inferred)* |
+| `source_url` | text | ✗ | - | *(inferred)* |
 
 ---
 
@@ -921,7 +901,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `sync_history`
 
-**Row Count**: 171
+**Row Count**: 321
 
 ### Columns
 
@@ -1156,6 +1136,94 @@ This document provides the authoritative schema definition for all tables in the
 | `actual_ebita` | numeric | ✗ | - | *(inferred)* |
 | `variance` | numeric | ✗ | - | *(inferred)* |
 | `ebita_percent` | numeric | ✗ | - | *(inferred)* |
+| `updated_at` | text | ✗ | - | *(inferred)* |
+
+---
+
+## Table: `burc_opex_monthly`
+
+**Row Count**: 1
+
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | text | ✗ | - | *(inferred)* |
+| `fiscal_year` | text | ✗ | - | *(inferred)* |
+| `month` | text | ✗ | - | *(inferred)* |
+| `month_num` | integer | ✗ | - | *(inferred)* |
+| `category` | text | ✗ | - | *(inferred)* |
+| `actual` | integer | ✗ | - | *(inferred)* |
+| `plan` | integer | ✗ | - | *(inferred)* |
+| `variance` | integer | ✗ | - | *(inferred)* |
+| `source_row` | integer | ✗ | - | *(inferred)* |
+| `created_at` | text | ✗ | - | *(inferred)* |
+| `updated_at` | text | ✗ | - | *(inferred)* |
+
+---
+
+## Table: `burc_cogs_monthly`
+
+**Row Count**: 1
+
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | text | ✗ | - | *(inferred)* |
+| `fiscal_year` | text | ✗ | - | *(inferred)* |
+| `month` | text | ✗ | - | *(inferred)* |
+| `month_num` | integer | ✗ | - | *(inferred)* |
+| `category` | text | ✗ | - | *(inferred)* |
+| `actual` | integer | ✗ | - | *(inferred)* |
+| `plan` | integer | ✗ | - | *(inferred)* |
+| `variance` | integer | ✗ | - | *(inferred)* |
+| `source_row` | integer | ✗ | - | *(inferred)* |
+| `created_at` | text | ✗ | - | *(inferred)* |
+| `updated_at` | text | ✗ | - | *(inferred)* |
+
+---
+
+## Table: `burc_net_revenue_monthly`
+
+**Row Count**: 1
+
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | text | ✗ | - | *(inferred)* |
+| `fiscal_year` | text | ✗ | - | *(inferred)* |
+| `month` | text | ✗ | - | *(inferred)* |
+| `month_num` | integer | ✗ | - | *(inferred)* |
+| `category` | text | ✗ | - | *(inferred)* |
+| `actual` | integer | ✗ | - | *(inferred)* |
+| `plan` | integer | ✗ | - | *(inferred)* |
+| `variance` | integer | ✗ | - | *(inferred)* |
+| `source_row` | integer | ✗ | - | *(inferred)* |
+| `created_at` | text | ✗ | - | *(inferred)* |
+| `updated_at` | text | ✗ | - | *(inferred)* |
+
+---
+
+## Table: `burc_gross_revenue_monthly`
+
+**Row Count**: 1
+
+### Columns
+
+| Column Name | Data Type | Nullable | Default | Notes |
+|-------------|-----------|----------|---------|-------|
+| `id` | text | ✗ | - | *(inferred)* |
+| `fiscal_year` | text | ✗ | - | *(inferred)* |
+| `month` | text | ✗ | - | *(inferred)* |
+| `month_num` | integer | ✗ | - | *(inferred)* |
+| `category` | text | ✗ | - | *(inferred)* |
+| `actual` | integer | ✗ | - | *(inferred)* |
+| `plan` | integer | ✗ | - | *(inferred)* |
+| `variance` | integer | ✗ | - | *(inferred)* |
+| `source_row` | integer | ✗ | - | *(inferred)* |
+| `created_at` | text | ✗ | - | *(inferred)* |
 | `updated_at` | text | ✗ | - | *(inferred)* |
 
 ---
