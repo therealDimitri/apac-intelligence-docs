@@ -47,13 +47,18 @@
 | `nps_period_config` | 5 | Survey period configuration |
 | `client_sentiment_snapshots` | ? | Aggregated daily/weekly sentiment |
 
-### 5. Financial / BURC (3+ tables)
+### 5. Financial / BURC (7+ tables)
 
 | Table | Purpose |
 |-------|---------|
 | `burc_annual_financials` | **AUTHORITATIVE** source for financial totals |
 | `aging_accounts` | AR aging buckets (18-20 rows) |
-| `burc_*` detail tables | Monthly breakdowns (12 tables) |
+| `burc_ebita_monthly` | Monthly EBITA amounts and margin % |
+| `burc_opex_monthly` | OPEX by department per month (CS, R&D, PS, Sales, G&A, total) |
+| `burc_cogs_monthly` | COGS breakdown per month (licence, PS, maintenance, hardware, total) |
+| `burc_net_revenue_monthly` | Net revenue by type per month (licence, PS, maintenance, hardware, total) |
+| `burc_gross_revenue_monthly` | Gross revenue by type per month (licence, PS, maintenance, hardware, total) |
+| `burc_*` detail tables | Additional monthly breakdowns (CSI ratios, waterfall, client maintenance, etc.) |
 
 ### 6. Goals & Strategic Planning (8 tables)
 

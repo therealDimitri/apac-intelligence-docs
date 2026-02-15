@@ -20,9 +20,9 @@ Supabase INSERT/UPSERT
     |-- burc_annual_financials (FY totals - AUTHORITATIVE)
     |-- burc_csi_ratios
     |-- burc_ebita_monthly
-    |-- burc_opex_data
-    |-- burc_cogs_data
-    |-- burc_net_revenue_data
+    |-- burc_opex_monthly
+    |-- burc_cogs_monthly
+    |-- burc_net_revenue_monthly
     |-- burc_gross_revenue_monthly
     |-- burc_quarterly_comparison
     |-- burc_waterfall_data
@@ -45,10 +45,10 @@ Detail tables (`burc_waterfall_data`, `burc_revenue_streams`, etc.) contain brea
 |-------|-------------|-------------|
 | `burc_annual_financials` | "APAC BURC" + "26 vs 25 Q" | fiscal_year, gross_revenue, maintenance_arr, ebita, target_revenue |
 | `burc_ebita_monthly` | "APAC BURC" Rows 100-101 | client_name, month, ebita_amount |
-| `burc_opex_data` | "APAC BURC" Rows 71-98 | department, monthly values (Jan-Dec) |
-| `burc_cogs_data` | "APAC BURC" Rows 38-56 | line_item, monthly values |
-| `burc_net_revenue_data` | "APAC BURC" Rows 58-66 | revenue_type, monthly values |
-| `burc_gross_revenue_monthly` | "APAC BURC" detail rows | month, gross_revenue |
+| `burc_opex_monthly` | "APAC BURC" Rows 71-98 | year, month, cs_opex, rd_opex, ps_opex, sales_opex, ga_opex, total_opex |
+| `burc_cogs_monthly` | "APAC BURC" Rows 38-56 | year, month, license_cogs, ps_cogs, maintenance_cogs, hardware_cogs, total_cogs |
+| `burc_net_revenue_monthly` | "APAC BURC" Rows 58-66 | year, month, license_net, ps_net, maintenance_net, hardware_net, total_net_revenue |
+| `burc_gross_revenue_monthly` | "APAC BURC" detail rows | year, month, license_revenue, ps_revenue, maintenance_revenue, hardware_revenue, total_gross_revenue |
 | `burc_client_maintenance` | "APAC BURC" maint section | client_name, arr_usd, forecast_usd |
 | `burc_ps_pipeline` | "APAC BURC" pipeline section | opportunity_id, deal_name, forecast |
 | `burc_csi_ratios` | "APAC BURC" KPI section | csi_gross, csi_renewal, csi_maintenance |
