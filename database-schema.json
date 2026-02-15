@@ -3441,7 +3441,7 @@
         "inferred": true
       }
     ],
-    "row_count": 321
+    "row_count": 322
   },
   "segmentation_events": {
     "columns": [
@@ -4254,8 +4254,8 @@
         "inferred": true
       },
       {
-        "column_name": "fiscal_year",
-        "data_type": "text",
+        "column_name": "year",
+        "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -4272,49 +4272,49 @@
         "inferred": true
       },
       {
-        "column_name": "category",
-        "data_type": "text",
+        "column_name": "cs_opex",
+        "data_type": "numeric",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "actual",
-        "data_type": "integer",
+        "column_name": "rd_opex",
+        "data_type": "numeric",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "plan",
-        "data_type": "integer",
+        "column_name": "ps_opex",
+        "data_type": "numeric",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "variance",
-        "data_type": "integer",
+        "column_name": "sales_opex",
+        "data_type": "numeric",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "source_row",
-        "data_type": "integer",
+        "column_name": "ga_opex",
+        "data_type": "numeric",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "created_at",
-        "data_type": "text",
+        "column_name": "total_opex",
+        "data_type": "numeric",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "updated_at",
+        "column_name": "calculated_at",
         "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       }
     ],
-    "row_count": 1
+    "row_count": 12
   },
   "burc_cogs_monthly": {
     "columns": [
@@ -4325,8 +4325,8 @@
         "inferred": true
       },
       {
-        "column_name": "fiscal_year",
-        "data_type": "text",
+        "column_name": "year",
+        "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -4343,49 +4343,43 @@
         "inferred": true
       },
       {
-        "column_name": "category",
-        "data_type": "text",
-        "is_nullable": "UNKNOWN",
-        "inferred": true
-      },
-      {
-        "column_name": "actual",
+        "column_name": "license_cogs",
         "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "plan",
+        "column_name": "ps_cogs",
+        "data_type": "numeric",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "maintenance_cogs",
+        "data_type": "numeric",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "hardware_cogs",
         "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "variance",
-        "data_type": "integer",
+        "column_name": "total_cogs",
+        "data_type": "numeric",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "source_row",
-        "data_type": "integer",
-        "is_nullable": "UNKNOWN",
-        "inferred": true
-      },
-      {
-        "column_name": "created_at",
-        "data_type": "text",
-        "is_nullable": "UNKNOWN",
-        "inferred": true
-      },
-      {
-        "column_name": "updated_at",
+        "column_name": "calculated_at",
         "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       }
     ],
-    "row_count": 1
+    "row_count": 12
   },
   "burc_net_revenue_monthly": {
     "columns": [
@@ -4396,8 +4390,8 @@
         "inferred": true
       },
       {
-        "column_name": "fiscal_year",
-        "data_type": "text",
+        "column_name": "year",
+        "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -4414,49 +4408,43 @@
         "inferred": true
       },
       {
-        "column_name": "category",
-        "data_type": "text",
-        "is_nullable": "UNKNOWN",
-        "inferred": true
-      },
-      {
-        "column_name": "actual",
+        "column_name": "license_net",
         "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "plan",
+        "column_name": "ps_net",
+        "data_type": "numeric",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "maintenance_net",
+        "data_type": "numeric",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "hardware_net",
         "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "variance",
-        "data_type": "integer",
+        "column_name": "total_net_revenue",
+        "data_type": "numeric",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "source_row",
-        "data_type": "integer",
-        "is_nullable": "UNKNOWN",
-        "inferred": true
-      },
-      {
-        "column_name": "created_at",
-        "data_type": "text",
-        "is_nullable": "UNKNOWN",
-        "inferred": true
-      },
-      {
-        "column_name": "updated_at",
+        "column_name": "calculated_at",
         "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       }
     ],
-    "row_count": 1
+    "row_count": 12
   },
   "burc_gross_revenue_monthly": {
     "columns": [
@@ -4467,8 +4455,8 @@
         "inferred": true
       },
       {
-        "column_name": "fiscal_year",
-        "data_type": "text",
+        "column_name": "year",
+        "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
@@ -4485,49 +4473,43 @@
         "inferred": true
       },
       {
-        "column_name": "category",
-        "data_type": "text",
-        "is_nullable": "UNKNOWN",
-        "inferred": true
-      },
-      {
-        "column_name": "actual",
+        "column_name": "license_revenue",
         "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "plan",
+        "column_name": "ps_revenue",
         "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "variance",
+        "column_name": "maintenance_revenue",
+        "data_type": "numeric",
+        "is_nullable": "UNKNOWN",
+        "inferred": true
+      },
+      {
+        "column_name": "hardware_revenue",
         "data_type": "integer",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "source_row",
-        "data_type": "integer",
+        "column_name": "total_gross_revenue",
+        "data_type": "numeric",
         "is_nullable": "UNKNOWN",
         "inferred": true
       },
       {
-        "column_name": "created_at",
-        "data_type": "text",
-        "is_nullable": "UNKNOWN",
-        "inferred": true
-      },
-      {
-        "column_name": "updated_at",
+        "column_name": "calculated_at",
         "data_type": "text",
         "is_nullable": "UNKNOWN",
         "inferred": true
       }
     ],
-    "row_count": 1
+    "row_count": 12
   },
   "account_plans": {
     "columns": [

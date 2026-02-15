@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-**Generated**: 2026-02-15T04:01:40.825Z
+**Generated**: 2026-02-15T04:28:18.173Z
 **Purpose**: Source of truth for all database table schemas
 
 ---
@@ -901,7 +901,7 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `sync_history`
 
-**Row Count**: 321
+**Row Count**: 322
 
 ### Columns
 
@@ -1142,89 +1142,86 @@ This document provides the authoritative schema definition for all tables in the
 
 ## Table: `burc_opex_monthly`
 
-**Row Count**: 1
+**Row Count**: 12
 
 ### Columns
 
 | Column Name | Data Type | Nullable | Default | Notes |
 |-------------|-----------|----------|---------|-------|
 | `id` | text | ✗ | - | *(inferred)* |
-| `fiscal_year` | text | ✗ | - | *(inferred)* |
+| `year` | integer | ✗ | - | *(inferred)* |
 | `month` | text | ✗ | - | *(inferred)* |
 | `month_num` | integer | ✗ | - | *(inferred)* |
-| `category` | text | ✗ | - | *(inferred)* |
-| `actual` | integer | ✗ | - | *(inferred)* |
-| `plan` | integer | ✗ | - | *(inferred)* |
-| `variance` | integer | ✗ | - | *(inferred)* |
-| `source_row` | integer | ✗ | - | *(inferred)* |
-| `created_at` | text | ✗ | - | *(inferred)* |
-| `updated_at` | text | ✗ | - | *(inferred)* |
+| `cs_opex` | numeric | ✗ | - | *(inferred)* |
+| `rd_opex` | numeric | ✗ | - | *(inferred)* |
+| `ps_opex` | numeric | ✗ | - | *(inferred)* |
+| `sales_opex` | numeric | ✗ | - | *(inferred)* |
+| `ga_opex` | numeric | ✗ | - | *(inferred)* |
+| `total_opex` | numeric | ✗ | - | *(inferred)* |
+| `calculated_at` | text | ✗ | - | *(inferred)* |
 
 ---
 
 ## Table: `burc_cogs_monthly`
 
-**Row Count**: 1
+**Row Count**: 12
 
 ### Columns
 
 | Column Name | Data Type | Nullable | Default | Notes |
 |-------------|-----------|----------|---------|-------|
 | `id` | text | ✗ | - | *(inferred)* |
-| `fiscal_year` | text | ✗ | - | *(inferred)* |
+| `year` | integer | ✗ | - | *(inferred)* |
 | `month` | text | ✗ | - | *(inferred)* |
 | `month_num` | integer | ✗ | - | *(inferred)* |
-| `category` | text | ✗ | - | *(inferred)* |
-| `actual` | integer | ✗ | - | *(inferred)* |
-| `plan` | integer | ✗ | - | *(inferred)* |
-| `variance` | integer | ✗ | - | *(inferred)* |
-| `source_row` | integer | ✗ | - | *(inferred)* |
-| `created_at` | text | ✗ | - | *(inferred)* |
-| `updated_at` | text | ✗ | - | *(inferred)* |
+| `license_cogs` | integer | ✗ | - | *(inferred)* |
+| `ps_cogs` | numeric | ✗ | - | *(inferred)* |
+| `maintenance_cogs` | numeric | ✗ | - | *(inferred)* |
+| `hardware_cogs` | integer | ✗ | - | *(inferred)* |
+| `total_cogs` | numeric | ✗ | - | *(inferred)* |
+| `calculated_at` | text | ✗ | - | *(inferred)* |
 
 ---
 
 ## Table: `burc_net_revenue_monthly`
 
-**Row Count**: 1
+**Row Count**: 12
 
 ### Columns
 
 | Column Name | Data Type | Nullable | Default | Notes |
 |-------------|-----------|----------|---------|-------|
 | `id` | text | ✗ | - | *(inferred)* |
-| `fiscal_year` | text | ✗ | - | *(inferred)* |
+| `year` | integer | ✗ | - | *(inferred)* |
 | `month` | text | ✗ | - | *(inferred)* |
 | `month_num` | integer | ✗ | - | *(inferred)* |
-| `category` | text | ✗ | - | *(inferred)* |
-| `actual` | integer | ✗ | - | *(inferred)* |
-| `plan` | integer | ✗ | - | *(inferred)* |
-| `variance` | integer | ✗ | - | *(inferred)* |
-| `source_row` | integer | ✗ | - | *(inferred)* |
-| `created_at` | text | ✗ | - | *(inferred)* |
-| `updated_at` | text | ✗ | - | *(inferred)* |
+| `license_net` | integer | ✗ | - | *(inferred)* |
+| `ps_net` | numeric | ✗ | - | *(inferred)* |
+| `maintenance_net` | numeric | ✗ | - | *(inferred)* |
+| `hardware_net` | integer | ✗ | - | *(inferred)* |
+| `total_net_revenue` | numeric | ✗ | - | *(inferred)* |
+| `calculated_at` | text | ✗ | - | *(inferred)* |
 
 ---
 
 ## Table: `burc_gross_revenue_monthly`
 
-**Row Count**: 1
+**Row Count**: 12
 
 ### Columns
 
 | Column Name | Data Type | Nullable | Default | Notes |
 |-------------|-----------|----------|---------|-------|
 | `id` | text | ✗ | - | *(inferred)* |
-| `fiscal_year` | text | ✗ | - | *(inferred)* |
+| `year` | integer | ✗ | - | *(inferred)* |
 | `month` | text | ✗ | - | *(inferred)* |
 | `month_num` | integer | ✗ | - | *(inferred)* |
-| `category` | text | ✗ | - | *(inferred)* |
-| `actual` | integer | ✗ | - | *(inferred)* |
-| `plan` | integer | ✗ | - | *(inferred)* |
-| `variance` | integer | ✗ | - | *(inferred)* |
-| `source_row` | integer | ✗ | - | *(inferred)* |
-| `created_at` | text | ✗ | - | *(inferred)* |
-| `updated_at` | text | ✗ | - | *(inferred)* |
+| `license_revenue` | integer | ✗ | - | *(inferred)* |
+| `ps_revenue` | integer | ✗ | - | *(inferred)* |
+| `maintenance_revenue` | numeric | ✗ | - | *(inferred)* |
+| `hardware_revenue` | integer | ✗ | - | *(inferred)* |
+| `total_gross_revenue` | numeric | ✗ | - | *(inferred)* |
+| `calculated_at` | text | ✗ | - | *(inferred)* |
 
 ---
 
